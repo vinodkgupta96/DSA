@@ -5,6 +5,7 @@ Collections of DSA concepts for interview preparation.
 1. Graphs
 	1. Given the adjacency list of a bidirectional graph. Your task is to return the adjacency list for each vertex.
 	2. BFS of graph (connected)
+    ```
 		public ArrayList<Integer> bfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj)
     {
         // Code here
@@ -26,8 +27,9 @@ Collections of DSA concepts for interview preparation.
         }
         return result;
     }
+    ```
     3. DFS of graph (connected)
-
+    ```
     public ArrayList<Integer> dfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj)
     {
         // Code here
@@ -50,8 +52,10 @@ Collections of DSA concepts for interview preparation.
             }
         }
     }
+    ```
 
     4. Find the number of islands 
+    ```
 
     public int numIslands(char[][] grid)
     {
@@ -131,4 +135,5 @@ Collections of DSA concepts for interview preparation.
 
         }
     }
+    ```
 
