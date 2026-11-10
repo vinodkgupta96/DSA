@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 14 of 24 tracks · 302 of 470 videos · 228 of 342 articles · 220 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 15 of 24 tracks · 332 of 470 videos · 252 of 342 articles · 252 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -89,8 +89,8 @@ Report back with:
 | 12 | Stack | 27 | 19 | 17 | ✅ Done: 27/27 videos, 19/19 articles, 17 problems |
 | 13 | Queue | 9 | 5 | 9 | ✅ Done: 9/9 videos, 5/5 articles, 9 problems |
 | 14 | Deque | 8 | 7 | 6 | ✅ Done: 8/8 videos, 7/7 articles, 6 problems |
-| 15 | Tree | 30 | 24 | 32 | ⏭ Next |
-| 16 | Binary Search Tree | 28 | 16 | 23 | Not started |
+| 15 | Tree | 30 | 24 | 32 | ✅ Done: 30/30 videos, 24/24 articles, 32 problems |
+| 16 | Binary Search Tree | 28 | 16 | 23 | ⏭ Next |
 | 17 | Heap | 14 | 11 | 11 | Not started |
 | 18 | Graph | 30 | 20 | 24 | Not started |
 | 19 | Greedy | 12 | 5 | 6 | Not started |
@@ -502,6 +502,43 @@ Every Stack article matches a video, so the Track practice set lists only the 17
 
 Every Deque article matches a video, so the Track practice set lists only the 6 problems. Every Deque video has a full transcript; none was cut off early. Course progress was unchanged (0%; the track shows no Watched or Read counter, and the articles still show "Mark as Read"). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 8 Deque videos.
 
+### Track 15: Tree, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Tree Data Structure | 4:26 | Transcript + board | Introduction to Trees |
+| 2 | Application of Tree | 4:44 | Transcript + board | Application of Tree |
+| 3 | Binary Tree | 6:29 | Transcript + board | Binary Tree |
+| 4 | Tree Traversal | 9:05 | Transcript + board | Binary Tree Traversals |
+| 5 | Implementation of Inorder Traversal | 8:24 | Transcript + board | Implementation of Inorder, Preorder and Postorder Traversal |
+| 6 | Implementation of Preorder Traversal | 5:26 | Transcript + board |  |
+| 7 | Implementation of Postorder Traversal | 4:25 | Transcript + board |  |
+| 8 | Height of Binary Tree | 7:40 | Transcript + board | Height of Binary Tree |
+| 9 | Print Nodes at K distance | 6:22 | Transcript + board | Print Nodes at K Distance |
+| 10 | Level Order Traversal | 10:27 | Board + description | Level Order Traversal of a Binary Tree |
+| 11 | Level Order Traversal Line by Line (Part 1) | 6:09 | Transcript + board |  |
+| 12 | Level Order Traversal Line by Line (Part 2) | 3:45 | Transcript + board |  |
+| 13 | Size of Binary Tree | 12:17 | Transcript + board | Size of Binary Tree |
+| 14 | Maximum in Binary Tree | 8:57 | Transcript + board | Maximum in Binary Tree |
+| 15 | Print Left View of Binary Tree | 9:34 | Transcript + board | Left, Right, Top and Bottom View of a Binary Tree |
+| 16 | Children Sum Property | 6:27 | Transcript + board |  |
+| 17 | Check for Balanced Binary Tree | 11:39 | Transcript + board | Check for Balanced Binary Tree |
+| 18 | Maximum Width of Binary Tree | 4:59 | Transcript + board | Maximum width of Binary Tree |
+| 19 | Convert Binary Tree to Doubly Linked List | 15:23 | Transcript + board |  |
+| 20 | Construct Binary Tree from Inorder and Preorder | 20:10 | Transcript + board | Construct Binary Tree from Inorder and Preorder |
+| 21 | Tree Traversal in Spiral Form | 21:41 | Transcript + board | Tree Traversal in Spiral Form |
+| 22 | Diameter of a Binary Tree | 15:26 | Transcript + board | Diameter of a Binary Tree |
+| 23 | LCA of Binary Tree (Part 1) | 12:57 | Transcript + board | Finding LCA in Binary Tree |
+| 24 | LCA of Binary Tree (Part 2) | 10:52 | Transcript + board |  |
+| 25 | Burn a Binary Tree from a Leaf | 16:44 | Transcript + board | Burn a Binary Tree From a Leaf |
+| 26 | Count nodes in a Complete Binary Tree | 18:28 | Transcript + board |  |
+| 27 | Serialize and Deserialize a Binary Tree | 19:16 | Transcript + board | Serialize and Deserialize a Binary Tree |
+| 28 | Iterative Inorder Traversal | 10:15 | Transcript + board |  |
+| 29 | Iterative Preorder Traversal (Simple) | 6:52 | Transcript + board | Iterative Preorder Traversal |
+| 30 | Iterative Preorder Traversal (Space Optimized) | 9:53 | Transcript + board |  |
+
+"Insertion in a Binary Tree", "Deletion in a Binary Tree", "Threaded Binary Tree" and "Sample Problems on Trees" match no video, so they're in the Track practice set with the 32 problems. "Finding LCA in Binary Tree" (both methods) is folded into V23, and "Iterative Preorder Traversal" (both solutions) into V29. V10 has no Transcript button and was done from frames and the description; no transcript was cut off early. Course progress was unchanged (23/30 videos watched, 52%, 0/24 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 30 Tree videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -527,10 +564,11 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
 - `3251af2`: Add Linked List track notes (54 videos, 40 articles, 25 problems)
 - `5e04a24`: Add Stack track notes (27 videos, 19 articles, 17 problems)
 - `e80e175`: Add Queue track notes (9 videos, 5 articles, 9 problems)
-- (this commit): Add Deque track notes (8 videos, 7 articles, 6 problems)
+- `6a5d4d9`: Add Deque track notes (8 videos, 7 articles, 6 problems)
+- (this commit): Add Tree track notes (30 videos, 24 articles, 32 problems)
 
 ### What's next
-- **Track 15: Tree** (30 videos, 24 articles, 32 problems), starting straight away.
+- **Track 16: Binary Search Tree** (28 videos, 16 articles, 23 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -557,6 +595,7 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
   - Completed track 12 (Stack): 27 videos, 19 articles, 17 problems.
   - Completed track 13 (Queue): 9 videos, 5 articles, 9 problems.
   - Completed track 14 (Deque): 8 videos, 7 articles, 6 problems.
+  - Completed track 15 (Tree): 30 videos, 24 articles, 32 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -573,6 +612,24 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Tree: teacher slips flagged
+- V6 (board): the Java version writes `root != NULL`; Java uses `null`.
+- V8 (board): the C++ version writes `height(roo->left)`.
+- V15, V18 (board): the C++ queue front is read with `q.top()`; `std::queue` uses `q.front()`. V18's Java also starts with `q.push(root)` and `q.inEmpty()`.
+- V16, V17, V23, V24 (board): `&&` is drawn like "$$" or "88". V16's ✗ mark only demonstrates the missing leaf check. V17 also writes `isBlanced` and `Nod root`.
+- V19 (board): the Java left call is `BToDLL` for `BTToDLL`.
+- V20: the C++ code declares `inIndx` and uses `inIndex`. For hashing the teacher says `unordered_set`/`HashSet`, but a key → index table is `unordered_map`/`HashMap`.
+- V21 (board): the Java header is `prinSpiral`. The second Method 2 example's last level, as read in the transcript, doesn't match the board and is left out.
+- V22: "the map can be built in O(1)" (it's O(n)); the Java `int res = 0` has no semicolon.
+- V23 (board): the Java `lca` declares `ArrayList<Integer>` paths though `findPath` takes `ArrayList<Node>`.
+- V25 (board): the `Distance` constructor sets `val = v` for `val = d`; `Dis ldist` stands for `Distance ldist`. The code doesn't return −1 for a missing leaf, despite the problem statement.
+- V26 (board): headers are `countNode` while the calls are `countNodes`; the C++ header has `root *root`; the Java `Math.pow` needs an `(int)` cast.
+- V27: the Java deserialize uses `arr[index]` on an ArrayList (needs `.get`). The teacher says the −1 call "returns −1" (it returns null).
+- V28 (board): the stack is declared `st` but used as `s`.
+- V29: "DFS traversal or level order traversal, we use a queue". Level order is BFS.
+- V30 (board): the first sketch pushes the root and loops while the stack isn't empty; the final code doesn't push the root and loops while `curr != NULL || !st.empty()`.
+- V10 (no transcript): spoken slips couldn't be checked.
 
 ### Deque: teacher slips flagged
 - V4 (board): Example 2's last two lines print `g.getFirst()`/`g.getLast()`; the deque is `d`.

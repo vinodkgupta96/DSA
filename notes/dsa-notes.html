@@ -23727,6 +23727,1685 @@ class GfG
   </section>
 </template>
 
+<template id="DSASP-Tree-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTU5Mzc%3D" target="_blank" rel="noopener">Tree Data Structure</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A tree represents a <strong>hierarchy</strong> — e.g. an organization structure (CEO at the top, with the CTO and others reporting to him) or a folder structure (a root folder with subfolders, and theirs). Arrays, linked lists, stacks and queues are all <em>linear</em>; a tree is a <strong>non-linear</strong> data structure.</p>
+    <p>Board tree: 10 with children 20 and 30; 20 → 40, 5; 30 → 8, 30, 80; the inner 30 → 70, 9. Terminology:</p>
+    <ul>
+      <li><strong>node</strong>; <strong>root</strong> — the node at the top of the hierarchy (10);</li>
+      <li><strong>leaf</strong> — nodes with nothing below them (40, 5, 8, 80, 70, 9);</li>
+      <li><strong>child</strong> — nodes just below a node (30 has three children: 8, 30, 80); <strong>parent</strong> — the node just above (parent of 5 is 20, of 8 is 30);</li>
+      <li><strong>subtree</strong> — a tree is recursive: the left side of the root is a tree rooted at 20, the right side one rooted at 30, and so on;</li>
+      <li><strong>descendants</strong> — everything in the subtree rooted at a node (all other nodes are descendants of 10); <strong>ancestors</strong> — the nodes above it on the way to the root;</li>
+      <li><strong>degree</strong> — the number of children (degree of 10 is 2, of the upper 30 is 3); leaves have degree 0;</li>
+      <li><strong>internal</strong> nodes — all nodes that are not leaves (20, both 30s, 10).</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/MjM0NQ%3D%3D" target="_blank" rel="noopener">Introduction to Trees</a></p>
+<ul>
+<li>A tree is a non-linear data structure; each node connects to other nodes through pointers or references.</li>
+<li><strong>Terms:</strong> <em>root</em> (the first node), <em>edge</em> (a link between two nodes), <em>siblings</em> (children of the same parent), <em>leaf</em> (no children), <em>height</em> (the number of levels, or the length of the path from the root to the last level; the article's sample tree has height 2).</li>
+<li><strong>Binary tree:</strong> every node has at most 2 children.</li>
+<li><strong>Properties</strong> (root at level 1, height counted in nodes):
+  <ul>
+    <li>At most 2<sup>l−1</sup> nodes at level l (by induction: each level can have twice the previous).</li>
+    <li>At most 2<sup>h</sup> − 1 nodes for height h (1 + 2 + … + 2<sup>h−1</sup>); with root height 0 this becomes 2<sup>h+1</sup> − 1.</li>
+    <li>With N nodes the minimum height is ⌈log₂(N + 1)⌉ (or log₂(N + 1) − 1 with leaf height 0).</li>
+    <li>With L leaves there are at least ⌈log₂ L⌉ + 1 levels.</li>
+    <li>If every node has 0 or 2 children, the number of leaves is one more than the number of nodes with two children.</li>
+  </ul>
+</li>
+<li><strong>Types:</strong>
+  <ul>
+    <li><em>Full</em>: every node has 0 or 2 children.</li>
+    <li><em>Complete</em>: every level is full except possibly the last, whose keys are as far left as possible.</li>
+    <li><em>Perfect</em>: every internal node has two children and all leaves are on the same level; it has 2<sup>h</sup> − 1 nodes for height h.</li>
+  </ul>
+</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>No code in this video. The next video covers applications, then binary trees and their representation.</p>
+  </section>
+</template>
+
+<template id="DSASP-Tree-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI2OA%3D%3D" target="_blank" rel="noopener">Application of Tree</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Applications of tree (board):</p>
+    <ul>
+      <li><strong>To represent hierarchical data:</strong>
+        <ul>
+          <li>organization structure (main person at the top, reportees, their reportees, …);</li>
+          <li>folder structure (e.g. Linux: root, subfolders inside it, …);</li>
+          <li>XML/HTML content (JSON objects) — an HTML page is read as a tree (html at the top, children body and head, …), and JavaScript in browsers manipulates the page through this tree;</li>
+          <li>in OOP (inheritance) — a base class, its children classes, and theirs.</li>
+        </ul></li>
+      <li><strong>Binary search trees</strong> — the most important application; covered separately.</li>
+      <li><strong>Binary heap</strong> — mainly used for priority queues, needed in Dijkstra's, Huffman's and Prim's algorithms or anywhere a queue with priority is needed.</li>
+      <li><strong>B and B+ trees in DBMS</strong> — used for indexing in many databases (the alternative is hashing).</li>
+      <li><strong>Spanning and shortest path trees in computer networks</strong> — bridges use a spanning tree to forward packets; each router treats itself as the root, builds a shortest path tree to every other node and routes data with it.</li>
+      <li><strong>Parse tree and expression tree in compilers</strong> — to parse source code.</li>
+    </ul>
+    <p>More variations used in practice:</p>
+    <ul>
+      <li><strong>Trie</strong> — represents dictionaries and supports operations like prefix search.</li>
+      <li><strong>Suffix tree</strong> — fast pattern searches in a big text: pre-process the text into a suffix tree, then a search takes time proportional to the pattern's length, not the text's — the fastest possible way.</li>
+      <li><strong>Binary index tree</strong> and <strong>segment tree</strong> — range query searches; segment tree is more powerful, binary index tree faster for a limited set of operations.</li>
+    </ul>
+    <p>Many of these are studied in upcoming tracks; the list isn't complete — trees are used in almost every field of computer science.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/Njc3NA%3D%3D" target="_blank" rel="noopener">Application of Tree</a></p>
+<ul>
+<li>A tree is a hierarchical, non-linear collection of nodes and edges. Terms from the article's example: internal nodes (those with children), external nodes (leaves), (parent, child) pairs and siblings.</li>
+<li><strong>Why trees:</strong>
+  <ul>
+    <li>They store naturally hierarchical information, e.g. a computer's file system.</li>
+    <li>With an ordering (e.g. a BST), search is moderate: quicker than a linked list, slower than arrays. Insert and delete are quicker than arrays and slower than unordered linked lists. Self-balancing trees (AVL, Red-Black) guarantee O(log n) for search, insertion and deletion.</li>
+    <li>Like linked lists, a pointer implementation has no upper limit on the number of nodes.</li>
+  </ul>
+</li>
+<li><strong>Applications:</strong>
+  <ul>
+    <li>Hierarchical data: folders, organization charts, XML/HTML.</li>
+    <li>Search and storage structures: BSTs (fast search, insert and delete on sorted data, and finding the closest item); heaps (array-based, for priority queues); B and B+ trees (database indexing); K-D trees (points in K-dimensional space); tries (dictionaries with prefix lookup); suffix trees (quick pattern search in a fixed text).</li>
+    <li>Syntax trees in compilers (scanning, parsing, code generation and evaluation of arithmetic expressions).</li>
+    <li>Spanning trees and shortest-path trees in routers and bridges.</li>
+    <li>Others the article lists: decision trees and machine learning, DNS servers, computer graphics, compositing digital images for visual effects, chess defense moves, the JVM.</li>
+  </ul>
+</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>No code in this video.</p>
+  </section>
+</template>
+
+<template id="DSASP-Tree-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI2OQ%3D%3D" target="_blank" rel="noopener">Binary Tree</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>In a <strong>binary tree</strong> every node has at most two children — degree 0, 1 or 2. Board example: 30 → 40, 50; 40 → 70; 50 → 60, 80.</p>
+    <p><strong>Representation:</strong> a root node represents the tree; every node has three fields — the key (data), a <em>left</em> child pointer/reference and a <em>right</em> child pointer/reference ("pointer" in C/C++, "reference" in Java/Python). For leaves, left and right are both null. This linked representation is the most common; arrays can also represent binary trees, and some trees are typically stored as arrays (binary heap, segment tree), but binary trees and binary search trees are generally linked.</p>
+    <p><strong>Why binary trees rather than general n-ary trees?</strong> The most popular tree data structures are binary-tree variations: the binary search tree (the most used), the binary heap (priority queues) and the segment tree (range queries).</p>
+    <p>An empty tree is represented by root = NULL/null.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/OTMyNA%3D%3D" target="_blank" rel="noopener">Binary Tree</a></p>
+<ul>
+<li>A tree whose nodes have at most 2 children (left and right). It's represented by a pointer to the root, which is NULL for an empty tree. Each node holds its data, a pointer to the left child and a pointer to the right child.</li>
+<li><strong>Operations:</strong> basic ones are insert, remove, search and traverse; auxiliary ones are height, a node's level and size. Traversals fall into two categories: depth-first (DFS) and breadth-first (BFS).</li>
+<li><strong>Applications:</strong>
+  <ul>
+    <li>Compilers: expression trees, and syntax trees (e.g. GCC) for arithmetic operations.</li>
+    <li>Huffman coding trees for compression, and encoding and decoding.</li>
+    <li>Priority queues (finding the max or min in O(1)), and heap sort with a binary heap.</li>
+    <li>Hierarchical data, spreadsheets such as Excel, database indexing, caching, and fast memory allocation.</li>
+    <li>Binary search trees for fast search in sorted data; inverted indexes and k-d trees for large datasets.</li>
+    <li>Decision trees for computer-controlled game characters.</li>
+  </ul>
+</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation</h4>
+<pre><code class="language-cpp">struct Node
+{
+    int key;
+    Node *left;
+    Node *right;
+    Node(int k)
+    {   key = k;
+        left = right = NULL;
+    }
+};
+int main()
+{
+    Node *root = new Node(10);
+    root-&gt;left = new Node(20);
+    root-&gt;right = new Node(30);
+    root-&gt;left-&gt;left = new Node(40);
+}</code></pre>
+<pre><code class="language-java">class Node
+{   int key;
+    Node left;
+    Node right;
+    Node(int k) { key = k; }
+}
+class Test {
+    public static void main(String[] args)
+    {   Node root = new Node(10);
+        root.left = new Node(20);
+        root.right = new Node(30);
+        root.left.left = new Node(40);
+    }
+}</code></pre>
+      <p>Like a linked-list node, but with two self-type pointers/references (left and right) instead of next (and prev). In Java, uninitialized member references are null by default, so the constructor doesn't set left and right. Memory is always allocated dynamically: Java objects anyway, C++ with <code>new</code>. The program builds 10 with children 20 and 30, and 40 as 20's left child.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI3MA%3D%3D" target="_blank" rel="noopener">Tree Traversal</a> · Notes from the full course transcript and the board (a frame every 25 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Tree traversal, in its simplest form, is printing (processing) every key of the tree exactly once. Many operations depend on it — searching an item, or counting the size.</p>
+    <ul>
+      <li><strong>Breadth first (or level order):</strong> draw a line at each level from top to bottom and print the nodes on it from left to right. Covered in a separate video.</li>
+      <li><strong>Depth first:</strong> go to one side, finish it completely, then the other. Understood with recursion as three tasks: visit the root, traverse the left subtree, traverse the right subtree (each subtree the same way). There are 3! = 6 orders; the three popular ones visit left before right:
+        <ul>
+          <li><strong>Inorder</strong> — left, root, right;</li>
+          <li><strong>Preorder</strong> — root, left, right;</li>
+          <li><strong>Postorder</strong> — left, right, root.</li>
+        </ul></li>
+    </ul>
+    <p>When a subtree is a single node, print it; otherwise apply the same process recursively.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/MjM0Ng%3D%3D" target="_blank" rel="noopener">Binary Tree Traversals</a></p>
+<ul>
+<li>Linear structures have one logical way to traverse them; trees have several. For the article's tree 1 → 2, 3; 2 → 4, 5:
+  <ul>
+    <li><strong>Inorder</strong> (Left, Root, Right): 4 2 5 1 3. A node is processed after all nodes in its left subtree; its right subtree comes after it.</li>
+    <li><strong>Preorder</strong> (Root, Left, Right): 1 2 4 5 3. A node is processed before any node in its subtrees.</li>
+    <li><strong>Postorder</strong> (Left, Right, Root): 4 5 2 3 1. A node is processed after all nodes in its subtrees.</li>
+  </ul>
+</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Examples</h4>
+      <ul>
+        <li>10 with children 20, 30: inorder 20 10 30; preorder 10 20 30; postorder 20 30 10.</li>
+        <li>Exercise tree: 10 → 20, 30; 20 → 40, 50; 50 → 70, 80; 30 → (empty left), 60:
+          <ul>
+            <li>Inorder: 40 20 70 50 80 10 30 60</li>
+            <li>Preorder: 10 20 40 50 70 80 30 60</li>
+            <li>Postorder: 40 70 80 50 20 60 30 10</li>
+          </ul></li>
+      </ul>
+      <p>The next videos implement the three traversals, and later level order traversal.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI3MQ%3D%3D" target="_blank" rel="noopener">Implementation of Inorder Traversal</a> · Notes from the full course transcript and the board (a frame every 25 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given the root of a binary tree, print its inorder traversal (a void function taking root). Recursively process the left subtree, print the root, then recursively process the right subtree. The <code>root != NULL</code> check is required: for an empty tree, accessing null's left, key or right gives runtime errors.</p>
+    <p>Board tree: 10 → 20, 30; 30 → 40, 50. Inorder: 20 10 40 30 50.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/NzY0Ng%3D%3D" target="_blank" rel="noopener">Implementation of Inorder, Preorder and Postorder Traversal</a></p>
+<ul>
+<li><strong>Uses:</strong>
+  <ul>
+    <li><strong>Inorder</strong> gives a BST's nodes in non-decreasing order; reversed inorder gives non-increasing order.</li>
+    <li><strong>Preorder</strong> is used to copy a tree and to get the prefix expression of an expression tree.</li>
+    <li><strong>Postorder</strong> is used to delete a tree and to get the postfix expression.</li>
+  </ul>
+</li>
+<li>For the tree 1 → 2, 3; 2 → 4, 5: inorder 4 2 5 1 3, preorder 1 2 4 5 3, postorder 4 5 2 3 1.</li>
+<li><strong>Complexity:</strong> O(N) time. Auxiliary space is O(1) if the function-call stack isn't counted, otherwise O(h): O(N) worst case for a skewed tree (height n), O(log N) best case for a balanced tree.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive implementation</h4>
+<pre><code class="language-cpp">void inorder(Node *root)
+{
+    if(root != NULL)
+    {   inorder(root-&gt;left);
+        cout &lt;&lt; (root-&gt;key) &lt;&lt; " ";
+        inorder(root-&gt;right);
+    }
+}</code></pre>
+<pre><code class="language-java">void inorder(Node root)
+{   if(root != null)
+    {   inorder(root.left);
+        System.out.print(root.key + " ");
+        inorder(root.right);
+    }
+}</code></pre>
+      <p>Trace: inorder(10) → inorder(20) → inorder(null) returns at once; print 20; inorder(null) for 20's right; back in 10, print 10; inorder(30) → inorder(40) → print 40; print 30; inorder(50) → print 50.</p>
+      <p><strong>Time O(n):</strong> constant work per node — an internal node is printed; a leaf is printed and makes two calls on null, which are also constant work. <strong>Auxiliary space O(h):</strong> a call finishes the left child's recursion before making the right child's, so at most one root-to-leaf path is on the call stack — h + 1 calls (including the null call), where h is the height counted in nodes on the longest root-to-leaf path. For the board tree (height 3), 4 calls in the worst case.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI3Mg%3D%3D" target="_blank" rel="noopener">Implementation of Preorder Traversal</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Preorder: print the root key first, then process the whole left subtree, then the whole right subtree. As with inorder, check <code>root != NULL</code> so an empty (null) root doesn't cause a runtime error.</p>
+    <p>Board tree: 10 → 20, 30; 30 → 40, 50. Preorder: 10 20 30 40 50.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive implementation</h4>
+<pre><code class="language-cpp">void preorder(Node *root)
+{
+    if(root != NULL)
+    {   cout &lt;&lt; (root-&gt;key) &lt;&lt; " ";
+        preorder(root-&gt;left);
+        preorder(root-&gt;right);
+    }
+}</code></pre>
+<pre><code class="language-java">void preorder(Node root)
+{   if(root != null)
+    {   System.out.print(root.key + " ");
+        preorder(root.left);
+        preorder(root.right);
+    }
+}</code></pre>
+      <p>Trace: preorder(10) prints 10, calls preorder(20) — prints 20, its null children return at once — then preorder(30) prints 30, then 40 and 50 the same way. Time O(n) (constant work per node) and auxiliary space O(h) (at most O(h) recursive calls at any moment) — same analysis as inorder.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the Java version writes <code>root != NULL</code>; Java uses <code>null</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI3Mw%3D%3D" target="_blank" rel="noopener">Implementation of Postorder Traversal</a> · Notes from the full course transcript and the board (a close-up of the final board). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Postorder: process the whole left subtree, then the whole right subtree, then the root — subtrees in the same fashion, recursively — only when root is not null.</p>
+    <p>Board tree: 10 → 20, 30; 30 → 40, 50. Postorder: 20 40 50 30 10.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive implementation</h4>
+<pre><code class="language-cpp">void postorder(Node *root)
+{
+    if(root != NULL)
+    {   postorder(root-&gt;left);
+        postorder(root-&gt;right);
+        cout &lt;&lt; (root-&gt;key) &lt;&lt; " ";
+    }
+}</code></pre>
+<pre><code class="language-java">void postorder(Node root)
+{   if(root != null)
+    {   postorder(root.left);
+        postorder(root.right);
+        System.out.print(root.key + " ");
+    }
+}</code></pre>
+      <p>Board call tree: postorder(10) → postorder(20) → postorder(NULL), postorder(NULL), print 20; postorder(30) → postorder(40) → two NULL calls, print 40; postorder(50) → two NULL calls, print 50; print 30; print 10.</p>
+      <p>Each node is traversed exactly once with constant work, so the time is Θ(n) — an exact bound, more precise than O(n). Auxiliary space is Θ(h): at some moment h + 1 recursive calls are on the call stack. The same Θ(n) time and Θ(h) space hold for inorder and preorder.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI3OQ%3D%3D" target="_blank" rel="noopener">Height of Binary Tree</a> · Notes from the full course transcript and the board (a frame every 25 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Height</strong> = the maximum number of nodes on a root-to-leaf path. Board examples:</p>
+    <ul>
+      <li>10 → 8, 30; 30 → 40, 50; 50 → 70: root-to-leaf paths have 2, 3 and 4 nodes, so height 4.</li>
+      <li>30 → 40, 60; 40 → 70 → 80: paths of 4 and 2 nodes → 4.</li>
+      <li>A single node 10 → 1; NULL → 0; 10 → 20 → 30 (one path) → 3.</li>
+    </ul>
+    <p>Another convention counts <em>edges</em> instead: 3 for the first tree, 0 for a single node, −1 for an empty tree — the nodes-based height minus one. The course follows the nodes convention.</p>
+    <p><strong>Recursive idea:</strong> recursively find the heights of the left and right subtrees, take the maximum and add 1. For 10 → 8, 30; 30 → 40, 50: left gives 1, right gives 2, so max(1, 2) + 1 = 3. Base case: an empty root returns 0.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/NzE3Mg%3D%3D" target="_blank" rel="noopener">Height of Binary Tree</a></p>
+<ul>
+<li>Recursively compute the heights of the left and right subtrees; a node's height is the larger of the two plus 1. Illustration: maxDepth('1') = max(maxDepth('2'), maxDepth('3')) + 1 = 2 + 1, with maxDepth('2') = 1 + 1 (leaves 4 and 5 have height 1) and maxDepth('3') = 1.</li>
+<li>The article defines height as the number of edges from the root to the deepest node, with an empty tree's height 0. Its step list says "If the tree is empty then return -1", but the illustration counts a leaf as 1.</li>
+<li><strong>Complexity:</strong> O(N) time, O(N) auxiliary space for the recursion stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation</h4>
+<pre><code class="language-cpp">int height(Node *root)
+{
+    if(root == NULL)
+        return 0;
+    else
+        return max(height(root-&gt;left), height(root-&gt;right)) + 1;
+}</code></pre>
+<pre><code class="language-java">int height(Node root)
+{   if(root == null)
+        return 0;
+    else
+        return Math.max(height(root.left), height(root.right)) + 1;
+}</code></pre>
+      <p>Board call tree: height(10) → height(8) → two NULL calls return 0, so 8 returns 1; height(30) → height(40) returns 1, height(50) returns 1, so 30 returns 2; height(10) returns max(1, 2) + 1 = 3.</p>
+      <p>Time O(n): every node is visited once with constant work (one comparison and one addition). Auxiliary space O(h): at most h + 1 calls on the recursion call stack (e.g. while a leaf's null child is being called).</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the C++ version writes <code>height(roo-&gt;left)</code>; it's <code>root</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI4MA%3D%3D" target="_blank" rel="noopener">Print Nodes at K distance</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a binary tree and k, print the nodes at distance k from the root — i.e. the (k+1)-th level. Board tree: 10 → 20, 30; 20 → 40, 50; 30 → (empty), 70; 70 → 80. k = 2 → 40 50 70 (the third level); k = 1 → 20 30; k = 0 → the root 10.</p>
+    <p><strong>Recursive idea:</strong> two base cases — if root is null, return (print nothing); if k is 0, print the root's key. Otherwise recur for the left and right subtrees with k − 1.</p>
+    <p>The order of the base conditions matters: check root == null first; checking k == 0 first would access null's key.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/NzY0NA%3D%3D" target="_blank" rel="noopener">Print Nodes at K Distance</a></p>
+<ul>
+<li>Print every node at distance k from the root (in the article's example, 4, 5 and 8 are at distance 2), recursively. At every node check whether k == 0 and, if so, print it; otherwise pass k − 1 to the left and right subtrees.</li>
+<li><strong>Complexity:</strong> O(n) time, O(height) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation</h4>
+<pre><code class="language-cpp">void printKDist(Node *root, int k)
+{
+    if(root == NULL) return;
+    if(k == 0) { cout &lt;&lt; (root-&gt;key) &lt;&lt; " "; }
+    else
+    {   printKDist(root-&gt;left, k-1);
+        printKDist(root-&gt;right, k-1);
+    }
+}</code></pre>
+<pre><code class="language-java">void printKDist(Node root, int k)
+{   if(root == null) return;
+    if(k == 0) { System.out.print(root.key + " "); }
+    else
+    {   printKDist(root.left, k-1);
+        printKDist(root.right, k-1);
+    }
+}</code></pre>
+      <p>Board call tree for k = 2: printKDist(10, 2) → printKDist(20, 1) → printKDist(40, 0) prints 40, printKDist(50, 0) prints 50; printKDist(30, 1) → printKDist(NULL, 0) returns, printKDist(70, 0) prints 70.</p>
+      <p>Time: worst case Θ(n) (every node visited), best case Θ(1) (k = 0, only the root) — in general O(n). Auxiliary space O(h): in the worst case the calls for every node along the longest path are on the stack.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTQ5MDM%3D" target="_blank" rel="noopener">Level Order Traversal</a> · <strong>No transcript</strong>: notes from the board (a frame every 30 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Level order traversal is the breadth-first traversal of a binary tree: print level by level, left to right, in a single line (Description), implemented with a <strong>queue</strong>. Board examples:</p>
+    <ul>
+      <li>10 → 20, 30; 20 → 8, 7; 30 → (empty), 6; 7 → 9, 15 → 10 20 30 8 7 6 9 15.</li>
+      <li>8 → (empty), 6; 6 → 2, 4; 4 → 3 → 8 6 2 4 3.</li>
+      <li>3 → 4; 4 → (empty), 5 → 3 4 5.</li>
+    </ul>
+    <p>Dequeue a node, print it, and enqueue its children (left, then right) if they exist; repeat until the queue is empty.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/MjM0OA%3D%3D" target="_blank" rel="noopener">Level Order Traversal of a Binary Tree</a></p>
+<ul>
+<li>Traverse level by level, from the first level to the last (the article's example prints 10 20 30 40 50 60 70 80), efficiently with a queue. Push the root; while the queue isn't empty, pop the front node, print it, then enqueue its left and then its right child.</li>
+<li><strong>Complexity:</strong> O(N) time, O(N) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation</h4>
+<pre><code class="language-cpp">void printLevel(Node *root)
+{
+    if(root == NULL) return;
+    queue&lt;Node *&gt; q;
+    q.push(root);
+    while(q.empty() == false)
+    {
+        Node *curr = q.front();
+        q.pop();
+        cout &lt;&lt; (curr-&gt;key) &lt;&lt; " ";
+        if(curr-&gt;left != NULL)
+            q.push(curr-&gt;left);
+        if(curr-&gt;right != NULL)
+            q.push(curr-&gt;right);
+    }
+}</code></pre>
+<pre><code class="language-java">void printLevel(Node root)
+{   if(root == null) return;
+    Queue&lt;Node&gt; q = new LinkedList&lt;Node&gt;();
+    q.add(root);
+    while(q.isEmpty() == false)
+    {   Node curr = q.poll();
+        System.out.print(curr.key + " ");
+        if(curr.left != null)
+            q.add(curr.left);
+        if(curr.right != null)
+            q.add(curr.right);
+    }
+}</code></pre>
+      <p>Board trace on 10 → 15, 20; 15 → 30; 20 → 40, 50; 40 → 60, 70: the queue holds 10, then 15 20, then 20 30, …, printing 10 15 20 30 40 50 60 70.</p>
+      <p><strong>Time complexity Θ(n). Auxiliary space O(n)</strong> — more precisely <strong>Θ(w)</strong>, where w is the width of the binary tree The board illustrates the extremes: a skewed tree with one node per level — aux space Θ(1); a complete-looking tree with a wide last level — aux space Θ(n).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI3NQ%3D%3D" target="_blank" rel="noopener">Level Order Traversal Line by Line (Part 1)</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print the level order traversal with a new line before each new level. Board examples:</p>
+    <ul>
+      <li>10 → 20, 30; 20 → 40, 50; 30 → (empty), 60; 60 → 70, 80 → lines "10", "20 30", "40 50 60", "70 80".</li>
+      <li>10 → 8 → 6 (one node per level) → a new line after every node.</li>
+      <li>5 → 3, 10; 10 → 15 → "5", "3 10", "15".</li>
+    </ul>
+    <p><strong>Method 1 (a single loop with a null marker):</strong> when you traverse the last node of a level, the next level is completely in the queue. Start with root and a <code>null</code> end-of-level marker in the queue. When you take out a null, you've reached the end of the current level: print a new line and push another null — the marker for the next level, which is now fully queued.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation (Method 1)</h4>
+<pre><code class="language-cpp">void printLevelOrderLine(Node *root)
+{
+    if(root == NULL) return;
+    queue&lt;Node *&gt; q;
+    q.push(root);
+    q.push(NULL);
+    while(q.size() &gt; 1)
+    {
+        Node *curr = q.front();
+        q.pop();
+        if(curr == NULL)
+        {   cout &lt;&lt; "\n";
+            q.push(NULL);
+            continue;
+        }
+        cout &lt;&lt; (curr-&gt;key) &lt;&lt; " ";
+        if(curr-&gt;left != NULL) q.push(curr-&gt;left);
+        if(curr-&gt;right != NULL) q.push(curr-&gt;right);
+    }
+}</code></pre>
+      <p>The loop condition is <code>q.size() &gt; 1</code>, not "while not empty": at the end only the last null remains. <code>continue</code> skips the printing/enqueuing lines for a null. Java is the same with <code>Queue&lt;Node&gt; q = new LinkedList&lt;Node&gt;()</code>, <code>q.add</code>, <code>q.poll()</code> and <code>System.out.println()</code>. Board trace on 10 → 20, 30; 20 → 40: queue [10, NULL] → print 10, [NULL, 20, 30] → "\n", [20, 30, NULL] → 20, 30 (40 added) → "\n" → 40 → done.</p>
+      <p>Time: every node enters and leaves the queue exactly once, plus O(h) extra nulls (one per level) — O(n + h) = O(n). Auxiliary space Θ(width) (width + 1 for the null, a constant), which can also be written O(n) since the width can reach about n/2 in a perfect tree.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI3Ng%3D%3D" target="_blank" rel="noopener">Level Order Traversal Line by Line (Part 2)</a> · Notes from the full course transcript and the board (a close-up of the final board). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Method 2 (nested loops):</strong> instead of a null marker after every level, break the printing into two loops. The outer loop runs once per level; the inner loop prints exactly the nodes currently in the queue (one level) and enqueues their children (the next level); then the outer loop prints a new line.</p>
+    <p>Board trace on 10 → 20, 30; 20 → 40, 50; 30 → (empty), 60: queue [10] → print 10, enqueue 20 30, "\n" → print 20 30, enqueue 40 50 60, "\n" → print 40 50 60, "\n".</p>
+    <p>A common mistake: writing <code>for(i = 0; i &lt; q.size(); i++)</code>. The queue's size changes inside the loop as children are added, so the new lines come at the wrong places — store the size in a separate <code>count</code> first.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation (Method 2)</h4>
+<pre><code class="language-cpp">void printLevelOrderLine(Node *root)
+{
+    if(root == NULL) return;
+    queue&lt;Node *&gt; q;
+    q.push(root);
+    while(q.empty() == false)
+    {
+        int count = q.size();
+        for(int i = 0; i &lt; count; i++)
+        {   Node *curr = q.front();
+            q.pop();
+            cout &lt;&lt; (curr-&gt;key) &lt;&lt; " ";
+            if(curr-&gt;left != NULL) q.push(curr-&gt;left);
+            if(curr-&gt;right != NULL) q.push(curr-&gt;right);
+        }
+        cout &lt;&lt; "\n";
+    }
+}</code></pre>
+      <p>Java is the same with <code>Queue&lt;Node&gt; q = new LinkedList&lt;Node&gt;()</code>, <code>q.isEmpty()</code>, <code>q.poll()</code>, <code>q.add</code> and <code>System.out.println()</code>.</p>
+      <p>Time O(n): analyzing the two loops directly is hard, but every node enters and leaves the queue exactly once, O(1) each. Auxiliary space Θ(width), or O(n) — it's a simple level order traversal.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI3Nw%3D%3D" target="_blank" rel="noopener">Size of Binary Tree</a> · Notes from the full course transcript and the board (a frame every 35 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The <strong>size</strong> of a binary tree is the number of nodes in it (e.g. 5, 3, 6 for the board examples; an empty tree has size 0).</p>
+    <p><strong>Recursive idea:</strong> base case — if root is null, return 0; otherwise return 1 + size of the left subtree + size of the right subtree. For 10 → 20, 30; 20 → 40, 50; 30 → (empty), 60: the left subtree returns 3, the right returns 2, so 1 + 3 + 2 = 6.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/NzE4Mw%3D%3D" target="_blank" rel="noopener">Size of Binary Tree</a></p>
+<ul>
+<li>Size is the number of elements: size(left subtree) + 1 + size(right subtree), computed recursively.</li>
+<li><strong>Complexity:</strong> O(N) time (every node visited once). O(N) auxiliary space for the recursion stack; the worst case is a left- or right-skewed tree. These are the same as for tree traversal.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive implementation</h4>
+<pre><code class="language-cpp">int getSize(Node *root)
+{
+    if(root == NULL)
+        return 0;
+    else
+        return 1 + getSize(root-&gt;left) + getSize(root-&gt;right);
+}</code></pre>
+<pre><code class="language-java">int getSize(Node root)
+{   if(root == null)
+        return 0;
+    else
+        return 1 + getSize(root.left) + getSize(root.right);
+}</code></pre>
+      <p>Board call tree: getSize(40) and getSize(50) each get 0 + 0 from their null children and return 1; getSize(20) returns 1 + 1 + 1 = 3; getSize(30) gets 0 from null and 1 from getSize(60), returning 2; getSize(10) returns 1 + 3 + 2 = 6.</p>
+      <p>Time O(n). Auxiliary space O(h): at most h + 1 calls on the call stack at any moment — e.g. 10, 20, 40, null (4 calls for this tree of height 3), matching the height of the recursion tree.</p>
+    </div>
+    <div class="approach">
+      <h4>Iterative alternative</h4>
+      <p>Use level order traversal with a queue and a counter initialized to 0: increment the count for every node taken out while the queue is not empty, and return it at the end. Time is also O(n), but auxiliary space is O(width) — a complete level can be in the queue — compared with O(h) for the recursive solution.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI3OA%3D%3D" target="_blank" rel="noopener">Maximum in Binary Tree</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Find the maximum value in a binary tree (e.g. 80, 40 and 80 for the board examples); for an empty tree, return −∞.</p>
+    <p><strong>Recursive idea:</strong> recursively get the maximum of the left subtree and of the right subtree, and return the maximum of those two and the root's key. A null returns −∞ (<code>INT_MIN</code> in C++, <code>Integer.MIN_VALUE</code> in Java), so for a leaf both calls give −∞ and the answer is the leaf itself.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/NzY0NQ%3D%3D" target="_blank" rel="noopener">Maximum in Binary Tree</a></p>
+<ul>
+<li>In a BST the maximum is found by following right pointers to the rightmost node. In a general binary tree every node must be visited: return the maximum of the node's data, the left subtree's maximum and the right subtree's maximum. The minimum works the same way.</li>
+<li><strong>Complexity:</strong> O(N) time, O(N) space for the recursion stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive implementation</h4>
+<pre><code class="language-cpp">int getMax(Node *root)
+{
+    if(root == NULL)
+        return INT_MIN;
+    else
+        return max(root-&gt;key, max(getMax(root-&gt;left), getMax(root-&gt;right)));
+}</code></pre>
+<pre><code class="language-java">int getMax(Node root)
+{   if(root == null)
+        return Integer.MIN_VALUE;
+    else
+        return Math.max(root.key, Math.max(getMax(root.left), getMax(root.right)));
+}</code></pre>
+      <p>Board call tree on 20 → 80, 30; 30 → 40, 50: getMax(80) gets −∞, −∞ and returns 80; getMax(30) gets 40 and 50 and returns max(50, 40, 30) = 50; getMax(20) returns max(20, 80, 50) = 80.</p>
+      <p>Time O(n): a traversal doing constant work per node (at most two comparisons). Auxiliary space O(h): at most h + 1 calls on the recursion stack.</p>
+    </div>
+    <div class="approach">
+      <h4>Iterative alternative (level order)</h4>
+      <p>Use a queue with the result initialized to −∞; for every node taken out while the queue isn't empty, update the result if the node's key is larger; return it (−∞ for an empty tree). Time O(n), auxiliary space O(width). For a skewed tree (height = n) the recursive solution keeps everything on the call stack while the queue never holds more than one node; for a perfect tree (1, 2, 4, 8, 16, … nodes per level) the level order solution needs more space.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI4MQ%3D%3D" target="_blank" rel="noopener">Print Left View of Binary Tree</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The <strong>left view</strong> prints the leftmost node at every level. Board examples: 10 → 20, 30; 30 → 40, 50 → 10 20 40; a tree with leftmost nodes 10, 50, 70, 8 → 10 50 70 8; a tree with one node per level 30, 50, 60, 10 → 30 50 60 10.</p>
+    <p>Two O(n) solutions — recursive and iterative.</p>
+    <ul>
+      <li><strong>Method 1 (recursive):</strong> in a preorder traversal the leftmost node of every level is visited first among its level. Keep <code>maxLevel</code> (the deepest level seen so far, initially 0) shared across calls — global in C++ (it could also be passed by reference) and a class member in Java — and pass the current <code>level</code> to each call (1 for the root; not shared). When level &gt; maxLevel, the node is the first of its level: print it and set maxLevel = level.</li>
+      <li><strong>Method 2 (iterative):</strong> almost the same as level order traversal line by line (Method 2); print the current node only when <code>i == 0</code>, i.e. it's the first node of its level.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/MjM1OA%3D%3D" target="_blank" rel="noopener">Left, Right, Top and Bottom View of a Binary Tree</a></p>
+<ul>
+<li><strong>Left view:</strong> the first node of every level. Do a level order traversal with a marker separating the levels and print the first node of each level.</li>
+<li><strong>Right view:</strong> the same, but print the last node of each level.</li>
+<li><strong>Top view:</strong> node x is in the output if it is the topmost node at its <em>horizontal distance</em>. The root has distance 0; a left child's distance is its parent's − 1 and a right child's is + 1. Do a level order traversal computing each node's horizontal distance and print the first node seen at each distance, using hashing to record which distances have been seen.</li>
+<li><strong>Bottom view:</strong> like the top view, but the bottommost node at each horizontal distance. Keep overwriting the map entry for a distance, so the map ends up with the last node at each distance instead of the first.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 1 (recursive): Θ(n) time, Θ(h) auxiliary space</h4>
+<pre><code class="language-cpp">int maxLevel = 0;
+void printLeft(Node *root, int level)
+{
+    if(root == NULL) return;
+    if(maxLevel &lt; level)
+    {   cout &lt;&lt; (root-&gt;key) &lt;&lt; " ";
+        maxLevel = level;
+    }
+    printLeft(root-&gt;left, level + 1);
+    printLeft(root-&gt;right, level + 1);
+}
+void printLeftView(Node *root)
+{   printLeft(root, 1); }</code></pre>
+      <p>Board trace on 10 → 20, 30; 30 → 40, 50: 10 (level 1 &gt; 0) printed, maxLevel 1; 20 (level 2) printed, maxLevel 2; 30 (level 2) not printed; 40 (level 3) printed; 50 (level 3) not printed → 10 20 40. Java is the same with <code>int maxLevel = 0</code> as a member.</p>
+    </div>
+    <div class="approach">
+      <h4>Method 2 (iterative): Θ(n) time, Θ(width) auxiliary space</h4>
+<pre><code class="language-cpp">void printLeft(Node *root)
+{
+    if(root == NULL) return;
+    queue&lt;Node *&gt; q;
+    q.push(root);
+    while(q.empty() == false)
+    {
+        int count = q.size();
+        for(int i = 0; i &lt; count; i++)
+        {   Node *curr = q.front();
+            q.pop();
+            if(i == 0)
+                cout &lt;&lt; (curr-&gt;key) &lt;&lt; " ";
+            if(curr-&gt;left != NULL) q.push(curr-&gt;left);
+            if(curr-&gt;right != NULL) q.push(curr-&gt;right);
+        }
+    }
+}</code></pre>
+      <p>The inner loop prints the current level and enqueues the next. Auxiliary space Θ(width), also O(n) since the last level can hold almost n/2 nodes. Java uses <code>q.poll()</code> and <code>q.add</code>.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the C++ iterative version reads the front with <code>q.top()</code>; <code>std::queue</code> uses <code>q.front()</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-16">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI4Mg%3D%3D" target="_blank" rel="noopener">Children Sum Property</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Children sum property:</strong> for every node, the sum of the left and right children's values equals the node's value (if only one child is present, its value must equal the node's — the missing child counts as 0). Board examples:</p>
+    <ul>
+      <li>20 → 8, 12; 8 → 3, 5 → Yes (3 + 5 = 8, 8 + 12 = 20).</li>
+      <li>A tree where a node with value 2 has a single child 2, and 8 + 2 = 10 at the root → Yes.</li>
+      <li>A single node 5 → Yes; NULL (an empty tree) → Yes.</li>
+      <li>3 → 1, 2; 2 → 1, 2 → No (1 + 2 ≠ 2).</li>
+    </ul>
+    <p><strong>Recursive idea:</strong> check that the root's key equals the sum of its children's keys, and that the property holds recursively for the left and right subtrees. Two base cases — empty tree, and <strong>leaf</strong> — both return true. Many people write the base conditions wrong the first time: without the leaf check, a leaf such as 8 gets sum 0 ≠ 8 and wrongly returns false.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation</h4>
+<pre><code class="language-cpp">bool isCSum(Node *root)
+{
+    if(root == NULL) return true;
+    if(root-&gt;left == NULL &amp;&amp; root-&gt;right == NULL)
+        return true;
+    int sum = 0;
+    if(root-&gt;left != NULL)  { sum += root-&gt;left-&gt;key; }
+    if(root-&gt;right != NULL) { sum += root-&gt;right-&gt;key; }
+    return (root-&gt;key == sum &amp;&amp;
+            isCSum(root-&gt;left) &amp;&amp;
+            isCSum(root-&gt;right));
+}</code></pre>
+      <p>Java is the same with <code>boolean</code> and <code>.</code>. Board trace on 20 → 8, 12; 12 → 3, 9: 20 = 8 + 12; isCSum(8) is a leaf → true; for 12, 3 + 9 = 12 and isCSum(3), isCSum(9) are leaves → true; so true overall.</p>
+      <p>Time O(n): a traversal with constant work per node. Auxiliary space O(h) for the recursion call stack.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;&amp;</code> is drawn like "$$"; the teacher marks the leaf-check line with a ✗ while demonstrating what goes wrong without it — the line is required.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-17">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI4Mw%3D%3D" target="_blank" rel="noopener">Check for Balanced Binary Tree</a> · Notes from the full course transcript and the board (a frame every 35 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A tree is <strong>height balanced</strong> if, for every node, the heights of the left and right subtrees differ by at most one. Board examples: a node whose left subtree has height 2 and right subtree height 0 makes the tree unbalanced (No); a tree where every node's difference is 0 or 1 (e.g. 3 vs 2, 1 vs 2, leaves 0) is balanced (Yes).</p>
+    <ul>
+      <li><strong>Naive, O(n²):</strong> for each node compute the left and right heights, check the difference is ≤ 1, and recursively check both subtrees. The height function on n nodes takes O(n), and it's called for (nearly) every node — e.g. a skewed tree calls it on n − 1 nodes, then n − 2, … — so O(n²). Assumption on the board: we have <code>height()</code> available.</li>
+      <li><strong>Efficient, O(n):</strong> make every call do two things — tell whether its subtree is balanced <em>and</em> return its height. Return an integer: −1 if the subtree is unbalanced, otherwise its height (≥ 0). As soon as a child returns −1, return −1 immediately.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/NzE4NA%3D%3D" target="_blank" rel="noopener">Check for Balanced Binary Tree</a></p>
+<ul>
+<li>A height-balanced tree: at every node the left and right subtree heights differ by at most 1, and both subtrees are themselves balanced.</li>
+<li><strong>Naive:</strong> get the left and right heights by DFS and check the difference plus both subtrees recursively. O(n²) time in the case of a full binary tree, O(n) call-stack space.</li>
+<li><strong>Efficient:</strong> compute the height in the same recursion. Return the subtree's height if it's balanced, otherwise −1. O(n) time (one DFS), O(n) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O(n²)</h4>
+<pre><code class="language-cpp">bool isBalanced(Node *root)
+{
+    if(root == NULL) return true;
+    int lh = height(root-&gt;left);
+    int rh = height(root-&gt;right);
+    return (abs(lh - rh) &lt;= 1 &amp;&amp;
+            isBalanced(root-&gt;left) &amp;&amp;
+            isBalanced(root-&gt;right));
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient: O(n)</h4>
+<pre><code class="language-cpp">int isBalanced(Node *root)
+{
+    if(root == NULL) return 0;
+    int lh = isBalanced(root-&gt;left);      // check left subtree,
+    if(lh == -1) return -1;               // also get the left height
+    int rh = isBalanced(root-&gt;right);     // check right subtree,
+    if(rh == -1) return -1;               // also get the right height
+    if(abs(lh - rh) &gt; 1) return -1;
+    else return max(lh, rh) + 1;
+}</code></pre>
+      <p>Java is the same with <code>Math.abs</code> and <code>Math.max</code> (naive: <code>boolean</code>). Board trace on 8 → 12, 15; 12 → 13, 14; 15 → (empty), 16; 16 → (empty), 17: 13 and 14 return 1, so 12 returns 2; 17 returns 1, 16 gets 0 and 1 → returns 2; 15 gets 0 and 2 → difference 2 &gt; 1 → returns −1; so 8 immediately returns −1 (unbalanced). Every node is traversed exactly once with constant work — O(n).</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the naive C++ version's last line calls <code>isBlanced(root-&gt;right)</code> and the Java parameter is typed <code>Nod root</code> — they're <code>isBalanced</code> and <code>Node</code>; <code>&amp;&amp;</code> is drawn like "$$".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-18">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI4NA%3D%3D" target="_blank" rel="noopener">Maximum Width of Binary Tree</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The <strong>width</strong> of a level is the number of nodes at that level; the <strong>maximum width</strong> of a binary tree is the largest width over all levels. Board examples:</p>
+    <ul>
+      <li>10 → 20, 30; 20 → 40; 30 → 50, 60; 40 → 80: levels have 1, 2, 3, 1 nodes → output 3.</li>
+      <li>10 → 80; 80 → (right) 70: one node at every level → output 1.</li>
+      <li>8 → 30, 20; 30 → 90, 100; 20 → 70, 300: levels 1, 2, 4 → output 4.</li>
+      <li>Empty tree (NULL / null) → output 0.</li>
+    </ul>
+    <p><strong>Idea</strong> (hint: level order traversal line by line, method 2): push the levels into the queue one by one. After a whole level is in the queue, its size is the width of that level; if it is greater than the result, update the result. Traversing all nodes of the current level enqueues the whole next level.</p>
+    <p><strong>Complexity:</strong> every node goes into and comes out of the queue exactly once with constant work → Θ(n) time. Auxiliary space Θ(width), since at most one level (the widest) is in the queue; in terms of n that's O(n), as the width can be about n/2 in a perfect binary tree.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/NzY0Mw%3D%3D" target="_blank" rel="noopener">Maximum width of Binary Tree</a></p>
+<ul>
+<li>Example: 1 → 2, 3; 2 → 4, 5; 3 → (right) 8; 8 → 6, 7. The level widths are 1, 2, 3, 2, so the output is 3.</li>
+<li>Using a queue, all nodes of a level can be counted in constant time. After finishing a level, the queue holds exactly the next level, so its size is that level's width. Keep the maximum.</li>
+<li><strong>Complexity:</strong> O(N) time, O(w) auxiliary space (w = maximum width).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Level order line by line: Θ(n) time, Θ(width) space</h4>
+<pre><code class="language-cpp">int maxWidth(Node *root)
+{
+    if(root == NULL) return 0;
+    queue&lt;Node *&gt; q;
+    q.push(root);
+    int res = 0;
+    while(q.empty() == false)
+    {
+        int count = q.size();
+        res = max(res, count);
+        for(int i = 0; i &lt; count; i++)
+        {
+            Node *curr = q.front();
+            q.pop();
+            if(curr-&gt;left != NULL)
+                q.push(curr-&gt;left);
+            if(curr-&gt;right != NULL)
+                q.push(curr-&gt;right);
+        }
+    }
+    return res;
+}</code></pre>
+      <p>Java is the same with <code>Queue&lt;Node&gt; q = new LinkedList&lt;Node&gt;()</code>, <code>q.isEmpty()</code>, <code>Math.max</code>, <code>q.poll()</code> and <code>q.add(...)</code>. Board trace on 10 → 20, 30; 20 → 40, 50; 30 → 60: queue [10] count = 1, then [20, 30] count = 2, then [40, 50, 60] count = 3 → result 3. The teacher added the final <code>return res;</code> line during the explanation.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the C++ loop reads the front with <code>q.top()</code> — <code>std::queue</code> uses <code>q.front()</code> (written above). The Java version starts with <code>q.push(root)</code> — Java's <code>Queue</code> uses <code>q.add(root)</code> — and the loop condition looks like <code>q.inEmpty()</code> for <code>q.isEmpty()</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-19">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI4NQ%3D%3D" target="_blank" rel="noopener">Convert Binary Tree to Doubly Linked List</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Convert a binary tree into a doubly linked list <strong>in place</strong>: allocate no new nodes, reuse the tree nodes. The <code>left</code> pointer/reference acts as <em>previous</em> and <code>right</code> acts as <em>next</em>. The list order is the <strong>inorder traversal</strong>, and the function returns the head.</p>
+    <ul>
+      <li>10 → 5, 20; 20 → 30, 35 → 5 ⇄ 10 ⇄ 30 ⇄ 20 ⇄ 35 (head 5).</li>
+      <li>5 → 8, 19; 19 → (left) 6 → 8 ⇄ 5 ⇄ 6 ⇄ 19 (head 8).</li>
+      <li>10 → (left) 8 → (left) 7 → 7 ⇄ 8 ⇄ 10 (head 7).</li>
+    </ul>
+    <p><strong>Idea:</strong> do an inorder traversal and keep a <code>prev</code> pointer (C/C++) or reference (Java) to the previously visited node. At the current node: <code>prev-&gt;right = curr</code>, <code>curr-&gt;left = prev</code>, then <code>prev = curr</code>. The first node visited has <code>prev</code> = null; it becomes the head, and only its left (previous) is null. <code>prev</code> must be shared by all recursive calls, so it's a class member in Java and a global in C++.</p>
+    <p><strong>Returning the right head:</strong> if the left subtree is empty, the left call returns null and the current node finds <code>prev</code> null, so it becomes the head. If the left subtree isn't empty, <code>prev</code> can't be null here, so the head returned by the left call is passed up.</p>
+    <p><strong>Complexity:</strong> an inorder traversal with constant work per node → O(n) time; O(h) auxiliary space, the same as inorder traversal (h = height).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Inorder with a prev pointer: O(n) time, O(h) space</h4>
+<pre><code class="language-cpp">Node *prev = NULL;
+Node *BTToDLL(Node *root)
+{
+    if(root == NULL) return root;
+    Node *head = BTToDLL(root-&gt;left);
+    if(prev == NULL) { head = root; }
+    else {
+        root-&gt;left = prev;
+        prev-&gt;right = root;
+    }
+    prev = root;
+    BTToDLL(root-&gt;right);
+    return head;
+}</code></pre>
+      <p>Java is the same with <code>Node prev = null;</code> as a class member and <code>.</code> instead of <code>-&gt;</code>. The boxed lines are the inorder parts (left call, right call); the middle part replaces "print" with the linking.</p>
+      <p>Board trace on 10 → 5, 20; 20 → 30, 35: 5 has prev = NULL → head = 5, prev = 5; at 10: 10.left = 5, 5.right = 10, prev = 10; at 30: 30.left = 10, 10.right = 30, prev = 30; at 20: 20.left = 30, 30.right = 20, prev = 20; at 35: 35.left = 20, 20.right = 35, prev = 35. Result 5 ⇄ 10 ⇄ 30 ⇄ 20 ⇄ 35, head 5.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the Java left call is written <code>BToDLL(root.left)</code> — the function is <code>BTToDLL</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-20">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTI4Ng%3D%3D" target="_blank" rel="noopener">Construct Binary Tree from Inorder and Preorder</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given the inorder array <code>in[]</code> and preorder array <code>pre[]</code> of a binary tree, build the tree and return its root. A binary tree can be built only when inorder is given together with one more traversal: inorder + preorder or inorder + postorder. It <em>cannot</em> be built from preorder + postorder.</p>
+    <ul>
+      <li>in = {20, 10, 30}, pre = {10, 20, 30} → 10 → 20, 30.</li>
+      <li>in = {40, 20, 50, 10, 30, 80, 70, 90}, pre = {10, 20, 40, 50, 30, 70, 80, 90} → 10 → 20, 30; 20 → 40, 50; 30 → (right) 70; 70 → 80, 90.</li>
+    </ul>
+    <p><strong>Recap:</strong> inorder is Left, Root, Right; preorder is Root, Left, Right.</p>
+    <p><strong>By hand</strong> (in = {40, 20, 60, 50, 70, 10, 80, 100, 30}, pre = {10, 20, 40, 50, 60, 70, 30, 80, 100}):</p>
+    <ol>
+      <li>The first preorder item, 10, is the root. Search 10 in inorder: {40, 20, 60, 50, 70} are in the left subtree and {80, 100, 30} in the right.</li>
+      <li>The next preorder item, 20, is the left subtree's root. In inorder, 40 is left of 20 and {60, 50, 70} right of it. Of those three, 50 comes first in preorder, so 50 is the root there, with 60 on its left and 70 on its right.</li>
+      <li>Right side {80, 100, 30}: 30 comes first in preorder, so it's the root. Nothing is right of 30 in inorder, so its right child is empty and {80, 100} go left. 80 comes first in preorder, and 100 is right of 80 in inorder, so 100 is 80's right child.</li>
+    </ol>
+    <p>Exercise on the board: in = {20, 10, 40, 30, 50}, pre = {10, 20, 30, 40, 50} → 10 → 20, 30; 30 → 40, 50.</p>
+    <p><strong>Implementation idea:</strong> build the tree in preorder. A shared <code>preIndex</code> (global in C++, class member in Java) gives the next preorder item; make it the root, increment <code>preIndex</code>, find the root's index <code>inIndex</code> in <code>in[is..ie]</code>, then build the left subtree from <code>in[is..inIndex−1]</code> and the right from <code>in[inIndex+1..ie]</code>. No start and end are needed for preorder, because nodes are created in preorder, so the next node is always the next preorder item. When <code>is &gt; ie</code> the range is empty → return null.</p>
+    <p><strong>Complexity:</strong> O(1) to create each node, but the search loop is O(n) per node → O(n²). <strong>With hashing → O(n):</strong> preprocess the inorder array into a hash table (key → index) and pass it to the recursive calls, so finding <code>inIndex</code> is a lookup instead of a linear search.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/ODM4Nw%3D%3D" target="_blank" rel="noopener">Construct Binary Tree from Inorder and Preorder</a></p>
+<ul>
+<li>Example: inorder D B E A F C, preorder A B D E C F. A, the first in preorder, is the root; elements left of A in inorder form the left subtree and those right of it the right subtree. Recurse.</li>
+<li><strong>Algorithm:</strong>
+  <ol>
+    <li>Pick the next element from preorder and increment <code>preIndex</code>.</li>
+    <li>Create a node <code>tNode</code> with it and find its index <code>inIndex</code> in inorder.</li>
+    <li>Build the left subtree from the elements before <code>inIndex</code> and the right subtree from those after it.</li>
+    <li>Return <code>tNode</code>.</li>
+  </ol>
+</li>
+<li>Storing the inorder indexes in a hash table makes each search O(1) → O(n) time. O(n) auxiliary space, for the map and the recursion stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive construction: O(n²) (O(n) with hashing)</h4>
+<pre><code class="language-cpp">int preIndex = 0;
+Node *cTree(int in[], int pre[], int is, int ie)
+{
+    if(is &gt; ie) return NULL;
+    Node *root = new Node(pre[preIndex++]);
+
+    int inIndex;
+    for(int i = is; i &lt;= ie; i++) {
+        if(in[i] == root-&gt;key) {
+            inIndex = i;
+            break;
+        }
+    }
+    root-&gt;left = cTree(in, pre, is, inIndex - 1);
+    root-&gt;right = cTree(in, pre, inIndex + 1, ie);
+    return root;
+}</code></pre>
+      <p>Java is the same (<code>return null</code>, <code>root.key</code>, <code>root.left</code>, <code>root.right</code>). The first call is <code>cTree(in, pre, 0, n − 1)</code>; <code>pre[preIndex++]</code> takes the current value, then increments.</p>
+      <p>Board trace on in = {20, 10, 40, 30, 50}, pre = {10, 20, 30, 40, 50}: root 10 (is = 0, ie = 4), found at inIndex 1 → left call (0, 0) builds 20, whose calls (0, −1) and (1, 0) return null; right call (2, 4) builds 30, found at index 3 → left (2, 2) builds 40, right (4, 4) builds 50.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong> the C++ code declares <code>int inIndx;</code> but then uses <code>inIndex</code>. For the hashing version the teacher says to use an <code>unordered_set</code> (C++) / <code>HashSet</code> (Java), but a key → index table is a map: <code>unordered_map</code> / <code>HashMap</code>, as the teacher's own description ("keys as key, indexes as value") requires.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-21">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTM4MA%3D%3D" target="_blank" rel="noopener">Tree Traversal in Spiral Form</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Spiral (zigzag) level order traversal:</strong> print the root, then the next level right to left, the next left to right, and so on, alternating at every level. The function takes the root and returns <code>void</code> (it only prints).</p>
+    <ul>
+      <li>1 → 2, 3; 2 → 4, 5; 3 → 6, 7; 4 → 8, 9; 6 → 10 → output 1 3 2 4 5 6 7 10 9 8.</li>
+      <li>10 → 20, 30; 30 → 40, 50; 40 → 60, 70; 50 → 80 → output 10 30 20 40 50 80 70 60.</li>
+    </ul>
+    <p><strong>Method 1 (queue + stack):</strong> take level order traversal line by line (the <code>q.size()</code> version) and add a stack plus a boolean <code>reverse</code>, initially false. Inside the inner loop, if <code>reverse</code> is true, push the node's key onto the stack instead of printing it. After the inner loop, if <code>reverse</code> is true, pop and print the whole stack, which gives that level in reverse. Then flip <code>reverse</code>. Time O(n): each node is enqueued and dequeued once, and may also be pushed and popped once, so at most 4 operations per node (≤ 4n).</p>
+    <p>Method 1 does extra work for reversed levels: those nodes go into the queue, out, into the stack and out again. <strong>Method 2 (two stacks)</strong> puts every item into a data structure once and takes it out once, halving that work:</p>
+    <ol>
+      <li>Push the root to stack <code>s1</code>.</li>
+      <li>While either stack is not empty:
+        <ul>
+          <li>While <code>s1</code> is not empty: take out a node, print it, push its children into <code>s2</code> (left, then right).</li>
+          <li>While <code>s2</code> is not empty: take out a node, print it, push its children into <code>s1</code> in reverse order (right, then left).</li>
+        </ul>
+      </li>
+    </ol>
+    <p>Board trace on 1 → 2, 3; 2 → 4, 5; 3 → 6, 7; 4 → 8, 9; 6 → 10, 11 (expected 1 3 2 4 5 6 7 11 10 9 8): pop 1 from s1, push 2, 3 into s2. Pop 3, print, push 7 then 6 into s1; pop 2, print, push 5 then 4. s1 now pops 4 (push 8, 9 into s2), 5, 6 (push 10, 11) and 7. s2 then pops 11, 10, 9, 8.</p>
+    <p>A second board example (1 → 2, 3; 3 → 4, 5; 4 → 6, 7; 5 → 8; …) is traced the same way: 1 | 3 2 | 4 5 | 8 7 6 | then the last level left to right.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/NzY2Nw%3D%3D" target="_blank" rel="noopener">Tree Traversal in Spiral Form</a></p>
+<ul>
+<li><strong>Method 1, recursive:</strong> print each level with <code>printGivenLevel()</code>, flipping a boolean <code>ltr</code> after every level to alternate the direction. O(n²) time, worst for skewed trees; O(n) call stack.</li>
+<li><strong>Method 2, two stacks:</strong> one stack for left-to-right levels and one for right-to-left. Print a level from one stack while pushing the next level into the other. O(n) time, O(n) space.</li>
+<li><strong>Method 3, deque:</strong> going left to right, take from the front and add children (left, then right) at the back. Going right to left, take from the back and add children (right, then left) at the front. O(N) time, O(N) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 1: queue + stack, O(n)</h4>
+<pre><code class="language-java">void printSpiral(Node root)
+{
+    if(root == null) return;
+    Queue&lt;Node&gt; q = new LinkedList&lt;Node&gt;();
+    Stack&lt;Integer&gt; s = new Stack&lt;Integer&gt;();
+    boolean reverse = false;
+    q.add(root);
+    while(q.isEmpty() == false)
+    {
+        int count = q.size();
+        for(int i = 0; i &lt; count; i++)
+        {
+            Node curr = q.poll();
+            if(reverse)
+                s.push(curr.key);
+            else
+                System.out.print(curr.key + " ");
+            if(curr.left != null) q.add(curr.left);
+            if(curr.right != null) q.add(curr.right);
+        }
+        if(reverse) {
+            while(s.isEmpty() == false) {
+                System.out.print(s.pop() + " ");
+            }
+        }
+        reverse = !reverse;
+        System.out.println();
+    }
+}</code></pre>
+      <p>C++ is the same with <code>queue&lt;Node *&gt; q</code>, <code>stack&lt;int&gt; s</code>, <code>bool reverse = false</code>, <code>q.front(); q.pop();</code>, and <code>cout &lt;&lt; s.top() &lt;&lt; " "; s.pop();</code> for the stack. The <code>println</code> puts each level on its own line; the teacher says the problem doesn't require it and the line can be removed. Board trace: [1] count 1 → print 1; [2, 3] count 2, reverse = true → push 2, 3, then pop and print 3 2; [4, 5, 6, 7] count 4 → print.</p>
+    </div>
+    <div class="approach">
+      <h4>Method 2: two stacks, O(n)</h4>
+      <p>The board gives Method 2 as the steps above, not as code (the description links code that isn't shown). Every item goes into a stack once and comes out once, so it is processed twice, against four times for reversed items in Method 1.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the board writes the Java function header as <code>prinSpiral</code>; it's <code>printSpiral</code>, as in the C++ version. The transcript reads the second Method 2 example's last level with values that don't match the board, so it is left out here.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-22">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTQ0Mw%3D%3D" target="_blank" rel="noopener">Diameter of a Binary Tree</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The <strong>diameter</strong> of a binary tree is the number of nodes on the longest path between two leaf nodes. An empty tree has diameter 0; a single node has diameter 1.</p>
+    <ul>
+      <li>10 → 20, 30; 30 → 40, 50; 40 → 60: the longest path is 60–40–30–10–20 → 5.</li>
+      <li>10 → 20, 60; 20 → 30, 80; 30 → 40, 50; 40 → 60; 80 → (right) 90 → (right) 18: the longest path is 60–40–30–20–80–90–18 → 7. Other leaf-to-leaf paths have 4 or 6 nodes; the maximum is 7.</li>
+    </ul>
+    <p><strong>Idea:</strong> for every node compute <code>1 + lh + rh</code> (left height + right height + 1), the longest path that has this node as its top. The answer is the maximum of this over all nodes. In the second example, node 20 gives 3 + 3 + 1 = 7, the root gives 4 + 1 + 1 = 6 and node 30 gives 2 + 1 + 1 = 4.</p>
+    <ul>
+      <li><strong>Naive, Θ(n²):</strong> for each node, d1 = 1 + height(left) + height(right); d2 = diameter(left); d3 = diameter(right); return max(d1, d2, d3). Worst case is a skewed tree: T(n) = T(n − 1) + Θ(n) (the height call on n − 1 nodes), so Θ(n) + Θ(n − 1) + … + Θ(1) = n(n + 1)/2 → Θ(n²).</li>
+      <li><strong>O(n) with a hash table:</strong> precompute every node's height into an <code>unordered_map</code> (C++) / <code>HashMap</code> (Java), node → height, built bottom up like the normal height function. Then each height lookup is O(1) and diameter becomes a normal traversal. This needs O(n) extra space plus hashing overhead.</li>
+      <li><strong>Efficient, O(n) without hashing:</strong> modify the height function. While computing a node's height it already has <code>lh</code> and <code>rh</code>, so it updates a shared result with <code>1 + lh + rh</code> if that is larger. The function returns the height but sets <code>res</code> to the diameter. Auxiliary space O(h) for the recursion, against O(n) with the hash table.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/MjM1Nw%3D%3D" target="_blank" rel="noopener">Diameter of a Binary Tree</a></p>
+<ul>
+<li>The diameter (sometimes called the width) is the number of nodes on the longest path between two end nodes. There can be more than one longest path; the article's two example trees both have diameter 9.</li>
+<li>Diameter = max(lDiameter, rDiameter, 1 + lHeight + rHeight). The longest path through a node nd is 1 + the heights of nd's left and right subtrees.</li>
+<li><strong>Complexity:</strong> the direct version takes O(N²) time and O(N) call stack. Computing the height in the same recursion, instead of calling <code>height()</code> separately, gives O(N) time with O(N) auxiliary space for the recursive calls.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: Θ(n²)</h4>
+<pre><code class="language-java">int height(Node root)
+{
+    if(root == null) return 0;
+    else
+        return 1 + Math.max(height(root.left),
+                            height(root.right));
+}
+int diameter(Node root)
+{
+    if(root == null) return 0;
+    int d1 = 1 + height(root.left) + height(root.right);
+    int d2 = diameter(root.left);
+    int d3 = diameter(root.right);
+    return Math.max(d1, Math.max(d2, d3));
+}</code></pre>
+      <p>C++ is the same with <code>Node *root</code>, <code>NULL</code> and <code>-&gt;</code>. Board trace on 10 → 20, 30; 30 → 40, 60; 40 → 50; 60 → 70: at 10, d1 = 1 + 1 + 3 = 5; d2 = diameter(20) = max(1, 0, 0) = 1; at 30, d1 = 1 + 2 + 2 = 5 and its children give 2 and 2, so it returns 5; the root returns max(5, 1, 5) = 5.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: O(n) time, O(h) space</h4>
+<pre><code class="language-cpp">int res = 0;
+int height(Node *root)
+{
+    if(root == NULL) return 0;
+    int lh = height(root-&gt;left);
+    int rh = height(root-&gt;right);
+    res = max(res, lh + rh + 1);
+    return 1 + max(lh, rh);
+}</code></pre>
+      <p>Java: <code>res = Math.max(res, 1 + lh + rh);</code> and <code>return 1 + Math.max(lh, rh);</code>, with <code>res</code> a class member. The only line that differs from the normal height function is the <code>res</code> update. After calling <code>height(root)</code>, <code>res</code> holds the diameter. In the board trace, the leaves set res to 1, then a node with one child sets it to 2, then node 30 (heights 2 and 2) sets it to 5; the root gives 1 + 1 + 3 = 5, which is not greater, so res stays 5.</p>
+    </div>
+    <div class="added">
+      <p><strong>Teacher and board slips:</strong> the transcript says the height map "can be built in Big O of 1 time". Filling a height for every node is O(n), which is what the overall O(n) claim needs. The Java line <code>int res = 0</code> is missing its semicolon on the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-23">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTQ0NQ%3D%3D" target="_blank" rel="noopener">LCA of Binary Tree (Part 1)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The <strong>ancestors</strong> of a node are the node itself, its parent, the parent's parent, and so on up to the root. The <strong>lowest common ancestor (LCA)</strong> of n1 and n2 is the common ancestor at the lowest level of the tree.</p>
+    <p>Board tree: 10 → 20, 30; 30 → 40, 50; 40 → 60; 50 → 70, 80.</p>
+    <ul>
+      <li>LCA(60, 70): the ancestors of 60 are 60, 40, 30, 10 and of 70 are 70, 50, 30, 10. The common ones are 30 and 10, and the lowest is <strong>30</strong>.</li>
+      <li>LCA(20, 80) = 10; LCA(80, 30) = 30 (a node is its own ancestor); LCA(70, 80) = 50.</li>
+    </ul>
+    <p><strong>Use:</strong> the distance between two nodes is the distance from the first to their LCA plus the distance from the LCA to the second.</p>
+    <p><strong>Naive method:</strong> build two path arrays, root → n1 and root → n2. Traverse both while the elements match; the last common element is the LCA (common ancestors run from highest to lowest along the paths). The arrays store pointers/references to nodes, not values, so the function can return the node, or null if the LCA doesn't exist (n1 or n2 not in the tree).</p>
+    <p><strong>findPath(root, p, n):</strong> push root onto p. If root's key is n, return true. If the search in the left or right subtree returns true, return true. Otherwise remove root from p (C++ <code>pop_back</code>, Java <code>remove(size − 1)</code>) and return false. Board trace for n = 50: push 10; 20's subtrees fail, so 20 is removed; push 30, then 40 fails and is removed; push 50 → found, p = [10, 30, 50].</p>
+    <p><strong>Complexity:</strong> two findPath calls at Θ(n) each, then a traversal of the path arrays, which can be Θ(n) long (skewed tree). Overall Θ(n) time, but three traversals and O(n) extra space for the paths, which Part 2 improves on.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/MjM1MQ%3D%3D" target="_blank" rel="noopener">Finding LCA in Binary Tree</a></p>
+<ul>
+<li>The LCA of N1 and N2 is their common ancestor closest to them, i.e. at the least possible distance from both.</li>
+<li><strong>Method 1:</strong> the LCA is the last common node on the root → n1 and root → n2 paths. For nodes 4 and 5: [1, 2, 4] and [1, 2, 5] give 2. Store both paths, traverse until the values differ, and return the element just before the mismatch. O(N) time and O(N) extra space, but three traversals plus the path arrays.</li>
+<li><strong>Method 2</strong> (assuming both keys are present): one traversal and no path arrays.
+  <ul>
+    <li>If the root matches n1 or n2, the root is the LCA.</li>
+    <li>Otherwise recur on both subtrees. A node with one key on its left and the other on its right is the LCA.</li>
+    <li>If both keys lie in the left subtree, the LCA is there; otherwise it's in the right subtree.</li>
+  </ul>
+</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: two path arrays, Θ(n)</h4>
+<pre><code class="language-java">boolean findPath(Node root, ArrayList&lt;Node&gt; p, int n)
+{
+    if(root == null) return false;
+    p.add(root);
+    if(root.key == n) return true;
+    if(findPath(root.left, p, n) || findPath(root.right, p, n))
+        return true;
+    p.remove(p.size() - 1);
+    return false;
+}
+Node lca(Node root, int n1, int n2)
+{
+    ArrayList&lt;Node&gt; path1 = new ArrayList&lt;Node&gt;();
+    ArrayList&lt;Node&gt; path2 = new ArrayList&lt;Node&gt;();
+    if(findPath(root, path1, n1) == false ||
+       findPath(root, path2, n2) == false)
+        return null;
+    for(int i = 0; i &lt; path1.size() - 1 &amp;&amp; i &lt; path2.size() - 1; i++)
+        if(path1.get(i + 1) != path2.get(i + 1))
+            return path1.get(i);
+    return null;
+}</code></pre>
+      <p>C++: <code>bool findPath(Node *root, vector&lt;Node *&gt; &amp;p, int n)</code> with <code>p.push_back(root)</code> and <code>p.pop_back()</code>; <code>Node *lca(...)</code> uses <code>vector&lt;Node *&gt; path1, path2;</code> and <code>path1[i]</code>. Board trace with n1 = 20 and n2 = 50 on 10 → 20, 30; 30 → 40, 50: path1 = [10, 20] and path2 starts [10, 30, …]. At i = 0, 20 ≠ 30, so the loop returns path1[0] = 10.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the Java <code>lca</code> declares <code>ArrayList&lt;Integer&gt; path1, path2</code>, but <code>findPath</code> takes <code>ArrayList&lt;Node&gt;</code> and the teacher says the arrays hold references. They're written as <code>ArrayList&lt;Node&gt;</code> above, and the Java list accesses are written with <code>.get()</code>. <code>&amp;&amp;</code> in the loop is drawn like "$$". The board loop ends with <code>return null;</code>, kept above as written.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-24">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTQ0Ng%3D%3D" target="_blank" rel="noopener">LCA of Binary Tree (Part 2)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The <strong>efficient LCA</strong> needs only one traversal, but <strong>assumes both n1 and n2 exist</strong> in the tree. If only one exists, it returns a pointer/reference to that key instead of null, which is wrong.</p>
+    <p><strong>Idea:</strong> do a normal recursive traversal. Each node falls into one of four cases (board tree 10 → 20, 30; 30 → 50, 60; 50 → 70; 60 → 80, 90; 90 → (right) 40):</p>
+    <ol>
+      <li>The node is n1 or n2 → return the node. Example: n1 = 10, n2 = 40, current node 10. Since both keys are assumed present, the first key found is the answer.</li>
+      <li>One subtree contains n1 and the other contains n2 → return the node; this happens only at the LCA. Example: n1 = 80, n2 = 40, current node 60.</li>
+      <li>One subtree contains both → return what that subtree's call returned. Example: n1 = 80, n2 = 40, current node 30 (or 10).</li>
+      <li>Neither subtree contains either key → return null. Example: n1 = 80, n2 = 40, current node 20 (or 50).</li>
+    </ol>
+    <p><strong>Complexity:</strong> Θ(n) time, the same as the naive method, but with only one traversal; Θ(h) auxiliary space for the recursion, which is less space in the worst case.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Efficient: one traversal, Θ(n) time, Θ(h) space</h4>
+<pre><code class="language-cpp">Node *lca(Node *root, int n1, int n2)
+{
+    if(root == NULL) return NULL;
+    if(root-&gt;key == n1 || root-&gt;key == n2)
+        return root;
+    Node *lca1 = lca(root-&gt;left, n1, n2);
+    Node *lca2 = lca(root-&gt;right, n1, n2);
+    if(lca1 != NULL &amp;&amp; lca2 != NULL)
+        return root;
+    if(lca1 != NULL)
+        return lca1;
+    else
+        return lca2;
+}</code></pre>
+      <p>Java is the same with <code>null</code> and <code>.</code>. If both calls are non-null, one key is on each side (case 2). Otherwise both keys are on one side or absent: a non-null <code>lca1</code> means the left side has both (case 3). Else return <code>lca2</code>, which is either the answer from the right or null (case 4).</p>
+      <p>Board trace with n1 = 40, n2 = 50 on 10 → 20, 30; 30 → 40, 50: lca(10) calls lca(20), whose two calls return NULL, so it returns NULL. lca(30) calls lca(40), which returns 40, and lca(50), which returns 50. Both are non-null, so lca(30) returns 30. At the root, lca1 = NULL and lca2 = 30 → returns 30.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> <code>&amp;&amp;</code> in the Java version is drawn like "88".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-25">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTQ2MA%3D%3D" target="_blank" rel="noopener">Burn a Binary Tree from a Leaf</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The given leaf burns at second 0. Each second, the fire spreads to every adjacent node (parent and children) of a burning node. Find the time to burn the whole tree; if the leaf isn't in the tree, return −1.</p>
+    <ul>
+      <li>10 → 20, 30; 20 → 40, 50; 30 → (right) 60; leaf 50: 50 at 0, 20 at 1, 10 and 40 at 2, 30 at 3, 60 at 4 → output 4.</li>
+      <li>10 → (left) 20 → (left) 30; 30 → 40, 50; leaf 50 → output 3.</li>
+      <li>The same chain with 40 → (left) 60 → (left) 70; leaf 50 → output 4 (70 is farthest).</li>
+    </ul>
+    <p><strong>Key observation:</strong> each burn time is the distance from the leaf, so the answer is the distance to the <strong>farthest node from the given leaf</strong>.</p>
+    <p><strong>Hint:</strong> from a leaf, every other node is reached through one of its ancestors (the leaf counts as its own ancestor, contributing 0). For each ancestor, the farthest distance through it is (distance of the leaf from that ancestor) + (height of the ancestor's other side, the one without the leaf). Take the maximum. Example 1: through 20, 1 + 1 (left height) = 2; through 10, 2 + 2 (right height) = 4; through 50, 0. Max = 4.</p>
+    <p>The teacher suggests the diameter video first, because the one-traversal solution uses the same idea.</p>
+    <p><strong>One traversal:</strong> <code>burnTime(root, leaf, dist)</code> returns the height of the subtree (a single node has height 1). It also sets <code>dist</code> to this node's distance from the leaf if the leaf is a descendant, otherwise leaves it −1. For a node with a non −1 distance (an ancestor): if the leaf is on the left, combine <code>dist</code> with the right height; if on the right, with the left height. Update <code>res</code> with the larger sum. Every node still returns its height, because other calls use it.</p>
+    <p><code>dist</code> is passed by reference: <code>int &amp;dist</code> in C++. Java passes primitives by value, so a wrapper class <code>Distance</code> holds one <code>int val</code>; objects behave as passed by reference. <code>res</code> is shared (a global in C++, a class member in Java) only to keep the code short. The teacher recommends passing it by reference too, in C++ with <code>&amp;</code> and in Java with a wrapper class.</p>
+    <p>The code assumes the given value is always a leaf. To handle wrong input, add a check so the base case applies only when root is a leaf.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/NzY0MQ%3D%3D" target="_blank" rel="noopener">Burn a Binary Tree From a Leaf</a></p>
+<ul>
+<li>In 1 s the fire spreads from a node to everything connected to it (left child, right child, parent); nodes one intermediate away burn in 2 s, and so on. Find the minimum time to burn the whole tree.</li>
+<li><strong>Per node, recursively compute:</strong> the left depth, the right depth, the time for the fire to reach this node from the burnt leaf, and whether this subtree contains the burnt leaf.</li>
+<li><strong>Observation</strong> (article example, leaf 11 burns first): the fire reaches 9 at 1 s and 5 at 2 s. At 5 the leaf is on the left, so the right side takes its height (1) more, and 10 burns at 2 + 1 = 3 s. Node 2 is also reached at 3 s, from its right, so its left side takes its height.</li>
+<li><strong>Answer:</strong> ans = max over nodes of (time for the fire to reach the node + depth of the opposite subtree).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>One traversal, height + distance from the leaf</h4>
+<pre><code class="language-cpp">int res = 0;
+int burnTime(Node *root, int leaf, int &amp;dist)
+{
+    if(root == NULL) return 0;
+    if(root-&gt;data == leaf) { dist = 0; return 1; }
+    int ldist = -1, rdist = -1;
+    int lh = burnTime(root-&gt;left, leaf, ldist);
+    int rh = burnTime(root-&gt;right, leaf, rdist);
+    if(ldist != -1)
+    {
+        dist = ldist + 1;
+        res = max(res, dist + rh);
+    }
+    else if(rdist != -1)
+    {
+        dist = rdist + 1;
+        res = max(res, dist + lh);
+    }
+    return max(lh, rh) + 1;
+}</code></pre>
+      <p>Initially <code>dist = −1</code> (C++) or <code>dist.val = −1</code> (Java). Java uses <code>class Distance { int val; Distance(int d) { val = d; } }</code>, <code>Distance ldist = new Distance(-1), rdist = new Distance(-1);</code>, and <code>dist.val = ldist.val + 1; res = Math.max(res, rh + dist.val);</code>. An on-screen note says to read <code>max</code> as <code>Math.max</code> in Java.</p>
+      <p>Board trace on 10 → 20, 30; 20 → 40, 50; 40 → 60 → 70; leaf = 50 (distance, height): 70 (−1, 1), 60 (−1, 2), 40 (−1, 3), 50 (0, 1), 30 (−1, 1). At 20: rdist = 0 → dist 1, res = 1 + 3 = 4, height 4. At 10: ldist = 1 → dist 2, 2 + 1 = 3 &lt; 4, height 5. Answer 4.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the Java constructor reads <code>Distance(int d) { val = v; }</code>; it should be <code>val = d</code>. The local declaration starts <code>Dis ldist</code> for <code>Distance ldist</code>. The base case returns 0 or the height, so a leaf missing from the tree isn't turned into −1 by this code (the −1 case is only in the problem statement).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-26">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTQ3NA%3D%3D" target="_blank" rel="noopener">Count nodes in a Complete Binary Tree</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A <strong>complete binary tree</strong> is completely filled except possibly the last level, and the last level is filled from left to right. Moving a last-level node to a later position, leaving a gap, or removing a node from an upper level breaks this. Count the nodes, given that the input is complete. Board outputs include 5, 2, 0 for the empty tree, and 10 (1 + 2 + 4 + 3).</p>
+    <ul>
+      <li><strong>Naive, Θ(n):</strong> <code>1 + count(left) + count(right)</code>, with 0 for null. It works for any binary tree and always visits every node. Board trace on 10 → 20, 30; 20 → 40: 40 returns 1, 20 returns 1 + 0 + 1 = 2, 30 returns 1, root returns 1 + 2 + 1 = 4.</li>
+      <li><strong>Efficient, O(log n · log n):</strong> uses completeness. A perfect binary tree of height h (height counted in nodes here) has 2<sup>h</sup> − 1 nodes, e.g. height 4 → 15. To test whether a subtree is perfect, go left, left, left … to get <code>lh</code> and right, right, right … to get <code>rh</code>. If they're equal, the count is 2<sup>lh</sup> − 1 without visiting the middle nodes. Otherwise return 1 + count(left) + count(right), recursively.</li>
+    </ul>
+    <p>Board example with 27 nodes: the left subtree is perfect (height 4 → 15). The right subtree's heights differ (4 vs 3), so recurse into it: its children give 7 and 3, so 15 + 7 + 3 + 1 + 1 = 27.</p>
+    <p><strong>Complexity:</strong></p>
+    <ul>
+      <li><strong>Best case,</strong> a perfect tree: lh = rh, so Θ(h) for the two height walks plus the power.</li>
+      <li><strong>Otherwise,</strong> the last node of the last level is in either the left or the right subtree, and the other subtree is perfect (its count is Θ(h)). So each call does Θ(h) work plus one recursive call on at most 2n/3 nodes (e.g. 7 nodes on the perfect side and up to 7 + 7 = 14 on the other).</li>
+      <li><strong>Recurrence:</strong> T(n) ≤ T(2n/3) + Θ(log₂ n), since h = log₂ n for a complete tree. The recursion tree has log<sub>3/2</sub> n levels, each doing at most log₂ n work → O(log<sub>3/2</sub> n × log₂ n) = O(log n · log n). The base doesn't matter asymptotically.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: Θ(n)</h4>
+<pre><code class="language-cpp">int countNodes(Node *root)
+{
+    if(root == NULL)
+        return 0;
+    else
+        return 1 + countNodes(root-&gt;left) +
+                   countNodes(root-&gt;right);
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient: O(log n · log n)</h4>
+<pre><code class="language-java">int countNodes(Node root)
+{
+    int lh = 0, rh = 0;
+    Node curr = root;
+    while(curr != null) {
+        lh++;
+        curr = curr.left;
+    }
+    curr = root;
+    while(curr != null) {
+        rh++;
+        curr = curr.right;
+    }
+    if(lh == rh)
+        return (int)Math.pow(2, lh) - 1;
+    return 1 + countNodes(root.left) +
+               countNodes(root.right);
+}</code></pre>
+      <p>C++ is the same with <code>Node *curr</code>, <code>NULL</code>, <code>-&gt;</code> and <code>pow(2, lh) - 1</code>. For null both loops don't run, so lh = rh = 0 → 2⁰ − 1 = 0.</p>
+      <p>Board trace on 10 → 20, 30; 20 → 40, 50; 30 → 60, 70; 40 → 80, 90; 50 → 100, 110; 60 → 120: at 10, lh = 4 and rh = 3, so recurse. 20 has lh = rh = 3 → 7. 30 has lh 3 and rh 2, so recurse. 60 has lh 2 and rh 1, so recurse: 120 gives 1 and null gives 0, so 60 gives 2. 70 gives 1, so 30 gives 1 + 2 + 1 = 4. Total 1 + 7 + 4 = 12.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the headers are written <code>countNode</code> (C++ naive, Java efficient) while the recursive calls use <code>countNodes</code>. The C++ efficient header reads <code>countNodes(root *root)</code> for <code>Node *root</code>. The Java <code>return Math.pow(2, lh) - 1;</code> needs an <code>(int)</code> cast, because <code>Math.pow</code> returns a <code>double</code>; the cast is added above.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-27">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTU2NQ%3D%3D" target="_blank" rel="noopener">Serialize and Deserialize a Binary Tree</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Serialization:</strong> given the root (a pointer in C++, a reference in Java), convert the tree into a string or array that holds enough information to rebuild it. <strong>Deserialization:</strong> the reverse. Build the linked representation back from that string or array and return its root.</p>
+    <p><strong>Applications:</strong></p>
+    <ul>
+      <li>Sending a tree held in RAM (any hierarchical data) across a network: within one program you'd pass the root pointer or reference, but across a network it must be a string.</li>
+      <li>Writing test cases for binary tree practice problems (e.g. practice.geeksforgeeks.org): generating the test strings is serialization, and a user's program reading them back into a tree is deserialization.</li>
+    </ul>
+    <p>For simplicity the code uses a <code>vector&lt;int&gt;</code> (C++) / <code>ArrayList&lt;Integer&gt;</code> (Java) instead of a string, to avoid string operations.</p>
+    <p><strong>Naive:</strong> store inorder plus one more traversal (preorder, postorder or level order), from which the tree can be rebuilt. This needs two traversals.</p>
+    <p><strong>Better, one traversal:</strong> store a single traversal with a special marker for null. Here −1 is the marker, assuming −1 never appears as data. Any standard traversal works; this video uses preorder. Deserialize with the same traversal, turning each −1 into NULL.</p>
+    <ul>
+      <li>10 → 20, 30 ⇒ 10 20 −1 −1 30 −1 −1</li>
+      <li>10 → (left) 20 ⇒ 10 20 −1 −1 −1</li>
+      <li>10 → (left) 20 → (left) 30 → (right) 40 ⇒ 10 20 30 −1 40 −1 −1 −1 −1</li>
+    </ul>
+    <p><strong>Size:</strong> a tree with n nodes has n + 1 nulls, so the array has n + (n + 1) = 2n + 1 entries, one per recursive call. Example: 2 nodes → 5 entries.</p>
+    <p><strong>Complexity:</strong> serialization Θ(n) time (a preorder traversal) and Θ(n) space (2n + 1 entries); deserialization also traverses the array in preorder, Θ(n) time.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/NzY0Nw%3D%3D" target="_blank" rel="noopener">Serialize and Deserialize a Binary Tree</a></p>
+<ul>
+<li>Serialization stores the tree, keeping its structure, in a file so it can be restored later; deserialization reads it back. Storing both inorder and preorder takes twice the tree's size. Saving space: store the preorder with a marker (−1) for every missing child.</li>
+<li><strong>Examples:</strong>
+  <ul>
+    <li>12 → (left) 13 ⇒ 12 13 −1 −1 −1</li>
+    <li>20 → 8, 22 ⇒ 20 8 −1 −1 22 −1 −1</li>
+    <li>20 → (left) 8; 8 → 4, 12; 12 → 10, 14 ⇒ 20 8 4 −1 −1 12 10 −1 −1 14 −1 −1 −1</li>
+    <li>A left chain 20, 8, 10, 5 ⇒ 20 8 10 5 −1 −1 −1 −1 −1</li>
+    <li>A right chain 20, 8, 10, 5 ⇒ 20 −1 8 −1 10 −1 5 −1 −1</li>
+  </ul>
+</li>
+<li><strong>Deserialize:</strong> read the values one by one, adding children until a −1 is reached; when both children are NULL, return to the parent.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Serialize (preorder with −1 for null)</h4>
+<pre><code class="language-cpp">const int EMPTY = -1;
+void serialize(Node *root, vector&lt;int&gt; &amp;arr)
+{
+    if(root == NULL) {
+        arr.push_back(EMPTY);
+        return;
+    }
+    arr.push_back(root-&gt;data);
+    serialize(root-&gt;left, arr);
+    serialize(root-&gt;right, arr);
+}</code></pre>
+      <p>Java: <code>static final int EMPTY = -1;</code>, <code>void serialize(Node root, ArrayList&lt;Integer&gt; arr)</code> with <code>arr.add(...)</code>. Board trace on 10 → (left) 20: arr = {10} → {10, 20} → {10, 20, −1} → {10, 20, −1, −1} → {10, 20, −1, −1, −1}.</p>
+    </div>
+    <div class="approach">
+      <h4>Deserialize (same preorder)</h4>
+<pre><code class="language-cpp">const int EMPTY = -1;
+int index = 0;
+Node *deSerialize(vector&lt;int&gt; &amp;arr)
+{
+    if(index == arr.size()) return NULL;
+    int val = arr[index];
+    index++;
+    if(val == EMPTY) return NULL;
+    Node *root = new Node(val);
+    root-&gt;left = deSerialize(arr);
+    root-&gt;right = deSerialize(arr);
+    return root;
+}</code></pre>
+      <p><code>index</code> is shared by all calls: a global in C++, a class member in Java. The teacher says globals aren't recommended and are used only for ease; <code>index</code> could be passed by reference instead. Java: <code>static final int EMPTY = -1; int index = 0; Node deSerialize(ArrayList&lt;Integer&gt; arr)</code>, returning <code>null</code>.</p>
+      <p>Board trace on {10, 20, −1, −1, −1}: index 0 builds 10; index 1 builds 20; index 2 and 3 are −1 → 20's left and right are null; index 4 is −1 → 10's right is null. Returns the root 10.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong></p>
+      <ul>
+        <li>The Java deserialize reads <code>arr[index]</code> from an <code>ArrayList</code>; Java needs <code>arr.get(index)</code>.</li>
+        <li>The C++ parameter <code>&amp;arr</code> is drawn like "$arr".</li>
+        <li>In the trace, the teacher says the call for 10's right "return[s] −1"; the code returns null for the −1 entry.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-28">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTQ3Nw%3D%3D" target="_blank" rel="noopener">Iterative Inorder Traversal</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print the inorder traversal (left subtree, root, right subtree) without recursion.</p>
+    <ul>
+      <li>10 → 20, 30; 20 → 40, 50; 30 → (left) 60 → 40 20 50 10 60 30.</li>
+      <li>10 → 20, 30; 20 → (left) 40 → (left) 50; 50 → 60, 70 → 60 50 70 40 20 10 30.</li>
+      <li>A single node 10 → 10; an empty tree (NULL) → nothing.</li>
+    </ul>
+    <p><strong>Idea:</strong> the first node to print is reached by going left, left, left … from the root. After printing it, we must come back to the last node passed on the way down to print it and process its right side. That needs the most recently passed node first, a LIFO structure, so we use a <strong>stack</strong>.</p>
+    <ol>
+      <li>Start with <code>curr = root</code> and an empty stack.</li>
+      <li>While <code>curr</code> isn't null or the stack isn't empty:
+        <ul>
+          <li>Go left as far as possible, pushing every node.</li>
+          <li>When <code>curr</code> becomes null (we've reached the leftmost node of the current subtree), pop the top, print it, and set <code>curr</code> to its right child. The right child may have its own left chain, which the next iteration handles.</li>
+        </ul>
+      </li>
+    </ol>
+    <p><strong>Complexity:</strong> every node is pushed exactly once and popped exactly once, both O(1) → Θ(n) time. The stack never holds more than one left chain, which is at most the height → O(h) auxiliary space.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Stack-based inorder: Θ(n) time, O(h) space</h4>
+<pre><code class="language-cpp">void iterativeInorder(Node *root)
+{
+    stack&lt;Node *&gt; st;
+    Node *curr = root;
+    while(curr != NULL || st.empty() == false)
+    {
+        while(curr != NULL)
+        {
+            st.push(curr);
+            curr = curr-&gt;left;
+        }
+        curr = st.top(); st.pop();
+        cout &lt;&lt; (curr-&gt;key) &lt;&lt; " ";
+        curr = curr-&gt;right;
+    }
+}</code></pre>
+      <p>Java: <code>Stack&lt;Node&gt; st = new Stack&lt;Node&gt;();</code>, <code>st.isEmpty()</code>, <code>curr = st.pop();</code> and <code>System.out.print(curr.key + " ");</code>.</p>
+      <p>Board trace on 10 → 20, 30; 20 → 40, 50. Initially curr = ref(10), stack empty.</p>
+      <ul>
+        <li>Iteration 1 pushes 10, 20, 40, then pops and prints 40; curr = NULL.</li>
+        <li>Iteration 2 pops 20 → prints 20, curr = 50.</li>
+        <li>Iteration 3 pushes 50, then pops and prints it.</li>
+        <li>Then 10 is popped and printed, and curr = 30: push, pop, print 30.</li>
+      </ul>
+      <p>Output 40 20 50 10 30.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> both versions declare the stack as <code>st</code> but then use <code>s.empty()</code>/<code>s.isEmpty()</code>, <code>s.push</code>, <code>s.top()</code> and <code>s.pop()</code>. The code above uses <code>st</code> throughout.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-29">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTQ3OA%3D%3D" target="_blank" rel="noopener">Iterative Preorder Traversal (Simple)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print the preorder traversal (root, left subtree, right subtree) without recursion; the function returns nothing.</p>
+    <ul>
+      <li>10 → 20, 30; 20 → 40, 50; 30 → (left) 60 → 10 20 40 50 30 60.</li>
+      <li>10 → 20, 30; 30 → 40, 50; 50 → 60, 70 → 10 20 30 40 50 60 70.</li>
+      <li>A single node 10 → 10; NULL → nothing.</li>
+    </ul>
+    <p><strong>Idea:</strong> the leftmost path (root, left, left, …) prints first. After that we must go back to the previously visited nodes in last-in-first-out order to handle their right children, so we use a <strong>stack</strong>.</p>
+    <p><strong>Simple method:</strong> like level order traversal, but with a stack instead of a queue. Push the root. While the stack isn't empty, pop a node, print it, then push its <em>right</em> child and then its <em>left</em> child (if not null). The left child ends up on top and is processed next.</p>
+    <p><strong>Complexity:</strong> O(n) time and O(n) extra space for the stack (the description: "A O(n) extra space and O(n) time solution").</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/NzY0MA%3D%3D" target="_blank" rel="noopener">Iterative Preorder Traversal</a></p>
+<ul>
+<li>Making a recursive procedure iterative needs an explicit stack. Push the root into <code>nodeStack</code>; while it isn't empty, pop and print an item, then push its right child and then its left child, so the left subtree is processed first. The article gives O(N) time and O(H) auxiliary space.</li>
+<li><strong>Another solution:</strong> a left child is popped right after it's pushed, so don't push it. Start from the root, keep printing and going left while possible, and push every node's right child onto an auxiliary stack. At a null node, pop a right child and repeat while the stack isn't empty. The article calls this a micro-optimization with asymptotically similar space: O(N) time, O(H) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Stack, push right then left: O(n) time, O(n) space</h4>
+<pre><code class="language-cpp">void iterativePreorder(Node *root)
+{
+    if(root == NULL) return;
+    stack&lt;Node *&gt; st;
+    st.push(root);
+    while(st.empty() == false)
+    {
+        Node *curr = st.top();
+        cout &lt;&lt; (curr-&gt;key) &lt;&lt; " ";
+        st.pop();
+        if(curr-&gt;right != NULL) st.push(curr-&gt;right);
+        if(curr-&gt;left != NULL) st.push(curr-&gt;left);
+    }
+}</code></pre>
+      <p>Java: <code>Stack&lt;Node&gt; st = new Stack&lt;Node&gt;();</code>, <code>st.isEmpty()</code>, <code>Node curr = st.pop();</code> and <code>System.out.print(curr.key + " ");</code>.</p>
+      <p>Board trace on 10 → 20, 30; 20 → 40, 50; 30 → 60, starting with st = [10]:</p>
+      <ol>
+        <li>Print 10, push 30, 20.</li>
+        <li>Print 20, push 50, 40 (stack 40, 50, 30).</li>
+        <li>Print 40.</li>
+        <li>Print 50 (stack 30).</li>
+        <li>Print 30, push 60.</li>
+        <li>Print 60.</li>
+      </ol>
+      <p>Output 10 20 40 50 30 60.</p>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slip:</strong> the transcript says "In DFS traversal or level order traversal, we use a queue". Level order traversal is the breadth-first (BFS) traversal.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-30">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/video/MTQ3OQ%3D%3D" target="_blank" rel="noopener">Iterative Preorder Traversal (Space Optimized)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The simple iterative preorder takes O(n) time and O(n) auxiliary space. This version keeps O(n) time but needs only <strong>O(h)</strong> extra space (h = height).</p>
+    <p><strong>Idea:</strong> push only <em>right</em> children onto the stack, never left ones. We go left, left, left anyway, printing each node on the way and pushing its right child. When the left chain ends (<code>curr</code> becomes null), pop the stack top, which is the right child of the most recently processed node, and repeat the same process from it. This avoids pushing and then popping every left child.</p>
+    <p>Board example 10 → 20, 30; 20 → 40, 50; 30 → (left) 60; 40 → 70, 80; 50 → (right) 90:</p>
+    <ul>
+      <li>Iteration 1 of the outer loop prints 10 20 40 70 and leaves 80, 50, 30 on the stack (80 on top).</li>
+      <li>Iteration 2 pops 80 and prints it.</li>
+      <li>Then 50 is printed and 90 is pushed; 90 is printed.</li>
+      <li>Then 30 and 60.</li>
+    </ul>
+    <p><strong>Complexity:</strong> O(n) time, since every node is printed exactly once. Auxiliary space O(h): only right children go into the stack, at most O(h) of them.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Space optimized: O(n) time, O(h) space</h4>
+<pre><code class="language-cpp">void iterativePreorder(Node *root)
+{
+    if(root == NULL) return;
+    stack&lt;Node *&gt; st;
+    Node *curr = root;
+    while(curr != NULL || st.empty() == false)
+    {
+        while(curr != NULL)
+        {
+            cout &lt;&lt; (curr-&gt;key) &lt;&lt; " ";
+            if(curr-&gt;right != NULL)
+                st.push(curr-&gt;right);
+            curr = curr-&gt;left;
+        }
+        if(st.empty() == false) { curr = st.top(); st.pop(); }
+    }
+}</code></pre>
+      <p>Java: <code>Stack&lt;Node&gt; st = new Stack&lt;Node&gt;();</code>, <code>st.isEmpty()</code>, <code>System.out.print(curr.key + " ");</code> and <code>curr = st.pop();</code>. The outer loop runs while <code>curr</code> isn't null or the stack isn't empty.</p>
+      <p>Board trace on 10 → 20, 30; 20 → 40, 50; 30 → (left) 60; 40 → 70, 80. Initially curr = ref(10) and the stack is empty.</p>
+      <ol>
+        <li>Prints 10 20 40 70, the stack holds 30, 50, 80, and curr becomes 80.</li>
+        <li>Prints 80; curr becomes 50.</li>
+        <li>Prints 50; curr becomes 30.</li>
+        <li>Prints 30 60; curr = NULL with an empty stack, so the loop ends.</li>
+      </ol>
+      <p>Output 10 20 40 70 80 50 30 60.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the first board sketch of the steps begins "st.push(root)" and loops "while (st is not empty)". The final C++/Java code doesn't push the root; it starts from <code>curr = root</code> with an empty stack and loops while <code>curr != NULL || !st.empty()</code>, as written above.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Tree-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (32 problems, in course order), plus the four Articles-tab items that don't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/preorder-traversal" target="_blank" rel="noopener">Preorder Traversal</a></td><td>Basic</td><td>Videos 6, 29–30</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/inorder-traversal" target="_blank" rel="noopener">Inorder Traversal</a></td><td>Basic</td><td>Videos 5, 28</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/postorder-traversal" target="_blank" rel="noopener">Postorder Traversal</a></td><td>Basic</td><td>Video 7</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/height-of-binary-tree" target="_blank" rel="noopener">Height of Binary Tree</a></td><td>Easy</td><td>Video 8</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/node-at-distance" target="_blank" rel="noopener">Count Nodes at Distance K From Leaf</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/level-order-traversal" target="_blank" rel="noopener">Level Order Traversal</a></td><td>Easy</td><td>Video 10</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/level-order-traversal-line-by-line" target="_blank" rel="noopener">Level Order Line by Line</a></td><td>Easy</td><td>Videos 11–12</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/print-a-binary-tree-in-vertical-order" target="_blank" rel="noopener">Vertical Tree Traversal</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/left-view-of-binary-tree" target="_blank" rel="noopener">Left View of Binary Tree</a></td><td>Easy</td><td>Video 15</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/right-view-of-binary-tree" target="_blank" rel="noopener">Right View of Binary Tree</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/children-sum-parent" target="_blank" rel="noopener">Children Sum in a Binary Tree</a></td><td>Medium</td><td>Video 16</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/mirror-tree" target="_blank" rel="noopener">Convert to Mirror Tree</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>13</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/check-for-balanced-tree" target="_blank" rel="noopener">Balanced Tree Check</a></td><td>Easy</td><td>Video 17</td></tr>
+        <tr><td>14</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/check-if-subtree" target="_blank" rel="noopener">Check Subtree</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>15</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/maximum-width-of-tree" target="_blank" rel="noopener">Maximum Width of Tree</a></td><td>Easy</td><td>Video 18</td></tr>
+        <tr><td>16</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/foldable-binary-tree" target="_blank" rel="noopener">Foldable Binary Tree</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>17</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/vertical-width-of-a-binary-tree" target="_blank" rel="noopener">Vertical Width of a Binary Tree</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>18</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/binary-tree-to-dll" target="_blank" rel="noopener">Binary Tree to DLL</a></td><td>Hard</td><td>Video 19</td></tr>
+        <tr><td>19</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/tree-from-postorder-and-inorder" target="_blank" rel="noopener">Binary Tree from Inorder and Postorder</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>20</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/make-binary-tree" target="_blank" rel="noopener">Linked List to Binary Tree</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>21</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/construct-binary-tree-from-parent-array" target="_blank" rel="noopener">Construct Binary Tree from Parent Array</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>22</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/level-order-traversal-in-spiral-form" target="_blank" rel="noopener">Zig-Zag Tree Traversal</a></td><td>Medium</td><td>Video 21</td></tr>
+        <tr><td>23</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/connect-nodes-at-same-level" target="_blank" rel="noopener">Connect Nodes of Same Levels</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>24</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/diameter-of-binary-tree" target="_blank" rel="noopener">Diameter of Binary Tree</a></td><td>Medium</td><td>Video 22</td></tr>
+        <tr><td>25</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/maximum-path-sum-from-any-node" target="_blank" rel="noopener">Maximum Path Sum</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>26</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/lowest-common-ancestor-in-a-binary-tree" target="_blank" rel="noopener">LCA in Binary Tree</a></td><td>Medium</td><td>Videos 23–24</td></tr>
+        <tr><td>27</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/maximum-difference-between-node-and-its-ancestor" target="_blank" rel="noopener">Node and Ancestor Max Diff</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>28</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/count-number-of-subtrees-having-given-sum" target="_blank" rel="noopener">Count SubTrees with Sum</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>29</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/determine-if-two-trees-are-identical" target="_blank" rel="noopener">Identical Trees</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>30</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/top-view-of-binary-tree" target="_blank" rel="noopener">Top View of Binary Tree</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>31</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/bottom-view-of-binary-tree" target="_blank" rel="noopener">Bottom View of Binary Tree</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>32</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/problem/binary-tree-to-cdll" target="_blank" rel="noopener">Binary Tree to Circular DLL</a></td><td>Medium</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/MjM0OQ%3D%3D" target="_blank" rel="noopener">Insertion in a Binary Tree</a></p>
+<ul>
+<li>Insert a key at the first available position in level order. Do an iterative level order traversal with a queue. The first node found with an empty left child gets the key as its left child; otherwise the first with an empty right child gets it as its right child.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/MjM1MA%3D%3D" target="_blank" rel="noopener">Deletion in a Binary Tree</a></p>
+<ul>
+<li>There are three cases: the node is a leaf (just delete it), an internal node, or the root. The last two need care with the node's children.</li>
+<li>One way that handles all three: starting at the root, find the deepest rightmost node and the node to delete. Copy the deepest rightmost node's data into the node to delete, then delete the deepest rightmost node.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/MjM2Mw%3D%3D" target="_blank" rel="noopener">Threaded Binary Tree</a></p>
+<ul>
+<li>Makes inorder traversal faster and possible without a stack or recursion. Every right pointer that would be NULL points instead to the node's inorder successor, if one exists.</li>
+<li><strong>Types:</strong>
+  <ul>
+    <li><em>Single threaded</em>: NULL right pointers point to the inorder successor.</li>
+    <li><em>Double threaded</em>: NULL left pointers also point to the inorder predecessor. Predecessor threads help reverse inorder and postorder traversal.</li>
+  </ul>
+  Threads also give fast access to ancestors.</li>
+<li><strong>Node representation:</strong> a boolean <code>rightThread</code> tells whether the right pointer is a child or a thread (plus <code>leftThread</code> for double threading).</li>
+<li><strong>Inorder using threads:</strong> start at the root, go to the leftmost node and print it. If the current node has a right thread, follow it and print that node. Otherwise go to the right subtree, find its leftmost node and print it. Repeat until the whole tree is traversed.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Tree/article/MjYwOA%3D%3D" target="_blank" rel="noopener">Sample Problems on Trees</a></p>
+<ul>
+<li><strong>Top view</strong> (expected O(n); the output may be in any order): like vertical order traversal, group nodes by horizontal distance. A level order traversal ensures the topmost node at each distance is visited first, and hashing records which distances have been seen.</li>
+<li><strong>Diameter:</strong> the largest of the left subtree's diameter, the right subtree's diameter, and the longest leaf-to-leaf path through the root (computed from the subtree heights).</li>
+<li><strong>Mirror tree:</strong> M(T) swaps the left and right children of every non-leaf node. Recurse on both subtrees and swap the child pointers at each call.</li>
+<li><strong>Binary tree to DLL, in place:</strong> left and right become previous and next, in inorder order, with the leftmost node as head. Do an inorder traversal, keeping the previously visited node in <code>prev</code>. Make each visited node the next of <code>prev</code>, and <code>prev</code> its previous.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -24041,7 +25720,39 @@ const TRACKS = [
       ["Maximums of all subarrays of size k", "20:26"],
       ["First Circular Tour", "27:52"]
     ] },
-  { id: "DSASP-Tree", slug: "tree", name: "Tree", counts: [30, 24, 32, 10, 0] },
+  { id: "DSASP-Tree", slug: "tree", name: "Tree", counts: [30, 24, 32, 10, 0],
+    videos: [
+      ["Tree Data Structure", "4:26"],
+      ["Application of Tree", "4:44"],
+      ["Binary Tree", "6:29"],
+      ["Tree Traversal", "9:05"],
+      ["Implementation of Inorder Traversal", "8:24"],
+      ["Implementation of Preorder Traversal", "5:26"],
+      ["Implementation of Postorder Traversal", "4:25"],
+      ["Height of Binary Tree", "7:40"],
+      ["Print Nodes at K distance", "6:22"],
+      ["Level Order Traversal", "10:27"],
+      ["Level Order Traversal Line by Line (Part 1)", "6:09"],
+      ["Level Order Traversal Line by Line (Part 2)", "3:45"],
+      ["Size of Binary Tree", "12:17"],
+      ["Maximum in Binary Tree", "8:57"],
+      ["Print Left View of Binary Tree", "9:34"],
+      ["Children Sum Property", "6:27"],
+      ["Check for Balanced Binary Tree", "11:39"],
+      ["Maximum Width of Binary Tree", "4:59"],
+      ["Convert Binary Tree to Doubly Linked List", "15:23"],
+      ["Construct Binary Tree from Inorder and Preorder", "20:10"],
+      ["Tree Traversal in Spiral Form", "21:41"],
+      ["Diameter of a Binary Tree", "15:26"],
+      ["LCA of Binary Tree (Part 1)", "12:57"],
+      ["LCA of Binary Tree (Part 2)", "10:52"],
+      ["Burn a Binary Tree from a Leaf", "16:44"],
+      ["Count nodes in a Complete Binary Tree", "18:28"],
+      ["Serialize and Deserialize a Binary Tree", "19:16"],
+      ["Iterative Inorder Traversal", "10:15"],
+      ["Iterative Preorder Traversal (Simple)", "6:52"],
+      ["Iterative Preorder Traversal (Space Optimized)", "9:53"]
+    ] },
   { id: "DSASP-BST", slug: "binary-search-tree", name: "Binary Search Tree", counts: [28, 16, 23, 10, 1] },
   { id: "DSASP-Heap", slug: "heap", name: "Heap", counts: [14, 11, 11, 10, 0] },
   { id: "DSASP-Graph", slug: "graph", name: "Graph", counts: [30, 20, 24, 10, 1] },
