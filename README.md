@@ -2,6 +2,8 @@
 Data Structure and Algorithms
 Collections of DSA concepts for interview preparation.
 
+Course revision notes (GfG DSA Self Paced): [notes/dsa-notes.html](notes/dsa-notes.html). How they are prepared: [notes/README.md](notes/README.md).
+
 1. Graphs
 	1. Given the adjacency list of a bidirectional graph. Your task is to return the adjacency list for each vertex.
 	2. BFS of graph (connected)
