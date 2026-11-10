@@ -1640,6 +1640,1573 @@ i = 4 :  c = 3,  a = 2,  b = 3</code></pre>
   </section>
 </template>
 
+<template id="DSASP-Mathematics-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MTgzNQ%3D%3D" target="_blank" rel="noopener">Count Digits</a> · <strong>No transcript:</strong> this video's page has no Transcript button, so these notes come from the board (a frame every 5 seconds plus close-ups) and the video's own description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>The problem (as written on the board)</h3>
+    <p>Given a number <code>x</code>, count its digits. The board adds the condition <strong>x &gt; 0</strong>.</p>
+
+    <h3>The idea</h3>
+    <p>Dividing by 10 (integer division) drops the last digit. The board shows a number's digits as x₀ … x<sub>n−2</sub> x<sub>n−1</sub> and crosses out the last one, x<sub>n−1</sub>, to show this. So keep doing <code>x = x/10</code> until x becomes 0, and count how many times it ran. That count is the number of digits.</p>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>We are given an n-digit number, with n &gt; 0. The task is to find the number of digits in the number.</li>
+<li>Examples: 256 → 3, 75 → 2, 5 → 1.</li>
+<li>Steps on 3456: after the 1st iteration n = 345, count = 1. After the 2nd, n = 34, count = 2. After the 3rd, n = 3, count = 3. In the 4th, n becomes 0 and count = 4. The test expression (n != 0) is now false, so the loop ends with count 4.</li>
+<li><strong>Time Complexity: Theta(d)</strong>, where d is the number of digits in the number.</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/Njg4OA%3D%3D" target="_blank" rel="noopener">Count Digits</a></p>
+<ul>
+<li>Given a number N, return the count of digits in it. Examples in the article's picture: 1567 → 4 digits, 256 → 3 digits, 58964 → 5 digits.</li>
+<li><strong>Simple iterative solution:</strong> loop while n != 0, doing n = n / 10 and incrementing count. The same 3456 dry run as above.</li>
+<li>The article's Java code handles n = 0 separately (it returns 1) and uses a <code>long</code> parameter:</li>
+</ul>
+<pre><code class="language-java">static int countDigit(long n)
+{
+    if (n == 0)
+        return 1;
+    int count = 0;
+    while (n != 0) {
+        n = n / 10;
+        ++count;
+    }
+    return count;
+}</code></pre>
+<ul>
+<li>On 345289467 the output is <code>Number of digits : 9</code>.</li>
+<li><strong>Time Complexity:</strong> O(log(n)) or θ(num digits). <strong>Auxiliary Space:</strong> O(1) or constant.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: Count Digits</strong>
+      <div class="io">
+        <span>I/P</span><span>x = 9235</span>
+        <span>O/P</span><span>4</span>
+        <span>I/P</span><span>x = 38</span>
+        <span>O/P</span><span>2</span>
+        <span>I/P</span><span>x = 7</span>
+        <span>O/P</span><span>1</span>
+      </div>
+      <p style="margin:8px 0 0;font-size:0.9rem;color:var(--muted)">Condition on the board: x &gt; 0.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Iterative: divide by 10 until x is 0</h4>
+<pre><code class="language-java">int countDigits(int x)
+{
+    int res = 0;
+    while (x > 0)
+    {
+        x = x/10;
+        res++;
+    }
+    return res;
+}</code></pre>
+      <p><strong>Dry run on the board, x = 789:</strong></p>
+<pre><code class="language-plaintext">x = 789
+Initially : res = 0
+
+After Ist Iteration
+   x = 78
+   res = 1
+After IInd Iteration
+   x = 7
+   res = 2
+After IIIrd Iteration
+   x = 0
+   res = 3</code></pre>
+      <p>Now x &gt; 0 is false, so the loop stops and the function returns 3, the number of digits in 789.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's explanation and any slips in speech couldn't be checked. Only the board is covered. The handwritten variable name looks like <code>res</code>. It's read that way here, though the letters are not fully clear.</p>
+      <p><strong>Java note:</strong> the board code is valid Java inside a class (add <code>static</code> to call it from <code>main</code>). Because of <code>x &gt; 0</code>, it returns 0 for x = 0. The article's version returns 1 for that case.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MTg1Mw%3D%3D" target="_blank" rel="noopener">Palindrome Numbers</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Idea (as written on the board)</h3>
+    <div class="key">Traverse digits from right to left to find reverse of given number.</div>
+    <p>The board's side note gives the two operations that do this:</p>
+<pre><code class="language-plaintext">Last Digit :  x % 10
+Remaining  :  x = x/10</code></pre>
+    <p>Each step builds the reverse with <code>rev = rev*10 + last digit</code>. If the reverse equals the original number, the number is a palindrome.</p>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>We are given an n-digit number, with n &gt;= 0. The task is to find whether the number is a palindrome. If the reversed number equals the original number, it is a palindrome. Otherwise it isn't.</li>
+<li>Examples: 78987 → Yes, 8668 → Yes, 8 → Yes, 21 → No, 837 → No.</li>
+<li>Steps on 3443: after the 1st iteration n = 344, rev = 3. After the 2nd, n = 34, rev = 34. After the 3rd, n = 3, rev = 344. In the 4th, n becomes 0 and rev = 3443. Now (n != 0) is false and the loop ends. Finally compare the reverse with the original.</li>
+<li><strong>Time Complexity: Theta(d)</strong>, where d is the number of digits in the number.</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/Njg5MA%3D%3D" target="_blank" rel="noopener">Palindrome Numbers</a></p>
+<ul>
+<li>Write a function that returns true if the given number is a palindrome, else false. For example, 12321 is a palindrome but 1451 is not. The article's picture: 2002 reversed is 2002, so reversed number = original number.</li>
+<li>The article says this simple approach can be used when the number of digits in the given number is less than 10^18. Beyond that, the number can't be taken as an integer, since even the range of long long int doesn't cover it.</li>
+<li>Reverse the digits of the number and check whether the reverse equals the original. The article's Java code:</li>
+</ul>
+<pre><code class="language-java">static boolean checkPalindrome(int n)
+{
+    int reverse = 0;
+    int temp = n;
+    while (temp != 0) {
+    reverse = (reverse * 10) + (temp % 10);
+    temp = temp / 10;
+    }
+    return (reverse == n); // if it is true then it will return 1;
+    // else if false it will return 0;
+}</code></pre>
+<ul>
+<li>On n = 7007 the output is <code>Yes</code>.</li>
+<li><strong>Time Complexity:</strong> O(log(n)) or O(Number of digits in a given number). <strong>Auxiliary space:</strong> O(1) or constant.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: Palindrome Number</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 78987</span><span>O/P</span><span>Yes</span>
+        <span>I/P</span><span>n = 8668</span><span>O/P</span><span>Yes</span>
+        <span>I/P</span><span>n = 8</span><span>O/P</span><span>Yes</span>
+        <span>I/P</span><span>n = 21</span><span>O/P</span><span>No</span>
+        <span>I/P</span><span>n = 367</span><span>O/P</span><span>No</span>
+      </div>
+      <p style="margin:8px 0 0;font-size:0.9rem;color:var(--muted)">Condition on the board: n ≥ 0.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Building the reverse: two worked examples on the board</h4>
+<pre><code class="language-plaintext">Example 1                    Example 2
+n = 367                      n = 363
+rev = 0                      rev = 0
+7 : rev = rev*10 + 7         3 : rev = rev*10 + 3
+        = 7                          = 3
+6 : rev = rev*10 + 6         6 : rev = rev*10 + 6
+        = 76                         = 36
+3 : rev = rev*10 + 3         3 : rev = rev*10 + 3
+        = 763                        = 363</code></pre>
+      <p>Example 1: 763 ≠ 367, so it isn't a palindrome. Example 2: 363 = 363, so it is.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Code <span class="cx">Θ(d)</span></h4>
+      <p>The board marks <code>bool</code> with a note: "boolean in Java".</p>
+<pre><code class="language-java">bool isPal(int n)
+{
+    int rev = 0;
+    int temp = n;
+    while (temp != 0)
+    {
+        int ld = temp % 10;
+        rev = rev * 10 + ld;
+        temp = temp / 10;
+    }
+    return (rev == n);
+}</code></pre>
+      <p><strong>Dry run on the board, n = 4553:</strong></p>
+<pre><code class="language-plaintext">n = 4553  }
+rev = 0   }  Initial Values
+temp = 4553 }
+
+Ist Iteration : 3        IIIrd Iteration : 5
+  ld = 3                   ld = 5
+  rev = 3                  rev = 355
+  temp = 455               temp = 4
+IInd Iteration : 5       IVth Iteration : 4
+  ld = 5                   ld = 4
+  rev = 35                 rev = 3554
+  temp = 45                temp = 0</code></pre>
+      <p>Now temp is 0 and the loop ends. rev = 3554 is not equal to n = 4553, so the function returns false. At the end the teacher writes the time complexity on the board: <strong>Θ(d)</strong>.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. Only the board is covered.</p>
+      <p><strong>Example mismatch (board vs. description):</strong> the board's last "No" example is n = 367. The course description lists 837 there instead. Both are "No", so the answer doesn't change.</p>
+      <p><strong>Java note:</strong> the board's <code>bool</code> is C++. In Java write <code>boolean isPal(int n)</code>, as the board's own note says.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MTg1Mg%3D%3D" target="_blank" rel="noopener">Factorial of a Number</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Definition (as written on the board)</h3>
+<pre><code class="language-plaintext">n ≥ 0
+n! = 1*2*3* ... (n-1)*n</code></pre>
+    <p>The video gives two solutions: an <strong>iterative implementation</strong> (a loop) and a <strong>recursive</strong> one. The recursive board states the <strong>Assumption: n ≥ 0</strong>.</p>
+
+    <h3>Time complexity of the recursive version (board)</h3>
+<pre><code class="language-plaintext">Time Complexity :
+T(n) = T(n-1) + Θ(1)</code></pre>
+    <p>The board draws this as a recursion tree: a chain of Θ(1) nodes, one per level, with the levels labelled n, n−1, … down to 0. So there are about n levels doing constant work each.</p>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>The factorial n! of a number is the product of all the integers from 1 to that number: n! = 1*2*3*.....(n-1)*n.</li>
+<li>Examples: 4 → 4*3*2*1 = 24. 6 → 6*5*4*3*2*1 = 720. 0 → 1. 1 → 1.</li>
+<li><strong>Iterative approach:</strong> a for loop, an integer variable starting at 1, increased by 1 each iteration until it equals the input. The final value of the fact variable is the factorial. <strong>Time O(n), Space O(1).</strong></li>
+<li><strong>Recursive approach:</strong> a recursive function with a base condition that returns 1 when n = 0. <strong>Time O(n), Space O(n)</strong>, because recursion needs stack space to store the function calls.</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/NzAwMA%3D%3D" target="_blank" rel="noopener">Factorial of a Number</a></p>
+<ul>
+<li>The factorial of a non-negative integer is the product of all positive integers less than or equal to n. For example, the factorial of 6 is 6*5*4*3*2*1 = 720.</li>
+<li>It is written as the number followed by "!". It is widely used in permutations and combinations to count the total possible outcomes. The French mathematician Christian Kramp first used the exclamation mark.</li>
+<li><strong>Recursive formula:</strong> n! = n * (n − 1)!, and the value is 1 when n = 0 or n = 1. The recursive function keeps calling itself until the value reaches zero. Java code:</li>
+</ul>
+<pre><code class="language-java">static int factorial(int n)
+{
+    if (n == 0)
+        return 1;
+
+    return n * factorial(n - 1);
+}</code></pre>
+<ul>
+<li>Output for 5: <code>Factorial of 5 is 120</code>. <strong>Time Complexity:</strong> O(n). <strong>Auxiliary Space:</strong> O(n).</li>
+<li><strong>Iterative solution:</strong> the factorial can also be calculated iteratively, since recursion can be costly for large numbers. Java code (using a for loop):</li>
+</ul>
+<pre><code class="language-java">static int factorial(int n)
+{
+    int res = 1, i;
+    for (i = 2; i &lt;= n; i++)
+        res *= i;
+    return res;
+}</code></pre>
+<ul>
+<li>Output for 5: <code>Factorial of 5 is 120</code>. <strong>Time Complexity:</strong> O(n). <strong>Auxiliary Space:</strong> O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: Factorial of a Number</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 4</span><span>O/P</span><span>24</span>
+        <span>I/P</span><span>n = 6</span><span>O/P</span><span>720</span>
+        <span>I/P</span><span>n = 0</span><span>O/P</span><span>1</span>
+      </div>
+      <p style="margin:8px 0 0;font-size:0.9rem;color:var(--muted)">Condition on the board: n ≥ 0.</p>
+    </div>
+
+    <div class="approach">
+      <h4>1. Iterative Implementation</h4>
+<pre><code class="language-java">int fact(int n)
+{
+    int res = 1;
+    for (int i = 2; i &lt;= n; i++)
+        res = res * i;
+    return res;
+}
+// Iterative Implementation.</code></pre>
+      <p><strong>Dry run on the board, n = 5:</strong></p>
+<pre><code class="language-plaintext">n = 5
+res = 1
+i = 2 : res = 2
+i = 3 : res = 6
+i = 4 : res = 24
+i = 5 : res = 120</code></pre>
+    </div>
+
+    <div class="approach">
+      <h4>2. Recursive Implementation</h4>
+<pre><code class="language-java">int fact(int n)
+{
+    if (n == 0)
+        return 1;
+    return n * fact(n-1);
+}
+// Assumption : n ≥ 0</code></pre>
+      <p><strong>Call trace on the board, fact(5):</strong></p>
+<pre><code class="language-plaintext">fact(5)
+ └→ 5 * fact(4)
+     └→ 4 * fact(3)
+         └→ 3 * fact(2)
+             └→ 2 * fact(1)
+                 └→ 1 * fact(0)</code></pre>
+      <p>fact(0) hits the base case and returns 1, so the products come back up: 1, 2, 6, 24, 120. Time: T(n) = T(n−1) + Θ(1), as worked out in the Theory part.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. Only the board is covered. The board doesn't write a final answer for T(n). The course description gives O(n) time, with O(1) space for the iterative version and O(n) for the recursive one.</p>
+      <p><strong>Java note:</strong> both board functions are valid Java inside a class. <code>int</code> overflows past 12! (479001600). Use <code>long</code> up to 20!.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MTg0MQ%3D%3D" target="_blank" rel="noopener">Trailing Zeros in Factorial</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Naive method</h3>
+    <p>Compute n! first, then count its trailing zeros by repeatedly checking <code>fact % 10 == 0</code> and dividing by 10.</p>
+
+    <h3>Efficient method (as written on the board)</h3>
+<pre><code class="language-plaintext">1×2×3×4×5×6×7×8×9×10 ......25.. n
+        ↑           ↑</code></pre>
+    <p>The board marks 5 and 10, the multiples of 5 in the product. Each one contributes a factor of 5, and with a 2 that makes a trailing zero. Numbers like 25 contribute an extra 5. This gives the formula:</p>
+    <div class="key">Trailing zero count = ⌊n/5⌋ + ⌊n/25⌋ + ⌊n/125⌋ + ......</div>
+    <p><strong>Time on the board:</strong> the loop runs i = 5, 25, 125, … while i ≤ n. If it runs k times, 5<sup>k</sup> ≤ n, so k ≤ log₅ n. The board's answer is <strong>Θ(log n)</strong>.</p>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>We are given a number. The task is to find the number of trailing zeros in its factorial. Trailing zeros are the zeros at the end of the number.</li>
+<li>Examples: 5 → 1 (5! = 120, one trailing 0). 20 → 4 (20! = 2432902008176640000, 4 trailing zeroes). 100 → 24.</li>
+<li><strong>Naive approach:</strong> calculate n!, then count trailing 0s by repeatedly dividing the factorial by 10 until the remainder is not 0. This can overflow for slightly bigger numbers, since a factorial is a big number, so the efficient approach is preferred.</li>
+<li><strong>Efficient approach:</strong> look at the prime factors of n!. A trailing zero always comes from the prime factors 2 and 5, so count the 5s and 2s. n = 5: one 5 and three 2s in 5! (2 * 2 * 2 * 3 * 5), so 1 trailing 0. n = 11: two 5s and eight 2s in 11! (2<sup>8</sup> * 3<sup>4</sup> * 5<sup>2</sup> * 7), so 2 trailing 0s.</li>
+<li>There are always at least as many 2s as 5s in the prime factors, so counting the 5s is enough: Trailing 0s in n! = Count of 5s in prime factors of n! = floor(n/5) + floor(n/25) + floor(n/125) + ....</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/NzAwMQ%3D%3D" target="_blank" rel="noopener">Trailing Zeros in Factorial</a></p>
+<ul>
+<li>The article repeats the description above: the same examples, the naive approach and its overflow problem, the 2s-and-5s idea, and the formula. Its picture shows 8! = 40320, with Trailing Zeros = 1.</li>
+<li>Java code:</li>
+</ul>
+<pre><code class="language-java">static int findTrailingZeros(int n)
+{
+    if (n &lt; 0) // Negative Number Edge Case
+        return -1;
+
+    // Initialize result
+    int count = 0;
+
+    // Keep dividing n by powers
+    // of 5 and update count
+    for (int i = 5; n / i &gt;= 1; i *= 5)
+        count += n / i;
+
+    return count;
+}</code></pre>
+<ul>
+<li>Output: <code>Count of trailing 0s in 100! is 24</code>. <strong>Time Complexity:</strong> O(log₅n). <strong>Auxiliary Space:</strong> O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: Trailing Zeros in Factorial</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 5</span><span>O/P</span><span>1 &nbsp;// 1×2×3×4×5 = 120</span>
+        <span>I/P</span><span>n = 10</span><span>O/P</span><span>2 &nbsp;// 1×2×3×4×…×10 = 3628800</span>
+        <span>I/P</span><span>n = 100</span><span>O/P</span><span>24</span>
+      </div>
+    </div>
+
+    <div class="approach">
+      <h4>1. Naive Method</h4>
+<pre><code class="language-java">int countZeros(int n)
+{
+    int fact = 1;
+    for (int i = 2; i &lt;= n; i++)
+        fact = fact * i;
+    int res = 0;
+    while (fact % 10 == 0)
+    {
+        res++;
+        fact = fact / 10;
+    }
+    return res;
+}</code></pre>
+      <p><strong>Dry run on the board, n = 10:</strong></p>
+<pre><code class="language-plaintext">n = 10
+fact = 3628800
+res = 0
+Ist Iteration of while
+   res = 1
+   fact = 362880
+IInd Iteration of while
+   res = 2
+   fact = 36288</code></pre>
+      <p>36288 % 10 is not 0, so the loop stops and the answer is 2.</p>
+    </div>
+
+    <div class="approach">
+      <h4>2. Efficient Method <span class="cx">Θ(log n)</span></h4>
+<pre><code class="language-java">int countTrailingZeros(int n)
+{
+    int res = 0;
+    for (int i = 5; i &lt;= n; i = i * 5)
+        res = res + n / i;
+    return res;
+}</code></pre>
+      <p><strong>Dry run on the board, n = 251:</strong></p>
+<pre><code class="language-plaintext">n = 251
+res = 0
+Ist Iteration : i = 5
+   res = res + 50
+       = 50
+IInd Iteration : i = 25
+   res = res + 10
+       = 60
+IIIrd Iteration : i = 125
+   res = res + 2
+       = 62</code></pre>
+      <p>The next i is 625, which is more than 251, so the loop stops and the answer is 62.</p>
+<pre><code class="language-plaintext">5^k ≤ n
+k ≤ log₅ n          →   Θ(log n)</code></pre>
+    </div>
+
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. Only the board is covered.</p>
+      <p><strong>Java note:</strong> the naive method overflows <code>int</code> once n passes 12, so it only works for small n. That's the overflow the description warns about. In the efficient method, <code>i = i * 5</code> can overflow when n is near <code>Integer.MAX_VALUE</code>. The article's <code>n / i &gt;= 1</code> condition has the same limit.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MTgzOQ%3D%3D" target="_blank" rel="noopener">GCD or HCF of two Numbers</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Greatest Common Divisor: the board's picture</h3>
+    <p>Next to the first example (a = 4, b = 6) the teacher draws a 4 × 6 grid, numbered 1–4 down the side and 1–6 across the top, and marks it off into 2 × 2 squares. 2 is the largest square size that tiles the 4 × 6 rectangle exactly, and GCD(4, 6) = 2.</p>
+
+    <h3>Euclidean Algorithm: Basic Idea (as written on the board)</h3>
+<pre><code class="language-plaintext">Let 'b' be smaller than 'a'
+gcd(a, b) = gcd(a-b, b)
+
+Why?
+Let 'g' be GCD of 'a' and 'b'
+a = gx , b = gy and GCD(x, y) = 1
+(a-b) = g(x-y)</code></pre>
+    <p>So g also divides a − b. Subtracting the smaller number from the bigger one keeps the GCD the same. Doing it repeatedly until both are equal gives the GCD. The optimised version replaces the repeated subtraction with a single <code>a % b</code>.</p>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>We are given two numbers. The task is to find their GCD / HCF. GCD: Greatest Common Divisor. HCF: Highest Common Factor.</li>
+<li>Example: a = 20, b = 28 → 4. The factors of 20 are 1, 2, 4, 5, 10, 20. The factors of 28 are 1, 2, 4, 7, 14, 28. The common factors are 1, 2 and 4, and the greatest is 4.</li>
+<li><strong>Naive:</strong> find the minimum of the two numbers, then go from it down to 1 to find the highest factor that also divides the other number. Time O(min(a,b)), Auxiliary Space O(1).</li>
+<li><strong>Euclidean:</strong> the GCD of two numbers doesn't change if the smaller number is subtracted from the bigger one. This is the Euclidean algorithm by subtraction: repeat the subtraction, carrying the result forward each time, until the result equals one of the numbers being subtracted. Time O(min(a,b)), Auxiliary Space O(1).</li>
+<li><strong>Optimised Euclidean:</strong> instead of subtracting until both become equal, check whether one number is a factor of the other. For a = 42, b = 56: b &gt; a, and b%a is not 0, so b = 56 − 42 = 14 and a stays 42. Then a &gt; b and a%b = 0, so the HCF is the smaller one, 14 (42 is 3 times 14). Time O(log(min(a,b))), Auxiliary Space O(1).</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/NzAwMg%3D%3D" target="_blank" rel="noopener">GCD or HCF of two Numbers</a></p>
+<ul>
+<li>The GCD (or HCF) of two numbers is the largest number that divides both. The article's picture: 36 = 2×2×3×3 and 60 = 2×2×3×5, so GCD = the product of the common factors = 2×2×3 = 12. Other examples: GCD(20, 28) = 4, GCD(98, 56) = 14.</li>
+<li><strong>Euclidean algorithm by subtraction:</strong> repeat the subtraction until the result equals one of the numbers. If that answer is greater than 1, there is a GCD besides 1. If it is 1, the numbers have no common divisor besides 1, so they are coprime. At some point one number becomes a factor of the other, so instead of subtracting until both are equal, check that. Worked examples: (98, 56) → 14, and (36, 60) → 12.</li>
+<li>Java code, recursive subtraction version:</li>
+</ul>
+<pre><code class="language-java">static int gcd(int a, int b)
+{
+    // Everything divides 0
+    if (a == 0)
+    return b;
+    if (b == 0)
+    return a;
+
+    // base case
+    if (a == b)
+        return a;
+
+    // a is greater
+    if (a &gt; b)
+        return gcd(a-b, b);
+    return gcd(a, b-a);
+}</code></pre>
+<ul>
+<li>Output: <code>GCD of 98 and 56 is 14</code>. <strong>Time Complexity:</strong> O(max(a,b)). <strong>Auxiliary Space:</strong> O(max(a,b)).</li>
+<li><strong>Better approach (modulo):</strong> keep dividing the bigger number by the smaller one instead of subtracting:</li>
+</ul>
+<pre><code class="language-java">static int gcd(int a, int b)
+{
+if (b == 0)
+    return a;
+return gcd(b, a % b);
+}</code></pre>
+<ul>
+<li>Output: <code>GCD of 98 and 56 is 14</code>. <strong>Time Complexity:</strong> O(log(min(a,b))). <strong>Auxiliary Space:</strong> O(log(min(a,b))).</li>
+<li><strong>Why log:</strong> worst-case analysis. The two smallest numbers that take 1 step are (1,1). For 2 steps they are (1,2), for 3 (2,3), for 4 (3,5), for 5 (5,8). So for n steps the numbers are (fib(n), fib(n+1)). The worst case is O(n) steps where a ≥ fib(n) and b ≥ fib(n+1). Fibonacci numbers grow exponentially (the ratio of consecutive terms approaches the golden ratio (√5+1)/2), so the step count grows only logarithmically: log(min(a,b)).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: Greatest Common Divisor</strong>
+      <div class="io">
+        <span>I/P</span><span>a = 4, b = 6</span><span>O/P</span><span>2</span>
+        <span>I/P</span><span>a = 100, b = 200</span><span>O/P</span><span>100</span>
+        <span>I/P</span><span>a = 7, b = 13</span><span>O/P</span><span>1</span>
+      </div>
+    </div>
+
+    <div class="approach">
+      <h4>1. Naive Solution <span class="cx">O(min(a, b))</span></h4>
+      <p>The board writes it side by side in C++ and Java. The only difference is <code>min</code> vs <code>Math.min</code>.</p>
+<pre><code class="language-java">// Java (board)
+int gcd(int a, int b)
+{
+    int res = Math.min(a, b);
+    while (res > 0)
+    {
+        if (a % res == 0 &amp;&amp;
+            b % res == 0)
+        {
+            break;
+        }
+        res--;
+    }
+    return res;
+}</code></pre>
+      <p><strong>Dry run on the board, a = 10, b = 15:</strong> res = 10, 9, 8, 7, 6, 5. At res = 5, both 10 % 5 and 15 % 5 are 0, so the loop breaks and returns 5.</p>
+      <p>Board: <strong>Time Complexity: O(min(a, b))</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>2. Euclidean Algorithm (subtraction)</h4>
+<pre><code class="language-java">int gcd(int a, int b)
+{
+    while (a != b)
+    {
+        if (a > b)
+            a = a - b;
+        else
+            b = b - a;
+    }
+    return a;
+}</code></pre>
+      <p><strong>Dry run on the board:</strong></p>
+<pre><code class="language-plaintext">a = 12, b = 15
+a = 12, b = 3
+a = 9,  b = 3
+a = 6,  b = 3
+a = 3,  b = 3      →  return 3</code></pre>
+    </div>
+
+    <div class="approach">
+      <h4>3. Optimized Implementation</h4>
+<pre><code class="language-java">int gcd(int a, int b)
+{
+    if (b == 0)
+        return a;
+    else
+        return gcd(b, a % b);
+}
+// Optimized Implementation</code></pre>
+      <p><strong>Call traces on the board:</strong></p>
+<pre><code class="language-plaintext">gcd(12, 15)                 gcd(10, 15)
+ └→ gcd(15, 12)              └→ gcd(15, 10)
+     └→ gcd(12, 3)               └→ gcd(10, 5)
+         └→ gcd(3, 0)                └→ gcd(5, 0)</code></pre>
+      <p>In the first trace, the first call swaps the numbers because 12 % 15 = 12. The board notes <code>x % y = x</code> for this case, when x is smaller than y. In the second trace, gcd(5, 0) returns 5, and the board draws arrows passing 5 back up each level.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. Only the board is covered. The note <code>x % y = x</code> was erased soon after it was written, so any condition written after it couldn't be read. The board doesn't give a complexity for the optimised version. The description gives O(log(min(a,b))).</p>
+      <p><strong>Board notation:</strong> the naive code's <code>&amp;&amp;</code> is handwritten so that it looks like "$$". The board also writes both C++ and Java versions; only the Java one is copied here.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MTg0Nw%3D%3D" target="_blank" rel="noopener">LCM of Two Numbers</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Key relation (boxed on the board)</h3>
+    <div class="key">a * b = gcd(a, b) * lcm(a, b)</div>
+    <p>So lcm(a, b) = (a * b) / gcd(a, b). With the optimised Euclidean gcd from the previous video, this takes <strong>O(log(min(a, b)))</strong>, as written on the board. The naive method counts up from max(a, b) and is <strong>O(a*b − max(a, b))</strong>.</p>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>We are given two numbers. The task is to find their LCM (Least Common Multiple).</li>
+<li>Examples: (15, 20) → 60. (2, 8) → 8. (3, 7) → 21.</li>
+<li><strong>Naive:</strong> find the maximum of the two numbers, then count up from it until a number is completely divisible by both. Time O(a*b − max(a,b)).</li>
+<li><strong>Efficient:</strong> a x b = LCM(a, b) * GCD(a, b), so LCM(a, b) = (a x b) / GCD(a, b). Calculate the GCD with the optimised Euclidean algorithm, then the LCM. Time O(log(min(a,b))).</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/NzAwMw%3D%3D" target="_blank" rel="noopener">LCM of Two Numbers</a></p>
+<ul>
+<li>The LCM of two numbers is the smallest number that both divide. For a and b it is the smallest x with <code>x % a == 0</code> (x is a multiple of a) and <code>x % b == 0</code> (x is a multiple of b).</li>
+<li>Example: a = 6, b = 9 → 18. Multiples of 6: 6, 12, 18, 24, 30, … Multiples of 9: 9, 18, 27, 36, … Common multiples: 18, 36, 54, … The smallest is 18.</li>
+<li>Steps: start from the maximum of a and b, since the LCM can't be smaller than the larger number. Check numbers from max(a, b) up to a*b, the largest possible LCM. The first number divisible by both is the LCM.</li>
+<li>The article's code (C++ only) computes the GCD with an iterative Euclidean loop (<code>while (y != 0) { temp = y; y = x % y; x = temp; }</code>), then <code>lcm = (a * b) / gcd</code>. Output: 18. "x" and "y" are used so the original a and b keep their values.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: LCM of Two Numbers</strong>
+      <div class="io">
+        <span>I/P</span><span>a = 4, b = 6</span><span>O/P</span><span>12</span>
+        <span>I/P</span><span>a = 12, b = 15</span><span>O/P</span><span>60</span>
+        <span>I/P</span><span>a = 2, b = 8</span><span>O/P</span><span>8</span>
+        <span>I/P</span><span>a = 3, b = 7</span><span>O/P</span><span>21</span>
+      </div>
+    </div>
+
+    <div class="approach">
+      <h4>1. Naive Solution <span class="cx">O(a*b − max(a,b))</span></h4>
+<pre><code class="language-java">int lcm(int a, int b)
+{   // Java: res = Math.max(a,b)
+    int res = max(a, b);
+    while (true)
+    {
+        if (res % a == 0 &amp;&amp; res % b == 0)
+            return res;
+        res++;
+    }
+    return res;
+}</code></pre>
+      <p><strong>Dry run on the board, a = 4, b = 6:</strong> res = 6, 7, 8, 9, 10, 11, 12. 12 is the first value divisible by both, so it is returned.</p>
+    </div>
+
+    <div class="approach">
+      <h4>2. Efficient Solution <span class="cx">O(log(min(a,b)))</span></h4>
+<pre><code class="language-java">int gcd(int a, int b)
+{   if (b == 0)
+        return a;
+    return gcd(b, a % b);
+}
+int lcm(int a, int b)
+{
+    return (a * b) / gcd(a, b);
+}</code></pre>
+      <p><strong>On the board:</strong> a = 4, b = 6, gcd = 2, so lcm = (4*6)/2 = 12.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. Only the board is covered.</p>
+      <p><strong>Java note:</strong> the board's comment says to use <code>Math.max</code> in Java. In the naive code, Java rejects the final <code>return res;</code> as unreachable after <code>while (true)</code>, so drop it. In the efficient code, <code>a * b</code> can overflow <code>int</code>. <code>(a / gcd(a, b)) * b</code> avoids that.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MTg0NQ%3D%3D" target="_blank" rel="noopener">Check for Prime</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>What the board shows</h3>
+    <ul>
+      <li>Condition: <strong>n &gt; 0</strong>. 13 has divisors 1 and 13 only → prime. 14 has divisors 1, 2, 7 and 14 → not prime. 101 has divisors 1 and 101 only → prime.</li>
+      <li>First Few Prime Numbers: 2, 3, 5, 7, 11, 13, 17, 19, ….</li>
+    </ul>
+
+    <h3>Efficient Method idea (as written on the board)</h3>
+    <div class="key">Idea: Divisors always appear in Pairs.</div>
+<pre><code class="language-plaintext">30 : (1, 30), (2, 15), (3, 10), (5, 6)
+65 : (1, 65), (5, 13)
+25 : (1, 25), (5, 5)
+
+If (x, y) is a Pair,
+   x * y = n
+And if x ≤ y,
+   x * x ≤ n
+   x ≤ √n</code></pre>
+    <p>So it is enough to look for a divisor from 2 up to √n. If none exists below √n, there is none above it either.</p>
+
+    <h3>More Efficient Method (For Large n), as written on the board</h3>
+    <p>The board lists the "Values of i for large n" (2, 3, 4, … 21 … √n) and crosses out every multiple of 2 and every multiple of 3. The ones left are 5, 7, 11, 13, 17, 19, …, which come in pairs i and i+2, starting at 5 and stepping by 6.</p>
+    <div class="key">Idea: By checking n % 2 == 0 and n % 3 == 0, we can save many iterations for large n.</div>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>We are given a number. The task is to check whether it is prime. A prime is a natural number greater than 1 that has no positive divisors other than 1 and itself.</li>
+<li>Examples: n = 11 → true. n = 15 → false. n = 1 → false.</li>
+<li><strong>Naive:</strong> check whether any number from 2 to (n−1) divides n. Time O(n), Auxiliary Space O(1).</li>
+<li><strong>Efficient:</strong> check from 2 to √n, because if n = xy and one of x, y is greater than √n, the other must be smaller. Time O(sqrt(n)), Auxiliary Space O(1).</li>
+<li><strong>More efficient:</strong> handle 1, 2, 3 and multiples of 2 and 3 as separate cases. Then go from 5 to sqrt(n), checking whether i or i+2 divides n, and step by 6, because any prime can be written as 6n+1 or 6n−1. Time O(sqrt(n)), Auxiliary Space O(1).</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/NzAyMw%3D%3D" target="_blank" rel="noopener">Check for Prime</a></p>
+<ul>
+<li>A prime is a natural number greater than 1 that is only divisible by 1 and itself: 2 3 5 7 11 13 17 19 23 …. It has exactly two factors. 1 is neither prime nor composite.</li>
+<li><strong>Facts:</strong> 2 is the only even prime. Every prime except 2 and 3 can be written as 6n + 1 or 6n − 1. 2 and 3 are the only two consecutive primes. Goldbach Conjecture: every even integer greater than 2 is the sum of two primes. Wilson's theorem: p &gt; 1 is prime if and only if (p − 1)! ≡ −1 mod p. Fermat's Little Theorem: if n is prime, then for every a with 1 ≤ a &lt; n, a<sup>n−1</sup> ≡ 1 (mod n). Prime Number Theorem: the chance that a random n is prime is inversely proportional to its number of digits, i.e. to log n. Lemoine's Conjecture: any odd integer greater than 5 is an odd prime plus an even semiprime.</li>
+<li><strong>Properties:</strong> every number greater than 1 is divisible by at least one prime. Two primes are always coprime to each other. Each composite number factors into primes uniquely.</li>
+<li><strong>Prime vs co-prime:</strong> co-prime is a property of a pair of numbers that share no common factor except 1 (e.g. 13 and 15). Each number in the pair can be prime or composite.</li>
+<li><strong>Naive approach</strong> in the article: go from 2 to sqrt(n) (its Java code handles n ≤ 1 and 2, rejects other even numbers, then checks odd i from 3 to Math.sqrt(n)). Output for 19: true. Time O(sqrt(n)), Auxiliary space O(1).</li>
+<li><strong>Efficient approach</strong>: for large n, √n is also large, so handle 1, 2, 3 and multiples of 2 and 3 separately, then check i and i + 2 from 5 to sqrt(n). Java:</li>
+</ul>
+<pre><code class="language-java">public static boolean isPrime(int n)
+{
+    if (n &lt;= 1)
+        return false;
+    // Check if n=2 or n=3
+    if (n == 2 || n == 3)
+        return true;
+    // Check whether n is divisible by 2 or 3
+    if (n % 2 == 0 || n % 3 == 0)
+        return false;
+    // Check from 5 to square root of n
+    // Iterate i by (i+6)
+    for (int i = 5; i &lt;= Math.sqrt(n); i = i + 6)
+        if (n % i == 0 || n % (i + 2) == 0)
+            return false;
+    return true;
+}</code></pre>
+<ul>
+<li>Output for 11: true. <strong>Time complexity:</strong> O(sqrt(n)). <strong>Auxiliary space:</strong> O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: Check for Prime</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 13</span><span>O/P</span><span>Yes</span>
+        <span>I/P</span><span>n = 14</span><span>O/P</span><span>No</span>
+        <span>I/P</span><span>n = 101</span><span>O/P</span><span>Yes</span>
+      </div>
+    </div>
+
+    <div class="approach">
+      <h4>1. Naive Method <span class="cx">O(n)</span></h4>
+<pre><code class="language-java">//boolean in Java
+bool isPrime(int n)
+{
+    if (n == 1) return false;
+
+    for (int i = 2; i &lt; n; i++)
+        if (n % i == 0)
+            return false;
+    return true;
+}</code></pre>
+<pre><code class="language-plaintext">n = 65       |  n = 7
+i = 2        |  i = 2
+i = 3        |  i = 3
+i = 4        |  i = 4
+i = 5        |  i = 5
+No           |  i = 6
+             |  Yes</code></pre>
+    </div>
+
+    <div class="approach">
+      <h4>2. Efficient Method <span class="cx">O(√n)</span></h4>
+<pre><code class="language-java">//boolean in Java
+bool isPrime(int n)
+{
+    if (n == 1) return false;
+
+    for (int i = 2; i * i &lt;= n; i++)
+        if (n % i == 0)
+            return false;
+    return true;
+}</code></pre>
+<pre><code class="language-plaintext">n = 65       |  n = 37
+i = 2        |  i = 2
+i = 3        |  i = 3
+i = 4        |  i = 4
+i = 5        |  i = 5
+             |  i = 6</code></pre>
+      <p>65 is divisible by 5, so the result is No. For 37 nothing up to 6 divides it (6·6 = 36 ≤ 37, and 7·7 = 49 &gt; 37), so it is prime.</p>
+    </div>
+
+    <div class="approach">
+      <h4>3. More Efficient Method (For Large n)</h4>
+<pre><code class="language-java">//boolean in Java
+bool isPrime(int n)
+{
+    if (n == 1) return false;
+    if (n == 2 || n == 3) return true;
+
+    if (n % 2 == 0 || n % 3 == 0)
+        return false;
+
+    for (int i = 5; i * i &lt;= n; i = i + 6)
+        if (n % i == 0 || n % (i + 2) == 0)
+            return false;
+    return true;
+}</code></pre>
+<pre><code class="language-plaintext">n = 121      |  n = 1031
+i = 5        |  i = 5
+i = 11       |  i = 11
+             |  i = 17
+             |  i = 23
+             |  i = 29
+             |  Note 35 * 35 = 1225
+             |  which is more than 1031</code></pre>
+      <p>121 = 11 × 11, so it is caught at i = 11. For 1031 the next i would be 35, and 35 × 35 = 1225 &gt; 1031, so the loop stops and 1031 is prime.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. Only the board is covered. The final <code>return false;</code> lines are partly hidden by the teacher's hand in the close-ups, and the dry-run sheets confirm them. The board doesn't give a complexity for method 3. The description gives O(sqrt(n)).</p>
+      <p><strong>Java note:</strong> the board writes <code>bool</code>, with the note "boolean in Java". <code>i * i</code> can overflow for n near <code>Integer.MAX_VALUE</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MTg0OQ%3D%3D" target="_blank" rel="noopener">Prime Factors</a> · Notes from the <strong>full course transcript</strong> (this video has the Transcript button) and the board (a frame every 5 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>What prime factors are</h3>
+    <p>Prime factors are the divisors of the given number that are prime. 12 has divisors 2, 3, 4, 6 and 12, but only 2 and 3 are prime, and 2 divides 12 two times, so the output is 2 2 3. For 13 the only divisors are 1 and 13. 1 is not prime, so the output is just 13. For 315 the output is 3 3 5 7. 9 also divides 315, but it isn't printed because it isn't prime.</p>
+    <p>If you multiply all the numbers in the output you get the original number, because only prime factors are printed, each as many times as it divides. Board condition: <strong>n &gt; 1</strong>. Prime Numbers: 2, 3, 5, 7, 11, 13, ….</p>
+
+    <h3>Efficient Solution: two ideas (as written on the board)</h3>
+<pre><code class="language-plaintext">① Divisors always appear in pairs
+   30 : (1,30), (2,15), (3,10), (5,6)
+
+   Let (x,y) be a Pair
+   x * y = n
+   If x ≤ y
+   x * x ≤ n
+   x ≤ √n
+
+② A number n can be written as
+   multiplications of powers of prime factors
+   12  = 2² * 3
+   450 = 2¹ * 3² * 5²
+   13  = 13¹</code></pre>
+    <p>The teacher says idea ① is the same one used in the prime-checking video: if n has a prime divisor other than itself, the first one is between 2 and √n. Idea ② is the main basis of the algorithm. Find the first prime factor, divide the number by it as long as it divides, then find the next prime factor and do the same. For 450: divide by 2 once to get 225, then by 3 twice to get 25, then by 5 twice.</p>
+    <p>The loop can start from the current i each time, because the remaining number can't be divisible by anything smaller. Those factors were already divided out.</p>
+
+    <h3>Why the last <code>if</code> is needed</h3>
+    <p>When the <strong>largest prime factor has power 1</strong>, the loop ends (i·i &gt; n) while n is still that prime. For example, 84 = 2² × 3 × 7 is left with n = 7 when i reaches 4. So after the loop, if n &gt; 1, print n.</p>
+
+    <h3>Time complexity (transcript)</h3>
+    <ul>
+      <li><strong>Naive:</strong> the outer loop runs Θ(n) times. isPrime is upper bounded by n. The inner loop multiplies x by i each time to reach n, so it runs at most O(log n) times.</li>
+      <li><strong>Efficient, worst case is n prime:</strong> the inner while loops never run, so n is never reduced and the outer loop runs all its iterations. That's Θ(√n), or about √n/6 for the more efficient version, but constants don't matter in asymptotic analysis. For composite numbers it takes less time, because the inner loop reduces n drastically. Board: <strong>Θ(√n)</strong>.</li>
+    </ul>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>We are given a number n. The task is to print all its prime factors, the prime numbers that are factors of it. Examples: 12 → 2 2 3, 315 → 3 3 5 7.</li>
+<li><strong>Naive:</strong> go from 2 to (n−1) and check whether each number is prime. If it is, divide the number by it as long as it divides. Time O(n*sqrt(n)*log(n)), Auxiliary Space O(1).</li>
+<li><strong>Efficient:</strong> go from 2 to √n. For each number that divides n, keep dividing n by it as long as it divides, and print it. Time O(sqrt(n)), Auxiliary space O(1).</li>
+<li><strong>More efficient:</strong> handle 1, 2, 3 and multiples of 2 and 3 separately. Then go from 5 to sqrt(n), checking i and i+2 and stepping by 6 (any prime is 6n+1 or 6n−1). Divide out each factor found. Time O(sqrt(n)), Auxiliary space O(1).</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/NzAyNA%3D%3D" target="_blank" rel="noopener">Prime Factors</a></p>
+<ul>
+<li>A prime factor is a factor of the number that is prime, i.e. the primes that multiply together to give the number. Example: 15 → 3 and 5. The picture shows a factor tree for 1092: 2 × 546, then 3 × 182, then 2 × 91, then 7 × 13, giving the prime factors 2, 3, 2, 7, 13 ("circle the primes as they appear").</li>
+<li>Facts: every number has only one (unique) set of prime factors. To keep this property, 1 is neither prime nor composite. Prime factorisation helps with divisibility, simplifying fractions and common denominators. Pollard's Rho is a fast factorisation algorithm for large composite numbers with small prime factors. Prime factorisation is important in cryptography.</li>
+<li>The article's steps: (1) while n is divisible by 2, print 2 and divide n by 2. (2) n is now odd, so loop i from 3 to √n in steps of 2, and while i divides n, print i and divide. (3) If n is a prime greater than 2, it won't become 1 from the steps above, so print n if it is greater than 2. Output for 315: <code>3 3 5 7</code>. Time O(sqrt(n)), Auxiliary Space O(1).</li>
+<li>The article also gives the "more efficient" Java version (<code>printPrimeFactors</code>: return if n ≤ 1, divide out 2s and 3s, then i = 5, 11, 17 … checking i and i+2). Output: <code>3 3 5 7</code>.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: Prime Factors</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 12</span><span>O/P</span><span>2 2 3</span>
+        <span>I/P</span><span>n = 13</span><span>O/P</span><span>13</span>
+        <span>I/P</span><span>n = 315</span><span>O/P</span><span>3 3 5 7</span>
+      </div>
+    </div>
+
+    <div class="approach">
+      <h4>1. Naive Solution</h4>
+<pre><code class="language-java">void primeFactors(int n)
+{
+    for (int i = 2; i &lt; n; i++)
+    {
+        if (isPrime(i))
+        {
+            int x = i;
+            while (n % x == 0)
+            {
+                print(i);
+                x = x * i;
+            }
+        }
+    }
+}</code></pre>
+      <p>x takes the powers of i (i, i², i³, …). Each power that divides n prints i once more. <strong>Dry run, n = 12</strong> (board and transcript): i = 2 is prime, x = 2 divides 12 so print 2, x = 4 divides 12 so print 2, x = 8 doesn't divide, stop. i = 3: print 3, then x = 9 doesn't divide 12. i = 4 is not prime. For i = 5 … 11 the while loop never runs. Output: 2 2 3.</p>
+    </div>
+
+    <div class="approach">
+      <h4>2. Efficient Solution <span class="cx">O(√n)</span></h4>
+<pre><code class="language-java">void printPrimeFactors(int n)
+{
+    if (n &lt;= 1) return;
+    for (int i = 2; i * i &lt;= n; i++)
+    {
+        while (n % i == 0)
+        {
+            print(i);
+            n = n / i;
+        }
+    }
+    if (n > 1)
+        print(n);
+}</code></pre>
+      <p>The teacher says <code>print</code> stands for <code>cout</code> in C++ and <code>System.out.print</code> in Java, and that i·i ≤ n is written instead of computing √n.</p>
+<pre><code class="language-plaintext">n = 450                    n = 84
+i = 2 :                    i = 2 :
+  print(2)                   print(2)
+  n = 225                    n = 42
+i = 3 :                      print(2)
+  print(3)                   n = 21
+  n = 75                   i = 3 :
+  print(3)                   print(3)
+  n = 25                     n = 7
+i = 4 :                    After Loop :
+i = 5 :                      print(7)
+  print(5)
+  n = 5                    84 = 2² × 3 × 7
+  print(5)
+  n = 1
+Note : 450 = 2¹ × 3² × 5²</code></pre>
+      <p>For 450, i = 4 enters the for loop (4·4 ≤ 25) but not the while loop. After 5 is printed twice, n = 1 and 6·6 ≤ 1 is false, so the loop ends and nothing more is printed. For 84 the loop ends with n = 7 (4·4 &gt; 7), so 7 is printed after the loop.</p>
+    </div>
+
+    <div class="approach">
+      <h4>3. More Efficient Solution <span class="cx">Θ(√n)</span></h4>
+      <p><strong>Further optimisation:</strong> if 2 and 3 are handled outside the loop, none of their multiples (4, 6, 8, 9, 10, 12, …) need checking. Only 5, 7, 11, 13, 17, 19, … are left: start at 5, check i and i + 2, then step by 6. The teacher says this does almost one third of the iterations.</p>
+<pre><code class="language-java">void printPrimeFactors(int n)
+{
+    if (n &lt;= 1) return;
+    while (n % 2 == 0)
+    {   print(2); n = n / 2;   }
+    while (n % 3 == 0)
+    {   print(3); n = n / 3;   }
+    for (int i = 5; i * i &lt;= n; i = i + 6)
+    {
+        while (n % i == 0)
+        {   print(i); n = n / i;   }
+        while (n % (i + 2) == 0)
+        {   print(i + 2); n = n / (i + 2);   }
+    }
+    if (n > 3)
+        print(n);
+}</code></pre>
+      <p><strong>Dry run, n = 450:</strong> print(2), n = 225. print(3), n = 75. print(3), n = 25. Then i = 5: print(5), print(5), n = 1. i + 2 doesn't divide 1, so the loop ends, and n is not greater than 3, so nothing more is printed.</p>
+      <p>The last check is n &gt; 3, not n &gt; 1, because 2 and 3 were already handled. A prime left at the end must be greater than 3.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Transcript slips (auto-generated transcript vs. board):</strong></p>
+      <ul>
+        <li>0:50–0:54: "only divisors are one and 30 … write only 30". The board example is n = 13, and the output is 13.</li>
+        <li>2:03–2:07: "initialized the variable x equal to Y … checking if x divides I". The board has <code>int x = i;</code> and <code>while (n % x == 0)</code>, i.e. x divides n.</li>
+        <li>3:37: "2 to 3 as output". The output is 2 2 3.</li>
+        <li>9:33: "if 250 is not a prime number". The example is 450.</li>
+        <li>14:13: "57 or anything". This means 5, 7.</li>
+        <li>17:27: "Theta of square root of M". The board has Θ(√n).</li>
+      </ul>
+      <p><strong>Uncertainty, naive complexity:</strong> at about 4:23 the transcript says "log n steps here and then we have N squared steps here … Big O of n log n". The close-up of the board at 4:32 reads <strong>O(n log n)</strong>. With isPrime being O(n) inside a Θ(n) loop, the bound would be O(n² log n). The course description gives O(n*sqrt(n)*log(n)), which assumes the √n isPrime. The notes copy the board's O(n log n) and flag the difference here.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MTkwMg%3D%3D" target="_blank" rel="noopener">All Divisors of a Number</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Efficient Solution: idea (as written on the board)</h3>
+<pre><code class="language-plaintext">1) Divisors always appear in pairs
+   30 : (1, 30), (2, 15), (3, 10), (5, 6)
+
+2) One of the divisors in every pair is
+   smaller than or equal to √n
+   For a pair (x, y)
+      x × y = n
+   Let x be the smaller, i.e., x ≤ y
+      x × x ≤ n
+      x ≤ √n</code></pre>
+    <p>So looping i from 1 while i·i ≤ n finds every pair: print i and n/i, and print only once when the two are equal. This prints all divisors, but not in order. To get them in order, the board splits the work into two loops: first print the divisors from 1 (inclusive) to √n (exclusive), then go back down and print n/i for the divisors from √n (inclusive) to n (inclusive).</p>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>We are given a number n. The task is to print all its divisors, the numbers that divide it completely.</li>
+<li>Examples: n = 10 → 1 2 5 10. n = 100 → 1 2 4 5 10 20 25 50 100. n = 125 → 1 5 25 125.</li>
+<li><strong>Naive:</strong> go through every number from 1 to n, and print it if it divides n. Time O(n), Auxiliary Space O(1).</li>
+<li><strong>Efficient:</strong> the divisors come in pairs. For n = 100: (1,100), (2,50), (4,25), (5,20), (10,10). Be careful when both divisors are equal, as in (10,10), and print only one of them. Go from 1 to √n. Time O(sqrt(n)), Auxiliary Space O(1).</li>
+<li><strong>More efficient (sorted order):</strong> first print all divisors from 1 (inclusive) to √n (exclusive), then all divisors from √n (inclusive) to n (inclusive). Time O(sqrt(n)), Auxiliary Space O(1).</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/NzAyNQ%3D%3D" target="_blank" rel="noopener">All Divisors of a Number</a></p>
+<ul>
+<li>Given a natural number n, print all its distinct divisors. Picture: 50 → 1, 2, 5, 10, 25, 50. The examples match the description: 10, 100 and 125.</li>
+<li><strong>Naive</strong> (Java): <code>for (int i=1;i&lt;=n;i++) if (n%i==0) System.out.print(i+" ");</code>. For 100: <code>1 2 4 5 10 20 25 50 100</code>. Time O(n), Auxiliary Space O(1).</li>
+<li><strong>Better:</strong> use the pairs. Loop <code>for (int i=1; i&lt;=Math.sqrt(n); i++)</code>. If n%i==0, print i alone when <code>n/i == i</code> ("If divisors are equal, print only one"), otherwise print both i and n/i. For 100 this prints <code>1 100 2 50 4 25 5 20 10</code>, not in order. Time O(sqrt(n)), Auxiliary Space O(1).</li>
+<li><strong>Sorted order:</strong> the article's Java code prints i in the first loop and stores each n/i in a <code>Vector</code>, then prints the vector in reverse. Output <code>1 2 4 5 10 20 25 50 100</code>. The article gives Time O(sqrt(n)), Auxiliary Space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: All Divisors of a Number</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 15</span><span>O/P</span><span>1 3 5 15</span>
+        <span>I/P</span><span>n = 100</span><span>O/P</span><span>1 2 4 5 10 20 25 50 100</span>
+        <span>I/P</span><span>n = 7</span><span>O/P</span><span>1 7</span>
+      </div>
+    </div>
+
+    <div class="approach">
+      <h4>1. Naive Solution <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-java">void printDivisors(int n)
+{
+    for (int i = 1; i &lt;= n; i++)
+        if (n % i == 0)
+            print(i);
+}</code></pre>
+<pre><code class="language-plaintext">n = 6
+i = 1 : print(1)
+i = 2 : print(2)
+i = 3 : print(3)
+i = 4 :
+i = 5 :
+i = 6 : print(6)</code></pre>
+      <p>Board: <strong>Θ(n)</strong> time, <strong>Θ(1) Aux Space</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>2. Efficient Solution (not in order)</h4>
+<pre><code class="language-java">void printDivisors(int n)
+{
+    for (int i = 1; i * i &lt;= n; i++)
+    {
+        if (n % i == 0)
+        {
+            print(i);
+            if (i != n / i)
+                print(n / i);
+        }
+    }
+}</code></pre>
+      <p>Board note: "A Solution that prints all divisors but not in order."</p>
+<pre><code class="language-plaintext">n = 25
+i = 1 : print(1)
+        print(25)
+i = 2 :
+i = 3 :
+i = 4 :
+i = 5 : print(5)</code></pre>
+      <p>At i = 5, n/i is also 5, so it's printed once. Output: 1 25 5.</p>
+    </div>
+
+    <div class="approach">
+      <h4>3. Efficient Solution, sorted order</h4>
+<pre><code class="language-java">void printDivisors(int n)
+{
+    int i;
+    for (i = 1; i * i &lt; n; i++)     // Print all divisors from
+        if (n % i == 0)             // 1 (inclusive) to √n (exclusive)
+            print(i);
+    for ( ; i >= 1; i--)            // Print all divisors from
+        if (n % i == 0)             // √n (inclusive) to n (inclusive)
+            print(n / i);
+}</code></pre>
+<pre><code class="language-plaintext">n = 15
+Ist Loop :              IInd Loop :
+i = 1 : print(1)        i = 4 :
+i = 2 :                 i = 3 : print(5)
+i = 3 : print(3)        i = 2 :
+                        i = 1 : print(15)</code></pre>
+      <p>The first loop stops when i·i ≥ 15, at i = 4. The second loop starts from that i and counts down, printing n/i, which gives the larger divisors in increasing order. Output: 1 3 5 15.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. Only the board is covered. The board doesn't give a complexity for solutions 2 and 3. The description gives O(sqrt(n)) for both.</p>
+      <p><strong>Board example vs. description:</strong> the board's examples are 15, 100 and 7. The description uses 10, 100 and 125.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MTg1MA%3D%3D" target="_blank" rel="noopener">Sieve of Eratosthenes</a> · Notes from the <strong>full course transcript</strong> (this video has the Transcript button) and the board (a frame every 5 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>The problem</h3>
+    <p>Given a number n, find all the prime numbers smaller than or equal to n. For n = 10: 2 3 5 7. For n = 23: 2 3 5 7 11 13 17 19 23.</p>
+
+    <h3>Naive idea</h3>
+    <p>Loop from 2 to n and print each number for which isPrime is true. The teacher assumes the isPrime function from the earlier video, which is O(√n). The loop is Θ(n), so the total is <strong>O(n√n)</strong>.</p>
+
+    <h3>Sieve idea (as written on the board)</h3>
+<pre><code class="language-plaintext">isPrime[n+1]: initial values all T
+(index 0 and 1 are never used)
+
+Multiples of 2, 3 and 5
+2 : 4, 6, 8, 10, 12, 14, 16, 18, 20 ...
+3 : 6, 9, 12, 15, 18, ...
+5 : 10, 15, 20, ...</code></pre>
+    <ul>
+      <li>Create a boolean array <code>isPrime</code> of size n + 1 with every value true. Cells 0 and 1 are never accessed. At the end, primes stay true and everything else becomes false.</li>
+      <li>Start with 2 and mark all its multiples false. Then 3, then 5, and so on. Only numbers not marked yet need their multiples crossed out. 4 is skipped: it was marked false by 2, and every multiple of 4 is a multiple of 2, so they're all marked already. 25 would be marked first by 5.</li>
+      <li>On the board for n = 20, what stays true is 2, 3, 5, 7, 11, 13, 17, 19: the primes up to 20.</li>
+    </ul>
+
+    <h3>Why the loop only goes up to √n</h3>
+    <p>The teacher says this is the same reason as in the prime videos. Divisors come in pairs, and the smaller one in each pair is ≤ √n (30: (2,15), (3,10), (5,6)). So a composite number always has a prime factor ≤ √n. When the loop reaches an i with isPrime[i] still true, i is definitely prime, because all smaller numbers and their multiples were already handled. So the inner loop only ever runs for primes.</p>
+
+    <h3>Optimised implementation: start at i*i (as written on the board)</h3>
+<pre><code class="language-plaintext">i², i²+i, i²+2i, ...
+Earlier : 5 : 10, 15, 20, 25, 30, ...
+Now     : 5 : 25, 30, ...
+Composite Numbers Smaller than i²
+   i*(i-1)
+   i*(i-2)
+   ...</code></pre>
+    <p>Every composite smaller than i² has the form i·(i−1), i·(i−2), … so it has a smaller divisor and was already marked by an earlier iteration. 10, 15 and 20 have divisors 2, 3 and 2. That's why the inner loop can begin with i·i.</p>
+    <p><strong>Shorter implementation:</strong> with the i·i start, the outer loop can go all the way to n and print i inside it. When i &gt; √n, the inner loop (starting at i·i) simply doesn't run. The teacher says this can't be done with the first code, and that time and performance stay the same, only the code is shorter.</p>
+
+    <h3>Time complexity (board and transcript)</h3>
+    <div class="key">O(n log log n), compared with the naive O(n × √n) = n<sup>3/2</sup></div>
+    <p>The teacher doesn't go into the proof, because it is long. The point is that log log n grows very, very slowly, so the sieve is almost linear and much better than n<sup>3/2</sup>.</p>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>Given a number n, print all primes smaller than or equal to n. It is also given that n is a small number. Examples: n = 10 → 2 3 5 7. n = 20 → 2 3 5 7 11 13 17 19.</li>
+<li>When the algorithm ends, all the numbers in the list that are not marked are prime. For n = 50: create a boolean array from 0 to 50, mark everything divisible by 2, then go to the next unmarked number 3 and mark its multiples, then 5, and so on. The unmarked ones are 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47.</li>
+<li><strong>Time Complexity:</strong> O(n*log(log(n))). <strong>Auxiliary Space:</strong> O(n). The optimised sieve and its shorter implementation are discussed in the video.</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/NzAyNg%3D%3D" target="_blank" rel="noopener">Sieve of Eratosthenes</a></p>
+<ul>
+<li>The sieve is one of the most efficient ways to find all primes smaller than n when n is smaller than about 10 million.</li>
+<li>Worked example for n = 50, shown as tables: first mark the numbers divisible by 2 that are ≥ 2² (4, 6, 8, …), then the multiples of 3 that are ≥ 3² (9, 15, 21, …), then the multiples of 5 that are ≥ 5² (25, 35, 45). The unmarked ones are the primes 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47.</li>
+<li>Java (<code>sieveOfEratosthenes</code>): <code>boolean prime[] = new boolean[n + 1]</code> with every entry set true. For each p with <code>p * p &lt;= n</code> and <code>prime[p] == true</code>, mark <code>i = p * p; i &lt;= n; i += p</code> as false ("numbers which are multiple of p and are less than p^2 are already been marked"). Then print every i from 2 to n that is still true. Output for 30: <code>2 3 5 7 11 13 17 19 23 29</code>.</li>
+<li><strong>Time Complexity:</strong> O(n*log(log(n))). <strong>Auxiliary Space:</strong> O(n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: Print all primes ≤ n</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 10</span><span>O/P</span><span>2 3 5 7</span>
+        <span>I/P</span><span>n = 23</span><span>O/P</span><span>2 3 5 7 11 13 17 19 23</span>
+      </div>
+    </div>
+
+    <div class="approach">
+      <h4>1. Naive Solution <span class="cx">O(n × √n)</span></h4>
+<pre><code class="language-java">void printPrimes(int n)
+{
+    for (int i = 2; i &lt;= n; i++)
+        if (isPrime(i))
+            print(i);
+}</code></pre>
+      <p><strong>n = 10:</strong> i = 2: print(2), i = 3: print(3), i = 4:, i = 5: print(5), i = 6:, i = 7: print(7), i = 8:, i = 9:, i = 10:. The teacher says <code>print</code> stands for <code>cout</code> in C++ and <code>System.out.print</code> in Java.</p>
+    </div>
+
+    <div class="approach">
+      <h4>2. Simple Implementation of Sieve</h4>
+<pre><code class="language-cpp">void sieve(int n)
+{
+    vector&lt;bool&gt; isPrime(n+1, true);
+    for (int i = 2; i*i &lt;= n; i++)
+    {
+        if (isPrime[i])
+        {
+            for (int j = 2*i; j &lt;= n; j = j+i)
+                isPrime[j] = false;
+        }
+    }
+    for (int i = 2; i &lt;= n; i++)
+    {   if (isPrime[i])
+            cout &lt;&lt; i &lt;&lt; " ";
+    }
+}
+// Simple Implementation of Sieve</code></pre>
+      <p>The teacher says that in Java you can create a boolean array and use <code>Arrays.fill</code> to set every value to true.</p>
+<pre><code class="language-plaintext">n = 9
+index : 0 1 2 3 4 5 6 7 8 9
+start : / / T T T T T T T T
+
+i = 2 : print 2
+   Mark 4, 6, and 8 as False
+        / / T T F T F T F T
+i = 3 : print 3
+   Mark 3, 6 and 9 as False      (board; see note)
+        / / T T F T F T F F</code></pre>
+      <p>The loop runs for i = 2 and 3 (up to √9). Then the last loop prints the true entries from index 2: <strong>2, 3, 5, 7</strong>.</p>
+      <p><strong>n = 16</strong> (on the board): i = 2 marks 4, 6, 8, 10, 12, 14, 16. i = 3 marks 6, 9, 12, 15. For i = 4, isPrime[4] is false, so "Does Not Go Inside If".</p>
+    </div>
+
+    <div class="approach">
+      <h4>3. Optimized Implementation</h4>
+<pre><code class="language-cpp">void sieve(int n)
+{
+    vector&lt;bool&gt; isPrime(n+1, true);
+    for (int i = 2; i*i &lt;= n; i++)
+    {   if (isPrime[i])
+        {
+            for (int j = i*i; j &lt;= n; j = j+i)   // Replaced 2*i
+                isPrime[j] = false;
+        }
+    }
+    for (int i = 2; i &lt;= n; i++)
+    {   if (isPrime[i])
+            cout &lt;&lt; i &lt;&lt; " ";
+    }
+}</code></pre>
+    </div>
+
+    <div class="approach">
+      <h4>4. Shorter Implementation of the Optimized Sieve <span class="cx">O(n log log n)</span></h4>
+<pre><code class="language-cpp">void sieve(int n)
+{
+    vector&lt;bool&gt; isPrime(n+1, true);
+    for (int i = 2; i &lt;= n; i++)
+    {
+        if (isPrime[i])
+        {
+            cout &lt;&lt; i &lt;&lt; " ";
+            for (int j = i*i; j &lt;= n; j = j+i)
+                isPrime[j] = false;
+        }
+    }
+}</code></pre>
+      <p>The board underlines the two changes: the outer loop goes to <code>i &lt;= n</code>, and <code>cout</code> moves inside it.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Board slip (about 7:27):</strong> the n = 9 board says "i = 3: print 3, <strong>Mark 3, 6 and 9</strong> as False". The teacher says the multiples of 3 are 6 and 9 (6:47), and the array drawn below keeps index 3 as T. So 3 is a slip for 6, and only 6 and 9 are marked.</p>
+      <p><strong>Transcript slips (auto-generated):</strong> 0:24 "And equal to 23" means "n equal to 23". 9:51 "10 and then up to 60" means up to 16. 10:52 "We need to buy now" means "But now".</p>
+      <p><strong>Java note:</strong> <code>vector&lt;bool&gt; isPrime(n+1, true)</code> is C++. In Java: <code>boolean[] isPrime = new boolean[n + 1]; Arrays.fill(isPrime, true);</code>, as the teacher says. In version 4, <code>i*i</code> overflows <code>int</code> once i passes about 46,340, so use <code>(long) i * i</code> for large n.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MTg0Ng%3D%3D" target="_blank" rel="noopener">Computing Power</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Efficient idea (as written on the board)</h3>
+<pre><code class="language-plaintext">              ⎧ if n % 2 == 0
+power(x, n) = ⎨     power(x, n/2) × power(x, n/2)
+              ⎪ else
+              ⎩     power(x, n-1) × x</code></pre>
+    <p>The code computes <code>power(x, n/2)</code> only once, stores it in <code>tmp</code>, and squares it. For odd n it multiplies by x once more, since n/2 rounds down.</p>
+
+    <h3>Time complexity (board)</h3>
+<pre><code class="language-plaintext">T(n) = T(⌊n/2⌋) + Θ(1)
+
+Θ(1)   n = 16
+ |
+Θ(1)   n = 8
+ |
+Θ(1)   n = 4
+ ⋮</code></pre>
+    <p>Each call does constant work and halves n, so the recursion tree is a single chain about log n deep.</p>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>Compute power(x, n), i.e. x to the power n. Examples: x = 2, n = 3 → 8 (2*2*2). x = 7, n = 2 → 49 (7*7).</li>
+<li><strong>Naive:</strong> multiply x exactly n times with a simple for loop. Time O(n), Auxiliary Space O(1).</li>
+<li><strong>Efficient:</strong> power(x, n) = power(x, n/2) * power(x, n/2) if n is even, and x * power(x, n/2) * power(x, n/2) if n is odd. <strong>Time Θ(log n)</strong>. <strong>Auxiliary Space Θ(log n)</strong>, since it uses recursion and the height of the tree goes up to log n.</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/NzAyNw%3D%3D" target="_blank" rel="noopener">Computing Power</a></p>
+<ul>
+<li>Given two integers x and n, write a function to compute x<sup>n</sup>. You may assume x and n are small and overflow doesn't happen. Picture: x = 5, n = 2 → 5² → 25.</li>
+<li><strong>Naive</strong> (Java): <code>long pow = 1L; for (int i = 0; i &lt; n; i++) pow = pow * x;</code>. Output for (2, 3): 8. Time O(n), Auxiliary Space O(1).</li>
+<li><strong>Optimised divide and conquer:</strong> the recursive definition above computes the same subproblem twice in every call. Compute it once instead:</li>
+</ul>
+<pre><code class="language-java">static int power(int x, int y)
+{
+    int temp;
+    if (y == 0)
+        return 1;
+    temp = power(x, y / 2);
+    if (y % 2 == 0)
+        return temp * temp;
+    else
+        return x * temp * temp;
+}</code></pre>
+<ul>
+<li>Output: 8. <strong>Time Complexity:</strong> O(log n). <strong>Auxiliary Space:</strong> O(log n), for the recursive call stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: Computing pow(x, n)</strong>
+      <div class="io">
+        <span>I/P</span><span>x = 2, n = 3</span><span>O/P</span><span>8</span>
+        <span>I/P</span><span>x = 3, n = 4</span><span>O/P</span><span>81</span>
+        <span>I/P</span><span>x = 5, n = 0</span><span>O/P</span><span>1</span>
+        <span>I/P</span><span>x = 5, n = 1</span><span>O/P</span><span>5</span>
+      </div>
+      <p style="margin:8px 0 0;font-size:0.9rem;color:var(--muted)">Condition on the board: n ≥ 0.</p>
+    </div>
+
+    <div class="approach">
+      <h4>1. Naive Solution <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-java">int power(int x, int n)
+{
+    int res = 1;
+    for (int i = 0; i &lt; n; i++)
+        res = res * x;
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">x = 3, n = 4
+res = 1
+i = 0 : res = 3
+i = 1 : res = 9
+i = 2 : res = 27
+i = 3 : res = 81</code></pre>
+    </div>
+
+    <div class="approach">
+      <h4>2. Efficient Solution <span class="cx">Θ(log n)</span></h4>
+<pre><code class="language-java">int power(int x, int n)
+{
+    if (n == 0)
+        return 1;
+    int tmp = power(x, n/2);
+    tmp = tmp * tmp;
+    if (n % 2 == 0)
+        return tmp;
+    else
+        return tmp * x;
+}</code></pre>
+<pre><code class="language-plaintext">pow(3, 5)
+ ├→ tmp = pow(3, 2) = 3*3
+ │   ├→ tmp = pow(3, 1) = 3
+ │   │   ├→ tmp = pow(3, 0) = 1
+ │   │   └→ return 3
+ │   └→ return 3*3
+ └→ return (3*3)*(3*3)*3</code></pre>
+    </div>
+
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. Only the board is covered. The board's recursion tree for T(n) is drawn but its final answer isn't legible in the frames. Θ(log n) time and Θ(log n) auxiliary space come from the course description.</p>
+      <p><strong>Java note:</strong> <code>int</code> overflows quickly (3<sup>20</sup> already exceeds it). Use <code>long</code> for larger results.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/video/MjEzNw%3D%3D" target="_blank" rel="noopener">Iterative Power</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Iterative Power (Binary Exponentiation), as written on the board</h3>
+<pre><code class="language-plaintext">xⁿ
+3¹⁰ = 3⁸ × 3²                 10 : 1 0 1 0
+                                   3⁸ 3⁴ 3² 3¹   (3⁸ and 3² circled)
+3¹⁹ = 3¹⁶ × 3² × 3¹           19 : 1 0 0 1 1</code></pre>
+    <div class="key">
+      <p style="margin:0">✱ Every number can be written as sum of powers of 2 (Set bits in binary representation).</p>
+      <p style="margin:6px 0 0">✱ We can traverse through all bits of a number (from LSB to MSB) in O(log n) time.</p>
+    </div>
+    <p>Each set bit of n picks one of the powers x¹, x², x⁴, x⁸, …. The board shows how to walk the bits from LSB to MSB:</p>
+<pre><code class="language-plaintext">res = 1;
+while (n > 0)
+{
+    if (n % 2 != 0)
+        // Bit is 1
+    else
+        // Bit is 0
+    n = n/2;
+    x = x*x
+}</code></pre>
+    <p>When the current bit is 1, multiply the result by the current x. Then square x to get the power for the next bit, and halve n to move to the next bit.</p>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>Compute power(x, n) using Iterative Power (Binary Exponentiation). Examples: x = 2, n = 3 → 8. x = 7, n = 2 → 49.</li>
+<li>Key ideas: every number can be written as the sum of powers of 2, and you can go through all the bits of a number from LSB to MSB in O(log n) time.</li>
+<li><strong>Time Complexity:</strong> O(log n). <strong>Auxiliary Space:</strong> O(1).</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/NzAyOA%3D%3D" target="_blank" rel="noopener">Iterative Power</a></p>
+<ul>
+<li>Given an integer x and a positive number y, write a function that computes x<sup>y</sup> in O(log y) time with O(1) extra space. Examples: (3, 5) → 243, (2, 5) → 32.</li>
+<li>Recursive solutions are generally not preferred, since they need call-stack space and have function-call overhead. Java:</li>
+</ul>
+<pre><code class="language-java">static int power(int x, int y)
+{
+    // Initialize result
+    int res = 1;
+    while (y > 0) {
+        // If y is odd, multiply x with result
+        if ((y &amp; 1) == 1)
+            res = res * x;
+        // y must be even now
+        y = y >> 1; // y = y/2
+        x = x * x;  // Change x to x^2
+    }
+    return res;
+}</code></pre>
+<ul>
+<li>Output: <code>Power is 243</code>. <strong>Time Complexity:</strong> O(log y), since y halves in every loop. <strong>Auxiliary Space:</strong> O(1), since no extra space is used.</li>
+</ul>
+    </div>
+
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/article/MTA0NTU%3D" target="_blank" rel="noopener">Modular Arithmetic</a> (in the Articles tab between Computing Power and Iterative Power; it matches the board's final <code>% M</code> version)</p>
+<ul>
+<li>Modular arithmetic is arithmetic with the "mod" operation: computing the mod of expressions that use addition, subtraction, multiplication, division and so on.</li>
+<li><strong>Quotient Remainder Theorem:</strong> for integers a and b (b positive) there are unique q and r with a = b × q + r, 0 ≤ r &lt; b. E.g. a = 20, b = 6: q = 3, r = 2, 20 = 6 × 3 + 2.</li>
+<li><strong>Addition:</strong> (a + b) mod m = ((a mod m) + (b mod m)) mod m. (15 + 17) % 7 = ((15 % 7) + (17 % 7)) % 7 = (1 + 3) % 7 = 4. Subtraction works the same way.</li>
+<li><strong>Multiplication:</strong> (a × b) mod m = ((a mod m) × (b mod m)) mod m. (12 × 13) % 5 = (2 × 3) % 5 = 1.</li>
+<li><strong>Division</strong> is different and doesn't always exist: (a / b) mod m is not ((a mod m) / (b mod m)) mod m. It is (a × (inverse of b, if it exists)) mod m.</li>
+<li><strong>Modular inverse:</strong> the inverse of a mod m exists only if gcd(a, m) = 1. If (a × b) mod m = 1, then b is the inverse of a. E.g. a = 5, m = 7: (5 × 3) % 7 = 1, so 3 is the inverse of 5 under 7.</li>
+<li><strong>Modular exponentiation:</strong> a<sup>b</sup> mod m, e.g. 5² % 7 = 25 % 7 = 4. xⁿ mod m can be found in O(log n) with xⁿ = 1 (n = 0), x<sup>n/2</sup>·x<sup>n/2</sup> (n even), x<sup>n−1</sup>·x (n odd). x<sup>n/2</sup> is computed only once, and n halves whenever it is even. The article's <code>modpower(x, n, m)</code>: return 1%m if n == 0; u = modpower(x, n/2, m); u = (u*u)%m; if n is odd, u = (u*x)%m; return u. Output for (5, 2, 7): 4.</li>
+<li><strong>Fermat's theorem:</strong> x<sup>m−1</sup> mod m = 1 when m is prime and x and m are coprime. This also gives x<sup>k</sup> mod m = x<sup>k mod (m−1)</sup> mod m.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Problem: Computing xⁿ iteratively</strong>
+      <div class="io">
+        <span>I/P</span><span>x = 2, n = 3</span><span>O/P</span><span>8</span>
+        <span>I/P</span><span>x = 7, n = 2</span><span>O/P</span><span>49</span>
+      </div>
+    </div>
+
+    <div class="approach">
+      <h4>Iterative Power <span class="cx">O(log n) time · O(1) aux space</span></h4>
+<pre><code class="language-java">int power(int x, int n)
+{
+    int res = 1;
+    while (n > 0)
+    {
+        if (n % 2 != 0)
+            res = res * x;
+
+        x = x * x;
+        n = n / 2;
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">x = 4, n = 5
+Initially     : res = 1
+Ist Iteration : res = 4
+                x = 16
+                n = 2
+IInd Iteration: res = 4
+                x = 16*16 = 256
+                n = 1
+IIIrd Iteration: res = 4*256 = 1024
+                x = 256*256 = ...
+                n = 0
+
+5 : 0 1 0 1
+res = 4⁴ * 4¹</code></pre>
+      <p>Board box: <strong>Time Complexity: O(log n)</strong>, <strong>Aux Space: O(1)</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Final version on the board: with modulo M and bit operations</h4>
+<pre><code class="language-java">int power(int x, int n, int M)
+{
+    int res = 1;
+    while (n > 0)
+    {
+        if (n &amp; 1)
+            res = (res * x) % M;
+
+        x = (x * x) % M;
+        n = n >> 1;
+    }
+    return res;
+}</code></pre>
+      <p>The board changes three things: an extra parameter <code>int M</code> with every product taken <code>% M</code>, <code>n &amp; 1</code> in place of <code>n % 2 != 0</code>, and <code>n &gt;&gt; 1</code> in place of <code>n / 2</code>.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. Only the board is covered.</p>
+      <p><strong>Uncertain board reading:</strong> the labels under "5 : 0101" look like 4⁴ 4³ 4² 4¹. The bit values for 0101 would be 4⁸ 4⁴ 4² 4¹. The board's result, res = 4⁴ × 4¹ = 1024, matches the dry run either way.</p>
+      <p><strong>Board notation:</strong> the handwritten <code>n &amp; 1</code> looks like "n $1", the same as the <code>&amp;&amp;</code> in the GCD video. In Java, <code>if (n &amp; 1)</code> doesn't compile (an int isn't a boolean). Write <code>if ((n &amp; 1) == 1)</code>, as the article does. <code>x * x</code> can overflow <code>int</code> before <code>% M</code> is applied, so use <code>long</code> for the products.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Mathematics-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (11 problems, in course order). The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/problem/absolute-value" target="_blank" rel="noopener">Absolute Value</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/problem/convert-celsius-to-fahrenheit" target="_blank" rel="noopener">Convert Celsius To Fahrenheit</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/problem/quadratic-equation-roots" target="_blank" rel="noopener">Quadratic Equation Roots</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/problem/factorial-of-number" target="_blank" rel="noopener">Factorial</a></td><td>Basic</td><td>Video 3</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/problem/digits-in-factorial" target="_blank" rel="noopener">Digits in Factorial</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/problem/primality-test" target="_blank" rel="noopener">Prime Number</a></td><td>Easy</td><td>Video 7</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/problem/exactly-3-divisors" target="_blank" rel="noopener">3 Divisors</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/problem/gp-term" target="_blank" rel="noopener">Nth of GP from First Two</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/problem/addition-under-modulo" target="_blank" rel="noopener">Addition Under Modulo</a></td><td>Basic</td><td>Video 12 (Modular Arithmetic article)</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/problem/multiplication-under-modulo" target="_blank" rel="noopener">Modular Multiplication</a></td><td>Easy</td><td>Video 12 (Modular Arithmetic article)</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Mathematics/problem/modular-multiplicative-inverse-1587115620" target="_blank" rel="noopener">Modular Inverse</a></td><td>Easy</td><td>Video 12 (Modular Arithmetic article)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="added">
+      <p>"Covered in" points to the video or article whose idea the problem uses. None of these 11 problems is solved as-is on the board, so all of them are listed here rather than inside a video.</p>
+    </div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -1654,7 +3221,13 @@ const TRACKS = [
       ["Recursion Tree Method for Solving Recurrences", "6:34"], ["More Example Recurrences", "5:23"],
       ["Upper Bounds Using Recursion Tree Method", "7:06"], ["Space Complexity", "22:37"]
     ] },
-  { id: "DSASP-Mathematics", slug: "mathematics", name: "Mathematics", counts: [12, 13, 11, 10, 0] },
+  { id: "DSASP-Mathematics", slug: "mathematics", name: "Mathematics", counts: [12, 13, 11, 10, 0],
+    videos: [
+      ["Count Digits", "3:00"], ["Palindrome Numbers", "7:25"], ["Factorial of a Number", "5:30"],
+      ["Trailing Zeros in Factorial", "8:57"], ["GCD or HCF of two Numbers", "10:22"], ["LCM of Two Numbers", "3:56"],
+      ["Check for Prime", "14:16"], ["Prime Factors", "17:31"], ["All Divisors of a Number", "9:34"],
+      ["Sieve of Eratosthenes", "13:51"], ["Computing Power", "6:08"], ["Iterative Power", "9:25"]
+    ] },
   { id: "DSASP-BitMagic", slug: "bit-magic", name: "Bit Magic", counts: [12, 11, 12, 10, 0] },
   { id: "DSASP-Recursion", slug: "recursion", name: "Recursion", counts: [17, 12, 12, 10, 0] },
   { id: "DSASP-Arrays", slug: "arrays", name: "Arrays", counts: [31, 27, 27, 5, 1] },
@@ -1760,6 +3333,19 @@ function render(slug) {
     d.appendChild(body);
     list.appendChild(d);
   });
+  const ptpl = document.getElementById(`${t.id}-practice`);
+  if (ptpl) {
+    const d = el("details", "video");
+    const s = el("summary");
+    s.appendChild(el("span", "idx", "✎"));
+    s.appendChild(el("span", "vt", "Track practice set"));
+    s.appendChild(el("span", "dur", `${t.counts[2]} problems`));
+    d.appendChild(s);
+    const body = el("div", "body");
+    body.appendChild(ptpl.content.cloneNode(true));
+    d.appendChild(body);
+    list.appendChild(d);
+  }
   mainEl.appendChild(list);
 
   function updateProg() {
