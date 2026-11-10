@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 15 of 24 tracks · 332 of 470 videos · 252 of 342 articles · 252 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 16 of 24 tracks · 360 of 470 videos · 268 of 342 articles · 275 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -90,8 +90,8 @@ Report back with:
 | 13 | Queue | 9 | 5 | 9 | ✅ Done: 9/9 videos, 5/5 articles, 9 problems |
 | 14 | Deque | 8 | 7 | 6 | ✅ Done: 8/8 videos, 7/7 articles, 6 problems |
 | 15 | Tree | 30 | 24 | 32 | ✅ Done: 30/30 videos, 24/24 articles, 32 problems |
-| 16 | Binary Search Tree | 28 | 16 | 23 | ⏭ Next |
-| 17 | Heap | 14 | 11 | 11 | Not started |
+| 16 | Binary Search Tree | 28 | 16 | 23 | ✅ Done: 28/28 videos, 16/16 articles, 23 problems |
+| 17 | Heap | 14 | 11 | 11 | ⏭ Next |
 | 18 | Graph | 30 | 20 | 24 | Not started |
 | 19 | Greedy | 12 | 5 | 6 | Not started |
 | 20 | Backtracking | 4 | 4 | 7 | Not started |
@@ -539,6 +539,41 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
 
 "Insertion in a Binary Tree", "Deletion in a Binary Tree", "Threaded Binary Tree" and "Sample Problems on Trees" match no video, so they're in the Track practice set with the 32 problems. "Finding LCA in Binary Tree" (both methods) is folded into V23, and "Iterative Preorder Traversal" (both solutions) into V29. V10 has no Transcript button and was done from frames and the description; no transcript was cut off early. Course progress was unchanged (23/30 videos watched, 52%, 0/24 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 30 Tree videos.
 
+### Track 16: Binary Search Tree, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Binary Search Tree(Background) | 6:40 | Transcript + board |  |
+| 2 | Binary Search Tree(Introduction) | 8:20 | Transcript + board | Introduction to Binary Search Trees |
+| 3 | Search in BST (Introduction) | 3:49 | Transcript + board |  |
+| 4 | Search in BST C++ | 7:37 | Transcript + board | Binary Search Tree (Search and Insert) |
+| 5 | Search in BST Java | 7:07 | Transcript + board |  |
+| 6 | Insert in BST | 3:31 | Transcript + board |  |
+| 7 | Insert in BST C++ | 7:19 | Transcript + board |  |
+| 8 | Insert in BST Java | 7:28 | Transcript + board |  |
+| 9 | Deletion in BST | 5:02 | Transcript + board | Deletion in a Binary Search Tree |
+| 10 | BST deletion in C++ | 8:19 | Transcript + board |  |
+| 11 | BST Deletion in Java | 8:01 | Transcript + board |  |
+| 12 | Floor in BST | 7:36 | Transcript + board | Floor in BST |
+| 13 | Floor in BST in CPP | 4:08 | Board + description |  |
+| 14 | Floor in BST Java | 3:31 | Transcript + board |  |
+| 15 | Ceil in BST | 7:42 | Transcript + board | Ceil in BST |
+| 16 | Self Balancing BST | 9:55 | Transcript + board | Self Balancing BST |
+| 17 | AVL Tree | 13:09 | Board + description | Introduction to AVL Tree |
+| 18 | Red Black Tree | 7:24 | Transcript + board | Red Black Tree |
+| 19 | Applications of BST | 5:43 | Transcript + board | Applications of BST |
+| 20 | Ceiling on left side in an array | 7:09 | Transcript + board |  |
+| 21 | Find Kth Smallest in BST | 12:32 | Transcript + board | Find Kth Smallest in BST |
+| 22 | Check for BST | 14:52 | Transcript + board | Check for BST |
+| 23 | Fix BST with Two Nodes Swapped | 11:39 | Board + description | Fix BST with two nodes swapped |
+| 24 | Pair Sum with given BST | 10:01 | Transcript + board | Pair Sum with given BST |
+| 25 | Vertical Sum in a Binary Tree | 14:02 | Transcript + board | Vertical Sum in a Binary Tree |
+| 26 | Vertical Traversal of Binary Tree | 16:09 | Transcript + board |  |
+| 27 | Top View of Binary Tree | 13:28 | Transcript + board | Top View of Binary Tree |
+| 28 | Bottom View of Binary Tree | 13:48 | Transcript + board |  |
+
+"Finding LCA in Binary Search Tree" matches no video, so it's in the Track practice set with the 23 problems. V13, V17 and V23 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (12/28 videos watched, 35%, 0/16 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 28 BST videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -565,10 +600,11 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
 - `5e04a24`: Add Stack track notes (27 videos, 19 articles, 17 problems)
 - `e80e175`: Add Queue track notes (9 videos, 5 articles, 9 problems)
 - `6a5d4d9`: Add Deque track notes (8 videos, 7 articles, 6 problems)
-- (this commit): Add Tree track notes (30 videos, 24 articles, 32 problems)
+- `684a13d`: Add Tree track notes (30 videos, 24 articles, 32 problems)
+- (this commit): Add Binary Search Tree track notes (28 videos, 16 articles, 23 problems)
 
 ### What's next
-- **Track 16: Binary Search Tree** (28 videos, 16 articles, 23 problems), starting straight away.
+- **Track 17: Heap** (14 videos, 11 articles, 11 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -596,6 +632,7 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
   - Completed track 13 (Queue): 9 videos, 5 articles, 9 problems.
   - Completed track 14 (Deque): 8 videos, 7 articles, 6 problems.
   - Completed track 15 (Tree): 30 videos, 24 articles, 32 problems.
+  - Completed track 16 (Binary Search Tree): 28 videos, 16 articles, 23 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -612,6 +649,24 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Binary Search Tree: teacher slips flagged
+- V7: in the iterative trace, "parent → right equal to 10"; the code sets `parent->right = temp` (20).
+- V8 (board): `curr = (curr.right);` has an extra parenthesis. In the final if-else, the teacher says "smaller → insert left"; the code inserts left when `parent.key > x`.
+- V10: the successor function is said to work "only when your right child is empty" (it's *non*-empty), and the successor is called the "leftmost leaf" (it's the leftmost node). `&&` is drawn like "88".
+- V11 (board/teacher): `&&` is drawn like "$$". The first delete-30 walk-through says "root.right" where the parent assigns `root.left`.
+- V12: "58 is greater than 15" at the root, which is 50.
+- V14 (board): `Node res = null` has no semicolon. The x = 58 trace ends with "reference of 50"; the floor is 55.
+- V15: in the x = 63 trace, "63 is greater … 70 is smaller" is backwards (50 < 63, 70 > 63).
+- V17 (board, no transcript): "Balace Factor".
+- V20: for 15, "only one element which is greater"; 30 is the only one ≥ 15.
+- V21 (board/teacher): the naive pseudo code calls `printKth(root.right)` without k. On insert, the transcript says "decrement the lcount"; it should increment (delete decrements).
+- V22 (board/teacher): `&&` is drawn like "$$". `int prev = INT_MIN` has no semicolon. "Greater than 80, like 22" means greater than 20.
+- V23 (board, no transcript): `&&` is drawn like "$$". The final swap isn't written on the board (it's in the description).
+- V24 (board): the last call is `isPairBST` for `isPairSum`; `&s` is drawn like "$s".
+- V25 (board/teacher): `TreeMab`, `Mab.Entry`; printing uses `mp.getValue()` for `sum.getValue()`. The transcript reads the output as "−30, 20, 40+10 50, 50".
+- V26 (board/teacher): the printing board has (−1, {30}) for {20}, and the spoken output "40, 30, 10 50, 30" differs from the board's 40 | 20 | 10 50 | 30.
+- Videos without a transcript (13, 17, 23): spoken slips couldn't be checked.
 
 ### Tree: teacher slips flagged
 - V6 (board): the Java version writes `root != NULL`; Java uses `null`.

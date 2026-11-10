@@ -25406,6 +25406,1459 @@ Node *deSerialize(vector&lt;int&gt; &amp;arr)
   </section>
 </template>
 
+<template id="DSASP-BST-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE4Ng%3D%3D" target="_blank" rel="noopener">Binary Search Tree (Background)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Motivating problem: a set of items with five operations: <strong>search</strong>, <strong>insert</strong>, <strong>delete</strong>, <strong>find closest</strong> and <strong>sorted traversal</strong> (print all items in sorted order). Find closest means the nearest value present even if the query isn't, e.g. for {5, 10, 30, 50} and input 29 → 30; for strings, the closest alphabetically.</p>
+    <ul>
+      <li><strong>Unsorted array:</strong> insert O(1); search, delete (shift the items) and closest O(n); sorted traversal needs a sort, O(n log n).</li>
+      <li><strong>Sorted array:</strong> search and closest O(log n) by binary search; insert and delete O(n) (shifting); sorted traversal O(n).</li>
+      <li><strong>Linked list:</strong> search, delete and closest O(n). Insert is O(1) at the head, or at the tail with a tail pointer, but O(n) in a sorted list, where the place must be found. Sorted traversal is O(n) if the list is kept sorted, otherwise O(n log n).</li>
+      <li><strong>BST (balanced):</strong> search, insert, delete and closest are O(log n); sorted traversal O(n).</li>
+      <li><strong>Hash table:</strong> search, insert and delete are O(1) on average, which beats a BST when only these are needed. But closest is O(n) and sorted traversal O(n log n).</li>
+    </ul>
+    <p><strong>When to use a BST:</strong> when search, insert and delete come with closest-type operations (floor, ceiling, next greater, next smaller) or sorted traversal.</p>
+    <p>A BST by itself is O(h), where h is its height, and the height can be linear. The logarithmic bounds hold only when it is <strong>balanced</strong> (height log n), which can be ensured (covered in later videos).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>Operation</th><th>Array (unsorted)</th><th>Array (sorted)</th><th>Linked list</th><th>BST (balanced)</th><th>Hash table</th></tr></thead>
+      <tbody>
+        <tr><td>Search</td><td>O(n)</td><td>O(log n)</td><td>O(n)</td><td>O(log n)</td><td>O(1)</td></tr>
+        <tr><td>Insert</td><td>O(1)</td><td>O(n)</td><td>O(1), O(n) if sorted</td><td>O(log n)</td><td>O(1)</td></tr>
+        <tr><td>Delete</td><td>O(n)</td><td>O(n)</td><td>O(n)</td><td>O(log n)</td><td>O(1)</td></tr>
+        <tr><td>Find closest</td><td>O(n)</td><td>O(log n)</td><td>O(n)</td><td>O(log n)</td><td>O(n)</td></tr>
+        <tr><td>Sorted traversal</td><td>O(n log n)</td><td>O(n)</td><td>O(n) if sorted, else O(n log n)</td><td>O(n)</td><td>O(n log n)</td></tr>
+      </tbody>
+    </table></div>
+    <p>The linked-list column is partly hidden by the teacher on the board; its entries are from the transcript.</p>
+  </section>
+</template>
+
+<template id="DSASP-BST-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE4Nw%3D%3D" target="_blank" rel="noopener">Binary Search Tree (Introduction)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A BST organizes data so that a search can skip about half the items at each step. It applies the binary search idea, but as a linked structure, a binary tree.</p>
+    <ol>
+      <li>For every node, keys in the left subtree are smaller and keys in the right subtree are greater. Example: 50 → 30, 70; 30 → (left), 40; 70 → 60, 80. Nodes left of 70 must also be greater than 50, so they lie between 50 and 70.</li>
+      <li>Keys are typically considered distinct; most algorithms assume distinct input.</li>
+      <li>Like a linked list, it is a linked data structure. It never needs resizing (insert as long as memory is available), but it is not cache friendly, because items are at different memory locations (true of linked lists, binary trees and BSTs alike).</li>
+      <li>Libraries: C++ <code>map</code>, <code>set</code>, <code>multimap</code> and <code>multiset</code>; Java <code>TreeSet</code> and <code>TreeMap</code>. These are specifically <em>self-balancing</em> BSTs.</li>
+    </ol>
+    <p><strong>Representation:</strong> the same as a binary tree (<code>int key</code> with left and right pointers or references). What differs is that insert, and delete, must keep the order.</p>
+    <p><strong>Height matters:</strong> search, insert, delete, closest and its variants (floor, ceiling, greater, smaller) are all O(h). In a chain h = n, so these are O(n); in a balanced BST (each level doubling) they are O(log n). Self-balancing BSTs keep h at O(log n).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/MjM1NQ%3D%3D" target="_blank" rel="noopener">Introduction to Binary Search Trees</a></p>
+<ul>
+<li>A node-based binary tree in which the left subtree holds keys "lesser than or equal to" the node's key, the right subtree holds greater keys, both subtrees are BSTs, and "there must be no duplicate nodes". The ordering makes search, minimum and maximum fast compared with a normal binary tree, which would need every key compared.</li>
+<li><strong>Search</strong> in O(h): compare with the root and return it if equal; recur right if the key is greater, otherwise left.</li>
+<li><strong>Insert</strong> always at a leaf: search from the root until a leaf is reached, then add the new node as its left child (if smaller) or right child.</li>
+<li><strong>Worst case:</strong> O(h) for search and insert, i.e. root to the deepest leaf. A skewed tree's height can be n, making them O(n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Example operations</h4>
+      <p>Create an empty BST: a root pointer/reference equal to null. To insert, start at the root and go left if smaller, right if greater, until an empty place is found; insert there.</p>
+      <p>Inserting 20, 15, 30, 40, 50, 12, 18, 35, 80, 7 gives 20 → 15, 30; 15 → 12, 18; 12 → (left) 7; 30 → (right) 40; 40 → 35, 50; 50 → (right) 80. The smallest value goes to the leftmost position and the greatest to the rightmost.</p>
+      <p>Inserting 5, 10, 20, 30, 40 (increasing order) gives a chain 5 → 10 → 20 → 30 → 40 going right, like a linked list. Decreasing order gives a chain going left.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE4OA%3D%3D" target="_blank" rel="noopener">Search in BST (Introduction)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given the root of a BST (distinct keys) and a key x, return <code>true</code> if x is present, otherwise <code>false</code>. Board BST: 15 → 5, 20; 5 → (left) 3; 20 → 18, 80; 18 → (left) 16. Here x = 16 → true, x = 15 → true, x = 10 → false.</p>
+    <p><strong>Idea:</strong> start at the root and compare. By the BST property, if x is greater than the node's key it can't be on the left, so search the right subtree (recursively, with the right child as the new root). If smaller, search the left subtree. If the key matches, return true; if you reach null, return false. The description notes that a missing key ends the search past a leaf.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board traces</h4>
+      <ul>
+        <li>x = 16: 16 &gt; 15 → right; 16 &lt; 20 → left; 16 &lt; 18 → left; the node matches → true.</li>
+        <li>x = 19: 19 &gt; 15 → right; 19 &lt; 20 → left; 19 &gt; 18 → right, which is null → false.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE4OQ%3D%3D" target="_blank" rel="noopener">Search in BST C++</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li><strong>Recursive:</strong> if root is NULL, return false. This handles both an empty tree and a key that isn't present, since the search then ends at the null left or right of a leaf (e.g. 19 ends at 18's null right). If root's key equals x, return true. If root's key &gt; x, search the left subtree; otherwise search the right.</li>
+      <li><strong>Iterative:</strong> move a pointer from the root, going to <code>root-&gt;right</code> when the key is smaller than x and to <code>root-&gt;left</code> when it is greater. Return true on a match. If the pointer becomes NULL (including an initially empty tree), return false.</li>
+    </ul>
+    <p><strong>Time O(h)</strong> for both, since they go down along the height. Finding 15 at the root is constant. A missing key like 15.5 takes one step past the last level, at most h + 1 comparisons, so it's written O(h), not Θ.</p>
+    <p><strong>Auxiliary space:</strong> recursive O(h) for the call stack (all calls down the path are on the stack); iterative O(1). So the iterative version is better: no extra space and no function call overhead.</p>
+    <p>The height can be n for a skewed tree (e.g. keys inserted as 10, 12, 14, 16) and log n when balanced, so for a normal BST the bound is O(h). Self-balancing BSTs keep the height O(log n), and then search is O(log n).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NzU4MA%3D%3D" target="_blank" rel="noopener">Binary Search Tree (Search and Insert)</a></p>
+<ul>
+<li>Searching a BST is like binary search on a sorted array. Compare with the root: equal means found, smaller means go left, larger means go right. Each step discards one subtree. In a balanced tree (every node's subtree heights differ by at most one), the search space drops from n to n/2, n/4, …, hence the name.</li>
+<li><strong>Insert</strong> at a leaf; example: inserting 40 into 100 → 20, 500; 20 → 10, 30 makes 40 the right child of 30.</li>
+<li><strong>Complexity:</strong> worst case O(h), O(n) for a skewed tree, with O(1) auxiliary space. The article also has an "insertion using the loop" version, listed as O(N) time and O(N) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Node structure</h4>
+<pre><code class="language-cpp">struct Node {
+    int key;
+    Node *left, *right;
+    Node(int x) {
+        key = x;
+        left = right = NULL;
+    }
+};</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Recursive: O(h) time, O(h) space</h4>
+<pre><code class="language-cpp">bool search(Node *root, int x)
+{
+    if(root == NULL)
+        return false;
+    else if(root-&gt;key == x)
+        return true;
+    else if(root-&gt;key &gt; x)
+        return search(root-&gt;left, x);
+    else
+        return search(root-&gt;right, x);
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Iterative: O(h) time, O(1) space</h4>
+<pre><code class="language-cpp">bool search(Node *root, int x)
+{
+    while(root != NULL)
+    {
+        if(root-&gt;key == x)
+            return true;
+        else if(root-&gt;key &lt; x)
+            root = root-&gt;right;
+        else
+            root = root-&gt;left;
+    }
+    return false;
+}</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE5MA%3D%3D" target="_blank" rel="noopener">Search in BST Java</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The same two methods as the C++ video, in Java. The <code>root == null</code> check returns false both for an explicitly empty tree and for the null child reached when the key is missing (e.g. 19). Without it, <code>root.key</code> on null would throw a NullPointerException. If <code>root.key &lt; x</code> (e.g. x = 25 at 15) the key can only be on the right; otherwise on the left.</p>
+    <p>The iterative loop exits in two ways: the reference becomes null (return false), or the key matches, which returns true from the function directly.</p>
+    <p><strong>Complexity</strong> (as in the C++ video): time O(h) for both; auxiliary space O(h) recursive, O(1) iterative. The iterative version is better: no extra space and no call overhead. h can be n for a skewed tree, or O(log n) for self-balancing BSTs.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive (Java)</h4>
+<pre><code class="language-java">class Node {
+    int key;
+    Node left, right;
+    Node(int x) { key = x; }
+}
+
+boolean search(Node root, int x)
+{
+    if(root == null)
+        return false;
+    else if(root.key == x)
+        return true;
+    else if(root.key &lt; x)
+        return search(root.right, x);
+    else
+        return search(root.left, x);
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Iterative (Java)</h4>
+<pre><code class="language-java">boolean search(Node root, int x)
+{
+    while(root != null)
+    {
+        if(root.key == x)
+            return true;
+        else if(root.key &lt; x)
+            root = root.right;
+        else
+            root = root.left;
+    }
+    return false;
+}</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE5MQ%3D%3D" target="_blank" rel="noopener">Insert in BST</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Insert x into a BST and return its root. Proceed like a search: if x is already present, do nothing; otherwise the search ends at a null below a leaf, and x is inserted there.</p>
+    <ul>
+      <li>x = 20 into 10 → 5, 15; 15 → 12, 18: 20 &gt; 10 → right, &gt; 15 → right, &gt; 18 → right, which is null, so 20 becomes 18's right child.</li>
+      <li>x = 10 into an empty tree (root = null / NULL): create a single node; it is the new root.</li>
+      <li>x = 10 into 8 → 2, 10: 10 &gt; 8 → right, where 10 is found, so return without any change.</li>
+    </ul>
+    <p><strong>Facts:</strong> insertions always happen at the bottom (e.g. 13 also ends up at the bottom). The root changes in only one case, an empty tree, so the function returns the (possibly new) root and the caller learns it. If the key already exists, the BST must not change. Two ways follow in the next videos: recursive and iterative.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>The teacher strongly recommends writing the insert function yourself before watching the implementation videos (C++ next, then Java).</p>
+  </section>
+</template>
+
+<template id="DSASP-BST-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE5Mg%3D%3D" target="_blank" rel="noopener">Insert in BST C++</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li><strong>Recursive:</strong> if root is NULL, return a new node with x. If root's key &lt; x, insert into the right subtree <em>and assign the result to <code>root-&gt;right</code></em>; if greater, likewise for the left. Return root. The teacher says many people write just <code>return insert(...)</code>, which doesn't work. The assignment links the new node: the call made on 18's null right returns the new node 20, and assigning it to <code>18-&gt;right</code> makes the connection. Higher calls just reassign the same pointers.</li>
+      <li><strong>Iterative:</strong> slightly longer, because we must hold on to the <em>parent</em>: when the search reaches NULL, the new node has to be connected to that parent. Allocate <code>temp</code>, then run the search loop with <code>curr</code>, setting <code>parent = curr</code> before each move. If x is found, return the old root unchanged. After the loop, a NULL parent means the tree was empty, so return temp. Otherwise attach temp as parent's left or right child by comparison, and return root. Board example: inserting 20 under 18 sets <code>18-&gt;right = temp</code>.</li>
+    </ul>
+    <p><strong>Complexity:</strong> the same as search, plus creating and linking one node. Recursive: O(h) time, O(h) auxiliary space. Iterative: O(h) time, O(1) auxiliary space. Iterative is generally better: no extra space and no recursive call overhead.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive: O(h) time, O(h) space</h4>
+<pre><code class="language-cpp">Node *insert(Node *root, int x)
+{
+    if(root == NULL)
+        return new Node(x);
+    else if(root-&gt;key &lt; x)
+        root-&gt;right = insert(root-&gt;right, x);
+    else if(root-&gt;key &gt; x)
+        root-&gt;left = insert(root-&gt;left, x);
+    return root;
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Iterative: O(h) time, O(1) space</h4>
+<pre><code class="language-cpp">Node *insert(Node *root, int x)
+{
+    Node *temp = new Node(x);
+    Node *parent = NULL, *curr = root;
+    while(curr != NULL)
+    {
+        parent = curr;
+        if(curr-&gt;key &gt; x)
+            curr = curr-&gt;left;
+        else if(curr-&gt;key &lt; x)
+            curr = curr-&gt;right;
+        else
+            return root;
+    } // End of loop
+    if(parent == NULL)
+        return temp;
+    if(parent-&gt;key &gt; x)
+        parent-&gt;left = temp;
+    else
+        parent-&gt;right = temp;
+    return root;
+} // End of function</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slip:</strong> in the iterative trace the transcript says "parent → right equal to 10"; the code sets <code>parent-&gt;right = temp</code> (the new node 20).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE5NA%3D%3D" target="_blank" rel="noopener">Insert in BST Java</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The Java versions of the two inserts.</p>
+    <ul>
+      <li><strong>Recursive:</strong> the result of each recursive call must be assigned back to <code>root.left</code> or <code>root.right</code>; writing just <code>return insert(root.left, x)</code> is the common mistake. When x equals <code>root.key</code>, neither branch runs and the unchanged root is returned. Inserting 20 into 10 → 5, 15; 15 → 12, 18: the call on 18's null right creates 20 and returns its reference, which is assigned to 18's right. The parent calls overwrite 15's right and 10's right with the same values.</li>
+      <li><strong>Iterative:</strong> keep <code>parent</code> and <code>curr</code>, updating <code>parent</code> before every move down. Return root if the key equals a node's key. A null parent after the loop means an empty BST was passed, so return the new node. Otherwise connect the new node to the left or right of the parent.</li>
+    </ul>
+    <p><strong>Complexity:</strong> both O(h) time. Auxiliary space O(h) recursive and O(1) iterative, so iterative is better space-wise and has no call overhead. The recursive code is tiny and simple to write.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive (Java)</h4>
+<pre><code class="language-java">Node insert(Node root, int x)
+{
+    if(root == null)
+        return new Node(x);
+    if(root.key &gt; x)
+        root.left = insert(root.left, x);
+    else if(root.key &lt; x)
+        root.right = insert(root.right, x);
+    return root;
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Iterative (Java)</h4>
+<pre><code class="language-java">Node insert(Node root, int x)
+{
+    Node temp = new Node(x);
+    Node parent = null, curr = root;
+    while(curr != null)
+    {
+        parent = curr;
+        if(curr.key &gt; x)
+            curr = curr.left;
+        else if(curr.key &lt; x)
+            curr = curr.right;
+        else
+            return root;
+    } // End of while loop
+    if(parent == null)
+        return temp;
+    if(parent.key &gt; x)
+        parent.left = temp;
+    else
+        parent.right = temp;
+    return root;
+}</code></pre>
+      <p>The lines after the loop are partly hidden by the teacher on the board. They are as described in the transcript, matching the C++ version.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong> the board writes <code>curr = (curr.right);</code> with an extra parenthesis. Explaining the final if-else, the transcript says "if it is smaller then we insert the left". The code attaches to the left when <code>parent.key &gt; x</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE5Mw%3D%3D" target="_blank" rel="noopener">Deletion in BST</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Delete key x from a BST while keeping the BST property (everything left of a node is smaller, everything right is greater). The description gives three possibilities:</p>
+    <ol>
+      <li><strong>A leaf:</strong> just delete it. Board: x = 40 in 50 → 30, 70; 30 → 20, 40; 70 → 60, 80. 40 is removed.</li>
+      <li><strong>Only one child</strong> (the other is empty): delete the node and put its only child in its place. Board: x = 30 in 50 → 30, 70; 30 → (left) 20; 70 → 60, 80 → 50 → 20, 70; 70 → 60, 80.</li>
+      <li><strong>Two non-empty children:</strong> replace the node with the <em>closest value</em>, either the closest lower or the closest higher, and both keep the BST property. Board: x = 50 in 50 → 20, 70; 20 → (right) 40; 70 → 60, 80. Here 40 (not 20, since 40 lies between) or 60 could replace it. The board uses 60 → 60 → 20, 70; 20 → (right) 40; 70 → (right) 80.</li>
+    </ol>
+    <p><strong>Rule used:</strong> always pick the closest greater value, the <strong>inorder successor</strong> (the next node in inorder traversal), because inorder traversal of a BST is sorted. The closest lower value is the inorder predecessor.</p>
+    <p>If the key doesn't exist (e.g. delete 90), the BST is not modified. The teacher says the recursive code is easier to write and suggests trying it, with all cases, before the implementation videos.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/MjM2MA%3D%3D" target="_blank" rel="noopener">Deletion in a Binary Search Tree</a></p>
+<ul>
+<li>Search for the node, then delete it if present. Three cases:
+  <ul>
+    <li>A <strong>leaf</strong>: simply remove it.</li>
+    <li><strong>One child</strong>: copy the child into the node and delete the child.</li>
+    <li><strong>Two children</strong>: copy the inorder successor's contents into the node and delete the successor. The inorder predecessor can also be used.</li>
+  </ul>
+</li>
+<li>The inorder successor is the minimum value in the node's right child.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>Work through the three board examples by hand, then write a recursive delete that handles: key absent, leaf, one child, and two children (replace with the inorder successor).</p>
+  </section>
+</template>
+
+<template id="DSASP-BST-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE5NQ%3D%3D" target="_blank" rel="noopener">BST deletion in C++</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Like insert, delete first searches for the key: an empty tree returns root, a larger root key means go left, a smaller one means go right, each time assigning the returned subtree back. The <code>else</code> branch handles the node whose key equals x:</p>
+    <ul>
+      <li><strong>Left child NULL:</strong> save <code>temp = root-&gt;right</code>, delete root and return temp. The parent's assignment links temp in place of the node. This also covers a <strong>leaf</strong> (temp is NULL, so the parent's pointer becomes NULL), e.g. deleting 40.</li>
+      <li><strong>Right child NULL:</strong> the same with <code>root-&gt;left</code>.</li>
+      <li><strong>Both children non-empty:</strong> find the inorder successor, the closest greater value: go to the right child, then left, left, … to the leftmost node. Copy its key into root, then recursively delete that key from the right subtree. It's found where its left is NULL, so it falls into the simple case. Example from the transcript: deleting 50 copies 55 (the leftmost in the right subtree) into its place.</li>
+    </ul>
+    <p><code>getSuccessor</code> here is only valid when the node's right child is non-empty, which is the only time delete needs it. In general a node's inorder successor can be an ancestor. For example, 40 in 50 → 30, 70; 30 → 20, 40 has successor 50, which isn't in 40's (empty) right subtree. So a general successor function is more complex.</p>
+    <p><strong>Complexity:</strong> it travels down the height like search and insert, so O(h) time, and O(h) extra space for the recursion.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive delete: O(h) time, O(h) space</h4>
+<pre><code class="language-cpp">Node *getSuccessor(Node *curr)
+{
+    curr = curr-&gt;right;
+    while(curr != NULL &amp;&amp; curr-&gt;left != NULL)
+        curr = curr-&gt;left;
+    return curr;
+}
+
+Node *delNode(Node *root, int x)
+{
+    if(root == NULL) return root;
+    if(root-&gt;key &gt; x)
+        root-&gt;left = delNode(root-&gt;left, x);
+    else if(root-&gt;key &lt; x)
+        root-&gt;right = delNode(root-&gt;right, x);
+    else {
+        if(root-&gt;left == NULL) {
+            Node *temp = root-&gt;right;
+            delete root;
+            return temp;
+        }
+        else if(root-&gt;right == NULL) {
+            Node *temp = root-&gt;left;
+            delete root;
+            return temp;
+        }
+        else {
+            Node *succ = getSuccessor(root);
+            root-&gt;key = succ-&gt;key;
+            root-&gt;right = delNode(root-&gt;right, succ-&gt;key);
+        }
+    }
+    return root;
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong></p>
+      <ul>
+        <li><code>&amp;&amp;</code> in <code>getSuccessor</code> is drawn like "88".</li>
+        <li>The transcript says this successor function works "only when your right child is empty"; it works only when the right child is <em>non</em>-empty, as the teacher says right after.</li>
+        <li>It also calls the successor the "leftmost leaf of the right child". It's the leftmost <em>node</em>, which can still have a right child.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE5Ng%3D%3D" target="_blank" rel="noopener">BST Deletion in Java</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The Java version of delete. Search, insert and delete all begin by <em>finding</em> the key: return null for an empty tree, go left if <code>root.key &gt; x</code>, go right if smaller.</p>
+    <p>When <code>root.key == x</code>:</p>
+    <ul>
+      <li>If <code>root.left</code> is null, return <code>root.right</code> as the subtree's new root.</li>
+      <li>If <code>root.right</code> is null, return <code>root.left</code>.</li>
+      <li>A leaf takes the first branch and returns null.</li>
+      <li>Otherwise copy in the successor's key and delete the successor from the right subtree.</li>
+    </ul>
+    <p>Board example: delete 30 in 50 → 30, 70; 30 → (right) 40; 70 → 60, 80. At 30, <code>root.left</code> is null, so the call returns the reference to 40. The caller (at 50) assigns it to <code>root.left</code>, so 40 becomes 50's left child and 30 drops out.</p>
+    <p>Deleting 50 there: the successor is right then left, left … → 60 (it would be 55 if 60 had a left child 55), the smallest value greater than 50. 50's key becomes 60, then 60 is deleted from the right subtree, where its left is null.</p>
+    <p>As in the C++ video, this successor code works only because delete calls it when the right child isn't null. For 40 it would return null, while the actual successor (closest greater value) is 50.</p>
+    <p><strong>Complexity:</strong> O(h) time and O(h) auxiliary space. h can be n for a fully skewed tree (e.g. keys inserted in increasing order), and O(log n) for self-balancing BSTs.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive delete (Java)</h4>
+<pre><code class="language-java">Node getSucc(Node root)
+{
+    Node curr = root.right;
+    while(curr != null &amp;&amp; curr.left != null)
+        curr = curr.left;
+    return curr;
+}
+
+Node delNode(Node root, int x)
+{
+    if(root == null) return null;
+    if(root.key &gt; x)
+        root.left = delNode(root.left, x);
+    else if(root.key &lt; x)
+        root.right = delNode(root.right, x);
+    else
+    {
+        if(root.left == null) return root.right;
+        else if(root.right == null) return root.left;
+        else
+        {
+            Node succ = getSucc(root);
+            root.key = succ.key;
+            root.right = delNode(root.right, succ.key);
+        }
+    }
+    return root;
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong> <code>&amp;&amp;</code> in <code>getSucc</code> is drawn like "$$". In the first delete-30 walk-through the transcript says the parent makes "root . right" equal to the returned value. The parent (50) called on its left, so it assigns <code>root.left</code>, as the teacher says in the second walk-through.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE5OA%3D%3D" target="_blank" rel="noopener">Floor in BST</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The <strong>floor</strong> of x is the closest smaller-or-equal value. If x is present, return its node; otherwise return the node with the largest value smaller than x; if there is none, return NULL. Board BST 10 → 5, 15; 15 → 12, 30:</p>
+    <ul>
+      <li>x = 14 → node 12 (the largest of 10, 5, 12).</li>
+      <li>x = 4 → NULL (or null), since nothing is smaller.</li>
+      <li>x = 30 → node 30, which is present.</li>
+      <li>x = 100 → node 30. Any x greater than 30 gives 30.</li>
+    </ul>
+    <p>Target: O(h) time and O(1) extra space, which means iterative (recursion would take O(h) space).</p>
+    <p><strong>Naive:</strong> traverse every node (inorder, preorder, postorder or level order), keeping the closest smaller value seen so far. That's O(n) time, plus the traversal's extra space (O(h) recursive or stack based).</p>
+    <p><strong>Efficient</strong> (based on BST search), at each node:</p>
+    <ul>
+      <li><strong>Equal to x:</strong> it's the floor, so return it.</li>
+      <li><strong>Greater than x:</strong> it can't be the floor, and any floor must be in its left subtree, so go left.</li>
+      <li><strong>Smaller than x:</strong> it's a potential floor, so record it. Its left subtree is all smaller still, so a better floor can only be between it and x in the right subtree: go right.</li>
+    </ul>
+    <p>Stop at null and return the last recorded node.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NzU4MQ%3D%3D" target="_blank" rel="noopener">Floor in BST</a></p>
+<ul>
+<li><strong>Simple:</strong> traverse the tree (inorder, preorder or postorder), keeping the closest smaller-or-same element: O(n).</li>
+<li><strong>Efficient:</strong> the closest smaller-or-same element can be found in O(h), where h is the BST's height.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board traces (BST 50 → 30, 70; 30 → 20, 40; 70 → 60, 80; 60 → 55, 65)</h4>
+      <ul>
+        <li>x = 25: 50 &gt; 25 → left; 30 &gt; 25 → left; 20 &lt; 25 → floor = 20, go right (null) → <strong>20</strong>.</li>
+        <li>x = 58: 50 &lt; 58 → floor = 50, go right; 70 &gt; 58 → left; 60 &gt; 58 → left; 55 &lt; 58 → floor = 55, go right (null) → <strong>55</strong>.</li>
+      </ul>
+      <p>Implementations follow in the next two videos (C++, then Java).</p>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slip:</strong> in the x = 58 trace the transcript says "58 is greater than 15" at the root; the root is 50.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE5Nw%3D%3D" target="_blank" rel="noopener">Floor in BST in CPP</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (a frame every 5 seconds plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The description: "the concept of the floor in Binary Search Tree and its implementation in C++". The board implements the iterative O(h) time, O(1) space idea from the previous video. Keep <code>res</code> (initially NULL). Return the node on an exact match, go left when the key is greater than x, and otherwise record the node in <code>res</code> and go right. Return <code>res</code>.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Iterative floor (C++)</h4>
+<pre><code class="language-cpp">Node *floor(Node *root, int x)
+{
+    Node *res = NULL;
+    while(root != NULL)
+    {
+        if(root-&gt;key == x)
+            return root;
+        else if(root-&gt;key &gt; x)
+            root = root-&gt;left;
+        else {
+            res = root;
+            root = root-&gt;right;
+        }
+    }
+    return res;
+}</code></pre>
+      <p>Board tree 50 → 30, 70; 30 → 20, 40; 70 → 60, 80; 60 → 55, 65. For search key x = 58 the board records <code>res = addr(50)</code>, then <code>res = addr(55)</code>. A second search key, x = 35, is then traced down from 50 through 30 and 40.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTIxMA%3D%3D" target="_blank" rel="noopener">Floor in BST Java</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A recap of the efficient floor, in Java: return the root on an equal key. If the root's key is greater, the root and its right side can't be the floor, so go left. If it's smaller, the root is a potential floor: set the result to it and go right. The iterative version needs O(1) extra space, and it runs in O(h) like a BST search.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Iterative floor (Java): O(h) time, O(1) space</h4>
+<pre><code class="language-java">Node floor(Node root, int x)
+{
+    Node res = null;
+    while(root != null)
+    {
+        if(root.key == x)
+            return root;
+        else if(root.key &gt; x)
+            root = root.left;
+        else {
+            res = root;
+            root = root.right;
+        }
+    }
+    return res;
+}</code></pre>
+      <p>Board tree 50 → 30, 70; 30 → 20, 40; 70 → 60, 80; 60 → 55, 65.</p>
+      <ul>
+        <li>x = 58: 50 &lt; 58, so res = ref(50) and go right. 70 and 60 are greater, so go left twice. 55 &lt; 58, so res = ref(55) and go right to null → returns 55.</li>
+        <li>x = 35: 50 &gt; 35 → left; 30 &lt; 35 → res = 30, right; 40 &gt; 35 → left to null → returns 30.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong> the board's first line is <code>Node res = null</code> without a semicolon. At the end of the x = 58 trace the transcript says "we get our output as reference of 50"; the result was just updated to 55, which is the floor of 58.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTE5OQ%3D%3D" target="_blank" rel="noopener">Ceil in BST</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The <strong>ceiling</strong> of x is the smallest value in the BST that is greater than or equal to x. Board BST 10 → 5, 15; 15 → 12, 30:</p>
+    <ul>
+      <li>x = 14 → node 15 (the smaller of 15 and 30).</li>
+      <li>x = 3 → node 5. Any x ≤ 5 gives 5.</li>
+      <li>x = 40 → NULL (or null). Any x greater than 30 has no ceiling.</li>
+    </ul>
+    <p><strong>Naive, O(n):</strong> traverse every node (any traversal). Return immediately on an equal key; otherwise keep the smallest greater key seen.</p>
+    <p><strong>Efficient: O(h) time, O(1) aux space</strong> (iterative, like a BST search). Initialize result as NULL and traverse from the root:</p>
+    <ol>
+      <li>If root's key is the same as x, return root.</li>
+      <li>If root's key is smaller, change root to root's right: the root and its whole left subtree are smaller, so they can't be the ceiling.</li>
+      <li>If root's key is greater, update result as root (a potential ceiling) and change root to root's left.</li>
+    </ol>
+    <p>When root becomes null, return the result.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NzU4Mg%3D%3D" target="_blank" rel="noopener">Ceil in BST</a></p>
+<ul>
+<li>The ceil node is the node with the smallest data larger than or equal to the key.</li>
+<li>Floor and ceil are needed in many applications, for a BST or a sorted array. For example, a memory manager that keeps free nodes in a BST can find the best fit for a request.</li>
+<li>The article gives O(log n) time and O(log n) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board traces (BST 50 → 30, 70; 30 → 20, 40; 70 → 60, 78; 60 → 55, 65)</h4>
+      <ul>
+        <li>x = 70: 50 &lt; 70 → right; 70 matches → return <strong>70</strong>.</li>
+        <li>x = 63: 50 &lt; 63 → right; 70 &gt; 63 → result = 70, go left; 60 &lt; 63 → right; 65 &gt; 63 → result = 65, go left (null) → <strong>65</strong>.</li>
+        <li>x = 15: 50 &gt; 15 → result = 50, left; 30 → result = 30, left; 20 → result = 20, left (null) → <strong>20</strong>.</li>
+      </ul>
+      <p>The video gives the steps; the description links C, C++, Java and C# code.</p>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slip:</strong> in the x = 63 trace the transcript says "63 is greater so we simply discard … 70 is smaller". The root 50 is smaller than 63, which is why it goes right, and 70 is <em>greater</em> than 63, which is why the result becomes 70 and it goes left.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-16">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTIwMA%3D%3D" target="_blank" rel="noopener">Self Balancing BST</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Search, insert, delete, floor and ceil are all O(h): linear if h = n, logarithmic if h = log n. <strong>Idea:</strong> keep the height O(log n), so all of them become logarithmic.</p>
+    <p><strong>Background:</strong> the same set of keys can give trees of different heights, depending on the insertion order. For keys 7, 10, 11, 15, 30, 35, 40:</p>
+    <ul>
+      <li>Order 1, increasing (7, 10, 11, 15, 30, 35, 40), gives a right chain of height n.</li>
+      <li>Order 2 (15, 10, 7, 11, 35, 30, 40) gives the perfectly balanced 15 → 10, 35; 10 → 7, 11; 35 → 30, 40, of height log n.</li>
+    </ul>
+    <p>If all keys are known in advance, a perfectly balanced BST can always be built: sort them, make the middle key the root, then build the left half and the right half the same way recursively.</p>
+    <p>With random insertions and deletions (users may insert in increasing or decreasing order), the idea is to do some restructuring, or re-balancing, when doing insertions and deletions, since only these operations can unbalance a balanced BST.</p>
+    <ul>
+      <li>Insert 100, 200, 300 into an empty BST: after 300 it's a chain, so a <strong>left rotation</strong> (counterclockwise) brings 200 to the top with 100 left and 300 right.</li>
+      <li>Insert 300, 200, 100: after 100 it's a chain, so a <strong>right rotation</strong> (clockwise) gives the same 200 → 100, 300.</li>
+    </ul>
+    <p><strong>Rotation</strong> restructures the tree without violating the BST property, and it's O(1): only a few pointer/reference changes. In general, let P be a parent with child x (left or right), y be x's left child, T1 and T2 be y's subtrees and T3 be x's right subtree (any of them possibly empty). A right rotation makes y the root of this part, with T1 on its left and x on its right; x keeps T2 as its left and T3 as its right. Left rotation is the reverse. Both trees keep the order {T1} &lt; y &lt; {T2} &lt; x &lt; {T3}.</p>
+    <p><strong>Examples:</strong> AVL tree, which keeps a very strict balance, and Red Black tree, whose looser balance means less restructuring on insert and delete. Others exist, e.g. the splay tree. Red Black trees are used more in general: Java's TreeSet and TreeMap and C++'s map and set use them. When to rotate, and which nodes, is covered per tree in the next videos.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NzM0OQ%3D%3D" target="_blank" rel="noopener">Self Balancing BST</a></p>
+<ul>
+<li>Height-balanced BSTs automatically keep the height as small as possible, typically O(log n), as insertions and deletions happen, so operations take O(log n) on average. They rebalance with left and right <strong>rotations</strong>, which keep keys(left) &lt; key(root) &lt; keys(right).</li>
+<li><strong>Common types:</strong>
+  <ul>
+    <li><strong>AVL</strong>: left and right subtree heights differ by at most one at every node.</li>
+    <li><strong>Red-Black</strong>: every node is red or black; the root and the leaf (NULL) nodes are black.</li>
+    <li><strong>Splay</strong>: the most recently accessed or inserted element is brought to the root by a sequence of rotations (splaying), using zig and zag rotations.</li>
+  </ul>
+</li>
+<li><strong>Libraries:</strong> C++ STL <code>set</code>/<code>map</code> and Java <code>TreeSet</code>/<code>TreeMap</code>, mostly Red-Black trees. Python's standard library has none; use the <code>bisect</code> module for sorted data, or PyPI modules such as rbtree and pyavl.</li>
+</ul>
+<div class="scroll"><table>
+  <thead><tr><th>Metric</th><th>RB Tree</th><th>AVL Tree</th><th>Splay Tree</th></tr></thead>
+  <tbody>
+    <tr><td>Insertion (worst)</td><td>O(log n)</td><td>O(log n)</td><td>Amortized O(log n)</td></tr>
+    <tr><td>Maximum height</td><td>2·log(n)</td><td>1.44·log(n)</td><td>O(n)</td></tr>
+    <tr><td>Search (worst)</td><td>O(log n), moderate</td><td>O(log n), faster</td><td>Amortized O(log n), slower</td></tr>
+    <tr><td>Efficient implementation needs</td><td>Three pointers with a color bit per node</td><td>Two pointers with a balance factor per node</td><td>Only two pointers, no extra information</td></tr>
+    <tr><td>Deletion (worst)</td><td>O(log n)</td><td>O(log n)</td><td>Amortized O(log n)</td></tr>
+    <tr><td>Mostly used</td><td>As a universal data structure</td><td>When frequent lookups are required</td><td>When the same element is retrieved again and again</td></tr>
+    <tr><td>Real-world application</td><td>Database transactions</td><td>Multiset, Multimap, Map, Set, etc.</td><td>Cache implementation, garbage collection algorithms</td></tr>
+  </tbody>
+</table></div>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board example: right rotation after inserting 5</h4>
+      <p>Before 5 was inserted, 30 → 20, 40; 20 → 10, 25 was balanced. Inserting 5 under 10 makes the left side too heavy. Take x = 30 and y = 20, with T1 = {10, 5}, T2 = {25} and T3 = {40}. Right rotation gives 20 → 10, 30; 10 → 5; 30 → 25, 40, which is balanced again.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-17">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTIwMQ%3D%3D" target="_blank" rel="noopener">AVL Tree</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (a frame every 5–10 seconds plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The description: an AVL tree is a self-balancing BST in which the heights of the left and right subtrees differ by at most one, for every node. The board gives two properties:</p>
+    <ol>
+      <li>It is a BST: for every node, the left subtree is smaller and the right is greater.</li>
+      <li>It is balanced: for every node, the difference between the left and right heights does not exceed one.</li>
+    </ol>
+    <p><strong>Balance factor</strong> = |lh − rh|, and it must be ≤ 1 at every node.</p>
+    <ul>
+      <li>AVL tree: 18 → 6, 20; 6 → 2; 20 → 19. Balance factors: 18: 0, 6: 1, 20: 1, leaves 0.</li>
+      <li>Not an AVL tree: 18 → 12 → 8 (a left chain). 18 has balance factor 2.</li>
+    </ul>
+    <p><strong>Insert operation:</strong></p>
+    <ol>
+      <li>Perform a normal BST insert.</li>
+      <li>Traverse all ancestors of the newly inserted node, from the node to the root.</li>
+      <li>If an unbalanced node is found, check for one of four cases:
+        <ul>
+          <li>Left Left and Right Right are fixed by a single rotation.</li>
+          <li>Left Right and Right Left are fixed by a double rotation.</li>
+        </ul>
+      </li>
+    </ol>
+    <p><strong>Height of an AVL tree:</strong> h &lt; c·log₂(n + 2) + b, where c ≈ 1.4405 and b ≈ −1.3277. So h is O(log n). The board also draws a sparse AVL tree with balance factor 1 at several nodes.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/MjM2Mg%3D%3D" target="_blank" rel="noopener">Introduction to AVL Tree</a></p>
+<ul>
+<li>A self-balancing BST in which, for every node, the left and right subtree heights differ by at most one. Its example of a non-AVL tree fails at 8 and 18.</li>
+<li><strong>Why AVL:</strong> most BST operations (search, max, min, insert, delete) are O(h), which is O(n) for a skewed tree. Keeping the height O(log n) after every insert and delete guarantees O(log n).</li>
+<li><strong>Insertion:</strong> do a standard BST insert of w, then travel up from w to the first unbalanced node z. Let y be z's child and x its grandchild on the path from w. Rebalance the subtree rooted at z with rotations; four arrangements are possible:
+  <ul>
+    <li><strong>Left Left:</strong> y is z's left child and x is y's left child.</li>
+    <li><strong>Left Right:</strong> y is z's left child and x is y's right child.</li>
+    <li><strong>Right Right:</strong> y is z's right child and x is y's right child.</li>
+    <li><strong>Right Left:</strong> y is z's right child and x is y's left child.</li>
+  </ul>
+  Only z's subtree needs rebalancing, because its height returns to what it was before the insertion.</li>
+<li><strong>Complexity:</strong> rotations, height updates and balance factors take O(1) (a few pointers), so AVL insert is O(h) like BST insert, which is O(log n) because the tree is balanced.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace: insert 20, 15, 5, 40, 50, 18</h4>
+      <ol>
+        <li>Insert 20, then 15 (20 → 15).</li>
+        <li>Insert 5: 20 → 15 → 5 makes 20 unbalanced (2). This is the <strong>Left Left case</strong>; a single right rotation gives 15 → 5, 20.</li>
+        <li>Insert 40: 15 → 5, 20; 20 → 40. Still balanced.</li>
+        <li>Insert 50: 20 → 40 → 50 makes 20 unbalanced (2). This is the <strong>Right Right case</strong>; a single left rotation gives 15 → 5, 40; 40 → 20, 50.</li>
+        <li>Insert 18 (under 20, on the left): 15 is unbalanced (2). 18 went into the right child's left subtree, the <strong>Right Left case</strong>, so two rotations are needed:
+          <ul>
+            <li>A right rotation at 40 gives 15 → 5, 20; 20 → 18, 40; 40 → 50.</li>
+            <li>A left rotation at 15 gives <strong>20 → 15, 40; 15 → 5, 18; 40 → 50</strong>.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the second property is written "Balace Factor ≤ 1" (Balance).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-18">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTIwMg%3D%3D" target="_blank" rel="noopener">Red Black Tree</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A self-balancing BST, like the AVL tree. Search is a normal BST search; insert and delete are complex, because they restructure when they cause unbalancing.</p>
+    <p><strong>Vs AVL:</strong> AVL is very strict (subtree heights differ by at most 1). Red Black is looser: one path from a node down to its descendant leaves may have up to twice as many nodes as another.</p>
+    <ul>
+      <li>The advantage is fewer rotations on insert and delete, since many operations stay within the constraints.</li>
+      <li>The disadvantage is a possibly higher worst-case height, so search is slightly costlier.</li>
+      <li>With few insertions and deletions and very many searches, prefer AVL (faster search). For a general mix, Red Black is always a good option.</li>
+    </ul>
+    <p><strong>Definition</strong> (the board's four rules, matching the description):</p>
+    <ol>
+      <li>Every node is either red or black.</li>
+      <li>The root is always black.</li>
+      <li>No two consecutive reds: a red node can't have a red child or a red parent.</li>
+      <li>The number of black nodes from every node to all of its descendant leaves is the same (the node's <em>black height</em>).</li>
+    </ol>
+    <p>Rules 3 and 4 are what make it balanced. Combining them: the number of nodes on the path from a node to its farthest descendant leaf can be at most twice the number on the path to its closest descendant leaf.</p>
+    <p><strong>Insertions</strong> first try to avoid rotation by recoloring; if that doesn't work, they rotate. Insert and delete are generally faster than in an AVL tree.</p>
+    <p><strong>Practical use:</strong> Red Black trees are used a lot, e.g. C++ STL <code>set</code>/<code>map</code> and Java Collections <code>TreeMap</code>/<code>TreeSet</code>.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NjUyOQ%3D%3D" target="_blank" rel="noopener">Red Black Tree</a></p>
+<ul>
+<li>A self-balancing BST with one extra bit per node, its color (red or black). Balance isn't perfect but keeps search around O(log n), with the same memory footprint as a plain BST. The article dates it to 1972 (Rudolf Bayer).</li>
+<li><strong>Rules:</strong>
+  <ul>
+    <li>Every node is red or black, and the root is black.</li>
+    <li>No two adjacent red nodes.</li>
+    <li>Every path from a node to its descendant NULL nodes has the same number of black nodes.</li>
+    <li>All leaf (NIL) nodes are black.</li>
+  </ul>
+</li>
+<li><strong>Vs AVL:</strong> AVL is more balanced but may rotate more on insert and delete. Prefer Red-Black for frequent insertions and deletions, and AVL when search dominates.</li>
+<li><strong>Balance facts:</strong>
+  <ul>
+    <li>A chain of 3 nodes is impossible.</li>
+    <li>Black height (the number of black nodes on a root-to-leaf path, counting leaves) is at least h/2.</li>
+    <li>The farthest descendant leaf is at most twice as far as the nearest.</li>
+    <li>The height is ≤ 2·log₂(n + 1). Proof: if k is the minimum number of nodes on any root-to-NULL path, then n ≥ 2<sup>k</sup> − 1, so k ≤ log₂(n + 1). Some root-to-leaf path therefore has at most log₂(n + 1) black nodes, and at least ⌊n/2⌋ nodes are black.</li>
+  </ul>
+</li>
+<li><strong>Search</strong> is the ordinary BST search.</li>
+<li><strong>Applications:</strong> C++ <code>map</code>/<code>multiset</code>/<code>multimap</code> and Java <code>TreeMap</code>/<code>TreeSet</code>; Linux's Completely Fair Scheduler (CPU scheduling); K-means clustering in machine learning; MySQL table indexes.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board examples</h4>
+      <ul>
+        <li>20 (black) → 10 (black), 40 (red); 40 → 30, 80 (black); 30 → 25, 35 (red); 80 → 70, 100 (red). Every path from 20 to a leaf has 2 black nodes, and every path from 40 or 30 has 1.</li>
+        <li>This is a <strong>maximum unbalanced</strong> Red Black tree for its size. Adding a red node on the long side breaks rule 3, and adding a black node breaks rule 4. Red nodes can be added on the short side (e.g. 5 and 15 under 10), which only makes it more balanced.</li>
+        <li>A larger maximum-unbalanced example has 20 → 10 (with 5, 15) on one side and four more levels under 40 on the other. Its closest leaf path has 3 nodes and its farthest has 6, showing the "at most twice" rule.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-19">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTIwMw%3D%3D" target="_blank" rel="noopener">Applications of BST</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>These are mainly applications of <em>self-balancing</em> BSTs, where search, insert, delete, floor, ceiling, greater and smaller all take O(log n).</p>
+    <ol>
+      <li><strong>Maintain a sorted stream of data (or a sorted set of data).</strong> Each insert is O(log n), and an inorder traversal prints the items in sorted order at any moment; deletions keep it sorted too. A self-balancing BST can also sort an array in O(n log n): insert everything, then traverse. It isn't used as a general-purpose sort, because its constants are higher and it needs extra space.</li>
+      <li><strong>Implement a doubly ended priority queue.</strong> A heap gives a single-ended one: a max heap for the maximum, a min heap for the minimum. If both are needed at random (e.g. a doctor's queue, where the least-priority patient is sent away as the queue grows and the most-priority patient goes in), a self-balancing BST works. Maintain the max and min alongside it: compare on insert, and recompute after a delete (log n anyway). Max and min are then O(1), insert and delete O(log n), and the data stays sorted.</li>
+      <li><strong>Solve problems like:</strong>
+        <ul>
+          <li>(a) count of smaller/greater elements in a stream, e.g. how many items sold below a given price;</li>
+          <li>(b) floor, ceiling, greater or smaller in a stream, e.g. the ceiling-on-left-side problem, or a right-side version by traversing from the right.</li>
+        </ul>
+        All are O(log n), along with search, insert and delete; sorted traversal is O(n).
+      </li>
+    </ol>
+    <p><strong>Rule of thumb:</strong> if only search, insert and delete (or a subset) are needed, use a hash table (O(1) each). If there's one more requirement (sorted order, count smaller/greater, floor/ceiling), use a self-balancing BST.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NzM1MA%3D%3D" target="_blank" rel="noopener">Applications of BST</a></p>
+<ul>
+<li><strong>Uses:</strong> indexing (including database indexing), searching algorithms, implementing other data structures, Huffman coding, dictionaries.</li>
+<li><strong>Advantages:</strong> fast insertion and deletion when balanced; efficient; range queries (keys between N and M, N ≤ M); simpler code than other data structures.</li>
+<li><strong>Disadvantages:</strong> it must be kept balanced, or operations degenerate to a linear search. Element access is slightly slower than an array's. An imbalanced or degenerate tree increases the complexity.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>For each application, name the operations involved and their costs in a self-balancing BST, and compare them with a hash table and a heap.</p>
+  </section>
+</template>
+
+<template id="DSASP-BST-20">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTIwNg%3D%3D" target="_blank" rel="noopener">Ceiling on left side in an array</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>For every element, print its <strong>ceiling on the left side</strong>: the smallest element to its left that is greater than or equal to it, or −1 if there is none.</p>
+    <ul>
+      <li>{2, 8, 30, 15, 25, 12} → −1 −1 −1 30 30 15. For 12, the candidates 30, 15 and 25 give the smallest, 15.</li>
+      <li>{30, 20, 10} (sorted decreasing) → −1 30 20: each is the previous element (another 5 would give 10).</li>
+      <li>{10, 20, 30} (sorted increasing) → −1 −1 −1.</li>
+      <li>{6, 18, 4, 5} → −1 −1 6 6.</li>
+    </ul>
+    <p>Target: O(n log n) time, possibly with O(n) extra space.</p>
+    <ul>
+      <li><strong>Naive, O(n²) time, O(1) aux space:</strong> print −1 for the first element. For each later element, scan every element to its left and keep the minimum difference <code>arr[j] − arr[i]</code> over those ≥ it, starting from positive infinity (<code>INT_MAX</code> in C++, <code>Integer.MAX_VALUE</code> in Java). Print −1 if it stays infinite, else <code>arr[i] + diff</code>.</li>
+      <li><strong>Efficient, O(n log n):</strong> keep the elements seen so far in a self-balancing BST, which keeps a running sorted set. Insert and ceiling are both O(log n). C++ <code>set</code> (for single elements; <code>map</code> is for key-value pairs) and Java <code>TreeSet</code> both implement Red Black trees.</li>
+    </ul>
+    <p>The ceiling function is <code>lower_bound</code> in C++: an iterator to the ceiling, or <code>end()</code> if none. In Java it's <code>TreeSet.ceiling</code>, which returns null if there is none. Hashing doesn't help: Java's <code>HashSet</code> has no <code>ceiling</code> and C++'s <code>unordered_set</code> has no <code>lower_bound</code>, so the ceiling can't be found efficiently.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O(n²) (language-independent board code)</h4>
+<pre><code class="language-cpp">void printCeiling(int arr[], int n)
+{
+    print(-1);
+    for(int i = 1; i &lt; n; i++)
+    {
+        int diff = POS_INF;
+        for(int j = 0; j &lt; i; j++)
+            if(arr[j] &gt;= arr[i])
+                diff = min(diff, arr[j] - arr[i]);
+        if(diff == POS_INF)
+            print(-1);
+        else
+            print(arr[i] + diff);
+    }
+}</code></pre>
+      <p><code>print</code> is <code>cout</code> in C++ and <code>System.out.print</code> in Java.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: O(n log n) (board steps)</h4>
+<pre><code class="language-cpp">void printCeiling(int arr[], int n)
+{
+    print(-1)
+    // 1. Create a self-balancing BST (set in C++ and TreeSet in Java). Let this be s.
+    // 2. Insert arr[0] into s
+    // 3. for(int i = 1; i &lt; n; i++)
+    //    {
+    //        if(s contains a ceiling of arr[i])
+    //            print the ceiling
+    //        else
+    //            print -1
+    //        Insert arr[i] into s
+    //    }
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slip:</strong> for 15 in the first example the transcript says "this is only one element which is greater". 30 is the only element ≥ 15 on its left (2 and 8 are smaller), as the output 30 shows.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-21">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTIwOA%3D%3D" target="_blank" rel="noopener">Find Kth Smallest in BST</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Design a data structure that supports <strong>search, insert, delete and kth smallest</strong> efficiently, in any order. Example: insert 10, 5, 15, 20, 2, and the 3rd smallest is 10; insert 1, and the 3rd smallest is now 5.</p>
+    <ul>
+      <li>An <strong>array or linked list</strong> makes some operations linear (as in the BST introduction).</li>
+      <li><strong>Hashing</strong> does the first three in O(1), but kth smallest can't beat linear: copy the elements to an array and run the median / order statistics algorithm.</li>
+      <li>A <strong>self-balancing BST</strong> does search, insert and delete in O(log n). The tricky part is kth smallest.</li>
+    </ul>
+    <p><strong>Naive, O(n):</strong> inorder traversal (or iterating a C++ <code>map</code> / Java <code>TreeMap</code>, which is the same thing) with a count; print the node when the count reaches k. With k = 3 on 50 → 20, 100; 20 → 10, 40: the count is 1 at 10, 2 at 20 and 3 at 40, so print 40. Optimization: stop as soon as the kth node is found (don't recurse right), which gives O(h + k): go down the height, then process k nodes.</p>
+    <p><strong>Efficient, O(h): augmented BST.</strong> Add <code>lCount</code> (the number of nodes in the left subtree) to each node; it starts at 0. Search from the root, comparing <code>lCount + 1</code> with k:</p>
+    <ol>
+      <li>If they're the same, return root.</li>
+      <li>If it's greater, recur for the left subtree, with k unchanged.</li>
+      <li>If it's smaller, recur for the right subtree with k = k − lCount − 1, since that many smaller nodes are skipped.</li>
+    </ol>
+    <p>The code is like the BST search (recursive or iterative) with an extra parameter k.</p>
+    <p><strong>Maintaining lCount:</strong> during insert, while searching for the position, increment a node's lCount whenever the new key goes into its left subtree. Example: inserting 35 increments 50 (4 → 5) and 40 (0 → 1), but not 20, since 35 goes right there; the new node starts at 0. Delete works the same way, decrementing lCount when the search goes left.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NzU4OQ%3D%3D" target="_blank" rel="noopener">Find Kth Smallest in BST</a></p>
+<ul>
+<li>In the article's BST, k = 3 gives 10 and k = 5 gives 14 (its preorder is 20 8 4 12 10 14 22).</li>
+<li><strong>Method 1, inorder with a count:</strong> print the node when the count reaches k. O(n) time, O(h) space; Morris traversal can make it O(1) space.</li>
+<li><strong>Method 2, any traversal plus a sort:</strong> e.g. preorder, then sort and pick the kth. O(n log n) time, O(n) space.</li>
+<li><strong>Method 3, augmented tree with lCount</strong> (the left subtree size, kept while building):
+  <ul>
+    <li>If k = lCount + 1, it's the root.</li>
+    <li>If k &lt; lCount + 1, search left.</li>
+    <li>Otherwise search right for the (k − lCount − 1)th.</li>
+  </ul>
+  O(h) time, O(h) space.</li>
+<li><strong>Method 4, iterative inorder with a stack:</strong> push the left chain, pop and decrement k (returning when it is the kth), then go to the popped node's right child. O(h + k) time and O(h + k) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive (board pseudo code)</h4>
+<pre><code class="language-java">int count = 0;
+void printKth(root, k)
+{
+    if(root is not null)
+    {
+        printKth(root.left, k);
+        count++;
+        if(count == k)
+            print(root.key, k);
+        printKth(root.right);
+    }
+}</code></pre>
+      <p>The teacher says a global count isn't good practice; count could be passed by reference. Read <code>.</code> as <code>-&gt;</code> and null as <code>NULL</code> in C++.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: board traces (lCount shown in brackets)</h4>
+      <p>Tree: 50(4) → 20(2), 100(3); 20 → 10(1), 40(0); 10 → 4(0); 100 → 70(1), 120(0); 70 → one left leaf (0), 80(0).</p>
+      <ul>
+        <li>k = 5: at 50, 4 + 1 = 5 → <strong>50</strong>.</li>
+        <li>k = 2: at 50, 5 &gt; 2 → left; at 20, 3 &gt; 2 → left; at 10, 1 + 1 = 2 → <strong>10</strong>.</li>
+        <li>k = 7: at 50, 5 &lt; 7 → right with k = 7 − 5 = 2; at 100, 4 &gt; 2 → left; at 70, 1 + 1 = 2 → <strong>70</strong>.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong> the naive pseudo code's final call is <code>printKth(root.right)</code> with no k, and it prints <code>print(root.key, k)</code>. On maintaining lCount for insert, the transcript says "we simply decrement the lcount" when the position is in the left subtree. It should increment, as the teacher did in the 35 example; delete is the case that decrements.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-22">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTIwNw%3D%3D" target="_blank" rel="noopener">Check for BST</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a binary tree, return true if it's a BST, otherwise false.</p>
+    <ul>
+      <li>10 → 8, 20; 20 → 13, 24 → Yes.</li>
+      <li>NULL (or null) → Yes, and a single node 10 → Yes.</li>
+      <li>10 → 12, 30 → No (12 is on the left of 10).</li>
+      <li>20 → 8, 30; 30 → 18, 35 → No: 18 is in 20's right subtree but smaller than 20. This case is what makes the question interesting.</li>
+    </ul>
+    <ol>
+      <li><strong>Wrong method:</strong> for every node, check only that its left child is smaller and its right child is greater. That passes the last tree, because it compares only consecutive nodes, not nodes two or more levels apart.</li>
+      <li><strong>Correct but inefficient, O(n²):</strong> for every node, require max(left subtree) &lt; node &lt; min(right subtree). For 20 that's 8 &lt; 20 &lt; 18, false. (Had 18 been, say, 22, the root would pass, but every node must be checked.) A skewed tree costs (n − 1) + (n − 2) + … → n².</li>
+      <li><strong>Efficient, O(n):</strong> give every node a range its value must lie in. The root gets (−∞, +∞). Going to a left child replaces the upper bound with the parent's value; going right replaces the lower bound. Values are distinct, so equality fails. In 20 → 8, 30; 30 → 18, 35, node 18 needs (20, 30) and fails. In 80 → 70, 90; 70 → 60, 75; 90 → 85, 100, every node fits: 60 (−∞, 70), 75 (70, 80), 85 (80, 90), 100 (90, +∞). This is a preorder-like traversal, and the short-circuit <code>&amp;&amp;</code> stops early once a node fails. If the function may take only root, call this as an internal helper with (−∞, +∞) from a wrapper.</li>
+      <li><strong>Efficient, inorder traversal, O(n) time, O(h) space:</strong> a binary tree is a BST if and only if its inorder traversal is sorted. 8 20 18 30 35 is not sorted; 60 70 75 80 85 90 is. Storing the inorder in an array works, but without an array: keep a shared <code>prev</code> (the last visited key, initially −∞). Check the left subtree, then that the current key is greater than <code>prev</code>, then set <code>prev</code> to it and check the right subtree.</li>
+    </ol>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NzYxMQ%3D%3D" target="_blank" rel="noopener">Check for BST</a></p>
+<ul>
+<li>A BST's left subtree holds smaller keys and its right subtree greater keys, both subtrees are BSTs, and so every key is distinct.</li>
+<li><strong>Method 1 (simple but wrong):</strong> compare each node only with its children. It returns true for a tree with 4 in the left subtree of 3.</li>
+<li><strong>Method 2 (correct but inefficient):</strong> max(left) &lt; node &lt; min(right), using helper functions <code>minValue()</code> and <code>maxValue()</code>. It traverses parts of the tree many times.</li>
+<li><strong>Method 3 (correct and efficient):</strong> <code>isBSTUtil(node, min, max)</code> narrows the allowed range from INT_MIN and INT_MAX, looking at each node once. It doesn't work if the tree holds INT_MIN or INT_MAX as duplicate values. O(n) time; O(1) auxiliary space ignoring the call stack, otherwise O(n). A simplified version uses NULL pointers instead of INT_MIN and INT_MAX.</li>
+<li><strong>Method 4 (inorder):</strong> store the inorder in a temp array and check it's ascending; this assumes no duplicates. O(n). Space optimization: track the previously visited node instead of the array. The static variable can be replaced by passing <code>prev</code> by reference.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 3: range (min, max)</h4>
+<pre><code class="language-cpp">bool isBST(Node *root, int min, int max)
+{
+    if(root == NULL) return true;
+    return (root-&gt;data &gt; min &amp;&amp;
+            root-&gt;data &lt; max &amp;&amp;
+            isBST(root-&gt;left, min, root-&gt;data) &amp;&amp;
+            isBST(root-&gt;right, root-&gt;data, max));
+}</code></pre>
+      <p>The first call passes <code>INT_MIN</code>, <code>INT_MAX</code> in C++, or <code>Integer.MIN_VALUE</code>, <code>Integer.MAX_VALUE</code> in Java. Java is the same with <code>boolean</code>, <code>null</code> and <code>root.data</code>.</p>
+    </div>
+    <div class="approach">
+      <h4>Method 4: inorder with prev</h4>
+<pre><code class="language-cpp">int prev = INT_MIN;
+bool isBST(Node *root)
+{
+    if(root == NULL) return true;
+    if(isBST(root-&gt;left) == false) return false;
+    if(root-&gt;key &lt;= prev) return false;
+    prev = root-&gt;key;
+    return isBST(root-&gt;right);
+}</code></pre>
+      <p>Java: <code>int prev = Integer.MIN_VALUE;</code> as a member, and <code>boolean isBST(Node root)</code> with the same body. Board trace on 20 → 8, 30; 30 → 18, 35: 8 &gt; −∞, so prev = 8; 20 &gt; 8, so prev = 20; at 18, 18 ≤ 20 → false.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong></p>
+      <ul>
+        <li><code>&amp;&amp;</code> is drawn like "$$" throughout Method 3.</li>
+        <li>The C++ line <code>int prev = INT_MIN</code> has no semicolon.</li>
+        <li>On the wrong method, the transcript says "had this been a value greater than 80, like 22"; it means greater than 20.</li>
+        <li>The trace says the previous is updated "right before we call for the right subtree", which matches the code's <code>prev = root-&gt;key</code>.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-23">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTIwOQ%3D%3D" target="_blank" rel="noopener">Fix BST with Two Nodes Swapped</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (a frame every 10 seconds plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The description: given a BST in which two nodes have been swapped, fix it by swapping them back.</p>
+    <ul>
+      <li>20 → 60, 80; 60 → 4, 10; 80 → 8, 100. The swapped nodes are 60 and 8, so the output is 20 → 8, 80; 8 → 4, 10; 80 → 60, 100.</li>
+      <li>60 → 8, 80; 8 → 4, 10; 80 → 20, 100. The swapped nodes are 60 and 20, so the output is 20 → 8, 80; 8 → 4, 10; 80 → 60, 100.</li>
+    </ul>
+    <p><strong>Idea (from the board):</strong> look at the inorder traversal, which is sorted for a BST.</p>
+    <ul>
+      <li>Example 1: 4 <u>60</u> 10 20 <u>8</u> 80 100. There are two places where a value is smaller than the one before it (10 after 60, 8 after 20). The swapped pair is the <em>first</em> element of the first drop (60) and the <em>second</em> element of the last drop (8).</li>
+      <li>Example 2: 4 8 10 <u>60</u> <u>20</u> 80 100. The swapped nodes are adjacent, so there's only one drop, and it gives both (60 and 20).</li>
+    </ul>
+    <p>The array version on the board: <code>prev = −∞, first = NIL, second = NIL</code>. For each element, if <code>arr[i] &lt; prev</code>, set <code>first = prev</code> only if first is still NIL, and always set <code>second = arr[i]</code>. Then <code>prev = arr[i]</code>.</p>
+    <p>The tree version does the same during an inorder traversal, with <code>prev</code>, <code>first</code> and <code>second</code> as node pointers or references. Once they are found, the two nodes are swapped back (per the description).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NzYxMg%3D%3D" target="_blank" rel="noopener">Fix BST with two nodes swapped</a></p>
+<ul>
+<li><strong>Simple:</strong> store the inorder in an array, sort it, and write the elements back into the BST keeping its structure. O(n log n) time, O(n) space.</li>
+<li><strong>O(n), one traversal:</strong> the problem reduces to two swapped elements in a sorted array, with two cases:
+  <ul>
+    <li><strong>Not adjacent</strong> in the inorder: there are two points where a node is smaller than the previous one. In the article's example, 7 &lt; 25 saves 25 (the previous node) and 5 &lt; 20 saves 5 (the current node). Swap those two values.</li>
+    <li><strong>Adjacent:</strong> there is only one such point (e.g. 7 &lt; 8).</li>
+  </ul>
+</li>
+<li><strong>Three pointers</strong> (<code>first</code>, <code>middle</code>, <code>last</code>):
+  <ul>
+    <li>At the first point, first = previous and middle = current.</li>
+    <li>At the second point, last = current.</li>
+    <li>If last is still null, the swapped nodes are adjacent (first and middle).</li>
+  </ul>
+</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Inorder detection (C++)</h4>
+<pre><code class="language-cpp">Node *prev = NULL, *first = NULL, *second = NULL;
+void fixBST(Node *root)
+{
+    if(root == NULL) return;
+    fixBST(root-&gt;left);
+    if(prev != NULL &amp;&amp; root-&gt;key &lt; prev-&gt;key)
+    {
+        if(first == NULL)
+            first = prev;
+        second = root;
+    }
+    prev = root;
+    fixBST(root-&gt;right);
+}</code></pre>
+      <p>Java has the same body, with <code>Node prev = null, first = null, second = null;</code> as members and <code>void fixBST(Node root)</code>.</p>
+      <p>Board trace on 18 → 60, 70; 60 → (left) 4; 70 → 8, 80 (inorder 4 60 18 8 70 80): prev = null, then 4, then 60. At 18, 18 &lt; 60, so first = 60 and second = 18; prev = 18. At 8, 8 &lt; 18, so second = 8. The swapped nodes are 60 and 8.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;&amp;</code> is drawn like "$$". The board code stops at finding <code>first</code> and <code>second</code>. The final step of swapping their keys back is what the description says; it isn't written on the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-24">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTI4Nw%3D%3D" target="_blank" rel="noopener">Pair Sum with given BST</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a BST and a sum, return true if some pair of nodes adds up to the sum.</p>
+    <ul>
+      <li>10 → 8, 20; 8 → 4, 9; 20 → 11, 30; 30 → 25, with sum = 33 → Yes: (8, 25).</li>
+      <li>20 → 8, 40; 40 → 35, with sum = 49 → No (40 + 8 = 48, but nothing gives 49).</li>
+    </ul>
+    <p><strong>Method 1 (inorder traversal):</strong></p>
+    <ol>
+      <li>Store the inorder traversal in an array; for a BST it's sorted (4 8 9 10 11 20 25 30).</li>
+      <li>Run the two-pointer approach from the Searching track: one pointer at the leftmost position, one at the rightmost, moving them inward.</li>
+    </ol>
+    <p>Time: step 1 is Θ(n) (the whole tree), step 2 is O(n) (the pair may be found early), so Θ(n) overall. Auxiliary space Θ(n) for the array, plus O(h) recursion, so O(n).</p>
+    <p><strong>Method 2 (hashing):</strong> do the inorder traversal and, at each node, check whether <code>sum − key</code> is already in a hash table. If yes, return true at once; otherwise insert the key. Go to the right subtree only if neither the left subtree nor the current node gave a pair.</p>
+    <ul>
+      <li>This doesn't rely on the inorder being sorted, so it works for a normal binary tree too.</li>
+      <li>It returns as soon as a pair is found: worst case Θ(n), often less.</li>
+      <li>Time O(n), with O(1) hash search and insert per node. Auxiliary space O(h) recursion plus O(n) hash table, so O(n).</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NzYxMw%3D%3D" target="_blank" rel="noopener">Pair Sum with given BST</a></p>
+<ul>
+<li>The article's version: a <em>balanced</em> BST, in O(n) time with only O(log n) extra space and no modification of the tree.</li>
+<li><strong>Brute force:</strong> check every pair, O(n²).</li>
+<li><strong>Better:</strong> inorder into an array (sorted), then find the pair in O(n). O(n) time, O(n) space.</li>
+<li><strong>Space optimized:</strong> convert the BST in place to a DLL, then find the pair in the sorted DLL. O(n) time and O(log n) space, but it modifies the BST.</li>
+<li><strong>Article's solution:</strong> run a normal inorder (from the leftmost, minimum node) and a reverse inorder (from the rightmost, maximum node) at the same time.
+  <ul>
+    <li>Equal to the target: return true.</li>
+    <li>Larger: advance the reverse traversal.</li>
+    <li>Smaller: advance the normal one.</li>
+    <li>If either traversal ends, return false.</li>
+  </ul>
+  O(n) time, O(log n) space (the stack holds log n values at a time).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 2: hashing during inorder</h4>
+<pre><code class="language-cpp">bool isPairSum(Node *root, int sum, unordered_set&lt;int&gt; &amp;s)
+{
+    if(root == NULL) return false;
+    if(isPairSum(root-&gt;left, sum, s) == true)
+        return true;
+    if(s.find(sum - root-&gt;key) != s.end())
+        return true;
+    else
+        s.insert(root-&gt;key);
+    return isPairSum(root-&gt;right, sum, s);
+}</code></pre>
+      <p>Java: <code>boolean isPairSum(Node root, int sum, HashSet&lt;Integer&gt; s)</code> with <code>s.contains(sum - root.key)</code> and <code>s.add(root.key)</code>.</p>
+      <p>Board trace on 10 → 5, 20; 20 → 16, 40 with sum = 21:</p>
+      <ol>
+        <li>At 5, 16 isn't in the table, so insert 5.</li>
+        <li>At 10, 11 isn't there, so insert 10.</li>
+        <li>At 16, 21 − 16 = 5 is present → true, which propagates up.</li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> both versions' last line calls <code>isPairBST(...)</code>, but the function is <code>isPairSum</code> (written that way above). The C++ <code>&amp;s</code> is drawn like "$s".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-25">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTQyMw%3D%3D" target="_blank" rel="noopener">Vertical Sum in a Binary Tree</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Find the sum of the nodes on each vertical line, from the leftmost line to the rightmost. Nodes are on the same vertical line when they have the same <strong>horizontal distance</strong> (hd) from the root. The root's hd is 0; a left child's hd is its parent's − 1 and a right child's is + 1.</p>
+    <ul>
+      <li>10 → 20, 30; 20 → 5, 15. The hds are 5: −2, 20: −1, 10 and 15: 0, 30: +1 → <strong>5 20 25 30</strong>.</li>
+      <li>10 → 15, 25; 15 → 35, 20; 35 → (left) 40; 20 → (right) 75 → (right) 80 → <strong>40 35 15 30 100 80</strong> (hd −3 … +2).</li>
+    </ul>
+    <p>In a big tree, nodes can't always be drawn on neat vertical lines (they cross), so use the hd values rather than drawing.</p>
+    <p><strong>Idea:</strong> a map from hd to sum, filled by any traversal (inorder, preorder, postorder or level order) that passes hd − 1 to the left child and hd + 1 to the right. Then print the map's values in key order. Use a C++ <code>map</code> / Java <code>TreeMap</code> (a self-balancing BST, sorted by key), not an <code>unordered_map</code> / <code>HashMap</code>.</p>
+    <p><strong>Complexity:</strong> with hd possible horizontal distances, each map operation is O(log hd). Building is O(n log hd) and traversing the map O(hd), so O(n log hd) overall.</p>
+    <p><strong>Next</strong> (left to try): vertical order traversal, where the node that comes first on each vertical line must be printed first.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NzYxNA%3D%3D" target="_blank" rel="noopener">Vertical Sum in a Binary Tree</a></p>
+<ul>
+<li>The example tree has five vertical lines with sums 4, 2, 12 (1 + 5 + 6), 3 and 7. Nodes with the same horizontal distance (HD) are on the same line: the root is 0, a right edge +1, a left edge −1 (node 4 is −2, node 2 is −1, nodes 5 and 6 are 0, node 7 is +2).</li>
+<li>Do an inorder traversal, passing HD − 1 to the left subtree and HD + 1 to the right. The article's Java stores the sums in a <code>HashMap</code>.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Inorder fill of a sorted map</h4>
+<pre><code class="language-cpp">void vSumR(Node *root, int hd, map&lt;int, int&gt; &amp;mp)
+{
+    if(root == NULL) return;
+    vSumR(root-&gt;left, hd - 1, mp);
+    mp[hd] += root-&gt;data;
+    vSumR(root-&gt;right, hd + 1, mp);
+}
+void vSum(Node *root)
+{
+    map&lt;int, int&gt; mp;
+    vSumR(root, 0, mp);
+    for(auto sum : mp)
+        cout &lt;&lt; sum.second &lt;&lt; " ";
+}</code></pre>
+      <p>In C++, <code>mp[hd] +=</code> creates a missing key with value 0 first, so one line is enough. Java takes two lines:</p>
+<pre><code class="language-java">int pSum = (mp.get(hd) == null) ? 0 : mp.get(hd);
+mp.put(hd, pSum + root.data);</code></pre>
+      <p>Here <code>mp</code> is <code>TreeMap&lt;Integer, Integer&gt;</code>, and printing loops over <code>mp.entrySet()</code>.</p>
+      <p>Board trace on 10 → 20, 50; 20 → 30, 40:</p>
+      <ul>
+        <li>vSumR(10, 0) → vSumR(20, −1) → vSumR(30, −2), where 30 sets mp[−2] = 30.</li>
+        <li>20 sets mp[−1] = 20, then 40 sets mp[0] = 40.</li>
+        <li>10 adds itself to mp[0], making 50, and 50 sets mp[1] = 50.</li>
+      </ul>
+      <p>Output 30 20 50 50.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong></p>
+      <ul>
+        <li>The Java board writes <code>TreeMab</code> and <code>Mab.Entry</code> (TreeMap, Map.Entry).</li>
+        <li>The print loop prints <code>mp.getValue()</code>; it should be <code>sum.getValue()</code>, the loop variable.</li>
+        <li>The transcript reads the output as "−30, 20, 40+10 50 and then 50"; the board's output is 30 20 50 50.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-26">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTQyNA%3D%3D" target="_blank" rel="noopener">Vertical Traversal of Binary Tree</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print the nodes vertical line by vertical line, from leftmost to rightmost, using horizontal distances as in the vertical sum video (which the teacher recommends watching first). Within a line, a node on a higher level comes first; nodes on the same level go left before right.</p>
+    <ul>
+      <li>10 → 20, 30; 30 → 40, 50 → <strong>20 | 10 40 | 30 | 50</strong>.</li>
+      <li>10 → (left) 20 → (right) 30 → <strong>20 | 10 30</strong>.</li>
+      <li>1 → 2, 3; 2 → 4, 5; 3 → 6, 7; … (hd from −2 to +2) → <strong>4 | 2 | 1 5 6 9 | 3 8 | 7</strong>.</li>
+    </ul>
+    <p><strong>Idea:</strong> a C++ <code>map</code> / Java <code>TreeMap</code> (a self-balancing BST, sorted by key) from hd to a list of node values (<code>vector</code> / <code>ArrayList</code>). Fill it with a <em>level order traversal</em>. That is required here, because upper levels must come first, and it also handles left before right within a level. Finally, traverse the map and print each list on its own line.</p>
+    <p>The queue holds (node, hd) pairs, so each dequeued node's hd gives its children's: hd − 1 for the left, hd + 1 for the right.</p>
+    <p>The description gives O(N log N) time with the STL map (O(log N) per operation), or O(N) with a good hash function under O(1) insertion and retrieval, and O(N) auxiliary space.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Level order + sorted map (Java)</h4>
+<pre><code class="language-java">class Pair {
+    Node node;
+    int hd;
+    Pair(Node n, int h) { node = n; hd = h; }
+}
+
+void verticalOrder(Node root)
+{
+    Queue&lt;Pair&gt; q = new LinkedList&lt;Pair&gt;();
+    Map&lt;Integer, ArrayList&lt;Integer&gt;&gt; mp = new TreeMap&lt;&gt;();
+    q.add(new Pair(root, 0));
+    while(!q.isEmpty())
+    {
+        Pair p = q.poll(); Node curr = p.node; int hd = p.hd;
+        if(mp.containsKey(hd))
+            mp.get(hd).add(curr.data);
+        else {
+            ArrayList&lt;Integer&gt; al = new ArrayList&lt;Integer&gt;();
+            al.add(curr.data);
+            mp.put(hd, al);
+        }
+        if(curr.left != null) q.add(new Pair(curr.left, hd - 1));
+        if(curr.right != null) q.add(new Pair(curr.right, hd + 1));
+    }
+    // Print mp contents line by line
+    for(Map.Entry&lt;Integer, ArrayList&lt;Integer&gt;&gt; p : mp.entrySet())
+    {
+        ArrayList&lt;Integer&gt; al = p.getValue();
+        for(int x : al)
+            System.out.print(x + " ");
+        System.out.println();
+    }
+}</code></pre>
+      <p><strong>C++:</strong> <code>map&lt;int, vector&lt;int&gt;&gt; mp;</code> and <code>queue&lt;pair&lt;Node *, int&gt;&gt; q;</code>. Push <code>{root, 0}</code>, then in the loop take <code>auto p = q.front()</code>, with <code>curr = p.first</code> and <code>hd = p.second</code>. <code>mp[hd].push_back(...)</code> needs no exists-check, because a missing key gets an empty vector. Pop, then push the children with hd − 1 and hd + 1. To print, loop <code>for(auto p : mp)</code>, set <code>vector&lt;int&gt; v = p.second</code>, print each x, then <code>endl</code>.</p>
+      <p>Board trace on 10 → 20, 30; 20 → 40, 50 (hd 0, −1, 1, −2, 0):</p>
+      <ul>
+        <li>10 creates mp[0] = {10}, 20 creates mp[−1] = {20}, 30 creates mp[1] = {30}, and 40 creates mp[−2] = {40}.</li>
+        <li>50 appends to the existing key, so mp[0] = {10, 50}.</li>
+      </ul>
+      <p>Output 40 | 20 | 10 50 | 30.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong> on the printing board, the map is written with (−1, {30}), but key −1 holds {20}. Reading the output there, the transcript says "40, then 30, then 10 50 … finally 30". The output on the first code board, 40 | 20 | 10 50 | 30, is right.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-27">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTQzMg%3D%3D" target="_blank" rel="noopener">Top View of Binary Tree</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Top view:</strong> the first (topmost) node on every vertical line, from left to right. Use horizontal distances rather than drawn lines (the root is 0, a left child hd − 1, a right child hd + 1). Nodes on one vertical line can't always be drawn on one straight line.</p>
+    <ul>
+      <li>10 → 20, 50; 20 → 30, 40; 50 → 60, 70. The hds are 30: −2, 20: −1, 10/40/60: 0, 50: +1, 70: +2 → <strong>30 20 10 50 70</strong>. At hd 0 the top-level node, 10, wins.</li>
+      <li>1 → 2, 3; 2 → (right) 4 → (right) 5. The hds are 2: −1, 1/4: 0, 3/5: +1 → <strong>2 1 3</strong>.</li>
+      <li>A single node 10 → 10; NULL → nothing.</li>
+    </ul>
+    <p>If two nodes tie (same hd and same level), prefer the one reached through the left child; the transcript describes such a case at level 4.</p>
+    <p><strong>Idea:</strong> a slight variation of vertical traversal.</p>
+    <ol>
+      <li>Create a map <code>mp</code> (C++ <code>map</code> / Java <code>TreeMap</code>, sorted by key; Java's <code>HashMap</code> also implements <code>Map</code> but keeps no order) from hd to <em>one</em> value. Fill it with a level order traversal over a queue of (node, hd) pairs, inserting a node only if its hd has <em>no entry yet</em>, so the first, top-level node per hd stays.</li>
+      <li>Print the values in <code>mp</code>.</li>
+    </ol>
+    <p>The description gives O(N) time (a level order traversal, printing part of the nodes) and O(N) auxiliary space (the map and the queue).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/NzYxNQ%3D%3D" target="_blank" rel="noopener">Top View of Binary Tree</a></p>
+<ul>
+<li>Similar to vertical order traversal: group nodes by horizontal distance. A level order traversal visits the topmost node at each horizontal distance before any node below it, and hashing records whether a horizontal distance has already been seen.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace (10 → 20, 50; 20 → 30, 40; 50 → (left) 60)</h4>
+      <ol>
+        <li>Dequeue (10, 0): no entry, so mp[0] = 10; enqueue (20, −1), (50, 1).</li>
+        <li>(20, −1) → mp[−1] = 20; enqueue (30, −2), (40, 0).</li>
+        <li>(50, 1) → mp[1] = 50; enqueue (60, 0).</li>
+        <li>(30, −2) → mp[−2] = 30.</li>
+        <li>(40, 0) and (60, 0): hd 0 already has an entry, so both are ignored.</li>
+      </ol>
+      <p>The map (sorted) prints <strong>30 20 10 50</strong>. The implementation is the vertical traversal code with an <code>int</code> value instead of a list, plus the "insert only if absent" check.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-28">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/video/MTQzMQ%3D%3D" target="_blank" rel="noopener">Bottom View of Binary Tree</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Bottom view:</strong> the bottommost node on every vertical line (the same horizontal distance), from left to right. When two nodes on a line are on the same level, the one reached through the <em>right</em> child counts as lower, so it wins. An empty tree prints nothing, and a single node prints itself.</p>
+    <p>Transcript examples: a four-line tree prints 40 20 50 30 (50 below 10 on line 0). A tree with three nodes at hd 0 prints the lowest; at a level-3 tie the right-child path wins, so 60. Another tree prints 50 over 10 and 60 at hd +1.</p>
+    <p><strong>Idea:</strong> like vertical traversal, a C++ <code>map</code> / Java <code>TreeMap</code> (sorted) and a queue of (node, hd) pairs, in level order. But the map is <code>int → int</code>: insert a node if its hd is new, otherwise <em>overwrite</em> the stored value. Level order sees lower levels later, so the last write per hd is the bottom node. Then traverse the map and print the values.</p>
+    <p>The description gives O(N log N) time and O(N) auxiliary space.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace (10 → 20, 30; 20 → 40, 50; 30 → (left) 60)</h4>
+      <ol>
+        <li>(10, 0) sets mp[0] = 10. Then (20, −1) sets mp[−1] = 20 and (30, 1) sets mp[1] = 30.</li>
+        <li>(40, −2) sets mp[−2] = 40.</li>
+        <li>(50, 0) overwrites mp[0] with 50, then (60, 0) overwrites it with 60.</li>
+      </ol>
+      <p>Step 1 builds <code>mp</code>: mp[−2] = 40, mp[−1] = 20, mp[0] = 60, mp[1] = 30. Step 2 traverses it and prints <strong>40 20 60 30</strong>. The only change from the vertical traversal code is overwriting a single value instead of appending to a list.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-BST-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (23 problems, in course order), plus the one Articles-tab item that doesn't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/search-a-node-in-bst" target="_blank" rel="noopener">Search in BST</a></td><td>Easy</td><td>Videos 3–5</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/insert-a-node-in-a-bst" target="_blank" rel="noopener">BST Insert</a></td><td>Easy</td><td>Videos 6–8</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/inorder-traversal-of-a-bst" target="_blank" rel="noopener">Inorder traversal of a BST</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/delete-a-node-from-bst" target="_blank" rel="noopener">Delete from BST</a></td><td>Medium</td><td>Videos 9–11</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/implementing-floor-in-bst" target="_blank" rel="noopener">Floor in BST</a></td><td>Easy</td><td>Videos 12–14</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/implementing-ceil-in-bst" target="_blank" rel="noopener">Ceil in BST</a></td><td>Easy</td><td>Video 15</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/count-smaller-elements2214" target="_blank" rel="noopener">Count Smaller on Right</a></td><td>Hard</td><td>Video 19</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/find-the-closest-element-in-bst" target="_blank" rel="noopener">Closest in BST</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/check-for-bst" target="_blank" rel="noopener">Check for BST</a></td><td>Medium</td><td>Video 22</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/merge-two-bst-s" target="_blank" rel="noopener">Merge Two BSTs</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/fixed-two-nodes-of-a-bst" target="_blank" rel="noopener">Fixing Two Nodes of BST</a></td><td>Hard</td><td>Video 23</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/print-common-nodes-in-bst" target="_blank" rel="noopener">Common Nodes in Two BSTs</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>13</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/pair-sum-in-bst" target="_blank" rel="noopener">Pair Sum in BST</a></td><td>Medium</td><td>Video 24</td></tr>
+        <tr><td>14</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/print-bst-elements-in-given-range" target="_blank" rel="noopener">BST Keys in Range</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>15</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/print-a-binary-tree-in-vertical-order" target="_blank" rel="noopener">Vertical Tree Traversal</a></td><td>Medium</td><td>Video 26</td></tr>
+        <tr><td>16</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/levelorder-traversal-of-a-bst" target="_blank" rel="noopener">Levelorder traversal of a BST</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>17</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/convert-level-order-traversal-to-bst" target="_blank" rel="noopener">Construct BST from Level Order</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>18</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/preorder-to-postorder4423" target="_blank" rel="noopener">Preorder to BST</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>19</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/bottom-view-of-binary-tree" target="_blank" rel="noopener">Bottom View of Binary Tree</a></td><td>Medium</td><td>Video 28</td></tr>
+        <tr><td>20</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/lowest-common-ancestor-in-a-bst" target="_blank" rel="noopener">Lowest Common Ancestor in a BST</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>21</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/count-bst-nodes-that-lie-in-a-given-range" target="_blank" rel="noopener">Count BST Nodes in Range</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>22</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/top-view-of-binary-tree" target="_blank" rel="noopener">Top View of Binary Tree</a></td><td>Medium</td><td>Video 27</td></tr>
+        <tr><td>23</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/problem/minimum-element-in-bst" target="_blank" rel="noopener">Minimum in BST</a></td><td>Easy</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-BST/article/MjM2MQ%3D%3D" target="_blank" rel="noopener">Finding LCA in Binary Search Tree</a></p>
+<ul>
+<li>Given n1 and n2 (assumed present), find their LCA, the common ancestor closest to both. The binary tree method works but is O(N); BST properties do better.</li>
+<li>Going from top to bottom, the first node n with n1 ≤ n ≤ n2 (taking n1 &lt; n2) is the LCA. If the node is greater than both, go left; if smaller than both, go right; otherwise the root is the LCA.</li>
+<li><strong>Complexity:</strong> O(h) time. The recursion takes O(h) call-stack space, which an iterative version avoids.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -25753,7 +27206,37 @@ const TRACKS = [
       ["Iterative Preorder Traversal (Simple)", "6:52"],
       ["Iterative Preorder Traversal (Space Optimized)", "9:53"]
     ] },
-  { id: "DSASP-BST", slug: "binary-search-tree", name: "Binary Search Tree", counts: [28, 16, 23, 10, 1] },
+  { id: "DSASP-BST", slug: "binary-search-tree", name: "Binary Search Tree", counts: [28, 16, 23, 10, 1],
+    videos: [
+      ["Binary Search Tree(Background)", "6:40"],
+      ["Binary Search Tree(Introduction)", "8:20"],
+      ["Search in BST (Introduction)", "3:49"],
+      ["Search in BST C++", "7:37"],
+      ["Search in BST Java", "7:07"],
+      ["Insert in BST", "3:31"],
+      ["Insert in BST C++", "7:19"],
+      ["Insert in BST Java", "7:28"],
+      ["Deletion in BST", "5:02"],
+      ["BST deletion in C++", "8:19"],
+      ["BST Deletion in Java", "8:01"],
+      ["Floor in BST", "7:36"],
+      ["Floor in BST in CPP", "4:08"],
+      ["Floor in BST Java", "3:31"],
+      ["Ceil in BST", "7:42"],
+      ["Self Balancing BST", "9:55"],
+      ["AVL Tree", "13:09"],
+      ["Red Black Tree", "7:24"],
+      ["Applications of BST", "5:43"],
+      ["Ceiling on left side in an array", "7:09"],
+      ["Find Kth Smallest in BST", "12:32"],
+      ["Check for BST", "14:52"],
+      ["Fix BST with Two Nodes Swapped", "11:39"],
+      ["Pair Sum with given BST", "10:01"],
+      ["Vertical Sum in a Binary Tree", "14:02"],
+      ["Vertical Traversal of Binary Tree", "16:09"],
+      ["Top View of Binary Tree", "13:28"],
+      ["Bottom View of Binary Tree", "13:48"]
+    ] },
   { id: "DSASP-Heap", slug: "heap", name: "Heap", counts: [14, 11, 11, 10, 0] },
   { id: "DSASP-Graph", slug: "graph", name: "Graph", counts: [30, 20, 24, 10, 1] },
   { id: "DSASP-Greedy", slug: "greedy", name: "Greedy", counts: [12, 5, 6, 10, 1] },
