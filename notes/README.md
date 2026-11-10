@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 13 of 24 tracks · 294 of 470 videos · 221 of 342 articles · 214 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 14 of 24 tracks · 302 of 470 videos · 228 of 342 articles · 220 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -88,8 +88,8 @@ Report back with:
 | 11 | Linked List | 54 | 40 | 25 | ✅ Done: 54/54 videos, 40/40 articles, 25 problems |
 | 12 | Stack | 27 | 19 | 17 | ✅ Done: 27/27 videos, 19/19 articles, 17 problems |
 | 13 | Queue | 9 | 5 | 9 | ✅ Done: 9/9 videos, 5/5 articles, 9 problems |
-| 14 | Deque | 8 | 7 | 6 | ⏭ Next |
-| 15 | Tree | 30 | 24 | 32 | Not started |
+| 14 | Deque | 8 | 7 | 6 | ✅ Done: 8/8 videos, 7/7 articles, 6 problems |
+| 15 | Tree | 30 | 24 | 32 | ⏭ Next |
 | 16 | Binary Search Tree | 28 | 16 | 23 | Not started |
 | 17 | Heap | 14 | 11 | 11 | Not started |
 | 18 | Graph | 30 | 20 | 24 | Not started |
@@ -487,6 +487,21 @@ Every Stack article matches a video, so the Track practice set lists only the 17
 
 "Implementing Queue using Stack" and "Sample Problems on Queue" match no video, so they're in the Track practice set with the 9 problems. V3, V4 and V8 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (0/9 videos watched, 22%, 0/5 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 9 Queue videos.
 
+### Track 14: Deque, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Deque Data Structure | 9:06 | Transcript + board | Deque Data Structure |
+| 2 | Array Implementation of Deque | 17:19 | Transcript + board | Circular implementation of Deque |
+| 3 | Deque in C++ STL | 13:43 | Transcript + board | Deque in C++ STL |
+| 4 | Deque in Java | 8:04 | Transcript + board | Deque in Java |
+| 5 | ArrayDeque in Java | 20:45 | Transcript + board |  |
+| 6 | Design a Data Structure with Min and Max operations | 5:12 | Transcript + board | Design a Data Structure with Min and Max operations |
+| 7 | Maximums of all subarrays of size k | 20:26 | Transcript + board | Maximums of all subarrays of size K |
+| 8 | First Circular Tour | 27:52 | Transcript + board | First Circular Tour |
+
+Every Deque article matches a video, so the Track practice set lists only the 6 problems. Every Deque video has a full transcript; none was cut off early. Course progress was unchanged (0%; the track shows no Watched or Read counter, and the articles still show "Mark as Read"). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 8 Deque videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -511,10 +526,11 @@ Every Stack article matches a video, so the Track practice set lists only the 17
 - `5a47254`: Add Strings track notes (19 videos, 12 articles, 26 problems)
 - `3251af2`: Add Linked List track notes (54 videos, 40 articles, 25 problems)
 - `5e04a24`: Add Stack track notes (27 videos, 19 articles, 17 problems)
-- (this commit): Add Queue track notes (9 videos, 5 articles, 9 problems)
+- `e80e175`: Add Queue track notes (9 videos, 5 articles, 9 problems)
+- (this commit): Add Deque track notes (8 videos, 7 articles, 6 problems)
 
 ### What's next
-- **Track 14: Deque** (8 videos, 7 articles, 6 problems), starting straight away.
+- **Track 15: Tree** (30 videos, 24 articles, 32 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -540,6 +556,7 @@ Every Stack article matches a video, so the Track practice set lists only the 17
   - Completed track 11 (Linked List): 54 videos, 40 articles, 25 problems.
   - Completed track 12 (Stack): 27 videos, 19 articles, 17 problems.
   - Completed track 13 (Queue): 9 videos, 5 articles, 9 problems.
+  - Completed track 14 (Deque): 8 videos, 7 articles, 6 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -556,6 +573,12 @@ Every Stack article matches a video, so the Track practice set lists only the 17
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Deque: teacher slips flagged
+- V4 (board): Example 2's last two lines print `g.getFirst()`/`g.getLast()`; the deque is `d`.
+- V6 (board): the Java `insertMin()`/`insertMax()` are written with no parameter, though the bodies use `x`.
+- V7 (board): the C++ second loop ends `dq.push_back();` for `dq.push_back(i);`; `&&` is drawn like "$$".
+- The "Design a Data Structure with Min and Max operations" article solves a different problem (a queue with getMin) from the video's.
 
 ### Queue: teacher slips flagged
 - V3 (board): the circular-array formulas on the 10:50 board are labelled with enque/deque swapped; the final code has them right.

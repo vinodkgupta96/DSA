@@ -23224,6 +23224,509 @@ System.out.println(q.peek());   // 20</code></pre>
   </section>
 </template>
 
+<template id="DSASP-Deque-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/video/MTQ3Mw%3D%3D" target="_blank" rel="noopener">Deque Data Structure</a> · Notes from the full course transcript and the board (a frame every 25 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Deque</strong> = doubly ended queue: two ends, front and rear, with insertions and deletions at both. Main operations: <code>insertFront()</code>, <code>deleteFront()</code>, <code>insertRear()</code>, <code>deleteRear()</code>. Additional operations: <code>getFront()</code>, <code>getRear()</code>, <code>isFull()</code>, <code>isEmpty()</code>, <code>size()</code>.</p>
+    <p>Board example (the first item inserted, at either end, is both front and rear):</p>
+    <ul>
+      <li>insertFront(10) → [10]; insertFront(20) → [20, 10]; insertRear(30) → [20, 10, 30]; insertRear(40) → [20, 10, 30, 40]; insertFront(50) → [50, 20, 10, 30, 40]; deleteFront() → [20, 10, 30, 40]; deleteRear() → [20, 10, 30].</li>
+    </ul>
+    <p><strong>Implementation</strong> — all operations should be O(1):</p>
+    <ul>
+      <li><strong>Linked list:</strong> a doubly linked list with front and rear references (pointers in C++). Not singly: inserting at the head, deleting at the head and inserting at the tail (with a tail pointer) are O(1), but deleting from the tail isn't, even with a tail pointer — a doubly linked list can reach the node before the tail and set its next to null.</li>
+      <li><strong>Array:</strong> trickier — use a circular array with two indexes front and rear (or front and size, from which rear can be computed). Covered in the next video.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/article/NzExNw%3D%3D" target="_blank" rel="noopener">Deque Data Structure</a></p>
+<ul>
+<li>A generalized queue allowing insert and delete at both ends. Operations: insertFront(), insertLast(), deleteFront(), deleteLast(), plus getFront(), getRear(), isEmpty(), isFull().</li>
+<li><strong>Applications:</strong> usable as both stack and queue; supports clockwise and anticlockwise rotations in O(1); problems needing additions/removals at both ends — maximum of all subarrays of size k, 0-1 BFS, the first circular tour visiting all petrol pumps, and the A-Steal job scheduling algorithm. Practical: a web browser's history, a software application's list of undo operations, job scheduling.</li>
+<li>Language support: <code>std::deque</code> in C++ STL, the <code>Deque</code> interface in Java. Implementation with a doubly linked list or a circular array gives all operations in O(1); a singly linked list can't, because delete rear can't be done in O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Applications (board)</h4>
+      <ol>
+        <li>A deque can be used as both <strong>stack and queue</strong>.</li>
+        <li><strong>Maintaining history of actions</strong> in a limited buffer — e.g. browser history of the last 50 pages: add each visited page at the rear; when the buffer is full remove from the front; the back button removes from the rear.</li>
+        <li><strong>A steal process scheduling algorithm:</strong> with multiple processors each having its own queue, a free processor P2 can take threads from the rear of busy P1's queue (P1 takes from the front). A normal queue doesn't allow deletion from the rear, so a deque is needed.</li>
+        <li><strong>Implementing a priority queue with two types of priorities</strong> (1 and 2): add priority-1 items at the front and priority-2 items at the rear, and always remove from the front — priority-1 items finish first.</li>
+        <li><strong>Maximum/minimum of all subarrays of size k</strong> in an array — a separate video.</li>
+      </ol>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Deque-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/video/MTk5Ng%3D%3D" target="_blank" rel="noopener">Array Implementation of Deque</a> · Notes from the full course transcript and the board (a frame every 50 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Implement with an array: insertFront, insertRear, deleteFront, deleteRear, getFront, getRear (these return indexes), size, isFull (size equals the capacity) and isEmpty. The array has a fixed capacity; it doesn't grow dynamically.</p>
+    <p><strong>Simple implementation:</strong> keep front always at 0 and rear always at size − 1, so only size and cap are stored. insertRear and deleteRear are O(1) (write at arr[size] and size++, or just size−−). insertFront must move all items one position ahead, and deleteFront all remaining items one position back, so those two are O(n).</p>
+    <p><strong>Efficient implementation:</strong> treat the array as a circular buffer, all under modulo capacity:</p>
+    <ul>
+      <li>delete from front: <code>front = (front + 1) % cap</code>; insert at rear: <code>rear = (rear + 1) % cap</code>;</li>
+      <li>insert before front: <code>front = (front − 1 + cap) % cap</code> (adding cap keeps the index non-negative); delete from rear: <code>rear = (rear − 1 + cap) % cap</code>.</li>
+    </ul>
+    <p>Store only <code>front</code> and <code>size</code> (plus arr and cap): front can be anywhere, and rear is always <code>(front + size − 1) % cap</code>. All six operations are O(1).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/article/NzUzMA%3D%3D" target="_blank" rel="noopener">Circular implementation of Deque</a></p>
+<ul>
+<li>Track two indices, front and rear, in an array arr of size N; start with front = −1, rear = 0. Inserting the first element at either end gives front = rear = 0.</li>
+<li><strong>Insert at rear:</strong> check full; if rear == size − 1, rear = 0, else rear++; arr[rear] = key (front unchanged). <strong>Insert at front:</strong> check full; if front == 0 (or initial), front = size − 1, else front−−; arr[front] = key (rear unchanged).</li>
+<li><strong>Delete from rear:</strong> check empty; with one element set front = rear = −1; else if rear is at index 0, rear = size − 1, else rear−−. <strong>Delete from front:</strong> check empty; with one element set front = rear = −1; else if front is at the last index, front = 0, else front++.</li>
+<li>The article lists time O(N) and auxiliary space O(N) for the implementation.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Simple implementation</h4>
+<pre><code class="language-cpp">bool isFull()  { return (size == cap); }
+bool isEmpty() { return (size == 0); }
+void insertRear(int x)
+{   if(isFull()) return;
+    arr[size] = x;
+    size++;
+}
+void deleteRear()
+{   if(isEmpty()) return;
+    size--;
+}
+int getRear()
+{   if(isEmpty()) return -1;
+    else return size-1;
+}
+void insertFront(int x)
+{   if(isFull()) return;
+    for(int i = size-1; i &gt;= 0; i--)
+        arr[i+1] = arr[i];
+    arr[0] = x;
+    size++;
+}
+void deleteFront()
+{   if(isEmpty()) return;
+    for(int i = 0; i &lt; size-1; i++)
+        arr[i] = arr[i+1];
+    size--;
+}
+int getFront()
+{   if(isEmpty()) return -1;
+    else return 0;
+}</code></pre>
+      <p>The structure (C++ <code>struct Deque { int size, cap; int *arr; Deque(int c) {…} }</code> or a Java class) only stores size and capacity. The syntax is almost the same in C++ and Java, so one code is shown. Board trace (cap = 5): insertRear(10) → [10]; insertFront(20) → [20, 10]; insertRear(30) → [20, 10, 30]; insertFront(40) → [40, 20, 10, 30]; deleteFront() → [20, 10, 30]; deleteRear() → [20, 10].</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient implementation (circular array)</h4>
+<pre><code class="language-cpp">struct Deque {
+    int *arr;
+    int front, size, cap;
+    Deque(int c)
+    {   arr = new int[c];
+        cap = c; front = 0; size = 0;
+    }
+    int getFront()
+    {   if(isEmpty()) return -1;
+        else return front;
+    }
+    int getRear()
+    {   if(isEmpty()) return -1;
+        else return (front + size - 1) % cap;
+    }
+    void deleteFront()
+    {   if(isEmpty()) return;
+        front = (front + 1) % cap;
+        size--;
+    }
+    void insertRear(int x)
+    {   if(isFull()) return;
+        int new_rear = (front + size) % cap;
+        arr[new_rear] = x;
+        size++;
+    }
+    void insertFront(int x)
+    {   if(isFull()) return;
+        front = (front + cap - 1) % cap;
+        arr[front] = x;
+        size++;
+    }
+    void deleteRear()
+    {   if(isEmpty()) return;
+        size--;
+    }
+};</code></pre>
+      <p>insertRear combines "get old rear, add one": (front + size − 1) + 1 = front + size. deleteRear only decrements size, since rear is derived. Board trace (cap = 4, front = 0): insertFront(10) → front 3, size 1; insertRear(20) → index (3+1)%4 = 0, size 2; insertRear(30) → index (3+2)%4 = 1, size 3; deleteFront() → front (3+1)%4 = 0, size 2; deleteRear() → size 1, front unchanged. The course Description links C++ code.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Deque-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/video/MTE3NQ%3D%3D" target="_blank" rel="noopener">Deque in C++ STL</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A deque gives the functionality of both stack (insert and delete at the same end) and queue (insert at one end, delete at the other): insert and delete at <em>both</em> ends. Most other languages implement it as a doubly linked list, but C++ STL guarantees more: <strong>random access</strong>, and insertions at both ends in O(1).</p>
+    <p>Functions: <code>push_front</code>, <code>push_back</code>, <code>front()</code>, <code>back()</code>, <code>pop_front</code>, <code>pop_back</code>, <code>size()</code>, <code>insert(it, x)</code> (inserts x before the iterator), <code>erase</code>, and iterators: <code>begin()</code> (first element), <code>end()</code> (beyond the last), <code>rbegin()</code>/<code>rend()</code> (reverse: last element / before the first, ++ moves backward), <code>cbegin()</code>/<code>cend()</code> (constant — can't modify elements) and <code>crbegin()</code>/<code>crend()</code> (constant reverse).</p>
+    <p><strong>How does deque work internally?</strong> A doubly linked list gives O(1) at both ends but no random access. A circular array gives both, but growing beyond capacity means doubling the array and copying all the data — costly when elements are large objects (e.g. a student with many members), because of the copy-constructor calls. So the STL deque uses an <strong>array of pointers to fixed-size blocks</strong> (5 on the board; could be 100 or 200). Filling starts from the middle block and grows in both directions; the middle blocks are generally full. When the pointer array itself fills up, it is doubled — but only pointers are copied, not the data, so push_back/push_front make a constant number of copy-constructor calls (and resizing is rare, since each pointer covers a big chunk).</p>
+    <p>Time complexities (board): <code>push_back</code>, <code>push_front</code>, <code>pop_front</code>, <code>pop_back</code>, and <code>[]</code> (random access, computed from the block sizes, begin and end) are O(1); <code>insert</code> and <code>erase</code> are O(n) — the memory is contiguous within blocks, so other items must be moved. push_back/push_front are arguably amortized O(1), but constant in copy-constructor calls.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/article/NzExOA%3D%3D" target="_blank" rel="noopener">Deque in C++ STL</a></p>
+<ul>
+<li>Sequence containers that expand and contract at both ends — like vectors, but more efficient for insertion and deletion; unlike vectors, contiguous storage isn't guaranteed. The functions are the same as vector's, plus push and pop at both front and back.</li>
+<li>Time complexities: accessing elements O(1); insertion or removal of elements O(N); insertion or removal at the start or end O(1).</li>
+<li>Methods table: insert() (returns an iterator to the first newly inserted element), rbegin(), rend(), cbegin() (constant — traverse only), max_size(), assign(), resize(), push_front(), push_back(), pop_front()/pop_back(), front(), clear(), empty(), operator=, at(), begin(), emplace_front().</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Examples</h4>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;deque&gt;
+using namespace std;
+int main()
+{
+    deque&lt;int&gt; dq = {10, 20, 30};
+    dq.push_front(5);
+    dq.push_back(50);
+    for(auto x : dq)
+        cout &lt;&lt; x &lt;&lt; " ";                       // 5 10 20 30 50
+    cout &lt;&lt; dq.front() &lt;&lt; " " &lt;&lt; dq.back();   // 5 50
+    return 0;
+}</code></pre>
+<pre><code class="language-cpp">deque&lt;int&gt; dq = {10, 15, 30, 5, 12};
+auto it = dq.begin();
+it++;                   // points to 15
+dq.insert(it, 20);      // {10, 20, 15, 30, 5, 12}
+dq.pop_front();         // {20, 15, 30, 5, 12}
+dq.pop_back();          // {20, 15, 30, 5}
+cout &lt;&lt; dq.size();      // 4</code></pre>
+      <p>Without an initializer list the deque starts empty. The course Description links code for three examples (push/front/back; begin/insert/pop/size; insert and erase).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Deque-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/video/MTQ2Nw%3D%3D" target="_blank" rel="noopener">Deque in Java</a> · Notes from the full course transcript and the board (a frame every 25 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A deque allows insertion and deletion at both ends, so it can be used as both stack and queue. In Java the front is called <strong>first</strong> and the rear <strong>last</strong>. <code>Deque</code> is an interface; here it's implemented by the <code>LinkedList</code> class (a doubly linked list keeping first and last references).</p>
+    <p>Two sets of functions:</p>
+    <ul>
+      <li><strong>Do not throw exceptions</strong> — return special values: <code>offerFirst</code>/<code>offerLast</code> (true if added, else false), <code>peekFirst</code>/<code>peekLast</code> and <code>pollFirst</code>/<code>pollLast</code> (null on an empty deque; poll removes and returns the item). Problem: if the deque itself contains null, a null return can't tell you it's empty.</li>
+      <li><strong>Throw exceptions</strong> on failure: <code>addFirst</code>/<code>addLast</code>, <code>getFirst</code>/<code>getLast</code>, <code>removeFirst</code>/<code>removeLast</code>.</li>
+    </ul>
+    <p>Deque also supports the inherited queue functions (add, poll, remove, peek), but it's strongly recommended to use the deque-specific names, which say clearly which end is used (add → addLast, poll → pollFirst).</p>
+    <p>Time complexity: adding and removing at the first and last positions of the doubly linked list are O(1), as are getFirst/getLast and peekFirst/peekLast.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/article/NzExOQ%3D%3D" target="_blank" rel="noopener">Deque in Java</a></p>
+<ul>
+<li>The <code>Deque</code> interface (java.util) is a subtype of Queue supporting addition and removal at either end, usable as a queue (FIFO) or a stack (LIFO). Being an interface, objects need an implementing class; since generics (Java 1.5) the stored type can be restricted (a type-safe deque).</li>
+<li><strong>Adding:</strong> add(), and addFirst()/addLast() for either end. <strong>Removing:</strong> removeFirst(), removeLast(), and poll(), pop(), pollFirst(), pollLast() — pop() removes and returns the head; poll() does the same without an exception when the deque is empty. <strong>Iterating:</strong> from the first (iterator) or from the back (descendingIterator).</li>
+<li><strong>ArrayDeque</strong> implements Deque with a resizable array that grows as needed (no capacity restrictions); not thread-safe (no concurrent access without external synchronization); likely faster than Stack as a stack and than LinkedList as a queue.</li>
+<li>Methods table: add, addFirst, addLast, contains, descendingIterator, element, getFirst, getLast, iterator, offer, offerFirst, offerLast, peek, peekFirst, peekLast, poll, pollFirst, pollLast, pop, push, removeFirst, removeLast, size.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Example 1 (functions that do not throw exceptions)</h4>
+<pre><code class="language-java">import java.util.*;
+class Test
+{   public static void main(String args[])
+    {   Deque&lt;Integer&gt; d = new LinkedList&lt;Integer&gt;();
+        d.offerFirst(10);    // {10}
+        d.offerLast(20);     // {10, 20}
+        d.offerFirst(5);     // {5, 10, 20}
+        d.offerLast(15);     // {5, 10, 20, 15}
+        System.out.println(d.peekFirst());   // 5
+        System.out.println(d.peekLast());    // 15
+        d.pollFirst();       // {10, 20, 15}
+        d.pollLast();        // {10, 20}
+        System.out.println(d.peekFirst());   // 10
+        System.out.println(d.peekLast());    // 20
+    }
+}</code></pre>
+      <p>Example 2 is identical with <code>addFirst</code>/<code>addLast</code>, <code>getFirst</code>/<code>getLast</code> and <code>removeFirst</code>/<code>removeLast</code> — same output (5, 15, 10, 20), but these throw exceptions on failure.</p>
+    </div>
+    <div class="approach">
+      <h4>Traversal</h4>
+<pre><code class="language-java">// first to last: 5 10 20 15
+Iterator it = d.iterator();
+while(it.hasNext())
+    System.out.print(it.next() + " ");
+for(int x : d)
+    System.out.print(x + " ");
+
+// last to first: 15 20 10 5
+Iterator it2 = d.descendingIterator();
+while(it2.hasNext())
+    System.out.print(it2.next() + " ");</code></pre>
+      <p>The course Description links code for both examples and both traversals.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the last two lines of Example 2 print <code>g.getFirst()</code> and <code>g.getLast()</code>; the deque is named <code>d</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Deque-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/video/MTY4NQ%3D%3D" target="_blank" rel="noopener">ArrayDeque in Java</a> · Notes from the full course transcript and the board (a frame every 60 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The <code>ArrayDeque</code> class implements the <code>Deque</code> interface, a sub-interface of <code>Queue</code>, itself a sub-interface of <code>Collection</code> — so all their functionality is in ArrayDeque. Queue is separate from List (no inheritance relation), so list features such as get/set at an index aren't in ArrayDeque (they are in LinkedList, which implements both).</p>
+    <p>It's faster than LinkedList on average (an array implementation, cache friendly) and can be used as a <strong>stack</strong> (push, pop, peek), a <strong>queue</strong> (add, peek, poll, …) and a <strong>deque</strong> (addFirst, removeFirst, addLast, …). For a stack it's preferred over the standard <code>Stack</code> class: Stack inherits from Vector, which is thread safe and so has overhead in a single-threaded environment. For queues and deques it's preferred over LinkedList for speed. Import it with <code>java.util.ArrayDeque</code>.</p>
+    <p><strong>Time complexity:</strong> all operations are <em>amortized</em> O(1) (not worst case, unlike a linked list): internally it's a resizable array like ArrayList that grows (about 1.5× or 2×) when full, so a single insertion can be linear but the average over n operations is constant. Insertions and deletions at both ends in O(1) use a <strong>circular array</strong>.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Examples</h4>
+<pre><code class="language-java">import java.util.ArrayDeque;
+class GfG
+{   public static void main(String args[])
+    {   ArrayDeque&lt;Integer&gt; ad = new ArrayDeque&lt;Integer&gt;();
+        ad.add(10);
+        ad.add(20);
+        ad.add(30);
+        System.out.println(ad);   // [10, 20, 30]
+    }
+}</code></pre>
+      <ul>
+        <li><strong>As a stack:</strong> push(10), push(20); peek() → 20; pop() → 20 (returns the removed item); peek() → 10; push(40); peek() → 40. pop and peek throw an exception on an empty ArrayDeque; push is the same as addFirst — stack operations work at the first end.</li>
+        <li><strong>As a queue:</strong> offer(10), offer(20) (offer adds at the last, poll removes from the first); peek() → 10; poll() → 10; peek() → 20; offer(40); peek() → 20. Queue functions come in two sets: add/remove/element throw exceptions; offer (false if a bounded queue is full)/poll/peek (null if empty) don't.</li>
+        <li><strong>As a deque:</strong> offerFirst/offerLast, pollFirst/pollLast and peekFirst/peekLast — board run prints 30, 40, 30, 10, 40, 20.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>ArrayDeque methods (board)</h4>
+      <ul>
+        <li><strong>Throw exceptions</strong>: addFirst(), addLast(), removeFirst(), removeLast(), getFirst(), getLast(). <strong>Equivalents that don't throw</strong>: offerFirst(), offerLast(), pollFirst(), pollLast(), peekFirst(), peekLast() — offer returns false if a bounded deque is full; poll and peek return null when empty.</li>
+        <li><strong>Redundant functions</strong> (queue): add() = addLast(), remove() = removeFirst(), poll() = pollFirst(), offer() = offerLast(), element() = getFirst(), peek() = peekFirst(); (stack): push() = addFirst(), pop() = removeFirst().</li>
+      </ul>
+      <p>Recommendation: when using ArrayDeque as a deque, use the deque functions; as a queue, the queue functions; as a stack, the stack functions. The course Description links code for all four examples.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Deque-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/video/MTU2Ng%3D%3D" target="_blank" rel="noopener">Design a Data Structure with Min and Max operations</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Design a data structure supporting these operations in O(1) time:</p>
+    <ol>
+      <li><code>insertMin(x)</code> — may assume x is smaller than all existing items (anything can be inserted when empty);</li>
+      <li><code>insertMax(x)</code> — may assume x is greater than all existing items;</li>
+      <li><code>getMin()</code>, (4) <code>getMax()</code>, (5) <code>extractMin()</code> (remove the current minimum), (6) <code>extractMax()</code> (remove the current maximum).</li>
+    </ol>
+    <p>Board example: insertMin(5), insertMax(10), insertMin(3), insertMax(15), insertMin(2), getMin() → 2, getMax() → 15, insertMin(1), getMin() → 1, insertMax(20), getMax() → 20.</p>
+    <p><strong>Idea:</strong> use a deque (insertions and deletions at both ends in O(1), with a linked list or an array). Keep the minimum at one end and the maximum at the other: insertMin at the front, insertMax at the rear; getMin is the front, getMax the rear; extractMin deletes from the front, extractMax from the rear. Since every inserted item is either smaller or greater than all existing ones, the deque stays sorted from front to rear.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/article/NzEyMA%3D%3D" target="_blank" rel="noopener">Design a Data Structure with Min and Max operations</a></p>
+<ul>
+<li>The article's version is a different problem: a <code>SpecialQueue</code> supporting enqueue, deque and getMin() (or getMax()) with getMin in O(1). It keeps a queue plus a deque in increasing order (decreasing for max).</li>
+<li><strong>Enqueue:</strong> if the deque is empty insert at the back; otherwise pop from the deque's back while the back is greater than the element, then insert at the back. <strong>Deque:</strong> if the deque's front equals the queue's front, pop both; otherwise pop only the queue. <strong>getMin:</strong> the deque's front. Time O(n), auxiliary space O(n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation: O(1) per operation</h4>
+<pre><code class="language-java">class MyDS
+{   Deque&lt;Integer&gt; dq;
+    MyDS() { dq = new LinkedList&lt;Integer&gt;(); }
+    void insertMin(int x) { dq.offerFirst(x); }
+    void insertMax(int x) { dq.offerLast(x); }
+    int getMin()     { return dq.peekFirst(); }
+    int getMax()     { return dq.peekLast(); }
+    int extractMin() { return dq.pollFirst(); }
+    int extractMax() { return dq.pollLast(); }
+}</code></pre>
+<pre><code class="language-cpp">struct MyDS {
+    deque&lt;int&gt; dq;
+    void insertMin(int x) { dq.push_front(x); }
+    void insertMax(int x) { dq.push_back(x); }
+    int getMin() { return dq.front(); }
+    int getMax() { return dq.back(); }
+    int extractMin()
+    {   int x = dq.front(); dq.pop_front(); return x; }
+    int extractMax()
+    {   int x = dq.back(); dq.pop_back(); return x; }
+};</code></pre>
+      <p>Board trace: insertMin(10) → [10]; insertMax(15) → [10, 15]; insertMin(5) → [5, 10, 15]; extractMin() → [10, 15]; extractMax() → [10]; insertMin(8) → [8, 10]. The C++ board's getMin/getMax/extract bodies were partly hidden; they follow the transcript (front/back and pop_front/pop_back).</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> in the Java version <code>insertMin()</code> and <code>insertMax()</code> are written with no parameter, though the bodies use <code>x</code>; shown above as <code>(int x)</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Deque-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/video/MTQxNg%3D%3D" target="_blank" rel="noopener">Maximums of all subarrays of size k</a> · Notes from the full course transcript and the board (a frame every 60 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given an array and k ≤ n, print the maximum of every subarray of size k — there are n − k + 1 of them. Examples: {10, 8, 5, 12, 15, 7, 6}, k = 3 → 10 12 15 15 15 (7 − 3 + 1 = 5 outputs); {20, 5, 3, 8, 6, 15}, k = 4 → 20 8 15.</p>
+    <p><strong>Efficient idea:</strong> maintain a deque (doubly ended queue — insert and delete at both ends, all four operations O(1) with a doubly linked list or a circular array) of at most k items whose front is the maximum of the current window. Store <strong>indexes</strong>, not values, so we can tell when an item leaves the window.</p>
+    <ul>
+      <li>When a new item comes, remove from the rear all items smaller than (or equal to) it — they are useless: the new item is in every later window they're in, and larger. Then add it at the rear. So the deque holds items in decreasing order from front to rear. (For 5, 8, 10: 8 removes 5, 10 removes 8.)</li>
+      <li>Smaller items arriving later are kept — they may become the maximum of later windows (e.g. 10, 8, 5 then 4: the next window's maximum is 8).</li>
+      <li>Before processing a new window, remove from the front the item that is no longer in the window.</li>
+    </ul>
+    <p>Three operations — delete from the front, insert at the rear, delete from the rear — so a deque is needed, not a queue or a stack. Board trace on {10, 8, 5, 12, 15, 7, 6}, k = 3: dq = [10, 8, 5] → print 10; remove 10 (out of window), 12 removes 8 and 5 → [12] → 12; 15 removes 12 → [15] → 15; 7 → [15, 7] → 15; 6 → [15, 7, 6] → 15.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/article/NzEyMQ%3D%3D" target="_blank" rel="noopener">Maximums of all subarrays of size K</a></p>
+<ul>
+<li>{1, 2, 3, 1, 4, 5, 2, 3, 6}, K = 3 → 3 3 4 5 5 5 6; {8, 5, 10, 7, 9, 4, 15, 12, 90, 13}, K = 4 → 10 10 10 15 15 90 90.</li>
+<li><strong>Naive:</strong> nested loops — outer over N − K + 1 starts, inner over K elements. O((n − k + 1)·k) = O(N·K), O(1) space.</li>
+<li><strong>Deque:</strong> Qi of capacity K holds only <em>useful</em> elements of the current window — in the window and greater than all elements to their right in it — in sorted order (largest at the front, smallest at the back). Insert the first K elements, popping smaller ones from the back first; then for each remaining element print the front, remove out-of-window elements from the front, pop smaller back elements and insert at the back; finally print the last window's maximum. O(N) — each element is added and removed at most once (2n operations); auxiliary space O(K).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O(n²)</h4>
+<pre><code class="language-cpp">void printMaxK(int arr[], int n, int k)
+{
+    for(int i = 0; i &lt; n-k+1; i++)
+    {   int mx = arr[i];
+        for(int j = i+1; j &lt; i+k; j++)
+            mx = max(arr[j], mx);
+        cout &lt;&lt; mx &lt;&lt; " ";
+    }
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient: O(n) with a deque</h4>
+<pre><code class="language-cpp">void printKMax(int arr[], int n, int k)
+{
+    deque&lt;int&gt; dq;
+    for(int i = 0; i &lt; k; i++)
+    {   while(!dq.empty() &amp;&amp; arr[i] &gt;= arr[dq.back()])
+            dq.pop_back();
+        dq.push_back(i);
+    }
+    for(int i = k; i &lt; n; i++)
+    {   cout &lt;&lt; arr[dq.front()] &lt;&lt; " ";
+        while(!dq.empty() &amp;&amp; dq.front() &lt;= i-k)
+            dq.pop_front();
+        while(!dq.empty() &amp;&amp; arr[i] &gt;= arr[dq.back()])
+            dq.pop_back();
+        dq.push_back(i);
+    }
+    cout &lt;&lt; arr[dq.front()] &lt;&lt; " ";
+}</code></pre>
+      <p>Section 1 processes the first window; section 2 the remaining n − k: print the previous window's maximum (the front), drop indexes ≤ i − k from the front, drop smaller items from the rear, and add i. After the loop, print the last window's maximum. Java (Deque is an interface implemented by LinkedList): <code>Deque&lt;Integer&gt; dq = new LinkedList&lt;Integer&gt;();</code> with <code>isEmpty()</code>, <code>peek()</code>, <code>peekLast()</code>, <code>removeFirst()</code>, <code>removeLast()</code>, <code>addLast(i)</code>; C++ uses <code>front()</code>, <code>back()</code>, <code>pop_front()</code>, <code>pop_back()</code>, <code>push_back()</code>.</p>
+      <p>Board trace on {20, 40, 30, 10, 60}, k = 3: first window → dq = [1 (40), 2 (30)]; i = 3: print 40, push 3 (10) → [1, 2, 3]; i = 4: print 40, remove index 1 (out of window), 60 removes 30 and 10 → [4]; finally print 60. Output 40 40 60.</p>
+      <p>Time: it looks more than linear because of the nested loops, but every item enters the deque exactly once and leaves at most once — at most 2n O(1) operations, so O(n).</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> in the C++ version the last line of the second loop is written <code>dq.push_back();</code> — it's <code>dq.push_back(i);</code> as in the first loop; and <code>&amp;&amp;</code> is drawn like "$$".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Deque-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/video/MTU3OQ%3D%3D" target="_blank" rel="noopener">First Circular Tour</a> · Notes from the full course transcript and the board (a frame every 80 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>n petrol pumps are arranged in a circle. <code>petrol[i]</code> is the petrol available at pump i and <code>dist[i]</code> the distance from pump i to the next (the last to the first, circularly). A truck with infinite capacity, initially empty, consumes 1 unit of petrol per unit of distance. Find the <strong>first</strong> pump (1-based position) from which the truck can visit all pumps and come back without running out of petrol, or −1 if none.</p>
+    <ul>
+      <li>petrol = {4, 8, 7, 4}, dist = {6, 5, 3, 5} → 2 (pump 1: 4 &lt; 6 fails; from pump 2: 8−5 = 3, +7−3 = 7, +4−5 = 6, +4−6 = 4 ≥ 0).</li>
+      <li>petrol = {4, 8}, dist = {5, 6} → 2.</li>
+      <li>petrol = {8, 9, 4}, dist = {5, 10, 12} → −1.</li>
+    </ul>
+    <p><strong>Better solution (use a deque):</strong> maintain a deque of the current set of pumps that can be visited. (1) Keep adding pumps at the end while curr_petrol ≥ 0. (2) Keep removing pumps from the front while curr_petrol is negative. When all pumps are in the deque with non-negative petrol, the front is the answer. Board example petrol = {50, 10, 60, 100}, dist = {30, 20, 100, 10}: 0 → 20, 1 → 10, 2 → −30 (remove 0: −50; remove 1: −40; remove 2: 0); add 3 → 90, 0 → 110, 1 → 100, 2 → 60 → start 3 (position 4). Each pump is added and removed at most once — O(n) time, O(n) auxiliary space. (The original array can serve as the deque, with start and end variables, for O(1) space.)</p>
+    <p><strong>Efficient solution — key fact:</strong> if curr_petrol (accumulated from p<sub>0</sub>) first becomes negative at p<sub>i</sub>, then none of p<sub>0</sub>…p<sub>i</sub> can be a valid start. Proof by contradiction: if some p<sub>k</sub> before p<sub>i</sub> were valid, its petrol at p<sub>i</sub> would equal the total from p<sub>0</sub> (negative) minus the part from p<sub>0</sub> to p<sub>k−1</sub> (non-negative, since petrol never went negative before p<sub>i</sub>) — still negative. So restart from p<sub>i+1</sub>.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/article/NzEyMg%3D%3D" target="_blank" rel="noopener">First Circular Tour</a></p>
+<ul>
+<li>Here arr[i][0] is petrol and arr[i][1] the distance to the next pump, and the answer is the starting <em>index</em> (−1 if none): {{4, 6}, {6, 5}, {7, 3}, {4, 5}} → 1; {{6, 4}, {3, 6}, {7, 3}} → 2.</li>
+<li><strong>Naive:</strong> try every pump as a start (the truck can take all the petrol at each pump, having infinite capacity). O(N²) time, O(1) space.</li>
+<li><strong>Using a queue:</strong> keep the current tour in a queue; when petrol becomes negative, remove the current start and take the next point as the new start. The array itself can be the queue with start = 0 and end = 1 pointers — advance end circularly while petrol suffices, otherwise advance start; if start reaches N there's no tour. Each pump is added at most twice and removed at most once. O(N) time, O(1) space.</li>
+<li><strong>Checking only valid starting positions:</strong> start at the first pump whose petrol ≥ distance; if petrol runs short at some pump, the next start is the next such pump after it — no pump in between can work (splitting the range at any kth pump leaves a part with a negative sum). Finally check the stretch from 0 to the found start. O(N) time, O(1) space.</li>
+<li><strong>Single loop:</strong> as above, but a variable stores the petrol used from 0 to the latest start, replacing the extra loop. O(N) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O(n²)</h4>
+<pre><code class="language-cpp">int firstPetrolPump(int petrol[], int dist[], int n)
+{
+    for(int start = 0; start &lt; n; start++)
+    {   int curr_petrol = 0;
+        int end = start;
+        while(true)
+        {   curr_petrol += (petrol[end] - dist[end]);
+            if(curr_petrol &lt; 0)
+                break;
+            end = (end + 1) % n;
+            if(end == start)
+                return (start + 1);
+        }
+    }
+    return -1;
+}</code></pre>
+      <p>Try every start, moving end circularly; stop when petrol goes negative; returning to the start means a full circle. Return start + 1 (a position, not an index). Board trace for {4, 8, 7, 4} / {6, 5, 3, 5}: start 0 → −2, break; start 1 → 3, 7, 6, 4 and end returns to 1 → return 2.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: O(n) time, O(1) space, one traversal</h4>
+<pre><code class="language-cpp">int firstPetrolPump(int petrol[], int dist[], int n)
+{
+    int start = 0, curr_pet = 0;
+    int prev_pet = 0;
+    for(int i = 0; i &lt; n; i++)
+    {   curr_pet += (petrol[i] - dist[i]);
+        if(curr_pet &lt; 0)
+        {   start = i + 1;
+            prev_pet += curr_pet;
+            curr_pet = 0;
+        }
+    }
+    return ((curr_pet + prev_pet) &gt;= 0) ? (start + 1) : -1;
+}</code></pre>
+      <p><code>prev_pet</code> stores the (negative) petrol needed to get from p<sub>0</sub> to the restart point, so the circular part from p<sub>n−1</sub> back round to the start needn't be recomputed: at the end, curr_pet (from start to p<sub>0</sub>) plus prev_pet must be ≥ 0. Board trace for {50, 10, 60, 100} / {30, 20, 100, 10}: i = 0 → 20; i = 1 → 10; i = 2 → −30 → start = 3, prev_pet = −30, curr_pet = 0; i = 3 → 90; 90 + (−30) ≥ 0 → return 4. Same complexity as the better solution, but in one traversal.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Deque-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (6 problems, in course order). Every Articles-tab item matches a video, so the articles are in the video notes. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/problem/insertion-in-deque" target="_blank" rel="noopener">Array to Deque</a></td><td>Basic</td><td>Videos 3–4</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/problem/deque-deletion" target="_blank" rel="noopener">Deque Special Deletions</a></td><td>Easy</td><td>Videos 3–4</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/problem/dequeue-traversal" target="_blank" rel="noopener">Deque Traversal</a></td><td>Basic</td><td>Videos 3–4</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/problem/deque-implementations" target="_blank" rel="noopener">Deque Operations</a></td><td>Easy</td><td>Videos 1–2</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/problem/rotate-deque-by-k" target="_blank" rel="noopener">Rotate Deque By K</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Deque/problem/maximum-of-all-subarrays-of-size-k3101" target="_blank" rel="noopener">K Sized Subarray Maximum</a></td><td>Medium</td><td>Video 7</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -23527,7 +24030,17 @@ const TRACKS = [
       ["Reversing a Queue", "7:02"],
       ["Generate numbers with given digits", "6:30"]
     ] },
-  { id: "DSASP-Deque", slug: "deque", name: "Deque", counts: [8, 7, 6, 10, 1] },
+  { id: "DSASP-Deque", slug: "deque", name: "Deque", counts: [8, 7, 6, 10, 1],
+    videos: [
+      ["Deque Data Structure", "9:06"],
+      ["Array Implementation of Deque", "17:19"],
+      ["Deque in C++ STL", "13:43"],
+      ["Deque in Java", "8:04"],
+      ["ArrayDeque in Java", "20:45"],
+      ["Design a Data Structure with Min and Max operations", "5:12"],
+      ["Maximums of all subarrays of size k", "20:26"],
+      ["First Circular Tour", "27:52"]
+    ] },
   { id: "DSASP-Tree", slug: "tree", name: "Tree", counts: [30, 24, 32, 10, 0] },
   { id: "DSASP-BST", slug: "binary-search-tree", name: "Binary Search Tree", counts: [28, 16, 23, 10, 1] },
   { id: "DSASP-Heap", slug: "heap", name: "Heap", counts: [14, 11, 11, 10, 0] },
