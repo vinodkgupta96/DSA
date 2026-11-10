@@ -65,7 +65,7 @@ Report back with:
 - every teacher slip (timestamp, what was said, what the board shows)
 - any uncertainties (unreadable board, ambiguous working)
 
-Then commit and push:
+**Wait for Vinod's go before starting the next track.** Commit and push only when he asks:
 - Author and committer: **Vinod Kumar <vinodkgupta.1996@gmail.com>**, set per commit with `git -c user.name=... -c user.email=...` (global git config is never changed)
 - **No** `Co-Authored-By` or other Claude trailer lines in commit messages
 
