@@ -22754,6 +22754,476 @@ push(op1 x op2)     // x is the operator</code></pre>
   </section>
 </template>
 
+<template id="DSASP-Queue-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/video/MjA1OA%3D%3D" target="_blank" rel="noopener">Queue Data Structure</a> · Notes from the full course transcript and the board (a frame every 12 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A queue is <strong>FIFO</strong> — first in, first out: whatever comes first is removed first. In the queue 10, 15, 20, 30, 40, 10 entered first; a new item 50 is added at the end, and removals go 10, 15, 20, 30, 40, then 50. It's like a pipe in a supply chain: items are pushed in at one end and removed from the other.</p>
+    <p>The removing end is the <strong>front</strong> and the adding end is the <strong>rear</strong>. Operations (board):</p>
+    <ul>
+      <li><code>enqueue(x)</code>: add x at the rear (the new item becomes the rear).</li>
+      <li><code>dequeue()</code>: remove the front item (the next item becomes the front).</li>
+      <li><code>getFront()</code> and <code>getRear()</code>: for 10 … 40 these give 10 and 40.</li>
+      <li><code>size()</code>: 5 for that queue; <code>isEmpty()</code>: true if the queue is empty, else false.</li>
+    </ul>
+    <p>The front changes only on dequeue and the rear only on enqueue; with a single item, it is both front and rear.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/article/MjMzMw%3D%3D" target="_blank" rel="noopener">Introduction to Queues</a></p>
+<ul>
+<li>A linear data structure with <strong>FIFO</strong> order: the element inserted first is removed first — like consumers queuing for a resource. Stack removes the most recently added item; queue removes the least recently added.</li>
+<li>Operations: <strong>Enqueue</strong> (on a full queue: Overflow), <strong>Dequeue</strong> (items come out in the order pushed; on an empty queue: Underflow), <strong>Front</strong> and <strong>Rear</strong>.</li>
+<li><strong>Array implementation:</strong> track the indices front and rear; just incrementing them lets front reach the end of the array, so increase them circularly. With an array of size N (capacity N, size 0 initially, front = 0, rear = N−1): insert → <code>rear = (rear + 1) % N</code>; remove → <code>front = (front + 1) % N</code>. All operations — enqueue, dequeue, isFull, isEmpty, front, rear — are O(1), with no loops.</li>
+<li><strong>Applications:</strong> when things needn't be processed immediately but in FIFO order, like Breadth First Search; a resource shared among multiple consumers (CPU scheduling, disk scheduling); data transferred asynchronously between two processes (IO buffers, pipes, file IO).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Example (language-independent pseudocode)</h4>
+<pre><code>Queue q
+q.enqueue(10)        // [10]
+q.enqueue(20)        // [10, 20]
+q.enqueue(30)        // [10, 20, 30]
+q.enqueue(40)        // [10, 20, 30, 40]
+print(q.dequeue())   // 10 → [20, 30, 40]
+print(q.dequeue())   // 20 → [30, 40]
+print(q.getFront())  // 30
+print(q.getRear())   // 40</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Queue-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/video/MjA1NA%3D%3D" target="_blank" rel="noopener">Application of Queue Data structure</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Applications of queue (board):</p>
+    <ol>
+      <li><strong>Single resource and multiple consumers</strong>, served first come first served — e.g. a ticket system: whoever comes first gets the ticket first, and new people join at the end.</li>
+      <li><strong>Synchronization between slow and fast devices</strong> — e.g. keyboard (slow) and processor (fast): typed characters go into a queue and the CPU takes them all quickly in a cycle.</li>
+      <li><strong>In operating systems:</strong> semaphores (sleeping processes wait in a queue until the resource is available), FCFS (first come first serve) CPU scheduling (one processor, many processes), spooling (printers serve one job at a time), and buffers for devices like the keyboard.</li>
+      <li><strong>In computer networks:</strong> routers/switches (a router between a high-bandwidth sender network and a low-bandwidth receiver network queues packets and forwards them when the slow network is available) and mail queues; generally wherever servers provide a service to multiple consumers.</li>
+      <li><strong>Variations:</strong> deque (doubly ended queue — insertions and deletions at both ends, so it can implement both stack and queue), priority queue (implemented with a heap; e.g. a doctor serving VIP patients by priority rather than first come first serve) and doubly ended priority queue (also find the lowest-priority item — e.g. telling the lowest-priority patients they may leave). Covered in upcoming videos.</li>
+    </ol>
+    <p>Summary: use a queue when a single resource is consumed by multiple consumers in first-come-first-serve order, or to synchronize a slow and a fast device.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>No code in this video. Deque and priority queue have their own tracks later in the course.</p>
+  </section>
+</template>
+
+<template id="DSASP-Queue-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/video/OTA2" target="_blank" rel="noopener">Implementation of Queue using Array</a> · <strong>No transcript</strong>: notes from the board (a frame every 10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Board warm-up: enqueue(10) → [10] (front and rear both 10); enqueue(20) → [10, 20]; enqueue(30) → [10, 20, 30]; dequeue() → [20, 30]. Additional operations: size(), getFront(), getRear(), isFull(), isEmpty().</p>
+    <p><strong>Simple implementation:</strong> keep front = 0 always, with rear = size − 1, inside an array of capacity cap. Enqueue writes at index size. Dequeue removes arr[0] and shifts every remaining item one position left, so it is O(n). Trace (cap = 5): enque(10) → size 1, front = rear = 0; enque(20), enque(30) → size 3, rear = 2; deque() → [20, 30], size 2, rear = 1.</p>
+    <p><strong>Efficient implementation (circular array):</strong> keep <code>front</code> and <code>size</code>; the rear is computed as <code>(front + size − 1) % cap</code>. Dequeue just advances front circularly — <code>front = (front + 1) % cap</code> — and enqueue writes at <code>(rear + 1) % cap</code>, wrapping round to the start of the array.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Simple implementation</h4>
+<pre><code class="language-cpp">struct Queue {
+    int size, cap;
+    int *arr;
+    Queue(int c)
+    {   cap = c;
+        size = 0;
+        arr = new int[cap];
+    }
+    bool isFull()  { return (size == cap); }
+    bool isEmpty() { return (size == 0); }
+    void enque(int x)
+    {   if(isFull()) return;
+        arr[size] = x;
+        size++;
+    }
+    void deque()
+    {   if(isEmpty()) return;
+        for(int i = 0; i &lt; size-1; i++)
+            arr[i] = arr[i+1];
+        size--;
+    }
+    int getFront()
+    {   if(isEmpty()) return -1;
+        else return 0;
+    }
+    int getRear()
+    {   if(isEmpty()) return -1;
+        else return size-1;
+    }
+};</code></pre>
+      <p>getFront and getRear return the <em>index</em> (−1 when empty). Board trace (cap = 5): [10, 20, 30, 40], size 4 → deque() shifts to [20, 30, 40], size 3 → enque(50) → [20, 30, 40, 50], size 4. The Java version on the board is <code>class Queue</code> with <code>int size, cap; int[] arr;</code> and the same methods (<code>boolean</code> for isFull/isEmpty).</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient implementation (circular array): O(1) operations</h4>
+<pre><code class="language-cpp">struct Queue {
+    int *arr;
+    int front, cap, size;
+    Queue(int c)
+    {   arr = new int[c];
+        cap = c;
+        front = 0;
+        size = 0;
+    }
+    bool isFull()  { return (cap == size); }
+    bool isEmpty() { return (size == 0); }
+    int getFront()
+    {   if(isEmpty()) return -1;
+        else return front;
+    }
+    int getRear()
+    {   if(isEmpty()) return -1;
+        else return (front + size - 1) % cap;
+    }
+    void enque(int x)
+    {   if(isFull()) return;
+        int rear = getRear();
+        rear = (rear + 1) % cap;
+        arr[rear] = x;
+        size++;
+    }
+    void deque()
+    {   if(isEmpty()) return;
+        front = (front + 1) % cap;
+        size--;
+    }
+};</code></pre>
+      <p>Board traces:</p>
+      <ul>
+        <li>cap = 4: [10, 20, 30, 40], size 4, front 0 → deque() → size 3, front 1 → deque() → size 2, front 2 → enque(50): rear = (2 + 3 − 1) % 4 = 4 % 4 = 0, so 50 goes to index 0 — size 3, front 2.</li>
+        <li>cap = 3: enque(10), enque(20), enque(30) → size 3, front 0; deque(), deque() → [_, _, 30], size 1, front 2; enque(40) → 40 at index 0, size 2, front 2; deque() → size 1, front 0.</li>
+      </ul>
+      <p>The Java version on the board is <code>class Queue { int[] arr; int front, cap, size; … }</code> with the same functions. The course Description links code for the efficient (circular array) version.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> on the 10:50 board the formulas are labelled the wrong way round — "enque():" is written beside <code>front = (front+1) % cap; size--</code> and "deque(x):" beside the rear/<code>arr[rear] = x; size++</code> lines. The final code (shown above) has them in the right functions.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Queue-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/video/OTA3" target="_blank" rel="noopener">Implementation of Queue using Linked List</a> · <strong>No transcript</strong>: notes from the board (a frame every 10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Board warm-up: enque(10) → [10] (front and rear); enque(20) → [10, 20]; enque(30) → [10, 20, 30]; deque() → [20, 30]. Additional operations: size(), getFront(), getRear(), isEmpty().</p>
+    <p>Use a singly linked list with two pointers, <code>front</code> and <code>rear</code>. The board shows 10 → 20 → 30 → 40 → 50 with rear at 10 (the head) and front at 50 (the tail), labelled "<strong>Wrong choice of front and rear</strong>". The implementation instead puts <strong>front at the head</strong> (dequeue removes the head) and <strong>rear at the tail</strong> (enqueue appends after the tail).</p>
+    <p>"How to implement getSize()?" — keep a <code>size</code> member, incremented in enque and decremented in deque (added in blue on the board).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation</h4>
+<pre><code class="language-cpp">struct Node {
+    int data;
+    Node *next;
+    Node(int x)
+    {   data = x; next = NULL; }
+};
+
+struct Queue {
+    Node *front, *rear;
+    int size;
+    Queue() { front = NULL; rear = NULL; size = 0; }
+    void enque(int x)
+    {   Node *temp = new Node(x);
+        size++;
+        if(front == NULL)
+        {   front = rear = temp; return; }
+        rear-&gt;next = temp;
+        rear = temp;
+    }
+    void deque()
+    {   if(front == NULL) return;
+        size--;
+        Node *temp = front;
+        front = front-&gt;next;
+        if(front == NULL) { rear = NULL; }
+        delete(temp);
+    }
+};</code></pre>
+      <p>Enqueue on an empty queue makes the new node both front and rear; otherwise link it after rear and move rear. Dequeue moves front forward; if the queue becomes empty, rear is reset to NULL too. The Java version on the board is the same (<code>class Node</code>, <code>class Queue { Node front, rear; int size; … }</code>, <code>rear.next = temp</code>) without the <code>delete</code>. The course Description links C++, Java and C# code.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Queue-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/video/OTA4" target="_blank" rel="noopener">Queue in C++ STL</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A queue is FIFO: insert 10, 20, 30, 40 and a removal takes out 10 first (in a stack it would be 40), then 20; a new item goes at the end — like a normal queue of people. Use <code>#include &lt;queue&gt;</code> and <code>using namespace std;</code> (otherwise write <code>std::queue</code>, as with vector, stack or pair).</p>
+    <p>Functions: <code>push()</code>, <code>pop()</code>, <code>front()</code>, <code>back()</code>, <code>empty()</code>, <code>size()</code>. In academic terms <code>pop()</code> works as <strong>dequeue</strong> (removes the item inserted first) and <code>push()</code> as <strong>enqueue</strong> (adds at the end).</p>
+    <p><strong>Time complexities and internal working:</strong> all these operations are O(1). A queue can be implemented on any underlying container providing <code>empty()</code>, <code>size()</code>, <code>front()</code>, <code>back()</code>, <code>push_back()</code> and <code>pop_front()</code> — unlike stack, it inserts at one end and removes from the other. Only <strong>list</strong> and <strong>deque</strong> provide these in O(1) — not vector, which has no O(1) pop_front. If no container is specified, deque is used by default. Like stack, queue is a <strong>container adapter</strong>: an interface on top of another container.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/article/MjMzNw%3D%3D" target="_blank" rel="noopener">Implementing Queue in C++ and Java using Built-in Classes</a></p>
+<ul>
+<li><strong>C++ STL <code>std::queue</code>:</strong> <code>empty()</code>, <code>size()</code>, <code>swap()</code> (exchange the contents of two queues of the same type, sizes may differ), <code>emplace()</code> (insert a new element at the end), <code>front()</code> and <code>back()</code> (references to the first and last elements), <code>push(g)</code> (add g at the end), <code>pop()</code> (delete the first element).</li>
+<li><strong>Java <code>Queue</code> interface</strong> (java.util, extends Collection): an ordered list limited to inserting at the end and deleting from the start (FIFO). Being an interface it needs a concrete class — most commonly <code>PriorityQueue</code> and <code>LinkedList</code>, neither thread safe (<code>PriorityBlockingQueue</code> is a thread-safe alternative).</li>
+<li>Java methods: <code>add()</code> (at the tail, or by priority in a priority queue), <code>peek()</code> (view the head; null if empty), <code>element()</code> (like peek but throws NoSuchElementException when empty), <code>remove()</code> (remove and return the head; throws when empty), <code>poll()</code> (remove and return the head; null when empty), <code>size()</code>.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Examples</h4>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;queue&gt;
+using namespace std;
+int main()
+{
+    queue&lt;int&gt; q;
+    q.push(10);
+    q.push(20);
+    q.push(30);
+    cout &lt;&lt; q.front() &lt;&lt; " " &lt;&lt; q.back() &lt;&lt; endl;   // 10 30
+    q.pop();
+    cout &lt;&lt; q.front() &lt;&lt; " " &lt;&lt; q.back() &lt;&lt; endl;   // 20 30
+    return 0;
+}</code></pre>
+<pre><code class="language-cpp">// Traversal (same three pushes)
+while(q.empty() == false)
+{
+    cout &lt;&lt; q.front() &lt;&lt; " " &lt;&lt; q.back() &lt;&lt; endl;
+    q.pop();
+}
+// Output: 10 30 / 20 30 / 30 30</code></pre>
+      <p>Traversing means removing items one by one, as with a stack. <code>q.size()</code> after three pushes gives 3. The course Description links code for all three examples.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Queue-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/video/MTY4OA%3D%3D" target="_blank" rel="noopener">Queue in Java</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A queue works like a doctor's queue or a ticket queue: the item that came first leaves first. In Java, <code>Queue</code> is an <strong>interface</strong> (not a class, as in C++), implemented by two classes: <strong>LinkedList</strong> (a doubly linked list) and <strong>ArrayDeque</strong> (an array implementation). Queue extends <code>Collection</code>, so implementing classes have all the Collection methods (size, isEmpty, …) plus the Queue methods.</p>
+    <p>Because Queue is an interface, swapping <code>new ArrayDeque&lt;Integer&gt;()</code> for <code>new LinkedList&lt;Integer&gt;()</code> on the right-hand side leaves the rest of the code unchanged — also for functions taking a Queue reference.</p>
+    <p><strong>Which to prefer?</strong> In general ArrayDeque: it's an array, so cache friendly and faster. Adding and removing are O(1) in both, but in LinkedList that's worst case, while in ArrayDeque it's <em>amortized</em> O(1) — the average over n operations is constant, but an operation that resizes the internal array can take O(n). If you need a worst-case guarantee, prefer LinkedList.</p>
+    <p>Terminology: the item at the front is the <strong>first</strong> and the one at the end the <strong>last</strong>; offer adds at the last and poll removes from the first.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Examples</h4>
+<pre><code class="language-java">class GfG
+{   public static void main(String args[])
+    {   // Queue&lt;Integer&gt; q = new LinkedList&lt;Integer&gt;();
+        Queue&lt;Integer&gt; q = new ArrayDeque&lt;Integer&gt;();
+        q.offer(10);
+        q.offer(20);
+        q.offer(30);
+        System.out.println(q.size());      // 3
+        System.out.println(q.isEmpty());   // false
+        System.out.println(q);             // [10, 20, 30]
+    }
+}</code></pre>
+<pre><code class="language-java">// same three offers, then
+System.out.println(q.peek());   // 10 (first item, not removed)
+System.out.println(q.poll());   // 10 (removed)
+System.out.println(q.peek());   // 20</code></pre>
+      <p><strong>Functions that do not throw exceptions vs. those that do</strong> (board):</p>
+      <ul>
+        <li><code>peek()</code> returns null on an empty queue; its counterpart <code>element()</code> throws an exception.</li>
+        <li><code>offer()</code> returns false if a capacity-bounded queue is full; <code>add()</code> throws an exception (otherwise they work the same).</li>
+        <li><code>poll()</code> returns null on an empty queue; <code>remove()</code> throws an exception.</li>
+      </ul>
+      <p>All these operations are O(1). LinkedList keeps references to first and last, so it can add and remove at both ends in O(1); ArrayDeque uses dynamic-sized (one possible implementation: circular) arrays with amortized O(1) insert/delete at both ends — a queue needs only two of those four operations (add at the last, remove from the first).</p>
+      <p>Applications recap: a single resource with many consumers in arrival order (web server requests, FCFS scheduling, mail queues, a doctor's patients) and synchronizing a fast and a slow device (processor and keyboard).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Queue-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/video/OTEw" target="_blank" rel="noopener">Implementing stack using queue</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Only a queue library is available; implement your own stack class (struct in C++, class in Java/Python) with top, push, pop and size, using multiple queue instances. There are multiple solutions; this one makes <strong>push costly</strong>.</p>
+    <p>Keep the stack in q1 with the most recently pushed item at the <em>front</em>, so top, pop and size are just q1.front(), removing q1's front, and q1.size(). A normal enqueue would put a new item at the end, so push does three steps — e.g. q1 = {10, 5, 15}, push 20:</p>
+    <ol>
+      <li>Move everything from q1 to q2: q1 = {}, q2 = {10, 5, 15}.</li>
+      <li>Push x into q1: q1 = {20}.</li>
+      <li>Move everything back from q2 to q1: q1 = {20, 10, 5, 15}, q2 = {}.</li>
+    </ol>
+    <p>Push becomes O(n); all other operations are O(1).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/article/MjM0MA%3D%3D" target="_blank" rel="noopener">Implementing Stack using Queue</a></p>
+<ul>
+<li>Implement a stack s using only queue instances (q1, q2) and queue operations — the opposite of implementing a queue using stacks.</li>
+<li><strong>Method 1 (push costly):</strong> keep the newly entered element always at the front of q1, using q2 to put every new element there, so pop just dequeues from q1.</li>
+<li><strong>Method 2 (pop costly):</strong> push always enqueues to q1; pop moves all elements except the last to q2, then dequeues and returns the last element from q1.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation (push costly)</h4>
+<pre><code class="language-cpp">struct Stack {
+    queue&lt;int&gt; q1, q2;
+    int top()  { return q1.front(); }
+    int size() { return q1.size(); }
+    int pop()
+    {   int res = q1.front();
+        q1.pop();
+        return res;
+    }
+    void push(int x)
+    {   while(q1.empty() == false)
+        {   q2.push(q1.front());
+            q1.pop();
+        }
+        q1.push(x);
+        while(q2.empty() == false)
+        {   q1.push(q2.front());
+            q2.pop();
+        }
+    }
+};</code></pre>
+    </div>
+    <div class="approach">
+      <h4>More variations (exercises on the board)</h4>
+      <ol>
+        <li>Implement stack using queue by making the <strong>pop</strong> operation costly (push is simply q1.push).</li>
+        <li>Implement stack using only <strong>one queue</strong> (we can use the recursion call stack here) — based on the recursive reverse of a queue.</li>
+        <li>Implement <strong>queue using stack</strong>: (a) by making enque() costly; (b) by making deque() costly; (c) using one stack (and one recursion call stack).</li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the board's <code>pop()</code> is written <code>{ return q1.front(); }</code> without removing the item (the transcript says pop removes the front item; shown above with <code>q1.pop()</code>), and push uses <code>q1.top()</code> / <code>q2.top()</code> — <code>std::queue</code> has <code>front()</code>, not <code>top()</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Queue-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/video/MTQ3Mzc%3D" target="_blank" rel="noopener">Reversing a Queue</a> · <strong>No transcript</strong>: notes from the board (a frame every 20 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a queue, reverse it: q = {10, 5, 15, 20} (front 10, rear 20) becomes {20, 15, 5, 10} (front 20, rear 10).</p>
+    <p>Two methods on the board: <strong>iterative</strong> with a stack, and <strong>recursive</strong> (the function call stack does the reversing). The course Description links code for both.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>1. Iterative (using a stack)</h4>
+<pre><code class="language-cpp">void reverse(queue&lt;int&gt; &amp;q)
+{
+    stack&lt;int&gt; s;
+    while(q.empty() == false)
+    {   s.push(q.front());
+        q.pop();
+    }
+    while(s.empty() == false)
+    {   q.push(s.top());
+        s.pop();
+    }
+}</code></pre>
+      <p>Move every item from the queue to the stack (first item at the bottom), then pop them back into the queue — they come out in reverse. Java notes on the board: the parameter is <code>Queue&lt;Integer&gt; q</code>, the first loop is <code>s.push(q.remove());</code> and the second <code>q.add(s.pop());</code>. Board trace: {12, 5, 15, 20} → stack 12, 5, 15, 20 (20 on top) → queue 20, …</p>
+    </div>
+    <div class="approach">
+      <h4>2. Recursive</h4>
+<pre><code class="language-cpp">void reverse(queue&lt;int&gt; &amp;q)
+{
+    if(q.empty())
+        return;
+    int x = q.front();
+    q.pop();
+    reverse(q);
+    q.push(x);
+}</code></pre>
+      <p>Remove the front item, reverse the rest recursively, then push the removed item at the end. Board trace: q = {12, 5, 15, 20} → remove 12, q = {5, 15, 20} → after reverse(q), {20, 15, 5} → push 12 → {20, 15, 5, 12}. Beside the first two lines the board also writes the one-line form <code>x = q.pop()</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Queue-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/video/OTEy" target="_blank" rel="noopener">Generate numbers with given digits</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given n, print the first n numbers (in increasing order) whose digits are all in the set {5, 6}. n = 10 → 5, 6, 55, 56, 65, 66, 555, 556, 565, 566; n = 4 → 5, 6, 55, 56. Note: n can be large, and the result values might not fit in long int or long long int.</p>
+    <p><strong>Naive:</strong> loop over all numbers from 1 upward, print those whose digits are only 5 or 6, and stop after n. Very high time complexity, and the numbers may overflow.</p>
+    <p><strong>Efficient (queue):</strong> treat numbers as strings. Enqueue "5" and "6"; then repeatedly dequeue a number, print it, and enqueue it with "5" and with "6" appended. The numbers form a tree from the empty string ("" → 5, 6 → 55, 56, 65, 66 → 555, 556, 565, …); traversing it level by level gives them in increasing order.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation: O(n)</h4>
+<pre><code class="language-cpp">void printFirstN(int n)
+{
+    queue&lt;string&gt; q;     // Java: Queue&lt;String&gt; q = new LinkedList&lt;&gt;();
+    q.push("5");
+    q.push("6");
+    for(int count = 0; count &lt; n; count++)
+    {
+        string curr = q.front();
+        cout &lt;&lt; curr &lt;&lt; " ";
+        q.pop();
+        q.push(curr + "5");
+        q.push(curr + "6");
+    }
+}</code></pre>
+      <p>Board trace of the queue: [5, 6] → pop 5, push 55, 56 → [6, 55, 56] → pop 6 → [55, 56, 65, 66] → pop 55 → [56, 65, 66, 555, 556]. In C++ getting and removing the front takes two calls (front, then pop); in Java a single poll does both. Time O(n), assuming string copying/appending is constant (the number of digits in the outputs is small).</p>
+      <p>The same idea generates any digit set: for the decimal system, enqueue 1–9 and append 0–9 to each popped number (1, …, 9, 10, 11, 12, …). The queue handles large numbers and prints them in increasing order efficiently.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the board declares <code>queue&lt;int&gt; q</code> (and Java <code>Queue&lt;Integer&gt;</code>) but pushes strings — it must be <code>queue&lt;string&gt;</code>; and it reads the front with <code>q.top()</code>, which <code>std::queue</code> doesn't have (it's <code>q.front()</code>).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Queue-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (9 problems, in course order), plus the two Articles-tab items that don't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/problem/implement-queue-using-array" target="_blank" rel="noopener">Queue Using Array</a></td><td>Basic</td><td>Video 3</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/problem/operations-on-queue" target="_blank" rel="noopener">Queue Operations</a></td><td>Basic</td><td>Videos 5–6</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/problem/implement-queue-using-linked-list" target="_blank" rel="noopener">Queue using Linked List</a></td><td>Basic</td><td>Video 4</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/problem/stack-using-queue" target="_blank" rel="noopener">Stack using Queue</a></td><td>Medium</td><td>Video 7</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/problem/queue-using-two-stacks" target="_blank" rel="noopener">Queue using Stack</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/problem/queue-reversal" target="_blank" rel="noopener">Queue Reversal</a></td><td>Easy</td><td>Video 8</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/problem/reverse-first-k-elements-of-queue" target="_blank" rel="noopener">Reverse First K of Queue</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/problem/generate-binary-numbers-1587115620" target="_blank" rel="noopener">Generate Binary Numbers</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/problem/circular-tour-1587115620" target="_blank" rel="noopener">Gas Station</a></td><td>Medium</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/article/MjMzOQ%3D%3D" target="_blank" rel="noopener">Implementing Queue using Stack</a></p>
+<ul>
+<li>Implement queue q with two stacks, stack1 and stack2.</li>
+<li><strong>Method 1 (enQueue costly):</strong> keep the oldest element always at the top of stack1, so deQueue just pops from stack1. To push: move all elements from stack1 to stack2, insert the new element into stack1, then move everything back from stack2 to stack1.</li>
+<li><strong>Method 2 (deQueue costly):</strong> enQueue pushes onto stack1; deQueue, if stack2 is empty, moves all elements to stack2, then returns stack2's top.</li>
+<li>Method 2 performs better: method 1 moves all elements twice on every enQueue, while method 2 moves them once, and only when stack2 is empty.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Queue/article/MjYwNQ%3D%3D" target="_blank" rel="noopener">Sample Problems on Queue</a></p>
+<ul>
+<li><strong>Reversing the first K elements of a queue</strong> (only enqueue, dequeue, size, front allowed), leaving the rest in the same relative order: with an auxiliary stack — dequeue the first k elements and push them on the stack; pop them and enqueue them back (reversing them); then dequeue and enqueue the remaining n − k elements. Time O(n), auxiliary space O(k).</li>
+<li><strong>Sliding window maximum</strong> (the maximum of every contiguous subarray of size k): a deque Qi of capacity k stores only the useful elements of the current window — those in the window and greater than all elements to their left in it — kept in sorted order, with the window's largest at the front and smallest at the rear.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -23045,7 +23515,18 @@ const TRACKS = [
       ["Infix to Prefix (Efficient Solution)", "15:47"],
       ["Evaluation of Prefix", "6:51"]
     ] },
-  { id: "DSASP-Queue", slug: "queue", name: "Queue", counts: [9, 5, 9, 10, 0] },
+  { id: "DSASP-Queue", slug: "queue", name: "Queue", counts: [9, 5, 9, 10, 0],
+    videos: [
+      ["Queue Data Structure", "3:59"],
+      ["Application of Queue Data structure", "6:43"],
+      ["Implementation of Queue using Array", "15:31"],
+      ["Implementation of Queue using Linked List", "11:40"],
+      ["Queue in C++ STL", "6:50"],
+      ["Queue in Java", "12:09"],
+      ["Implementing stack using queue", "6:47"],
+      ["Reversing a Queue", "7:02"],
+      ["Generate numbers with given digits", "6:30"]
+    ] },
   { id: "DSASP-Deque", slug: "deque", name: "Deque", counts: [8, 7, 6, 10, 1] },
   { id: "DSASP-Tree", slug: "tree", name: "Tree", counts: [30, 24, 32, 10, 0] },
   { id: "DSASP-BST", slug: "binary-search-tree", name: "Binary Search Tree", counts: [28, 16, 23, 10, 1] },

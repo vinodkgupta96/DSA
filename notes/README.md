@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 12 of 24 tracks · 285 of 470 videos · 216 of 342 articles · 205 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 13 of 24 tracks · 294 of 470 videos · 221 of 342 articles · 214 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -87,8 +87,8 @@ Report back with:
 | 10 | Strings | 19 | 12 | 26 | ✅ Done: 19/19 videos, 12/12 articles, 26 problems |
 | 11 | Linked List | 54 | 40 | 25 | ✅ Done: 54/54 videos, 40/40 articles, 25 problems |
 | 12 | Stack | 27 | 19 | 17 | ✅ Done: 27/27 videos, 19/19 articles, 17 problems |
-| 13 | Queue | 9 | 5 | 9 | ⏭ Next |
-| 14 | Deque | 8 | 7 | 6 | Not started |
+| 13 | Queue | 9 | 5 | 9 | ✅ Done: 9/9 videos, 5/5 articles, 9 problems |
+| 14 | Deque | 8 | 7 | 6 | ⏭ Next |
 | 15 | Tree | 30 | 24 | 32 | Not started |
 | 16 | Binary Search Tree | 28 | 16 | 23 | Not started |
 | 17 | Heap | 14 | 11 | 11 | Not started |
@@ -471,6 +471,22 @@ Every Strings article matches a video, so the Track practice set lists only the 
 
 Every Stack article matches a video, so the Track practice set lists only the 17 problems. V1, V2, V3, V4, V5, V8, V9, V13 and V20 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (1/27 videos watched, 10%, 0/19 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 27 Stack videos.
 
+### Track 13: Queue, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Queue Data Structure | 3:59 | Transcript + board | Introduction to Queues |
+| 2 | Application of Queue Data structure | 6:43 | Transcript + board |  |
+| 3 | Implementation of Queue using Array | 15:31 | Board + description |  |
+| 4 | Implementation of Queue using Linked List | 11:40 | Board + description |  |
+| 5 | Queue in C++ STL | 6:50 | Transcript + board | Implementing Queue in C++ and Java using Built-in Classes |
+| 6 | Queue in Java | 12:09 | Transcript + board |  |
+| 7 | Implementing stack using queue | 6:47 | Transcript + board | Implementing Stack using Queue |
+| 8 | Reversing a Queue | 7:02 | Board + description |  |
+| 9 | Generate numbers with given digits | 6:30 | Transcript + board |  |
+
+"Implementing Queue using Stack" and "Sample Problems on Queue" match no video, so they're in the Track practice set with the 9 problems. V3, V4 and V8 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (0/9 videos watched, 22%, 0/5 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 9 Queue videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -494,10 +510,11 @@ Every Stack article matches a video, so the Track practice set lists only the 17
 - `4d2a6f6`: Add Hashing track notes (29 videos, 23 articles, 22 problems)
 - `5a47254`: Add Strings track notes (19 videos, 12 articles, 26 problems)
 - `3251af2`: Add Linked List track notes (54 videos, 40 articles, 25 problems)
-- (this commit): Add Stack track notes (27 videos, 19 articles, 17 problems)
+- `5e04a24`: Add Stack track notes (27 videos, 19 articles, 17 problems)
+- (this commit): Add Queue track notes (9 videos, 5 articles, 9 problems)
 
 ### What's next
-- **Track 13: Queue** (9 videos, 5 articles, 9 problems), starting straight away.
+- **Track 14: Deque** (8 videos, 7 articles, 6 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -522,6 +539,7 @@ Every Stack article matches a video, so the Track practice set lists only the 17
   - Completed track 10 (Strings): 19 videos, 12 articles, 26 problems.
   - Completed track 11 (Linked List): 54 videos, 40 articles, 25 problems.
   - Completed track 12 (Stack): 27 videos, 19 articles, 17 problems.
+  - Completed track 13 (Queue): 9 videos, 5 articles, 9 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -538,6 +556,12 @@ Every Stack article matches a video, so the Track practice set lists only the 17
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Queue: teacher slips flagged
+- V3 (board): the circular-array formulas on the 10:50 board are labelled with enque/deque swapped; the final code has them right.
+- V7 (board): the stack-using-queue `pop()` returns `q1.front()` without removing it, and push uses `q1.top()`/`q2.top()` (std::queue has `front()`).
+- V9 (board): `queue<int>` (Java `Queue<Integer>`) holds strings, and the front is read with `q.top()`.
+- Videos without a transcript (V3, V4, V8): spoken slips couldn't be checked.
 
 ### Stack: teacher slips flagged
 - V3 (board): the Java ArrayList stack heads isEmpty with `bool` for `boolean`.
