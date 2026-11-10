@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-09)
 
-**Notes written: 7 of 24 tracks · 144 of 470 videos · 111 of 342 articles · 100 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 8 of 24 tracks · 156 of 470 videos · 122 of 342 articles · 115 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -82,8 +82,8 @@ Report back with:
 | 5 | Arrays | 31 | 27 | 27 | ✅ Done: 31/31 videos, 27/27 articles, 27 problems |
 | 6 | Searching | 18 | 13 | 18 | ✅ Done: 18/18 videos, 13/13 articles, 18 problems |
 | 7 | Sorting | 39 | 29 | 20 | ✅ Done: 39/39 videos, 29/29 articles, 20 problems |
-| 8 | Matrix | 12 | 11 | 15 | ⏭ Next |
-| 9 | Hashing | 29 | 23 | 22 | Not started |
+| 8 | Matrix | 12 | 11 | 15 | ✅ Done: 12/12 videos, 11/11 articles, 15 problems |
+| 9 | Hashing | 29 | 23 | 22 | ⏭ Next |
 | 10 | Strings | 19 | 12 | 26 | Not started |
 | 11 | Linked List | 54 | 40 | 25 | Not started |
 | 12 | Stack | 27 | 19 | 17 | Not started |
@@ -295,6 +295,25 @@ The "Sample Problems on Array" article matches no single video, so it's in the T
 
 Every Sorting article matches a video, so the Track practice set lists only the 20 problems. V12, V15, V21 and V30 have no Transcript button and were done from frames and the description; no transcript was cut off early. V28's auto-generated transcript is badly garbled, so its notes follow the board. Course progress was unchanged (14/39 videos watched, 33%, no article marked as read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 39 Sorting videos.
 
+### Track 8: Matrix, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Multidimensional array in CPP | 14:07 | Transcript + board | Introduction to Matrix; 2D Vector in C++ |
+| 2 | Passing 2D arrays as arguments in CPP | 11:09 | Transcript + board |  |
+| 3 | Multidimensional array in Java | 7:41 | Transcript + board | Implementing Matrix using 2D Arrays in Java |
+| 4 | Passing 2D arrays as arguments in Java | 2:38 | Transcript + board |  |
+| 5 | Matrix in Snake Pattern | 3:29 | Transcript + board |  |
+| 6 | Matrix Boundary Traversal | 5:24 | Transcript + board |  |
+| 7 | Transpose of a Matrix | 6:13 | Transcript + board | Transpose of a Matrix |
+| 8 | Rotate Matrix Anti-clockwise by 90 | 8:03 | Transcript + board | Matrix Rotation |
+| 9 | Spiral Traversal of Matrix | 10:08 | Transcript + board | Spiral Traversal of Matrix |
+| 10 | Search in Row-wise and Column-wise sorted matrix | 11:53 | Transcript + board | Search in Row-wise and Column-wise sorted matrix |
+| 11 | Median of a Row Wise Sorted Matrix | 13:27 | Board + description | Median of a Row Wise Sorted Matrix |
+| 12 | Median of a Row Wise Sorted Matrix Java | 13:22 | Board + description |  |
+
+"Matrix Operations (Addition, Subtraction, Multiplication)", "Sample Problems on Matrix" and "Determinant of a Matrix | Explanation" match no video, so they're in the Track practice set with the 15 problems. V11 and V12 have no Transcript button and were done from frames and the description; no transcript was cut off early. V6's transcript is heavily garbled, so its notes follow the board. The track page shows 0% and no watched count; it was unchanged, no article was marked as read, and all resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 12 Matrix videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -313,10 +332,11 @@ Every Sorting article matches a video, so the Track practice set lists only the 
 - `e864134`: Add Recursion track notes (17 videos, 12 articles, 12 problems)
 - `f9e9cf3`: Add Arrays track notes (31 videos, 27 articles, 27 problems)
 - `10fb46a`: Add Searching track notes (18 videos, 13 articles, 18 problems)
-- (this commit): Add Sorting track notes (39 videos, 29 articles, 20 problems)
+- `c40a4e7`: Add Sorting track notes (39 videos, 29 articles, 20 problems)
+- (this commit): Add Matrix track notes (12 videos, 11 articles, 15 problems)
 
 ### What's next
-- **Track 8: Matrix** (12 videos, 11 articles, 15 problems), starting straight away.
+- **Track 9: Hashing** (29 videos, 23 articles, 22 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -335,6 +355,7 @@ Every Sorting article matches a video, so the Track practice set lists only the 
   - Completed track 5 (Arrays): 31 videos, 27 articles, 27 problems.
   - Completed track 6 (Searching): 18 videos, 13 articles, 18 problems.
   - Completed track 7 (Sorting): 39 videos, 29 articles, 20 problems.
+  - Completed track 8 (Matrix): 12 videos, 11 articles, 15 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -351,6 +372,16 @@ Every Sorting article matches a video, so the Track practice set lists only the 
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Matrix: teacher slips flagged
+- V2 (board): the array-of-vectors `main` calls `print(arr)` without m; the vector-of-vectors print writes `arr[i].size` without brackets; `&` is drawn like "$".
+- V8 (board): the naive `rotate90(int mat[R][C])` uses n inside, and one line has no semicolon.
+- V9 (board): the walkthrough writes 8 as "18" (1 2 3 4 18 12 16 …); the header reads `voia`.
+- V10 (board): the efficient walkthrough for x = 29 ends "Found at (2, 3)"; it is (2, 1), as on the first board.
+- V11 (board, no transcript): `upper_bound` is written "ubber_bound" and the subtraction uses `m[i]` for `mat[i]`.
+- V12 (board, no transcript): the comparison uses `MedPos` for `medPos`.
+- V11, V12 (no transcript): spoken slips couldn't be checked.
+- Board notation: `&&` is handwritten like "$$" (V9, V10).
 
 ### Sorting: teacher slips flagged
 - V10: "one more bad thing about quicksort, mergesort", meaning merge sort.

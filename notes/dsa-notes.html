@@ -13136,6 +13136,1104 @@ Worst Case: All items go into a single …
   </section>
 </template>
 
+<template id="DSASP-Matrix-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MTQ2Mw%3D%3D" target="_blank" rel="noopener">Multidimensional array in CPP</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>2D arrays and traversal</h3>
+    <ul>
+      <li><code>int arr[3][2]</code> is a 2D array with 3 rows and 2 columns. A 3D array uses three square brackets and three levels of nested curly brackets.</li>
+      <li>Traverse a 2D array with two nested loops (a 3D one with three): a loop for every row and, inside it, a loop for every column. <code>arr[i][j]</code> is the jth element of the ith row: i is the row index, j the column index.</li>
+    </ul>
+<pre><code class="language-cpp">#include&lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    int arr[3][2] = {{10, 20},
+                     {30, 40},
+                     {50, 60}};
+    for(int i=0; i&lt;3; i++)
+        for(int j=0; j&lt;2; j++)
+            cout&lt;&lt; arr[i][j] &lt;&lt;" ";
+    return 0;
+}
+O/P: 10 20 30 40 50 60</code></pre>
+
+    <h3>Important Points</h3>
+<pre><code class="language-plaintext">Important Points
+① Elements are stored in row-major order.
+   | 10 | 20 | 30 | 40 | 50 | 60 |
+   2000 2004 2008 2012 2016 2020
+② Internal Curly Brackets are optional
+   int arr[3][2] = {10, 20, 30, 40, 50, 60}
+③ Only the first dimension can be omitted when we initialize.
+   int arr[][2] = {{1, 2} {3, 4}}
+   int arr[][2][2] = {{{1,2}, {3,4}},
+                      {{5,6}, {7,8}}}</code></pre>
+    <ul>
+      <li>A multidimensional array is still an array, so all its elements are at contiguous locations. <strong>Row major</strong> stores row by row (10, 20, then 30, 40, then 50, 60); <strong>column major</strong> stores column by column. C++ uses row major: with base address 2000 and 4-byte ints, 20 is at 2004, 30 at 2008, and so on.</li>
+      <li>Internal curly brackets and multiple lines are optional, but recommended for readability.</li>
+      <li>When initializing, only the first dimension can be omitted; the compiler works it out (here 2). Removing any other dimension is a compiler error.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/article/MjI2MA%3D%3D" target="_blank" rel="noopener">Introduction to Matrix</a></p>
+<ul>
+<li>A matrix is a collection of numbers arranged in rows and columns, enclosed in parentheses or brackets. Each element is referred to by its row and column number (e.g. M<sub>23</sub> = 6 in the article's 3 × 3 example). The order of a matrix is its number of rows and columns.</li>
+<li><strong>Transpose:</strong> [M]<sup>T</sup> of an m × n matrix is the n × m matrix obtained by interchanging rows and columns. Properties: (A<sup>T</sup>)<sup>T</sup> = A; (A + B)<sup>T</sup> = A<sup>T</sup> + B<sup>T</sup>; (AB)<sup>T</sup> = B<sup>T</sup>A<sup>T</sup>.</li>
+<li><strong>Addition and multiplication:</strong> A + B = B + A (commutative); (A + B) + C = A + (B + C) (associative); AB ≠ BA (not commutative); (AB)C = A(BC) (associative); A(B + C) = AB + AC (distributive).</li>
+<li><strong>Terminology:</strong> square (rows = columns); symmetric (A<sup>T</sup> = A); skew-symmetric (A<sup>T</sup> = −A); diagonal (entries outside the main diagonal all zero, usually square); identity I (ones on the principal diagonal, zeros elsewhere); orthogonal (AA<sup>T</sup> = A<sup>T</sup>A = I); idempotent (A² = A); involutory (A² = I); singular (|A| = 0); non-singular (|A| ≠ 0).</li>
+<li>Every square matrix can be expressed uniquely as the sum of a symmetric and a skew-symmetric matrix: A = ½(A<sup>T</sup> + A) + ½(A − A<sup>T</sup>).</li>
+<li>Trace tr(A), only for square matrices: the sum of the diagonal elements.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/article/MjI5Mg%3D%3D" target="_blank" rel="noopener">2D Vector in C++</a></p>
+<ul>
+<li>A matrix in C++ can be implemented with 2D arrays or vectors. A 2D vector is a vector of vectors.</li>
+<li>The number of rows is the outer vector's size, <code>vec_name.size()</code>; the number of items in row i is <code>vec_name[i].size()</code>.</li>
+<li>The functions of vector can be used with 2D vectors as well.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Variable sized arrays</h4>
+      <p>From the C++14 standard (as the teacher puts it), C++ allows variables in the array dimensions.</p>
+<pre><code class="language-cpp">int main()
+{
+    int m=3, n=2;
+    int arr[m][n];
+    for(int i=0; i&lt;m; i++)
+        for(int j=0; j&lt;n; j++)
+            arr[i][j] = i+j;
+    for(int i=0; i&lt;m; i++)
+        for(int j=0; j&lt;n; j++)
+            cout&lt;&lt; arr[i][j] &lt;&lt;" ";
+    return 0;
+}
+O/P: 0 1 1 2 2 3</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Other ways to create: ① Double Pointer</h4>
+      <p>arr is a double pointer to a dynamically allocated array of m pointers; each of those points to a dynamically allocated row of n ints.</p>
+<pre><code class="language-cpp">int main()
+{
+    int m=3, n=2;
+    int **arr;
+    arr = new int *[m];
+    for(int i=0; i&lt;m; i++)           // m×n
+        arr[i] = new int[n];
+    for(int i=0; i&lt;m; i++)
+        for(int j=0; j&lt;n; j++)
+        {
+            arr[i][j] = 10;
+            cout&lt;&lt; arr[i][j] &lt;&lt;" ";
+        }
+}
+O/P: 10 10 10 10 10 10</code></pre>
+      <ul>
+        <li><strong>Advantage:</strong> rows can have different sizes, a <strong>jagged array</strong> (e.g. <code>new int[i+1]</code> gives rows of size 1, 2, 3, …). Also, a function can take the dimensions as arguments and work for any 2D array (see the next video).</li>
+        <li><strong>Disadvantage:</strong> not cache friendly; the rows are not at contiguous locations, so there are many cache misses.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>② Array of Pointers</h4>
+      <p>Same as the double pointer, but the array of pointers is a normal array on the stack; only the rows are allocated on the heap.</p>
+<pre><code class="language-cpp">int main()
+{
+    int m = 3, n = 2;
+    int *arr[m];
+    for(int i=0; i&lt;m; i++)          // Create a 2D array of size m×n
+        arr[i] = new int[n];
+    for(int i=0; i&lt;m; i++)
+        for(int j=0; j&lt;n; j++)
+        {
+            arr[i][j] = 10;
+            cout&lt;&lt; arr[i][j] &lt;&lt;" ";
+        }
+}
+O/P 10 10 10 10 10 10</code></pre>
+    </div>
+    <div class="approach">
+      <h4>③ Array of Vectors</h4>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main()
+{   int m=3, n=2;
+    vector&lt;int&gt; arr[m];
+    for(int i=0; i&lt;m; i++)
+        for(int j=0; j&lt;n; j++)
+            arr[i].push_back(10);
+    for(int i=0; i&lt;m; i++)
+        for(int j=0; j&lt;n; j++)
+            cout &lt;&lt; arr[i][j] &lt;&lt;" ";
+}
+… 10 10 10 10 10</code></pre>
+<pre><code class="language-plaintext">→ Not as cache friendly as simple 2-D …
+→ Individual rows … dynamic sizes.
+→ Easy to pass to …</code></pre>
+      <ul>
+        <li>m vectors, one per row, accessed with the normal 2D syntax.</li>
+        <li>Not as cache friendly as a simple 2D array: each vector allocates its own dynamic memory at different locations.</li>
+        <li>Main advantage: rows have <strong>dynamic</strong> sizes; elements can be added and removed, with vectors taking care of resizing (the first two methods only allow different, fixed row sizes).</li>
+        <li>Like the previous two methods, it is easier to pass to functions than the naive method.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>④ Vector of Vectors</h4>
+      <p>Number of rows can also be dynamic: rows can be added and removed. Otherwise as method 3: not as cache friendly as the first method, easier to pass to functions.</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main()
+{   int m=3, n=2;
+    vector&lt;vector&lt;int&gt;&gt; arr;
+    for(int i=0; i&lt;m; i++)              // Creates 2D array
+    {
+        vector&lt;int&gt; v;
+        for(int j=0; j&lt;n; j++)
+            v.push_back(10);
+        arr.push_back(v);
+    }
+    for(int i=0; i&lt; arr.size(); i++)
+        for(int j=0; j&lt; arr[i].size(); j++)
+            cout &lt;&lt;arr[i][j] &lt;&lt;" ";
+}
+… 10 10 10</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the closing braces and <code>return 0;</code> of the later programs are partly hidden; the method 3 notes on the left are cut off at the edge. In method 4 the opening brace of the row loop is not visible on the board. The description repeats that a multidimensional array is an array of arrays storing homogeneous data in tabular form, generally in row-major order.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MTQ2NA%3D%3D" target="_blank" rel="noopener">Passing 2D arrays as arguments in CPP</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>The problem with fixed dimensions</h3>
+<pre><code class="language-cpp">void print(int mat[3][2])
+{   for(int i=0; i&lt;3; i++)
+    {   for(int j=0; j&lt;2; j++)
+            cout &lt;&lt; mat[i][j] &lt;&lt;" ";
+    }
+}
+int main()
+{   int mat[3][2] = {{10, 20},
+                     {30, 40},
+                     {50, 60}};
+    print(mat);
+    return …
+}
+O/P: 10 20 30 40 50 60</code></pre>
+    <ul>
+      <li>This print works only for a 3×2 matrix. A general-purpose function (print, transpose, anything) should work for different sizes like 4×5 or 10×20.</li>
+      <li>C++ lets the first dimension be omitted, so passing the number of rows works for any matrix with 2 columns. But there is no direct syntax for normal multidimensional arrays to pass both dimensions as parameters, since a declaration cannot omit all dimensions.</li>
+    </ul>
+<pre><code class="language-cpp">void print(int mat[][2], int m)
+{   for(int i=0; i&lt;m; i++)
+    {   for(int j=0; j&lt;2; j++)
+            cout &lt;&lt; mat[i][j] &lt;&lt;" ";
+    }
+}
+int main()
+{   int mat[3][2] = {{10, 20},
+                     {30, 40},
+                     {50, 60}};
+    print(mat, 3);
+    return 0;
+}</code></pre>
+    <h3>Convention used in the Matrix problem videos</h3>
+    <p>The problem videos assume global constants R and C for the dimensions, to keep the syntax simple. This is still not general purpose (it works only for 3×2, and the constants cannot change per test case), but it reads well: R rows, C columns.</p>
+<pre><code class="language-cpp">const int R = 3;
+const int C = 2;
+void print(int mat[R][C])
+{   for(int i=0; i&lt;R; i++)
+    {   for(int j=0; j&lt;C; j++)
+            cout &lt;&lt; mat[i][j] &lt;&lt;" ";
+    }
+}
+… main()
+… int mat[R][C] = {{10, 20},
+                   {30, 40},
+                   {50, 60}};
+  print(mat);</code></pre>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>C-Style Solutions to write general purpose matrix methods: ① Using Double Pointer</h4>
+      <p>Works for any matrix allocated through a pointer to a pointer: an array of pointers (allocated dynamically) whose pointers refer to the individual rows. Pass the number of rows and columns.</p>
+<pre><code class="language-cpp">void print(int **arr, int m, int n)
+{
+    for(int i=0; i&lt;m; i++)
+        for(int j=0; j&lt;n; j++)
+            cout &lt;&lt; arr[i][j] &lt;&lt; " ";
+}
+int main()
+{   int **arr;
+    int m=3, n=2;
+    arr = new int *[m];
+    for(int i=0; i&lt;m; i++)
+    {   arr[i] = new int[n];
+        for(int j=0; j&lt;n; j++)
+        {   arr[i][j] = i;
+            cout &lt;&lt; arr[i][j] &lt;&lt;" ";
+        }
+    }
+    return 0;
+}
+O/P: 0 0 …</code></pre>
+      <p>Each element of row i is set to i, so the output is 0 0 1 1 2 2.</p>
+    </div>
+    <div class="approach">
+      <h4>Using Array of Pointers</h4>
+      <p>The same structure, but the array of pointers is an actual array of size m (user input) instead of a pointer to it.</p>
+<pre><code class="language-cpp">void print(int *arr[], int m, int n)
+{   for(int i=0; i&lt;m; i++)
+        for(int j=0; j&lt;n; j++)
+            cout &lt;&lt; arr[i][j] &lt;&lt; " ";
+}
+int main()
+{   int m=3, n=2;
+    int *arr[m];                   // ← Array of Pointers
+    for(int i=0; i&lt;m; i++)
+    {   arr[i] = new int[n];
+        for(int j=0; j&lt;n; j++)
+        {   arr[i][j] = i;
+            cout &lt;&lt; arr[i][j] &lt;&lt;" ";
+        }
+    }
+    return 0;
+}
+O/P: 0 0 1 1 2 2</code></pre>
+      <p>Both C-style versions work for any dimension: neither the number of rows nor of columns has to be fixed.</p>
+    </div>
+    <div class="approach">
+      <h4>C++ Vector Solutions to write general purpose matrix functions: ① Using array of vectors</h4>
+      <p>No need to pass the number of columns: <code>arr[i].size()</code> gives each row's length, since each element is a vector object.</p>
+<pre><code class="language-cpp">void print(vector&lt;int&gt; arr[], int m)
+{
+    for(int i=0; i&lt;m; i++)
+        for(int j=0; j&lt;arr[i].size(); j++)
+            cout &lt;&lt; arr[i][j] &lt;&lt; " ";
+}
+int main()
+{   int m=3, n=2;
+    vector&lt;int&gt; arr[m];
+    for(int i=0; i&lt;m; i++)
+        for(int j=0; j&lt;n; j++)
+            arr[i].push_back(i);
+    print(arr);
+    return 0;
+}
+O/P: 0 0 1 1 2 2</code></pre>
+    </div>
+    <div class="approach">
+      <h4>② Using Vector of Vectors</h4>
+      <p>Neither dimension is passed: <code>arr.size()</code> is the number of rows and <code>arr[i].size()</code> the columns of row i. It is passed by reference to avoid copying the vector.</p>
+<pre><code class="language-cpp">void print(vector&lt;vector&lt;int&gt;&gt; &amp;arr)
+{
+    for(int i=0; i&lt;arr.size(); i++)
+        for(int j=0; j&lt;arr[i].size; j++)
+            cout &lt;&lt; arr[i][j] &lt;&lt; " ";
+}
+int main()
+{
+    int m = 3, n = 2;
+    vector&lt;vector&lt;int&gt;&gt; arr;
+    for(int i=0; i&lt;m; i++)
+    {   vector&lt;int&gt; v;
+        for(int j=0; j&lt;n; j++)
+            v.push_back(i);
+        … push_back(v);
+O/P: 0 0 1 1 2 2</code></pre>
+      <ul>
+        <li>All these methods allow <strong>jagged arrays</strong> (different numbers of items in individual rows). Array of vectors: rows grow and shrink dynamically. Vector of vectors: the number of rows is dynamic too.</li>
+        <li>Disadvantage: rows are not all at contiguous locations, so they are slightly less cache friendly than a native 2D array, which keeps all m·n elements together.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the array-of-vectors <code>main</code> calls <code>print(arr)</code> without the m argument; the vector-of-vectors print writes <code>arr[i].size</code> without brackets, and its reference <code>&amp;</code> looks like "$". The end of the last program is hidden behind the teacher.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MTQ2NQ%3D%3D" target="_blank" rel="noopener">Multidimensional array in Java</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>A 2D array in Java is an array of arrays</h3>
+<pre><code class="language-java">class Test
+{   public static void main(String[] args)
+    {
+        int arr[][] = {{1, 2, 3, 8, 9},
+                       {4, 5, 6}};
+        for(int i=0; i&lt; arr.length; i++)
+            for(int j=0; j &lt; arr[i].length; j++)
+                System.out.print(arr[i][j] + " ");
+    }
+}
+… 3 8 9 4 5 6</code></pre>
+    <ul>
+      <li>Two square brackets create a 2D array. <code>arr.length</code> gives the number of rows; <code>arr[i].length</code> the number of columns in row i.</li>
+      <li>Unlike C++, the 2D array is an array of array objects, each with its own length. The teacher first initialises it as {1, 2, 3}, {4, 5, 6} (output 1 2 3 4 5 6), then adds 8, 9 to the first row: rows of 5 and 3 elements still work, printing 1 2 3 8 9 4 5 6.</li>
+    </ul>
+<pre><code class="language-plaintext">Important Points
+① Memory allocation in Java is different from C++.
+     0 | ─→ [0 1 … n-1]
+     1 | ─→ [0 1 … n-1]        m×n
+     ⋮
+   m-1 | ─→ [0 1 … n-1]
+② We do not specify dimensions with array name.
+     int arr[2][3] is invalid
+     int arr[][3] is also invalid</code></pre>
+    <ul>
+      <li>An m×n array is m array objects referring to arrays of size n (or different sizes n1, n2, n3), not necessarily at contiguous locations. C++ allocates one contiguous block of m·n; in Java, for m·n contiguous elements, create a 1D array of size m·n.</li>
+      <li>Coming from C++, you may write dimensions with the array name; Java does not allow it. Either initialise the array so the compiler works out the dimensions (2 rows, of 5 and 3 elements), or use <code>new int[m][n]</code>.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/article/MjI5Ng%3D%3D" target="_blank" rel="noopener">Implementing Matrix using 2D Arrays in Java</a></p>
+<ul>
+<li>A two-dimensional array is the simplest multidimensional array, easiest seen as an array of one-dimensional arrays. It can be declared indirectly (declare, then initialise) or directly.</li>
+<li>Elements are referred to as x[i][j], i the row and j the column number. Indexes run 0 to N − 1, so row_index 2 is actually row 3.</li>
+<li>A 2D array is a table with x rows (0 to x − 1) and y columns (0 to y − 1). To print all elements in tabular form, use two nested for loops, one for rows and one for columns.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Creating with new</h4>
+      <p>Arrays are objects, so elements are initialised to 0 automatically: without the assignment the output is 0 six times. Assigning 10 to each element (with curly brackets for the two statements) gives 10 six times; printing a new line after each row prints it in tabular form.</p>
+<pre><code class="language-java">class Test
+{   public static void main(String[] args)
+    {
+        int m=2, n=3;
+        int arr[][] = new int[m][n];
+        for(int i=0; i&lt; arr.length; i++)
+        {   for(int j=0; j &lt; arr[i].length; j++)
+            {
+                arr[i][j] = 10;
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        …</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Jagged Array of user specified sizes</h4>
+      <p>Create an array of m rows without the number of columns; then each row gets its own size (here 1, 2, 3) and the value i.</p>
+<pre><code class="language-java">class Test
+{   public static void main(String[] args)
+    {   int m=3;
+        int arr[][] = new int[m][];
+        for(int i=0; i&lt; arr.length; i++)
+        {
+            arr[i] = new int[i+1];
+            for(int j=0; j&lt; arr[i].length; j++)
+            {   arr[i][j] = i;
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+O/P: 0
+     1 1
+     2 2 2</code></pre>
+      <p>A 2D array is called jagged if its rows are not all the same size.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the closing braces of the <code>new int[m][n]</code> program are hidden behind the teacher. The description repeats that a multidimensional array is an array of arrays storing homogeneous data in tabular form.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MTQ2Ng%3D%3D" target="_blank" rel="noopener">Passing 2D arrays as arguments in Java</a> · Notes from the full course transcript and the board (a frame every 8 seconds plus a close-up; one board for the whole video). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-java">class Test {
+    public static void print(int arr[][])
+    {   for(int i=0; i&lt; arr.length; i++)
+            for(int j=0; j&lt; arr[i].length; j++)
+                System.out.print(arr[i][j] + " ");
+    }
+    public static void main(String [] args)
+    {
+        int arr[][] = {{1, 2, 3},
+                       {4, 5, 6}};
+        print(arr);
+    …
+O/P: 1 2 3 4 5 6</code></pre>
+    <ul>
+      <li>A 2D array parameter is declared with the same rules as the array itself: no dimensions, just two square brackets (which can also go before the name).</li>
+      <li>Inside, <code>arr.length</code> gives the rows and <code>arr[i].length</code> the elements in row i. Compared with C++ this is very clean: general-purpose functions for a matrix of any dimension are easy to write.</li>
+      <li>In Java an m×n matrix is an array of arrays (the outer array holds references to the row objects), so its elements might not be at contiguous locations.</li>
+      <li><strong>The Matrix problem videos</strong> use R and C with loops <code>i &lt; R</code> and <code>j &lt; C</code>. In Java read R as <code>arr.length</code> and C as <code>arr[i].length</code>. The code in those videos is pseudocode close to both C++ and Java.</li>
+    </ul>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MTQ1Nw%3D%3D" target="_blank" rel="noopener">Matrix in Snake Pattern</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Print a matrix in snake pattern: the first row left to right, the second right to left, the third left to right, and so on.</p>
+<pre><code class="language-plaintext">Print a Matrix in Snake Pattern
+I/P:  1  2  3  4
+      5  6  7  8
+      9 10 11 12
+     13 14 15 16
+O/P: 1 2 3 4 8 7 6 5 9 10 11 12 16 15 14 13
+
+I/P:  1  2  3  4
+      5  6  7  8
+      9 10 11 12
+O/P: 1 2 3 4 8 7 6 5 9 10 11 12</code></pre>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Pseudo Code</h4>
+      <p>Go row by row: an even row number (0, 2, …) is printed left to right, an odd one (1, 3, …) right to left. The pseudocode is close to both C++ and Java; R and C are the numbers of rows and columns (both 4 here).</p>
+<pre><code class="language-cpp">void printSnake(int mat[R][C])
+{
+    for(int i=0; i&lt;R; i++)
+    {   if(i%2 == 0)                         // Rows: 0, 2, ...
+        {   for(int j=0; j&lt;C; j++)
+                print(mat[i][j] + " ");
+        }
+        else                                 // Rows: 1, 3, ...
+        {   for(int j = C-1; j&gt;=0; j--)
+                print(mat[i][j] + " ");
+        }
+    }
+}</code></pre>
+      <p>Time Θ(R × C): a simple matrix traversal with an extra if-else.</p>
+    </div>
+    <div class="added">
+      <p><strong>Source note:</strong> the "Rows: 0, 2, …" and "Rows: 1, 3, …" labels are brackets beside the code on the board, shown here as comments. The description describes printing a matrix in snake pattern as a zigzag traversal resembling a snake's movement.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MTY5NzI%3D" target="_blank" rel="noopener">Matrix Boundary Traversal</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Print the boundary traversal of a matrix: the first row left to right, the last column top to bottom, the last row right to left, and the first column bottom to top.</p>
+<pre><code class="language-plaintext">Print Boundary Elements
+I/P:  1  2  3  4          I/P: 1 2 3 4
+      5  6  7  8          O/P: 1 2 3 4
+      9 10 11 12
+     13 14 15 16          I/P: 1
+O/P: 1 2 3 4 8 12 16 15 14 13 9 5      2
+                               3
+I/P: 1 2 3 4              O/P: 1 2 3
+     5 6 7 8
+O/P: 1 2 3 4 8 7 6 5      I/P: 1 2
+                               3 4
+                               5 6
+                          O/P: 1 2 4 6 5 3</code></pre>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Idea</h4>
+      <p>For an R × C matrix: print the first row (i = 0 to C − 1); the last column from i = 1 to R − 1 (so the corner is not printed again); the last row right to left from C − 2 to 0; and the first column from R − 2 down to 1, leaving out both corners.</p>
+      <p><strong>Corner cases:</strong> with a single row, the four loops would print 1 2 3 4 and then 3 2 1 again from the third loop (the second loop does not run). A single column has the same problem, so both are handled explicitly.</p>
+<pre><code class="language-plaintext">Corner Cases:
+① 1 2 3 4
+② 1
+   2
+   3
+   4</code></pre>
+<pre><code class="language-cpp">void bTraversal(int mat[R][C])
+{
+    if(R==1)
+    {   for(int i=0; i&lt;C; i++)
+            print(mat[0][i] + " ");
+    }
+    else if(C==1)
+    {   for(int i=0; i&lt;R; i++)
+            print(mat[i][0] + " ");
+    }
+    else
+    {   for(int i=0; i&lt;C; i++)
+            print(mat[0][i] + " ");
+        for(int i=1; i&lt;R; i++)
+            print(mat[i][C-1] + " ");
+        for(int i=C-2; i&gt;=0; i--)
+            print(mat[R-1][i] + " ");
+        for(int i=R-2; i&gt;=1; i--)
+            print(mat[i][0] + " ");
+    }
+}</code></pre>
+      <p>Time: two loops run Θ(R) times and two Θ(C), so Θ(2R + 2C) = <strong>Θ(R + C)</strong>, since constants do not matter.</p>
+    </div>
+    <div class="added">
+      <p><strong>Source note:</strong> the transcript is heavily garbled ("four four loops", "Theta 0"), so the notes follow the board. The description defines boundary traversal as accessing and printing the elements on the outermost edges of a matrix, used in image processing and matrix manipulation.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MTQ1Mw%3D%3D" target="_blank" rel="noopener">Transpose of a Matrix</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Given an n × n matrix (same number of rows and columns), change it to its transpose: rows become columns and columns become rows. The first row becomes the first column, the second row the second column, and so on; automatically the first column becomes the first row.</p>
+<pre><code class="language-plaintext">Transpose of a Matrix                  n×n
+I/P:  1  2  3  4         I/P: 1 1
+      5  6  7  8              2 2
+      9 10 11 12         O/P: 1 2
+     13 14 15 16              1 2
+O/P:  1  5  9 13
+      2  6 10 14
+      3  7 11 15
+      4  8 12 16</code></pre>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/article/NzY1Nw%3D%3D" target="_blank" rel="noopener">Transpose of a Matrix</a></p>
+<ul>
+<li>The transpose swaps rows and columns: each row becomes a column and each column a row; A[i][j] becomes A[j][i] (for A[N][M]).</li>
+<li>Approach: store the input in a 2D vector, create another 2D vector for the transpose, and assign Transpose[i][j] = Original[j][i] with two nested loops.</li>
+<li>Example: 1 2 3 / 4 5 6 / 7 8 9 has transpose 1 4 7 / 2 5 8 / 3 6 9.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+      <p>The task is to move the element at (i, j) to (j, i). Create a temporary n × n array, copy each <code>mat[j][i]</code> into <code>temp[i][j]</code> (equivalently <code>temp[j][i] = mat[i][j]</code>), then copy temp back. 1 at (0, 0) stays at (0, 0); 5 at (1, 0) goes to (0, 1); 9 at (2, 0) to (0, 2); 13 at (3, 0) to (0, 3).</p>
+<pre><code class="language-cpp">void transpose(int mat[n][n])
+{
+    int temp[n][n];
+    for(int i=0; i&lt;n; i++)
+        for(int j=0; j&lt;n; j++)
+            temp[i][j] = mat[j][i];      // temp[j][i] = mat[i][j]
+    for(… i=0; i&lt;n; i++)
+        … j=0; j&lt;n; j++)
+            …[i][j] = temp[i][j];
+}</code></pre>
+<pre><code class="language-plaintext">mat[][]   1  2  3  4        temp[][]  1  5  9 13
+          5  6  7  8                  2  6 10 14
+          9 10 11 12                  3  7 11 15
+         13 14 15 16                  4  8 12 16</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution: In-Place, One Traversal</h4>
+      <p>The diagonal elements stay the same in the transpose. For the rest, go through each row i and, from j = i + 1 (the upper triangle), swap each element with its counterpart in the lower triangle. Row 0 starts at the second element; row 1 at index 2; and so on.</p>
+<pre><code class="language-cpp">void transpose(int mat[n][n])
+{
+    for(int i=0; i&lt;n; i++)
+        for(int j=i+1; j&lt;n; j++)
+            swap(mat[i][j], mat[j][i]);
+}</code></pre>
+      <ul>
+        <li>This is pseudocode. Java has no swap function: use a temporary variable.</li>
+        <li>Matrix passing differs: Java gets the dimensions with length; C++ can use an array of vectors, a vector of vectors, pointers, or a global number of columns.</li>
+        <li>One traversal and constant extra space.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the second loop of the naive solution is partly hidden behind the teacher. The description says the transpose interchanges rows and columns and is used in matrix multiplication and solving systems of linear equations.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MTQ1NA%3D%3D" target="_blank" rel="noopener">Rotate Matrix Anti-clockwise by 90</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Rotate an n × n matrix by 90 degrees anti-clockwise.</p>
+<pre><code class="language-plaintext">Rotate a matrix by 90°
+I/P: 1 2 3            I/P:  1  2  3  4
+     4 5 6                  5  6  7  8
+     7 8 9                  9 10 11 12
+O/P: 3 6 9                 13 14 15 16
+     … 5 8            O/P:  4  8 12 16
+     … … 7                  3  7 11 15
+                            2  6 10 14
+                            1  5  9 13</code></pre>
+    <p>In the first example, row 1 2 3 becomes the column 3, 2, 1, row 4 5 6 becomes 6, 5, 4, and 7 8 9 becomes 9, 8, 7.</p>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/article/MjI2NQ%3D%3D" target="_blank" rel="noopener">Matrix Rotation</a></p>
+<ul>
+<li>Rotate an N × N matrix anti-clockwise by 90 degrees. This is equivalent to replacing the rows from the top of the matrix by the columns from the end.</li>
+<li><strong>With extra space:</strong> copy the matrix into a temporary matrix of the same dimensions, then replace each row of the original, one by one, by the columns of the temporary matrix from last to first.</li>
+<li><strong>Without extra space (in place):</strong> an N × N matrix has floor(N/2) square cycles; a 4 × 4 has 2. The first cycle is the 1st row, last column, last row and 1st column; the second is the 2nd row, second-last column, second-last row and 2nd column. For each cycle, swap the elements with the corresponding cells anti-clockwise (top to left, left to bottom, bottom to right, right to top) one at a time, using only a temporary variable.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution: Θ(n²) time, Θ(n²) auxiliary space</h4>
+      <p>→ Last column becomes first row. → Second last column becomes second row. (The third last column becomes the third row, and the first column the last row.) Copy each mat[i][j] to temp[n − j − 1][i]: j = n − 1 (last column) goes to row 0, j = n − 2 to row 1. Then copy temp back.</p>
+<pre><code class="language-cpp">void rotate90(int mat[R][C])
+{
+    int temp[n][n];
+    for(int i=0; i&lt;n; i++)
+        for(int j=0; j&lt;n; j++)
+            temp[n-j-1][i] = mat[i][j]
+    for(int i=0; i&lt;n; i++)
+        for(int j=0; j&lt;n; j++)
+            mat[i][j] = temp[i][j];
+}</code></pre>
+      <p>Two pairs of nested loops: Θ(n²) time; the n × n temporary array: Θ(n²) auxiliary space.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution: Θ(n²) time, Θ(1) Auxiliary Space</h4>
+      <p>This relates to the transpose. In the transpose the last column becomes the last row, the second last column the second last row; here the last column must become the first row. So after transposing, reverse the order: the last row becomes the first, and so on. That is done by reversing individual columns.</p>
+<pre><code class="language-plaintext">① Find transpose of matrix.
+② Reverse individual columns.
+
+ 1  2  3  4                1  5  9 13                 4  8 12 16
+ 5  6  7  8   Transpose    2  6 10 14   Reverse       3  7 11 15
+ 9 10 11 12   ───────→     3  7 11 15   Columns       2  6 10 14
+13 14 15 16                4  8 12 16   ───────→      1  5  9 13</code></pre>
+<pre><code class="language-cpp">void rotate90(int mat[n][n])
+{
+    for(int i=0; i&lt;n; i++)                       // Transpose
+        for(int j=i+1; j&lt;n; j++)
+            swap(mat[i][j], mat[j][i]);
+    for(int i=0; i&lt;n; i++)                       // Reverse Columns
+    {   int low = 0, high = n-1;
+        while(low &lt; high)
+        {
+            swap(mat[low][i], mat[high][i]);
+            low++;
+            high--;
+        }
+    }
+}</code></pre>
+      <ul>
+        <li>The transpose step is the in-place algorithm from the previous video: keep the diagonal, swap each upper-triangle element mat[i][j] (j from i + 1) with mat[j][i].</li>
+        <li>The reverse step uses the simple array-reverse algorithm on each column i: low = 0, high = n − 1, swap mat[low][i] with mat[high][i] (the column stays i, only the rows change), then low++ and high--.</li>
+        <li>The rotation is in place and takes Θ(n²) time.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong> the naive function is declared <code>rotate90(int mat[R][C])</code> but uses n, and the line <code>temp[n-j-1][i] = mat[i][j]</code> has no semicolon. The "Transpose" and "Reverse Columns" labels are brackets beside the code, shown here as comments. The description describes the rotation as swapping elements layer by layer (concentric squares); the video uses transpose plus column reversal.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MTQ1Mg%3D%3D" target="_blank" rel="noopener">Spiral Traversal of Matrix</a> · Notes from the full course transcript and the board (a frame every 25 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Print a matrix in spiral form: the top row, the right column, the bottom row in reverse, the rest of the first column upwards, then inwards in the same way.</p>
+<pre><code class="language-plaintext">Spiral Traversal of Matrix
+I/P:  1  2  3  4              I/P: 10 20 30
+      5  6  7  8              O/P: 10 20 30
+      9 10 11 12
+     13 14 15 16              I/P: 10
+O/P: 1 2 3 4 8 … 6 7 11 10         20
+                                   30
+I/P: 1 …                      O/P: 10 20 30
+     4 …
+O/P: 1 …</code></pre>
+    <p>From the transcript: the 4 × 4 output is 1 2 3 4 8 12 16 15 14 13 9 5 6 7 11 10, and the 2 × 3 example (1 2 3 / 4 5 6) gives 1 2 3 6 5 4. A single row or a single column is printed as it is.</p>
+    <h3>Idea: peel the onion</h3>
+    <p>Remove the outermost layer first, then the inner one, and so on. Keep four variables: top (top row), bottom (bottom row), left (left column), right (right column). Print the top row and do top++; print the right column and do right--; print the bottom row in reverse and do bottom--; print the left column bottom to top and do left++.</p>
+<pre><code class="language-plaintext">Spiral Traversal of Matrix
+           ↓ Right
+ 1   2 → 3   4   5
+ 6 | 7   8 → 9  10
+11 ↑ 12 ← 13 (14) 15 ← bottom
+16  17 ← 18  19  20
+     ↑ left
+… Top Row
+… Right Column
+… Row (Reverse)
+… (Reverse)</code></pre>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/article/NzY2NA%3D%3D" target="_blank" rel="noopener">Spiral Traversal of Matrix</a></p>
+<ul>
+<li>Print a 2D array in spiral form: the 4 × 4 matrix 1–16 gives 1 2 3 4 8 12 16 15 14 13 9 5 6 7 11 10; a 3 × 6 matrix 1–18 gives 1 2 3 4 5 6 12 18 17 16 15 14 13 7 8 9 10 11.</li>
+<li><strong>Method 1, simulation:</strong> follow the spiral path, turning clockwise whenever the next position (cr, cc) would go out of bounds or into a cell already visited (seen[r][c]). Time O(N) for N elements; auxiliary space O(N) for seen and the answer.</li>
+<li><strong>Method 2:</strong> divide the matrix into loops (squares, boundaries) printed outer first, clockwise, with four for loops: left to right, top to bottom, right to left, bottom to up. Variables k and m (start and end row), l and n (start and end column). Print row k from l to n, k++; column n − 1 from k to m, n--; if k &lt; m, row m − 1 from n − 1 to l, m--; if l &lt; n, column l from m − 1 to k, l++. Time O(m·n), auxiliary space O(1).</li>
+<li><strong>Method 3, recursive:</strong> print the boundary in each call and recurse with reduced dimensions, the same four steps with the base case start index ≤ end index. Time O(m·n), auxiliary space O(1) (as stated in the article).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Pseudo Code</h4>
+      <p>Loop while top ≤ bottom and left ≤ right. The two <code>if</code> checks are needed when only one row or one column is left.</p>
+<pre><code class="language-cpp">void printSpiral(int mat[][], int R, int C)
+{
+    int top = 0, left = 0, bottom = R-1, right = C-1;
+    while(top &lt;= bottom &amp;&amp; left &lt;= right)
+    {
+        for(int i = left; i &lt;= right; i++)             // Top Row
+            print(mat[top][i] + " ");
+        top++;
+        for(int i = top; i &lt;= bottom; i++)             // Right Column
+            print(mat[i][right] + " ");
+        right--;
+        if(top &lt;= bottom) {
+            for(int i = right; i &gt;= left; i--)         // Bottom Row (Reverse Order)
+                print(mat[bottom][i] + " ");
+            bottom--;
+        }
+        if(left &lt;= right) {
+            for(int i = bottom; i &gt;= top; i--)         // Left Column (Reverse Order)
+                print(mat[i][left] + " ");
+            left++;
+        }
+    }
+}</code></pre>
+<pre><code class="language-plaintext"> 1  2  3  4
+ 5  6  7  8
+ 9 10 11 12
+13 14 15 16
+Initially
+top = 0, bottom = 3, left = 0, right = 3
+O/P: 1 2 3 4, top = 1
+O/P: 1 2 3 4 8 12 16, right = 2
+O/P: 1 2 3 4 8 12 16 15 14 13, bottom = 2
+O/P: 1 2 3 4 8 12 16 15 14 13 9 5, left = 1
+O/P: 1 2 3 4 8 12 16 15 14 13 9 5 6 7, top = …
+O/P: 1 2 3 4 8 12 16 15 14 13 9 5 6 7 11, right = …
+O/P: 1 2 3 4 8 12 16 15 14 13 9 5 6 7 11 10, bottom … 1</code></pre>
+      <ul>
+        <li>First iteration: top row 0..3 (1 2 3 4), top = 1; right column rows 1..3 (8 12 16), right = 2; bottom row 2..0 (15 14 13), bottom = 2; left column rows 2..1 (9 5), left = 1. The outer layer is peeled.</li>
+        <li>Second iteration: top row 1..2 (6 7), top = 2; right column row 2 (11), right = 1; bottom row 1..1 (10), bottom = 1; left ≤ right holds, but the left-column loop runs from bottom = 1 to top = 2, so it prints nothing. Now top &gt; bottom, so the outer loop ends.</li>
+        <li>Each cell is printed exactly once: Θ(R × C).</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong> the walkthrough rows write 8 as "18" (1 2 3 4 18 12 16 …). <code>&amp;&amp;</code> is written <code>$$</code>, and the function header reads <code>voia</code>. The section labels are brackets beside the code, shown here as comments. The description lists image processing, matrix manipulation and graph algorithms as uses.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MTQ1OQ%3D%3D" target="_blank" rel="noopener">Search in Row-wise and Column-wise sorted matrix</a> · Notes from the full course transcript and the board (a frame every 25 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Given a matrix whose every row and every column is sorted in increasing order, and a value x, print the position of x if it is present, otherwise "Not Found".</p>
+<pre><code class="language-plaintext">Search in a Row-wise and Column-wise Sorted Matrix
+I/P: mat[][] = {{10, 20, 30, 40},
+                {15, 25, 35, 45},
+                {27, 29, 37, 48},
+                {32, 33, 39, 50}}
+     x = 29
+O/P: Found at (2, 1)
+
+I/P: mat[][] = {{10, 20},
+                {12, 30}}
+     x = 15
+O/P: Not Found</code></pre>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/article/NzY2NQ%3D%3D" target="_blank" rel="noopener">Search in Row-wise and Column-wise sorted matrix</a></p>
+<ul>
+<li>Given an n × n matrix with every row and column sorted in increasing order, find x's position or print "Not Found", in linear time. In {{10, 20, 30, 40}, {15, 25, 35, 45}, {27, 29, 37, 48}, {32, 33, 39, 50}}, x = 29 is found at (2, 1); x = 100 is not found.</li>
+<li><strong>Naive:</strong> nested loops comparing every element with x. Time O(n²), auxiliary space O(1). A divide and conquer solution is better, O(n<sup>1.58</sup>).</li>
+<li><strong>Efficient:</strong> start from the top-right corner and remove a row or column in each comparison. If x is greater than the current element, the whole row is smaller (the pointer is at its right-most element), so move to the next row. If x is smaller, the whole column is greater, so move to the column on the left. If equal, stop.</li>
+<li>Algorithm: i = 0, j = n − 1; loop until i = n; current &gt; x → j--; current &lt; x → i++; equal → print and end. Time O(n), at most 2n steps; it also works for an m × n matrix in O(m + n). Auxiliary space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O(R × C)</h4>
+      <p>A normal row-wise traversal: as soon as x is found, print its position and return. Reaching the end means x was never found. It does not use the sorted property.</p>
+<pre><code class="language-cpp">void search(int mat[R][C], int x)
+{
+    for(int i=0; i&lt;R; i++)
+    (   for(int j=0; j&lt;C; j++)
+        {   if(mat[i][j] == x)
+            {   print("Found at (" + i + ", " + j + ")");
+                return;
+            }
+        …
+    … print("Not Found");
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution: O(R + C)</h4>
+<pre><code class="language-plaintext">→ Begin from the top right corner.
+→ If x is same, print position and return.
+→ If x is smaller, move left
+→ If x is gr… , … down</code></pre>
+      <ul>
+        <li>If x is smaller than the current element, every element below it in that column is greater too, so the whole column can be skipped: move left.</li>
+        <li>If x is greater, every element to its left in that row is smaller, so the row can be skipped: move down.</li>
+        <li>Searching 29: 40 → 30 → 20 (each greater, move left), then 20 &lt; 29 → down to 25, 25 &lt; 29 → down to 29: found. Searching 39: 40 → 30, then down 35, down 37, down 39: found.</li>
+        <li><strong>Why top right?</strong> From the top left (smallest) or bottom right (largest) corner, an x on one side could be anywhere, so neither a row nor a column can be ruled out. The bottom left corner also works, with the rules reversed: greater → right, smaller → up.</li>
+      </ul>
+<pre><code class="language-cpp">void search(int mat[R][C], int x)
+{
+    int i=0, j = C-1;
+    while(i&lt;R &amp;&amp; j &gt;= 0)
+    {   if(mat[i][j] == x)
+        {   print("Found at (" + i + ", " + j + ")");
+            return;
+        }
+        else if(mat[i][j] &gt; x)
+            j--;
+        else
+            i++;
+    }
+    print("Not Found");
+}</code></pre>
+<pre><code class="language-plaintext">2nd Example          x = 24
+Initially: i = 0, j = 3
+After Iteration ①: j = 2
+After Iteration ②: j = 1
+After Iteration ③: i = 1
+After Iteration ④: j = 0
+After Iteration ⑤: i = 2
+After Iteration ⑥: j = -1, Not Found</code></pre>
+      <ul>
+        <li>For x = 29: j goes 3 → 2 → 1, then i goes 0 → 1 → 2, and the fifth iteration finds it.</li>
+        <li>Each iteration changes either the column or the row, so at most R + C steps: O(R + C).</li>
+        <li><strong>Optimisation:</strong> the top left element is always the smallest and the bottom right the greatest, so if x is smaller than the top left or greater than the bottom right, print "Not Found" immediately.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the efficient walkthrough for x = 29 ends "Found at (2, 3)"; the position is (2, 1), as on the first board and in the transcript (j stops at 1). <code>&amp;&amp;</code> is written <code>$$</code>. The description lists database querying, efficient search algorithms and optimisation problems as uses.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MjI2MQ%3D%3D" target="_blank" rel="noopener">Median of a Row Wise Sorted Matrix</a> · <strong>No transcript</strong> on this video. Notes from the board (a frame every 10 seconds, then every 5 seconds over the dry run, plus close-ups) and the course Description. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Find the median of a matrix whose rows are each sorted. The Description: the median is the middle value of a set of data, a measure of central tendency.</p>
+<pre><code class="language-plaintext">Median of a Row-wise Sorted Matrix
+I/P: mat[][] = [ 1 10 20          Assumptions:
+                15 25 35          ⊛ Odd Sized Matrix
+                 5 30 40 ]        ⊛ All Distinct Elements
+O/P: 20      // 1, 5, 10, 15, (20), 25, 30, 35, 40
+
+I/P: mat[][] = [  2   4   6   8  10
+                  1   3   5   7   9
+                100 200 400 500 800 ]
+O/P: 8       // 1, 2, 3, 5, 6, 7, (8), 9, 10, 100, 200, 400, 500, 800</code></pre>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/article/NzY2Ng%3D%3D" target="_blank" rel="noopener">Median of a Row Wise Sorted Matrix</a></p>
+<ul>
+<li>Find the median of a row-wise sorted r × c matrix, assuming r·c is odd.</li>
+<li><strong>Simple method:</strong> store all elements in an array of size r·c, then sort it and take the median in O(r·c log(r·c)), or use a linear-time selection approach in O(r·c). Auxiliary space O(r·c) either way.</li>
+<li><strong>Efficient, binary search:</strong> for a number to be the median, exactly n/2 numbers must be less than it. Find min (comparing each row's first element) and max (each row's last element), binary search the range min to max, and for each mid count the numbers ≤ mid with upper_bound() in each row: if fewer than required, the median is greater than mid, else it is ≤ mid.</li>
+<li>Time O(32 · r · log c): upper_bound takes log c per row, and with 32-bit numbers the binary search over min to max takes at most log₂(2³²) = 32 steps. Auxiliary space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution: O(rc log rc)</h4>
+<pre><code class="language-plaintext">Naive Solution: ① Put all elements in an array        O(r*c)
+   [ 1 10 20
+    15 25 30
+     5  8 40 ]
+   arr[] = {1, 10, 20, 15, 25, 30, 5, 8, 40}
+② Sort the array
+   arr[] = {1, 5, 8, 10, 15, 20, 25, 30, 40}
+③ Return the middle element of the sorted array.
+                                                       O(rc log rc)</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient: O(r * log(max − min) * log c)</h4>
+      <p>From the Description: find the minimum (comparing the first element of each row) and maximum (comparing the last element of each row). Binary search on the range of numbers from min to max: take mid and count the numbers ≤ mid, using upper_bound() in each row. For a number to be the median, (r·c)/2 numbers must be smaller than it; if the count is less than required, the median is greater than mid, else it is ≤ mid.</p>
+<pre><code class="language-cpp">int matMed(int mat[][MAX], int r, int c)
+{
+    int min = mat[0][0], max = mat[0][c-1];
+    for(int i=1; i&lt;r; i++)                                      // Θ(r)
+    {   if(mat[i][0] &lt; min) { min = mat[i][0]; }
+        if(mat[i][c-1] &gt; max) { max = mat[i][c-1]; }
+    }
+    int medPos = (r*c + 1)/2;
+    while(min &lt; max)
+    {   int mid = (min + max)/2;
+        int midPos = 0;
+        for(int i=0; i&lt;r; i++)
+            midPos += upper_bound(mat[i], mat[i]+c, mid) - m[i];
+        if(midPos &lt; medPos)
+            min = mid+1;
+        else
+            max = mid;
+    }
+    return min;
+}
+// O(log(max-min) * r * log₂c)</code></pre>
+<pre><code class="language-plaintext">[  5 10 20 30 40
+   1  2  3  4  6         medPos = 8
+  11 13 15 17 19 ]
+min = 1,  max = 40
+  mid = 20
+  midPos = 3 + 5 + 5 = 13
+min = 1,  max = 20
+  mid = 10
+  midPos = 2 + 5 + 0 = 7
+min = 11, max = 20
+  mid = 15
+  midPos = 2 + 5 + 3 = 10
+…
+min = 11, …
+  mid = 12
+  midPos = 2 + 5 + …
+min = 11, max = 12
+  mid = 11
+  midPos = 2 + 5 + 1
+         = 8
+min = 11, max = 11</code></pre>
+      <p>The loop ends with min = max = 11, the median. The board labels the complexity: the max − min term is the maximum and minimum element; the board also writes O(r*c) beneath it.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong> <code>upper_bound</code> is written "ubber_bound" and the subtraction uses <code>m[i]</code> for <code>mat[i]</code>; the first loop's header uses ":" style separators. One row of the dry run (between mid = 15 and mid = 12) is hidden in every frame; the next video's board shows the full dry run. The description also links C++ and C# code on the GfG IDE; those weren't opened.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/video/MjI2Mw%3D%3D" target="_blank" rel="noopener">Median of a Row Wise Sorted Matrix Java</a> · <strong>No transcript</strong> on this video. Notes from the board (a frame every 20 seconds plus close-ups) and the course Description. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The same problem, assumptions (odd-sized matrix, all distinct elements), examples and naive solution as the previous video; this one gives the efficient code in Java.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Efficient (Java)</h4>
+      <p>The C++ upper_bound is replaced by <code>Arrays.binarySearch</code> on each row: <code>pos</code> is its result + 1, and <code>Math.abs(pos)</code> is added to midPos.</p>
+<pre><code class="language-java">int matMed(int mat[][], int r, int c)
+{
+    int min = mat[0][0], max = mat[0][c-1];
+    for(int i=1; i&lt;r; i++)                                  // Θ(r)
+    {   if(mat[i][0] &lt; min) { min = mat[i][0]; }
+        if(mat[i][c-1] &gt; max) { max = mat[i][c-1]; }
+    }
+    int medPos = (r*c + 1)/2;
+    while(min &lt; max)
+    {   int mid = (min + max)/2, midPos = 0;
+        for(int i=0; i&lt;r; i++)
+        {   int pos = Arrays.binarySearch(mat[i], mid) + 1;
+            midPos += Math.abs(pos);
+        }
+        if(midPos &lt; MedPos)
+            min = mid+1;
+        else
+            max = mid;
+    }
+    return min;
+}
+// lo… * r * log(max-min)</code></pre>
+<pre><code class="language-plaintext">[  5 10 20 30 40
+   1  2  3  4  6         medPos = 8
+  11 13 15 17 19 ]
+min = 1,  max = 40
+  mid = 20
+  midPos = 3 + 5 + 5 = 13
+min = 1,  max = 20
+  mid = 10
+  midPos = 2 + 5 + 0 = 7
+min = 11, max = 20
+  mid = 15
+  midPos = 2 + 5 + 3 = 10
+min = 11, max = 15
+  mid = 13
+  midPos = 2 + 5 + 2 = 9
+min = 11, max = 13
+  mid = 12
+  midPos = 2 + 5 + 1 = 8
+min = 11, max = 12
+  mid = 11
+  midPos = 2 + 5 + 1
+         = 8
+min = 11, max = 11</code></pre>
+      <p>The median is 11.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong> the comparison uses <code>MedPos</code> where the variable is <code>medPos</code>; the complexity note is partly covered ("lo… * r * log(max-min)"). Why <code>Math.abs(pos)</code> gives the count isn't explained on the board, and there is no transcript. The description is the same as the previous video's.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Matrix-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (15 problems, in course order), plus the three Articles-tab items that don't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/adding-two-matrices3512" target="_blank" rel="noopener">Adding two matrices</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/multiply-the-matrices-1587115620" target="_blank" rel="noopener">Multiply 2 Matrices</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/print-matrix-in-snake-pattern-1587115621" target="_blank" rel="noopener">Matrix Snake Pattern</a></td><td>Easy</td><td>Video 5</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/boundary-traversal-of-matrix-1587115620" target="_blank" rel="noopener">Matrix Boundary Traversal</a></td><td>Easy</td><td>Video 6</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/transpose-of-matrix-1587115621" target="_blank" rel="noopener">Transpose of Matrix</a></td><td>Easy</td><td>Video 7</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/rotate-by-90-degree-1587115621" target="_blank" rel="noopener">Rotate by 90 degree</a></td><td>Medium</td><td>Video 8</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/spirally-traversing-a-matrix-1587115621" target="_blank" rel="noopener">Spirally Traversing Matrix</a></td><td>Medium</td><td>Video 9</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/search-in-a-matrix-1587115621" target="_blank" rel="noopener">Search in Sorted Matrix</a></td><td>Medium</td><td>Video 10</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/determinant-of-a-matrix-1587115620" target="_blank" rel="noopener">Determinant of a Matrix</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/sum-of-upper-and-lower-triangles-1587115621" target="_blank" rel="noopener">Sum of upper and lower triangles</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/exchange-matrix-columns-1587115620" target="_blank" rel="noopener">Exchange matrix columns</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/reversing-the-columns-of-a-matrix-1587115621" target="_blank" rel="noopener">Reversing the columns of a Matrix</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>13</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/reversing-the-rows-of-a-matrix-1587115621" target="_blank" rel="noopener">Reverse Order of Rows in Matrix</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>14</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/boolean-matrix-problem-1587115620" target="_blank" rel="noopener">Boolean Matrix</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>15</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/problem/make-matrix-beautiful-1587115620" target="_blank" rel="noopener">Make Matrix Beautiful</a></td><td>Medium</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/article/MjI2NA%3D%3D" target="_blank" rel="noopener">Matrix Operations (Addition, Subtraction, Multiplication)</a></p>
+<ul>
+<li><strong>Addition:</strong> A<sub>m×n</sub> + B<sub>m×n</sub> = C<sub>m×n</sub>, each element the sum of the corresponding elements: {{1, 2}, {3, 4}} + {{1, 2}, {3, 4}} = {{2, 4}, {6, 8}}. Commutative and associative; A, B and A + B have the same order; it can't be computed if the orders differ. O(m·n).</li>
+<li><strong>Subtraction:</strong> element-wise differences, giving {{0, 0}, {0, 0}} for the same matrices. Non-commutative (A − B ≠ B − A) and non-associative; same order requirement. O(m·n).</li>
+<li><strong>Multiplication:</strong> A<sub>m×n</sub> × B<sub>n×p</sub> = C<sub>m×p</sub>: the columns of A must equal the rows of B. C<sub>11</sub> is the first row of A times the first column of B, summed. {{1, 2}, {3, 4}} × {{1, 2}, {3, 4}} = {{7, 10}, {15, 22}}.</li>
+<li>Multiplication is always non-commutative and associative; A × B existing does not imply B × A exists. O(m·n·p); the result has order m × p (the article writes O(m·p)).</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/article/MjYwMQ%3D%3D" target="_blank" rel="noopener">Sample Problems on Matrix</a></p>
+<ul>
+<li><strong>Problem #1, Transpose of a Matrix:</strong> for an m × n matrix A, create an auxiliary matrix B of size n × m and place A[j][i] at B[i][j]. Time O(m·n), auxiliary space O(m·n).</li>
+<li><strong>Problem #2, Search in a Row-wise and Column-wise Sorted Matrix:</strong> reduce the search space by eliminating rows and columns, starting from the top-right corner (i = 0, j = n − 1). Equal: return the position. Target less than the current value: the rest of the current column is greater, so ignore the column. Target greater: the rest of the current row is smaller, so ignore the row.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Matrix/article/MjYyMA%3D%3D" target="_blank" rel="noopener">Determinant of a Matrix | Explanation</a></p>
+<ul>
+<li>The determinant is a special number defined only for square matrices. It represents the matrix as a real number and is used in calculus and algebra, e.g. to solve systems of linear equations and find the inverse of a matrix.</li>
+<li>Calculation: for each element of the first row (or column), take its cofactor (the matrix left after removing that element's row and column), multiply the element by the cofactor's determinant, and add these with alternating signs. Base case: a 1 × 1 matrix's determinant is its single value. The article shows 2 × 2 and 3 × 3 examples.</li>
+<li>For N × N: determinantOfMatrix(matrix, dimension) loops over the first row, gets each element's cofactor with getCofactor(), and recursively calls determinantOfMatrix() on the cofactor and its dimension, combining with alternate signs.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -13271,7 +14369,21 @@ const TRACKS = [
       ["Radix Sort", "15:25"],
       ["Bucket Sort", "17:12"]
     ] },
-  { id: "DSASP-Matrix", slug: "matrix", name: "Matrix", counts: [12, 11, 15, 5, 0] },
+  { id: "DSASP-Matrix", slug: "matrix", name: "Matrix", counts: [12, 11, 15, 5, 0],
+    videos: [
+      ["Multidimensional array in CPP", "14:07"],
+      ["Passing 2D arrays as arguments in CPP", "11:09"],
+      ["Multidimensional array in Java", "7:41"],
+      ["Passing 2D arrays as arguments in Java", "2:38"],
+      ["Matrix in Snake Pattern", "3:29"],
+      ["Matrix Boundary Traversal", "5:24"],
+      ["Transpose of a Matrix", "6:13"],
+      ["Rotate Matrix Anti-clockwise by 90", "8:03"],
+      ["Spiral Traversal of Matrix", "10:08"],
+      ["Search in Row-wise and Column-wise sorted matrix", "11:53"],
+      ["Median of a Row Wise Sorted Matrix", "13:27"],
+      ["Median of a Row Wise Sorted Matrix Java", "13:22"]
+    ] },
   { id: "DSASP-Hashing", slug: "hashing", name: "Hashing", counts: [29, 23, 22, 10, 1] },
   { id: "DSASP-Strings", slug: "strings", name: "Strings", counts: [19, 12, 26, 10, 0] },
   { id: "DSASP-LinkedList", slug: "linked-list", name: "Linked List", counts: [54, 40, 25, 10, 1] },
