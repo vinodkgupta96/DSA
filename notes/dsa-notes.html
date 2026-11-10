@@ -21163,6 +21163,1597 @@ return -1;   // no intersection</code></pre>
   </section>
 </template>
 
+<template id="DSASP-Stack-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTk5OQ%3D%3D" target="_blank" rel="noopener">Stack Data Structure</a> · <strong>No transcript</strong>: notes from the board (a frame every 20 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A stack is a structure where items are inserted and removed at one end, the <strong>top</strong>. Board examples:</p>
+    <ul>
+      <li>push(10), push(20), push(30) on an empty stack gives 10, 20, 30 with 30 on top.</li>
+      <li>pop() on that stack removes 30, then 20, then 10, leaving it empty.</li>
+    </ul>
+    <p><strong>Stack operations</strong> (board):</p>
+    <ul>
+      <li><code>isEmpty()</code>: returns true if the stack is empty, else false.</li>
+      <li><code>push(x)</code>: inserts an item to the top of the stack.</li>
+      <li><code>pop()</code>: removes an item from the top.</li>
+      <li><code>peek()</code>: returns the top item.</li>
+      <li><code>size()</code>: returns the size of the stack.</li>
+    </ul>
+    <p><strong>Underflow</strong>: when pop() or peek() is called on an empty stack. <strong>Overflow</strong>: when push is called on a full stack.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NzM2Mw%3D%3D" target="_blank" rel="noopener">Stack Data Structure</a></p>
+<ul>
+<li>A linear data structure following <strong>LIFO</strong> (Last In First Out): the element inserted last comes out first — like a pile of plates, where the last plate put on top is the first removed (the bottom one stays longest, so it can also be seen as FILO).</li>
+<li>Basic operations: <code>push()</code> inserts (on a full stack: <strong>Overflow</strong>); <code>pop()</code> removes, items coming out in the reverse of the order pushed (on an empty stack: <strong>Underflow</strong>); <code>top()</code> returns the top element; <code>isEmpty()</code>; <code>size()</code>. Complexity table: push, pop, isEmpty and size are all O(1).</li>
+<li><strong>Types of stacks:</strong> a <em>register stack</em> is a memory element in the memory unit handling only a small amount of data — its height is always limited, the register stack being very small compared to memory; a <em>memory stack</em> handles a large amount of memory data, with a flexible height.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Example usage (board)</h4>
+<pre><code>Stack s
+s.push(15)
+s.push(20)
+s.push(35)
+print(s.peek())      // 35
+s.pop()
+print(s.peek())      // 20
+print(s.size())      // 2
+s.push(5)
+print(s.peek())      // 5
+print(s.isEmpty())   // false</code></pre>
+      <p>The stack goes 15 → 15, 20 → 15, 20, 35; pop leaves 15, 20; push(5) gives 15, 20, 5. The teacher also writes <code>if s == []</code> beside it as an emptiness check. The course Description links code for two methods, "using List" and "using deque".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTk4MA%3D%3D" target="_blank" rel="noopener">Array Implementation of Stack in C++</a> · <strong>No transcript</strong>: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Build your own stack in C++ on an array, with all the stack operations, and handle overflow and underflow (Description).</p>
+    <p>Board usage example: <code>MyStack s(10);</code> then push(5), push(15), push(25). size() gives 3, peek() 25, pop() 25. Then push(35); peek() gives 35 and isEmpty() gives 0.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NjkxNw%3D%3D" target="_blank" rel="noopener">Array Implementation of Stack</a></p>
+<ul>
+<li>Design your own stack class on an array with push, pop, peek, etc. (C++ and Java code).</li>
+<li><strong>Advantages:</strong> easy to implement; memory is saved as pointers are not involved. <strong>Disadvantages:</strong> not dynamic — it doesn't grow and shrink with needs at runtime. A dynamic-size stack can be built with vector in C++ and ArrayList in Java.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Fixed-capacity array</h4>
+<pre><code class="language-cpp">struct MyStack
+{
+    int *arr;
+    int cap;
+    int top;
+    MyStack(int c)
+    {   cap = c;
+        arr = new int[cap];
+        top = -1;
+    }
+    void push(int x)
+    {   top++;
+        arr[top] = x;
+    }
+    int pop()
+    {   int res = arr[top];
+        top--;
+        return res;
+    }
+    int peek()
+    {   return arr[top]; }
+    int size()
+    {   return (top + 1); }
+    bool isEmpty()
+    {   return (top == -1); }
+};  // End of Structure MyStack
+
+int main()
+{   MyStack s(5);
+    s.push(5);
+    s.push(10);
+    s.push(20);
+    cout &lt;&lt; s.pop() &lt;&lt; endl;
+    cout &lt;&lt; s.size() &lt;&lt; endl;
+    cout &lt;&lt; s.peek() &lt;&lt; endl;
+    cout &lt;&lt; s.isEmpty() &lt;&lt; endl;
+    return 0;
+}</code></pre>
+      <p><code>top</code> is the index of the top item, starting at −1 for an empty stack, so the size is top + 1. (The main() push lines were partly hidden in the frames.)</p>
+      <p><strong>Problems with this code</strong> (board):</p>
+      <ol>
+        <li>It does not handle overflow and underflow: pop() and peek() on an empty stack, or adding 6 items to a stack of capacity 5.</li>
+        <li>We need to provide the capacity initially; there is no dynamic resizing.</li>
+      </ol>
+      <p>The teacher then adds guards: in push, <code>if(top == cap-1) { ... }</code>; in pop and peek, <code>if(top == -1) { ... }</code>. The bodies are written as "…" on the board.</p>
+    </div>
+    <div class="approach">
+      <h4>Using vector (dynamic size)</h4>
+<pre><code class="language-cpp">struct MyStack
+{
+    vector&lt;int&gt; v;
+    void push(int x)
+    {   v.push_back(x); }
+    int pop()
+    {   int res = v.back();
+        v.pop_back();
+        return res;
+    }
+    int size()
+    {   return v.size(); }
+    bool isEmpty()
+    {   return v.empty(); }
+    int peek()
+    {   return v.back(); }
+};  // End of Structure</code></pre>
+      <p>The vector grows as needed, so no capacity is given and there is no overflow. The course Description links both versions ("Using Array" and "Using Vector").</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTk4MQ%3D%3D" target="_blank" rel="noopener">Array Implementation of Stack in Java</a> · <strong>No transcript</strong>: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The Java version of the previous video: your own stack class on an array, with all the stack operations, handling overflow and underflow (Description).</p>
+    <p>Board usage example: <code>MyStack s = new MyStack(10);</code> then push(5), push(15), push(25). peek() gives 25 and pop() leaves 15, 5. Then push(35), size() and isEmpty().</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Fixed-capacity array</h4>
+<pre><code class="language-java">class MyStack
+{   int arr[];
+    int cap;
+    int top;
+    MyStack(int c)
+    {   top = -1;
+        cap = c;
+        arr = new int[cap];
+    }
+    void push(int x)
+    {   top++;
+        arr[top] = x;
+    }
+    int pop()
+    {   int res = arr[top];
+        top--;
+        return res;
+    }
+    int peek()
+    {   return arr[top]; }
+    int size()
+    {   return top + 1; }
+    boolean isEmpty()
+    {   return (top == -1); }
+}
+
+class Test
+{   public static void main(String args[])
+    {   MyStack s = new MyStack(5);
+        s.push(10);
+        s.push(20);
+        System.out.println(s.pop());
+        s.push(30);
+    }
+}</code></pre>
+      <p>Board trace (capacity 5): top = −1; push(10) gives [10] with top = 0; push(20) gives [10, 20] with top = 1; pop() prints 20 and top = 0; push(30) gives [10, 30] with top = 1.</p>
+      <p><strong>Problems with this implementation</strong> (board, partly behind the teacher): it doesn't handle underflow and overflow, and there is no dynamic resizing. The teacher adds guards <code>if(top == cap-1) { ... }</code> in push and <code>if(top == -1) { ... }</code> in pop and peek, with bodies left as "…".</p>
+    </div>
+    <div class="approach">
+      <h4>ArrayList-based implementation</h4>
+<pre><code class="language-java">class MyStack
+{   ArrayList&lt;Integer&gt; al = new ArrayList&lt;&gt;();
+    void push(int x)
+    {   al.add(x); }
+    int pop()
+    {   int res = al.get(al.size() - 1);
+        al.remove(al.size() - 1);
+        return res;
+    }
+    int peek()
+    {   return al.get(al.size() - 1); }
+    boolean isEmpty()
+    {   return al.isEmpty(); }
+    int size()
+    {   return al.size(); }
+}</code></pre>
+      <p>The top is the last element of the ArrayList, which resizes itself. The course Description links both versions ("Using Array" and "Using ArrayList").</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the ArrayList version heads isEmpty with <code>bool</code>; Java needs <code>boolean</code>, as in the array version.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTk4NQ%3D%3D" target="_blank" rel="noopener">Linked List Implementation of Stack in C++</a> · <strong>No transcript</strong>: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Build your own stack class on a linked list, with all the stack operations, handling overflow and underflow (Description).</p>
+    <p>Board usage example: <code>MyStack s;</code> then push(10), push(20), push(30). peek() gives 30, pop() gives 30 (leaving 20, 10) and size() gives 2. Then push(40); peek() gives 40 and isEmpty() gives 0.</p>
+    <p>The board draws a list with <code>head</code> and <code>tail</code> and the operations push(x), pop(), size(), isEmpty(), peek(). The implementation inserts and removes at the <strong>head</strong>, so the head is the top of the stack.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NjkxOA%3D%3D" target="_blank" rel="noopener">Linked List implementation of Stack</a></p>
+<ul>
+<li>The stack keeps a <code>top</code> pointer, the "head" of the list, where pushing and popping happen. The first node has null in its link field, the second links to the first, and so on; the last node's address is in top.</li>
+<li>Advantage over arrays: the stack can shrink or grow as needed; an array limits the maximum capacity, which can lead to stack overflow, while here each node is allocated dynamically, so overflow is not possible.</li>
+<li><strong>push()</strong>: initialise a node, set its data, link it to the top of the list and update top. <strong>pop()</strong>: if no node, return; else point temp to the top node, move top forward one step and free temp. <strong>peek()</strong>: if no node, return; else the top node's value. <strong>display()</strong>: traverse a temp pointer from top until NULL, printing each value.</li>
+<li>Time O(1) for push, pop and peek — no traversal, only the current pointer. Auxiliary space O(N) for a stack of size N.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation</h4>
+<pre><code class="language-cpp">struct Node
+{   int data;
+    Node *next;
+    Node(int d)
+    {   data = d;
+        next = NULL;
+    }
+};
+
+struct MyStack
+{   Node *head;
+    int sz;
+    MyStack()
+    {   head = NULL; sz = 0; }
+    void push(int x)
+    {   Node *temp = new Node(x);
+        temp-&gt;next = head;
+        head = temp;
+        sz++;
+    }
+    int pop()
+    {   if(head == NULL)
+            return INT_MAX;
+        int res = head-&gt;data;
+        Node *temp = head;
+        head = head-&gt;next;
+        delete(temp);
+        sz--;
+        return res;
+    }
+    int size()
+    {   return sz; }
+    bool isEmpty()
+    {   return (head == NULL); }
+    int peek()
+    {   if(head == NULL)
+            return INT_MAX;
+        return head-&gt;data;
+    }
+};</code></pre>
+      <p>Board trace: initially sz = 0 and head = NULL.</p>
+      <ul>
+        <li>push(10): sz = 1, 10 → NULL.</li>
+        <li>push(20): sz = 2, 20 → 10 → NULL.</li>
+        <li>push(30): sz = 3, 30 → 20 → 10 → NULL.</li>
+        <li>pop(): sz = 2, 20 → 10 → NULL, with head at 20.</li>
+      </ul>
+      <p>Underflow (pop or peek on an empty stack) returns <code>INT_MAX</code>. There is no overflow, since nodes are allocated as needed. The lines of peek after <code>if(h…</code> were behind the teacher; they're shown here following pop.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTk4NA%3D%3D" target="_blank" rel="noopener">Linked List Implementation of Stack in Java</a> · <strong>No transcript</strong>: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The Java version of the previous video: a stack class on a linked list, pushing and popping at the head (Description: all the essential operations, with overflow and underflow handled).</p>
+    <p>Board usage example: <code>MyStack s = new MyStack();</code> then push(10), push(20), push(30). peek() gives 30, pop() gives 30; then push(40), size(), isEmpty().</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation</h4>
+<pre><code class="language-java">class Node
+{   int data;
+    Node next;
+    Node(int d)
+    {   data = d;
+        next = null;
+    }
+} // End of Node
+
+class MyStack
+{   Node head;
+    int sz;
+    MyStack()
+    {   head = null;
+        sz = 0;
+    }
+    int size()
+    {   return sz; }
+    boolean isEmpty()
+    {   return (head == null); }
+    void push(int x)
+    {   Node temp = new Node(x);
+        temp.next = head;
+        head = temp;
+        sz++;
+    }
+    int pop()
+    {   if(head == null)
+            return Integer.MAX_VALUE;
+        int res = head.data;
+        head = head.next;
+        sz--;
+        return res;
+    }
+    int peek()
+    {   if(head == null)
+            return Integer.MAX_VALUE;
+        return head.data;
+    }
+} // End of MyStack Class</code></pre>
+      <p>Board trace: <code>new MyStack()</code> gives head = null and sz = 0.</p>
+      <ul>
+        <li>push(10): 10 → null, sz = 1.</li>
+        <li>push(20): 20 → 10 → null, sz = 2.</li>
+        <li>push(30): 30 → 20 → 10 → null, sz = 3.</li>
+        <li>pop(): 20 → 10 → null, sz = 2.</li>
+      </ul>
+      <p>Underflow returns <code>Integer.MAX_VALUE</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTQxMzI%3D" target="_blank" rel="noopener">Applications of Stack</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus a close-up). The transcript is auto-generated and noisy, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Use a stack wherever items must be processed in <strong>last in, first out</strong> (LIFO) order. Applications on the board:</p>
+    <ol>
+      <li><strong>Function calls.</strong> fun1() calls fun2(), which calls fun3(); fun3 finishes first, then control returns to fun2, then fun1. Languages keep a <em>function call stack</em> of records holding each function's local data and the line to continue from. With a main function, main is always at the bottom.</li>
+      <li><strong>Balanced parenthesis</strong>, e.g. <code>[(a+b) * {c + (d-e)}]</code>. Compilers check whether brackets are balanced; the last bracket opened must close first (LIFO), so a stack fits naturally. Without one it becomes very difficult. (Separate video.)</li>
+      <li><strong>Reversing items.</strong> Push A, B, C, then pop one by one to get C, B, A.</li>
+      <li><strong>Infix to postfix/prefix.</strong> Infix puts the operator between its operands, prefix first and postfix at the end. Infix is human-readable but hard for a compiler: precedence, associativity and brackets all matter. Postfix and prefix need none of those, so compilers convert to them, and the conversion uses a stack.</li>
+      <li><strong>Evaluation of postfix/prefix</strong> is also done with a stack-based algorithm.</li>
+      <li><strong>Stock span problem</strong> and its variants (previous greater, next greater, largest rectangular area in a histogram). Separate videos; they have many real-world applications.</li>
+      <li><strong>Undo/redo, or forward/backward in a browser.</strong> These follow LIFO order. Typing a, b, c then undo removes c, undo again removes b, and redo brings back b. With two stacks: visiting abc.com, bcd.com and cde.com pushes each; backward pops cde.com and pushes it on a second stack, so forward can bring it back.</li>
+    </ol>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NjkxNQ%3D%3D" target="_blank" rel="noopener">Applications of Stack</a></p>
+<ul>
+<li><strong>Applications:</strong> evaluating expressions with operands and operators; matching tags in HTML and XML; undo in text editors; infix-to-postfix and other notation conversions; backtracking and parenthesis matching; function calls (storing activation records and deleting them on return); reversing data or strings; managing recursion (keeping the previous state of each call).</li>
+<li><strong>Real life:</strong> CD/DVD stand; a stack of books in a shop; undo/redo in editors; a web browser's history; call logs, e-mails and Google Photos galleries; YouTube downloads and notifications shown in LIFO order (latest first).</li>
+<li><strong>Advantages:</strong> manages LIFO data; systematic memory management; used in many virtual machines like the JVM; a function's local variables and parameters are stored on the stack and automatically destroyed on return (efficient function management); more secure and reliable as they don't get corrupted easily; control over memory allocation and deallocation; cleans up objects automatically; converting infix to postfix/prefix in compilers' expression parsing, managing order of operations and parentheses.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>No code in this video. The rest of the track covers these applications: balanced parenthesis (video 9), stock span and its variants (videos 13–18), and infix/postfix/prefix (videos 21–27).</p>
+  </section>
+</template>
+
+<template id="DSASP-Stack-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/ODk1" target="_blank" rel="noopener">Stack in C++ STL</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A stack is LIFO: items are always inserted at the top and removed from the top. For example, 10, 20, 30 becomes 10, 20 after a removal, and 10, 20, 40 after inserting 40.</p>
+    <p>The C++ STL class <code>stack</code> (<code>#include &lt;stack&gt;</code>) provides:</p>
+    <ul>
+      <li><code>push()</code>: insert at the top.</li>
+      <li><code>pop()</code>: remove the top item.</li>
+      <li><code>top()</code>: the top item.</li>
+      <li><code>size()</code>: the number of elements.</li>
+      <li><code>empty()</code>: true if the stack is empty, else false.</li>
+    </ul>
+    <p><strong>Time complexities and internal working</strong> (board):</p>
+    <ul>
+      <li>push(), pop(), top(), size() and empty() are all O(1).</li>
+      <li>A stack can be implemented on any underlying container that provides <code>back()</code>, <code>size()</code>, <code>empty()</code>, <code>push_back()</code> and <code>pop_back()</code>. list, vector and deque all do; the default is <strong>deque</strong>.</li>
+      <li>Since stack is built on other containers and works only as an interface, it is called a <strong>container adapter</strong>, like queue and priority_queue. With any of the three underlying containers these operations are O(1), so the stack guarantees O(1).</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NjkxMw%3D%3D" target="_blank" rel="noopener">Stack in C++ STL</a></p>
+<ul>
+<li>The built-in class <code>stack</code>: <code>empty()</code>, <code>size()</code>, <code>top()</code> (a reference to the topmost element), <code>push(g)</code>, <code>pop()</code> (deletes the topmost element). All are O(1).</li>
+<li>It can be built on any structure providing <code>back()</code>, <code>size()</code>, <code>empty()</code>, <code>push_back()</code>, <code>pop_back()</code> — list, deque or vector; the default is <strong>deque</strong>. Acting as an interface over another container, it is a <strong>container adapter</strong> (others: queue, priority queue). Those operations are all O(1), so stack is guaranteed O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Example programs</h4>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;stack&gt;
+using namespace std;
+int main()
+{
+    stack&lt;int&gt; s;
+    s.push(10);
+    s.push(20);
+    s.push(30);
+    cout &lt;&lt; s.size() &lt;&lt; endl;   // 3
+    cout &lt;&lt; s.top() &lt;&lt; endl;    // 30
+    s.pop();
+    cout &lt;&lt; s.top() &lt;&lt; endl;    // 20
+    return 0;
+}</code></pre>
+<pre><code class="language-cpp">// same three pushes, then
+while(s.empty() == false)
+{
+    cout &lt;&lt; s.top() &lt;&lt; " ";
+    s.pop();
+}
+// Output: 30 20 10</code></pre>
+      <p>Traversing by printing and popping gives the items in the reverse of their insertion order, because the top is printed first.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTY4OQ%3D%3D" target="_blank" rel="noopener">Stack in Java Collections</a> · <strong>No transcript</strong>: notes from the board (a frame every 20 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The Collection framework provides a <code>Stack</code> class with push and pop, plus empty, search and peek (Description).</p>
+    <p>Hierarchy on the board: Collection → List → Vector → <strong>Stack</strong>, and Collection → Queue → Deque → <strong>ArrayDeque</strong>. Both Stack and ArrayDeque are circled as ways to get a stack, and the board code uses <code>ArrayDeque</code>, with the <code>Stack</code> line commented out. The course Description's code is titled "Stack Implementation using ArrayDeque".</p>
+    <p>The board writes O(1) beside the operations.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NjkxNA%3D%3D" target="_blank" rel="noopener">Stack in Java Collection</a></p>
+<ul>
+<li>The Collection framework's <code>Stack</code> class (LIFO) extends Vector — it is a subclass of Vector — and has one default constructor <code>Stack()</code> creating an empty stack.</li>
+<li>Methods: <code>push(element)</code>; <code>pop()</code> removes and returns the top (throws <code>EmptyStackException</code> on an empty stack); <code>peek()</code> returns the top without removing it; <code>empty()</code>; <code>search(element)</code> returns its position from the top, or −1.</li>
+<li>Note: Stack is a legacy, thread-safe class, so it has overhead when thread safety isn't needed; <strong>ArrayDeque</strong> is recommended for stacks as it is more efficient single-threaded.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Example</h4>
+<pre><code class="language-java">class GfG
+{   public static void main(String args[])
+    {   // Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+        ArrayDeque&lt;Integer&gt; s = new ArrayDeque&lt;&gt;();
+        s.push(10);
+        s.push(20);
+        s.push(30);
+        System.out.println(s.peek());   // 30
+        System.out.println(s.pop());    // 30
+        System.out.println(s.peek());   // 20
+    }
+}</code></pre>
+      <p>The stack goes 10 → 10, 20 → 10, 20, 30; pop leaves 10, 20. The second board pushes the same three items and prints <code>s.size()</code> (3) and <code>s.isEmpty()</code> (false).</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> after the pop the board draws the remaining stack as just 10, though 10 and 20 remain (the next peek prints 20).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/ODk4" target="_blank" rel="noopener">Balanced Parenthesis</a> · <strong>No transcript</strong>: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Check whether a string of brackets is balanced. There are six possible characters in the input string: <code>(</code>, <code>)</code>, <code>{</code>, <code>}</code>, <code>[</code> and <code>]</code>. Board examples:</p>
+    <ul>
+      <li><code>"([])"</code>: Yes.</li>
+      <li><code>"((())"</code>: No.</li>
+      <li><code>"([)]"</code>: No.</li>
+      <li><code>"{}([()])"</code>: Yes.</li>
+      <li><code>"(()))"</code>: No.</li>
+    </ul>
+    <p>Hint (board): we use a stack because of its LIFO nature. For <code>"([)]"</code>, after pushing <code>(</code> and <code>[</code> the top is <code>[</code>, which doesn't match <code>)</code>.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NjkxOQ%3D%3D" target="_blank" rel="noopener">Balanced Parenthesis</a></p>
+<ul>
+<li>Check whether the pairs and orders of {, }, (, ), [, ] are correct: <code>"[()]{}{[()()]()}"</code> is Balanced; <code>"[(])"</code> is Not Balanced — there is a closing ']' before the closing of '('.</li>
+<li>Push every opening bracket; on a closing bracket, pop and check that the popped character is the matching opening bracket, else Not Balanced. After the traversal, any opening bracket left in the stack means Not Balanced. Time O(N), auxiliary space O(N) for the stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation: O(n) time, O(n) auxiliary space</h4>
+<pre><code class="language-java">boolean matching(char a, char b)
+{   return ((a == '(' &amp;&amp; b == ')') ||
+            (a == '{' &amp;&amp; b == '}') ||
+            (a == '[' &amp;&amp; b == ']'));
+}
+
+boolean isBalanced(String str)
+{   Deque&lt;Character&gt; s = new ArrayDeque&lt;&gt;();
+    for(int i = 0; i &lt; str.length(); i++)
+    {   char x = str.charAt(i);
+        if(x == '(' || x == '{' || x == '[')
+            s.push(x);
+        else
+        {   if(s.isEmpty() == true)
+                return false;
+            else if(matching(s.peek(), x) == false)
+                return false;
+            else
+                s.pop();
+        }
+    }
+    return (s.isEmpty() == true);
+}</code></pre>
+<pre><code class="language-cpp">bool isBalanced(string &amp;str)
+{
+    stack&lt;char&gt; s;
+    for(char x : str)
+    {
+        if(x == '(' || x == '{' || x == '[')
+            s.push(x);
+        else
+        {   if(s.empty() == true)
+                return false;
+            if(matching(s.top(), x) == false)
+                return false;
+            else
+                s.pop();
+        }
+    }
+    return (s.empty() == true);
+}</code></pre>
+      <ul>
+        <li>Push every opening bracket.</li>
+        <li>On a closing bracket: if the stack is empty, or its top doesn't match, return false; otherwise pop.</li>
+        <li>At the end the string is balanced only if the stack is empty.</li>
+      </ul>
+      <p><code>matching</code> is the same in C++ with <code>bool</code>.</p>
+      <p>Board trace of <code>"[()]"</code>, iteration by iteration:</p>
+      <ol>
+        <li>Push <code>[</code>.</li>
+        <li>Push <code>(</code>.</li>
+        <li><code>)</code> matches the top, so pop.</li>
+        <li><code>]</code> matches, so pop: the stack is empty, so it's balanced.</li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong></p>
+      <ul>
+        <li><code>&amp;&amp;</code> is drawn like "$$" in both <code>matching</code> functions.</li>
+        <li>The Java version writes <code>str.CharAt(i)</code>; the method is <code>charAt</code>.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/NzAyNQ%3D%3D" target="_blank" rel="noopener">Implement two Stacks in an Array</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Design a class that implements two stacks in a single array of given capacity. It supports push1, push2, pop1, pop2, size1 and size2. One reason for this requirement is cache friendliness: one contiguous array gives locality of reference, while two separate stack objects would be created at different locations.</p>
+    <p>The class skeleton shown first has <code>int *arr; int cap;</code> and a constructor <code>TwoStacks(int n)</code>, plus the six methods. In C++ members are private by default, so the methods need <code>public:</code>; use a pointer for the dynamic array. The teacher suggests improving the simple <code>void</code>/<code>int</code> versions:</p>
+    <ul>
+      <li>push should return a boolean, false when the array is full.</li>
+      <li>pop should return an <code>Integer</code> in Java, or a pointer in C++, so it can return null when the stack is empty. Alternatively, print "stack underflow" and exit.</li>
+    </ul>
+    <p><strong>Naive solution:</strong> divide the array from the middle, using the first half for stack 1 and the second half for stack 2. This is an inefficient use of space: if we add 5 items to stack 1 and none to stack 2, we can't add more to stack 1 even though the array has space.</p>
+    <p><strong>Idea for the efficient solution:</strong> begin both stacks from the two corners of the array, top1 = −1 and top2 = n, growing towards each other. Now items can be inserted in either stack as long as there is space. Board: stack 1 holds 10…60 in indexes 0–5 of a size-10 array, so top1 = 5 and top2 = 10.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NjkyMA%3D%3D" target="_blank" rel="noopener">Implement two Stacks in an Array</a></p>
+<ul>
+<li><code>twoStacks</code> uses one array and supports push1, push2, pop1 and pop2 (pop returns the popped element); it should be space efficient.</li>
+<li><strong>Dividing the space into two halves:</strong> arr[0] to arr[n/2] for stack 1 and arr[(n/2)+1] to arr[n−1] for stack 2. In the article's version push1 checks top1 &gt; 0, stores at top1 and decrements it; push2 checks top2 &lt; n−1, stores and increments; otherwise Stack Overflow. pop1 checks top1 ≤ n/2 and pop2 checks top2 ≥ (n+1)/2, else Stack Underflow. Push and pop O(1), auxiliary space O(N). Problem: with the first half full, stack 1 overflows even though the second half has free space.</li>
+<li><strong>Starting from the endpoints:</strong> stack 1 starts at index 0 and stack 2 at index n−1, growing (or shrinking) in opposite directions. Overflow: check for space between the two top elements; underflow: check whether each top is within 0 to n−1. Push and pop O(1), auxiliary space O(N).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Efficient implementation (Java): O(1) per operation</h4>
+<pre><code class="language-java">class TwoStacks
+{   int arr[];
+    int cap, top1, top2;
+    TwoStacks(int n)
+    {   cap = n;
+        top1 = -1;
+        top2 = n;
+        arr = new int[n];
+    }
+    boolean push1(int x)
+    {   if(top1 &lt; top2 - 1)
+        {   top1++;
+            arr[top1] = x;
+            return true;
+        }
+        return false;
+    }
+    boolean push2(int x)
+    {   if(top1 &lt; top2 - 1)
+        {   top2--;
+            arr[top2] = x;
+            return true;
+        }
+        return false;
+    }
+    Integer pop1()
+    {   if(top1 &gt;= 0)
+        {   int x = arr[top1];
+            top1--;
+            return x;
+        }
+        return null;
+    }
+    Integer pop2()
+    {   if(top2 &lt; cap)
+        {   int x = arr[top2];
+            top2++;
+            return x;
+        }
+        return null;
+    }
+    int size1()
+    {   return (top1 + 1); }
+    int size2()
+    {   return (cap - top2); }
+} // End of class</code></pre>
+      <ul>
+        <li><strong>Push:</strong> push1 does top1++ and push2 does top2−−, then stores the item.</li>
+        <li><strong>Pop:</strong> the opposite, top1−− and top2++.</li>
+        <li><strong>Overflow check</strong> (the condition people get wrong): a push is allowed only while <code>top1 &lt; top2 − 1</code>, i.e. at least one free slot. When top1 + 1 equals top2 the array is full. With this check no space is ever wasted: a single free slot can go to either stack.</li>
+        <li><strong>Sizes:</strong> size1 = top1 + 1, starting at 0 when top1 = −1. size2 = cap − top2: 5 − 5 = 0 initially, 5 − 4 = 1 after one push.</li>
+      </ul>
+      <p>Board trace: <code>new TwoStacks(5)</code> starts with top1 = −1 and top2 = 5; pushing 70 to stack 2 gives top2 = 4. The C++ code (linked in the description) differs only slightly: <code>public:</code>, <code>int *arr</code>, <code>bool</code>, and a pointer return type to allow null.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong></p>
+      <ul>
+        <li>push2 omits <code>arr[top2] = x;</code>; the transcript describes the item being added at index top2, as in push1.</li>
+        <li>The second pop is headed <code>pop1()</code> again; it's <code>pop2()</code>.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/NzAzMw%3D%3D" target="_blank" rel="noopener">Implement K Stacks in an Array in C++</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Implement k stacks inside a single array of capacity n. As before, this can be for cache friendliness and locality of reference.</p>
+    <ul>
+      <li>Operations: a constructor, <code>push(sn, x)</code>, <code>pop(sn)</code> and <code>isEmpty(sn)</code>, all in O(1).</li>
+      <li><code>sn</code> is the stack number, with values in the range [0, 1, 2, …, k−1].</li>
+    </ul>
+    <p><strong>Naive:</strong> divide the array into k equal parts, one per stack. If one part fills up you can't insert into that stack even when the other parts have space.</p>
+    <p><strong>Efficient idea:</strong> never waste a slot. The real items may be large objects (student, teacher, subject), but the helpers are integer arrays: two extra arrays and one extra variable.</p>
+    <ul>
+      <li><code>top</code> (size k): the index of each stack's top, −1 if empty.</li>
+      <li><code>next</code> (size n): for a used slot, the index of the item below it in its stack; for a free slot, the next free slot.</li>
+      <li><code>free_top</code>: the top of the stack of free slots.</li>
+    </ul>
+    <p>Initially every slot is free: free_top = 0 and next = [1, 2, 3, 4, −1] for n = 5.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NzM2NA%3D%3D" target="_blank" rel="noopener">Implement K Stacks in an Array</a></p>
+<ul>
+<li><code>kStacks</code> uses one array and supports <code>push(x, sn)</code> and <code>pop(sn)</code>, sn from 0 to k−1.</li>
+<li><strong>Method 1 (slots of size n/k):</strong> arr[0] to arr[n/k−1] for the first stack, and so on — inefficient: with k = 2 and n = 6, pushing a 4th element to the first stack overflows though 3 slots are free.</li>
+<li><strong>Method 2 (space efficient):</strong> two extra arrays — <code>top[]</code> (size k, index of each stack's top) and <code>next[]</code> (size n, index of the next item for items in arr[]) — plus a stack of free slots whose top is in the variable <code>free</code>. All top[] start at −1, next[i] = i+1, and free = 0. Extra integer arrays may not make much sense for integer stacks, but items can be large (stacks of employees or students, hundreds of bytes each), so the extra space is comparatively small.</li>
+<li>push() and pop() are O(1), and any free slot can take an item for any stack — no wastage of space. (The article also lists O(N) time for the initialising loop and O(N) auxiliary space.)</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation: O(1) push, pop, isEmpty</h4>
+<pre><code class="language-cpp">struct KStacks {
+    int *arr, *top, *next;
+    int k, free_top, cap;
+    KStacks(int k1, int n) {
+        free_top = 0;
+        cap = n;
+        k = k1;
+        arr = new int[n];
+        top = new int[k];
+        fill(top, top + k, -1);
+        for(int i = 0; i &lt; cap - 1; i++)
+            next[i] = i + 1;
+        next[cap - 1] = -1;
+    }
+    void push(int sn, int x) {
+        int i = free_top;
+        free_top = next[i];
+        next[i] = top[sn];
+        top[sn] = i;
+        arr[i] = x;
+    }
+    int pop(int sn) {
+        int i = top[sn];
+        top[sn] = next[i];
+        next[i] = free_top;
+        free_top = i;
+        return arr[i];
+    }
+    bool isEmpty(int sn) {
+        return (top[sn] == -1);
+    }
+}; // End of class</code></pre>
+      <ul>
+        <li>A <code>struct</code> is used so everything is public by default.</li>
+        <li><strong>push:</strong> take the free slot i = free_top. First update free_top to next[i]; doing that last would lose next[i], so the order matters. Then next[i] = the old top of the stack, top[sn] = i, and store the item. Overflow isn't handled to keep it simple; free_top == −1 would mean the array is full.</li>
+        <li><strong>pop:</strong> i = top[sn]; the stack's new top is next[i]; slot i goes on top of the free stack (next[i] = free_top, free_top = i); return arr[i].</li>
+        <li><strong>isEmpty:</strong> top[sn] == −1.</li>
+      </ul>
+      <p>Board trace with n = 5, k = 2 (top = [−1, −1], next = [1, 2, 3, 4, −1], free_top = 0):</p>
+      <ul>
+        <li>push(1, 100): arr[0] = 100, top = [−1, 0], next[0] = −1, free_top = 1.</li>
+        <li>push(1, 200): arr[1] = 200, top = [−1, 1], next = [−1, 0, 3, 4, −1], free_top = 2.</li>
+        <li>pop(1): returns 200, top = [−1, 0], and slot 1 becomes free_top again.</li>
+      </ul>
+      <p>Push and pop are O(1) and no space is wasted: any free slot can go to any stack.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the constructor allocates <code>arr</code> and <code>top</code> but never <code>next</code> (it needs <code>next = new int[n];</code>) before the loop fills it.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/NzAzNA%3D%3D" target="_blank" rel="noopener">Implement K Stacks in an Array in Java</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The Java version of the previous video, with the same explanation: the naive equal division, then the efficient solution with the extra arrays <code>top</code> (size k) and <code>next</code> (size n) and the variable <code>free_top</code>. See the C++ video's notes for the step-by-step reasoning.</p>
+    <p>Here <code>arr</code> and <code>next</code> both get size n, <code>top</code> gets size k, and every top starts at −1.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation: O(1) push, pop, isEmpty</h4>
+<pre><code class="language-java">class KStacks {
+    int arr[], top[], next[];
+    int free_top = 0, k, cap;
+    KStacks(int k, int n) {
+        this.k = k;
+        cap = n;
+        arr = new int[n];
+        top = new int[k];
+        next = new int[n];
+        for(int i = 0; i &lt; k; i++)
+            top[i] = -1;
+        for(int i = 0; i &lt; n - 1; i++)
+            next[i] = i + 1;
+        next[n - 1] = -1;
+    }
+    void push(int sn, int x) {
+        int i = free_top;
+        free_top = next[i];
+        next[i] = top[sn];
+        top[sn] = i;
+        arr[i] = x;
+    }
+    int pop(int sn) {
+        int i = top[sn];
+        top[sn] = next[i];
+        next[i] = free_top;
+        free_top = i;
+        return arr[i];
+    }
+    boolean isEmpty(int sn) {
+        return top[sn] == -1;
+    }
+} // End of class</code></pre>
+      <p>Board trace with n = 5, k = 2:</p>
+      <ul>
+        <li>push(1, 100): arr[0] = 100, top = [−1, 0], next = [−1, 2, 3, 4, −1].</li>
+        <li>push(1, 200): arr[1] = 200, top = [−1, 1], next = [−1, 0, 3, 4, −1].</li>
+        <li>pop(1): top = [−1, 0], next = [−1, 2, 3, 4, −1], free_top = 1.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/OTAx" target="_blank" rel="noopener">Stock span problem</a> · <strong>No transcript</strong>: notes from the board (frames every 5–10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given n daily stock prices, the <strong>span</strong> of day i is the number of consecutive days up to and including day i for which the price is ≤ day i's price (Description: the maximum number of consecutive days just before the given day with price less than its price, counting the day itself). Board examples:</p>
+    <ul>
+      <li>{13, 15, 12, 14, 16, 8, 6, 4, 10, 30} → 1 2 1 2 5 1 1 1 4 10</li>
+      <li>{10, 20, 30, 40} → 1 2 3 4 (increasing: each span reaches the start)</li>
+      <li>{40, 30, 20, 10} → 1 1 1 1 (decreasing)</li>
+      <li>{30, 20, 25, 28, 27, …} → 1 1 2 3 1 …</li>
+    </ul>
+    <p><strong>Efficient idea</strong> (board): span = (index of current element) − (index of the closest greater element on the left side) if there is a greater element on the left, otherwise (index of current element) + 1. For {60, 10, 20, 40, 35, 30, 50, 70, 65} the spans are 1, (1−0), (2−0), (3−0), (4−3), (5−4), (6−0), (7+1), (8−7).</p>
+    <p>While going left to right over x<sub>0</sub> … x<sub>i</sub> | x<sub>i+1</sub> …, only some earlier elements can still be the closest greater element for later items — the board shows 60, 40, 38 kept for the prefix {60, 10, 20, 40, 35, 38}. A stack of indexes holds exactly these.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NzM3Mg%3D%3D" target="_blank" rel="noopener">Stock span problem</a></p>
+<ul>
+<li>Examples: [100 80 60 70 60 75 85] → 1 1 1 2 1 4 6; [10 4 5 90 120 80] → 1 1 2 4 5 1.</li>
+<li><strong>Naive:</strong> for every element, traverse left while the elements are smaller, incrementing the span. O(N²) time, O(N) auxiliary space.</li>
+<li><strong>Stack:</strong> with h(i) the closest preceding day whose price is greater (−1 if none), S[i] = i − h(i). The stack stores the days i, h(i), h(h(i)), …; going from day i−1 to i, pop days with price ≤ price[i], then push i. Steps: push 0, the answer for day 1 is 1; for each day pop while the top's price ≤ the current price; answer i+1 if the stack is empty, else i − st.top; push i. Note: equal prices need a check so that equal previous prices are handled as intended. O(N) — every element is added and removed at most once; auxiliary space O(N) in the worst case (prices sorted in decreasing order).</li>
+<li><strong>Dynamic programming:</strong> overlapping subproblems — store each index's answer and, while the current element is greater than the one at (previous index − its answer), add that answer and jump back again. O(N) time, O(N) space.</li>
+<li><strong>Two stacks:</strong> one holds the actual prices and the other is temporary, using only push and pop; spans go in an array. O(N) time, O(N) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O(n²)</h4>
+<pre><code>void printSpan(int arr[], int n)
+{
+    for(int i = 0; i &lt; n; i++)
+    {   int span = 1;
+        for(int j = i-1; j &gt;= 0 &amp;&amp; arr[j] &lt;= arr[i]; j--)
+            span++;
+        print(span + " ");
+    }
+}   // Pseudo Code</code></pre>
+      <p>Count leftward while the earlier price is ≤ the current one. Board trace for {18, 12, 13, 14, 11, 16}: spans 1, 1, 2, 3, 1, 5.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: stack of indexes, Θ(n) time, O(n) auxiliary space</h4>
+<pre><code>void printSpan(int arr[], int n)
+{
+    Stack s;          // Create a Stack
+    s.push(0);        // &amp; Process First Item
+    print(1);
+    for(int i = 1; i &lt; n; i++)        // Process Remaining Items
+    {
+        while(s.isEmpty() == false &amp;&amp; arr[s.top()] &lt;= arr[i])
+            s.pop();
+        span = s.isEmpty() ? i+1 : i - s.top();
+        print(span);
+        s.push(i);
+    }
+}   // Pseudo Code</code></pre>
+      <p>Pop every index whose price is ≤ the current price; the top that remains is the closest greater element on the left. Board trace for {60, 10, 20, 15, 35, 50}: before the loop stack [0], print 1; i = 1: [0, 1], print 1; i = 2: pop 1 → [0, 2], print 2; i = 3: [0, 2, 3], print 1; i = 5: [0, 5], print 5 (the i = 4 step is behind the teacher). The board gives Θ(n) time and O(n) auxiliary space, with "30 20 10 5" written beside it.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;&amp;</code> is drawn like "$$" in both versions. The efficient diagram's prefix at 16:50 reads {60, 10, 20, 40, 35, 38}, with 30 overwritten as 38.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/OTAy" target="_blank" rel="noopener">Previous Greater Element</a> · Notes from the full course transcript and the board (a frame every 25 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given an array of distinct integers, for every element print the closest (position-wise) greater element on its left, or −1 if there is none. Example: {15, 10, 18, 12, 4, 6, 2, 8} → −1 15 −1 18 12 12 6 12; for 12 there is also 15 on the left, but 18 is the closest. The first element's answer is always −1; a sorted increasing array gives all −1; in a decreasing array each answer is the element just before.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NjkyMQ%3D%3D" target="_blank" rel="noopener">Previous Greater Element</a></p>
+<ul>
+<li>For an array of distinct elements, print the previous greater element of each, or −1; expected time O(n).</li>
+<li>Simple: two nested loops — the inner loop finds the previous greater element. Efficient: a stack, as a variation of the stock span problem, maintaining previous greater elements. O(n) — each element is added and removed at most once, at most 2n operations with O(1) stack operations; auxiliary space O(n) in the worst case (sorted in decreasing order).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O(n²)</h4>
+<pre><code class="language-cpp">void printPrevGreater(int arr[], int n)
+{
+    for(int i = 0; i &lt; n; i++)
+    {   int j;
+        for(j = i-1; j &gt;= 0; j--)
+        {   if(arr[j] &gt; arr[i])
+            {   cout &lt;&lt; arr[j] &lt;&lt; " ";
+                break;
+            }
+        }
+        if(j == -1)
+            cout &lt;&lt; -1 &lt;&lt; " ";
+    }
+}</code></pre>
+      <p>For every element, scan left and print the first greater element; if j reaches −1 none was found. For {20, 30, 10, 5, 15}: −1 −1 30 10 30. In the worst case both loops run fully — about n(n+1)/2, O(n²).</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: stack, O(n)</h4>
+<pre><code class="language-cpp">void printPrevGreater(int arr[], int n)
+{
+    stack&lt;int&gt; s;
+    s.push(arr[0]);
+    cout &lt;&lt; -1 &lt;&lt; " ";
+    for(int i = 1; i &lt; n; i++)
+    {
+        while(s.empty() == false &amp;&amp; s.top() &lt;= arr[i])
+            s.pop();
+        int pg = (s.empty()) ? -1 : s.top();
+        cout &lt;&lt; pg &lt;&lt; " ";
+        s.push(arr[i]);
+    }
+}</code></pre>
+      <p>A variation of the stock span problem; here the stack stores the items themselves, not indexes, because only the previous greater value is needed. Pop smaller elements; whatever remains on top is the previous greater (−1 if the stack is empty); then push the current element.</p>
+      <p>Trace for {20, 30, 10, 5, 15}: push 20, print −1; 30 pops 20 → empty, print −1, push 30; 10: print 30, push → [30, 10]; 5: print 10 → [30, 10, 5]; 15 pops 5 and 10, print 30 → [30, 15]. Every item is pushed exactly once and removed at most once, so the worst case is 2n operations — O(n).</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;&amp;</code> is drawn like "$$"; the function name is written <code>printPrevGreater</code> in a hard-to-read hand.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/OTAz" target="_blank" rel="noopener">Next Greater Element</a> · Notes from the full course transcript and the board (a frame every 45 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A popular interview question, similar to stock span and previous greater element. For every element, find the next greater element — closest position-wise on the right — or −1 if none. Example: {5, 15, 10, 8, 6, 12, 9, 18} → 15 18 12 12 12 18 18 −1. The rightmost element always gets −1; an increasing array gives the next element each time; a decreasing array gives all −1.</p>
+    <p><strong>Idea:</strong> traverse from the right and run the previous-greater-element logic: the previous greater element seen from the right side is the next greater element.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NjkyMg%3D%3D" target="_blank" rel="noopener">Next Greater Element</a></p>
+<ul>
+<li>The NGE of x is the first greater element on its right, or −1: [4, 5, 2, 25] → 5, 25, 25, −1; [13, 7, 6, 12] → −1, 12, 12, −1.</li>
+<li><strong>Nested loops:</strong> for each element, scan from i+1 to the end and print the first greater element, else −1. O(N²) time, O(1) space.</li>
+<li><strong>Stack</strong> (left to right): push the first element; for each next element, while the stack is non-empty and its top is smaller than next, pop it — next is the NGE of each popped element; then push next. After the loop, every element left in the stack gets −1. O(N) time, O(N) space.</li>
+<li><strong>Using a map</strong> (as the main stack): the same idea with each element pushed and popped once, changing the array in place; leftover elements get −1 at their index. O(N) time, O(N) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O(n²)</h4>
+<pre><code class="language-cpp">void nextGreater(int arr[], int n)
+{
+    for(int i = 0; i &lt; n; i++)
+    {   int j;
+        for(j = i+1; j &lt; n; j++)
+        {   if(arr[j] &gt; arr[i])
+            {   cout &lt;&lt; arr[j] &lt;&lt; " ";
+                break;
+            }
+        }
+        if(j == n)
+            cout &lt;&lt; -1 &lt;&lt; " ";
+    }
+}</code></pre>
+      <p>Scan right of every element and print the first greater one; if j reaches n there is none (e.g. the last element, or an element greater than all on its right). About n(n+1)/2 operations — O(n²).</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: stack, O(n) time and O(n) extra space</h4>
+<pre><code class="language-cpp">vector&lt;int&gt; nextGreater(int arr[], int n)
+{
+    vector&lt;int&gt; v;
+    stack&lt;int&gt; s;
+    s.push(arr[n-1]);
+    v.push_back(-1);
+    for(int i = n-2; i &gt;= 0; i--)
+    {
+        while(s.empty() == false &amp;&amp; s.top() &lt;= arr[i])
+            s.pop();
+        int nextGr = (s.empty()) ? (-1) : (s.top());
+        v.push_back(nextGr);
+        s.push(arr[i]);
+    }
+    reverse(v.begin(), v.end());
+    return v;
+}</code></pre>
+      <p>First version: print <code>-1</code> for the last element, then print <code>nextGr</code> in the loop — but that prints the output in <strong>reverse order</strong>. The practice problem expects a vector (C++) / ArrayList (Java) in the right order, so push the answers into <code>v</code> and reverse it at the end. Java: <code>Stack&lt;Integer&gt; s = new Stack&lt;Integer&gt;();</code>, <code>v.add(...)</code>, <code>Collections.reverse(v)</code>, with <code>isEmpty()</code> and <code>peek()</code> in place of <code>empty()</code> and <code>top()</code>.</p>
+      <p>Board trace (right to left) for {5, 15, 10, 8, 6, 12, 9, 18}: push 18 → −1; 9 → 18, stack [18, 9]; 12 pops 9 → 18, [18, 12]; 6 → 12, [18, 12, 6]; 8 pops 6 → 12; 10 pops 8 → 12; 15 pops 10 and 12 → 18, [18, 15]; 5 → 15, [18, 15, 5]. Every item is pushed once and popped at most once, as in stock span, so it's O(n).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-16">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTMyNA%3D%3D" target="_blank" rel="noopener">Largest Rectangular Area in a Histogram (Part 1)</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Each array value is the height of a histogram bar; every bar has width 1. Find the largest rectangular area. For {6, 2, 5, 4, 1, 5, 6} the answer is 10 (heights 5 and 6 at the end, 5 × 2); other rectangles give 2 × 4 = 8 or the whole width 7 × 1 = 7. For {2, 5, 1} the answer is 5 (1 × 3 = 3 is smaller).</p>
+    <p><strong>Idea (both solutions):</strong> consider every bar as the <em>smallest</em> bar of a rectangle, find that rectangle's area, and return the largest. With arr[i] as the smallest, the rectangle extends left and right over all consecutive bars with height ≥ arr[i].</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: Θ(n²)</h4>
+<pre><code class="language-cpp">int getMaxArea(int arr[], int n)
+{
+    int res = 0;
+    for(int i = 0; i &lt; n; i++)
+    {   int curr = arr[i];
+        for(int j = i-1; j &gt;= 0; j--)
+        {   if(arr[j] &gt;= arr[i]) curr += arr[i];
+            else break;
+        }
+        for(int j = i+1; j &lt; n; j++)
+        {   if(arr[j] &gt;= arr[i]) curr += arr[i];
+            else break;
+        }
+        res = max(res, curr);
+    }
+    return res;
+}</code></pre>
+      <p>Add <code>arr[i]</code> (not arr[j]) for every neighbouring bar that is greater or equal. Trace for {6, 2, 5, 4, 1, 5, 6}: curr = 6, 8, 5, 8, 7, 10, 6, so res becomes 6, 8, then 10.</p>
+    </div>
+    <div class="approach">
+      <h4>Better solution: Θ(n) time</h4>
+      <ol>
+        <li>Initialize res = 0.</li>
+        <li>Find the previous smaller element for every element (index, −1 if none).</li>
+        <li>Find the next smaller element for every element (index, n if none).</li>
+        <li>For every element arr[i]:
+<pre><code>curr = arr[i];
+curr += (i - ps[i] - 1) * arr[i];
+curr += (ns[i] - i - 1) * arr[i];
+res = max(res, curr);</code></pre></li>
+        <li>Return res.</li>
+      </ol>
+      <p>Previous smaller and next smaller are found in Θ(n) each with a stack, reversing the comparison in the previous/next greater element code. Using −1 and n for "none" means one formula works with no if-else. Board: arr = 6 2 5 4 1 5 6, ps = −1 −1 1 1 −1 4 5, ns = 1 4 3 4 7 7 7; i = 0: 6 + 0·6 + 0·6; i = 1: 2 + 1·2 + 2·2; i = 2: 5 + 0·5 + 0·5; i = 3: 4 + 1·4 + 0·4.</p>
+      <p>Θ(n) overall, but it needs three traversals and two auxiliary stacks plus the arrays ps and ns. The video ends asking for a solution with exactly one traversal and one auxiliary stack (Part 2).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-17">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/NzAzMg%3D%3D" target="_blank" rel="noopener">Largest Rectangular Area in a Histogram (Part 2)</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The efficient solution uses a single stack of indexes — no extra arrays and not two stacks. In stock span the answer was computed when an item was <em>pushed</em>; here an item's area (with it as the smallest bar) is computed when it is <em>popped</em>:</p>
+    <ul>
+      <li>the item just below it in the stack is its <strong>previous smaller</strong> element, and</li>
+      <li>the current element arr[i] that caused the pop is its <strong>next smaller</strong> element.</li>
+    </ul>
+    <p>The pop condition is the opposite of the previous/next greater problems: pop while the top's height is ≥ arr[i]. After the loop, the items left in the stack have no next smaller element, so n is used as their next-smaller index; an item that leaves the stack empty has no previous smaller, so its width reaches the left end.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NzM3Mw%3D%3D" target="_blank" rel="noopener">Largest Rectangular Area in a Histogram</a></p>
+<ul>
+<li>Contiguous bars of width 1: {6, 2, 5, 4, 5, 1, 6} → 12; {3, 5, 1, 7, 5, 9} → 15. For every bar x, compute the area with x as the smallest bar, using the first smaller bar on its left ("left index") and on its right ("right index"); return the maximum.</li>
+<li><strong>One stack:</strong> traverse left to right; if the stack is empty or hist[i] is higher than the top bar, push i; otherwise keep removing the top while it is greater, computing the area for the removed bar hist[tp] — its left index is the previous item in the stack and its right index is i. At the end, remove the remaining bars the same way. O(N) — every bar is pushed and popped once; O(N) space.</li>
+<li><strong>Previous and next smaller:</strong> arrays left_smaller[] (initialised to −1) and right_smaller[] (initialised to n) hold each element's previous/next smaller indexes; the area for i is arr[i] × the length of the range between them; take the maximum. O(N) time, O(N) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation: Θ(n) time, Θ(n) auxiliary space (one stack)</h4>
+<pre><code>int getMaxArea(int arr[], int n)
+{   Stack s;   // Empty Stack
+    int res = 0;
+    for(int i = 0; i &lt; n; i++)
+    {   while(!s.empty() &amp;&amp; arr[s.top()] &gt;= arr[i])
+        {   tp = s.pop();
+            curr = arr[tp] * (s.empty() ? i : (i - s.top() - 1));
+            res = max(res, curr);
+        }
+        s.push(i);
+    } // End of for loop
+    while(!s.empty())
+    {   tp = s.pop();
+        curr = arr[tp] * (s.empty() ? n : (n - s.top() - 1));
+        res = max(res, curr);
+    }
+    return res;
+}</code></pre>
+      <p>Pseudocode, close to both C++ and Java. Board dry run for arr = {60, 20, 50, 40, 10, 50, 60}:</p>
+      <ul>
+        <li>i = 0: push 0 (60).</li>
+        <li>i = 1 (20): pop 60, stack empty → width i = 1, area 60, res = 60; push 1.</li>
+        <li>i = 2 (50): push → [1, 2].</li>
+        <li>i = 3 (40): pop 50 → width 3 − 1 − 1 = 1, area 50; push 3 → [1, 3].</li>
+        <li>i = 4 (10): pop 40 → width 4 − 1 − 1 = 2, area 80, res = 80; pop 20 → empty, width 4, area 80; push 4.</li>
+        <li>i = 5, 6: push → [4, 5, 6].</li>
+        <li>Remaining: pop 60 → width 7 − 5 − 1 = 1, area 60; pop 50 → width 7 − 4 − 1 = 2, area 100, res = 100; pop 10 → empty, width 7, area 70.</li>
+      </ul>
+      <p>Answer 100. Every item is pushed exactly once and popped exactly once (2n O(1) operations), so it's Θ(n).</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the first loop mixes <code>st.top()</code> / <code>st.pop()</code> with the stack named <code>s</code>; it's <code>s</code> throughout. <code>&amp;&amp;</code> is drawn like "$$".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-18">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/NzU4Ng%3D%3D" target="_blank" rel="noopener">Largest Rectangle with all 1's</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a binary matrix, find the size of the largest rectangular sub-matrix with all 1s. Board examples:</p>
+    <ul>
+      <li>{{0, 1, 1, 0}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 0, 0}} → 8 (candidates include 1×2, 2×4, 3×2).</li>
+      <li>{{0, 1, 1}, {1, 1, 1}, {0, 1, 1}} → 6.</li>
+      <li>All zeros → 0; a single 1 → 1; all 1s (one row of 3) → 3.</li>
+    </ul>
+    <p><strong>Naive</strong> ("super naive"): consider every cell as a starting point, O(R × C); consider all sizes of rectangles with that cell as the starting point, O(R × C); for each rectangle, check whether it is all 1s and update the result if its size is more, O(R × C). Time O(R³ × C³).</p>
+    <p><strong>Efficient idea</strong>, based on the largest rectangular area in a histogram (recap: {10, 5, 6, 2} → 5 × 3 = 15): run a loop over the rows from 0 to R−1; treat the current row as the base of a histogram whose bar heights are the counts of consecutive 1s ending at that row; find the largest area in this histogram and update the result. A 0 in the current row makes that bar's height 0, even if there are 1s above it.</p>
+    <p>For the first example the histograms are [0, 1, 1, 0] (res = 2), [1, 2, 2, 1] (res = 4), [2, 3, 3, 2] (res = 8) and [3, 4, 0, 0] (largest 3 × 2 = 6, res stays 8).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NzM3NA%3D%3D" target="_blank" rel="noopener">Largest Rectangle with all 1's</a></p>
+<ul>
+<li>Find the maximum-size rectangle sub-matrix with all 1s using the largest rectangle in a histogram as a subroutine: treat 1s as filled squares and 0s as empty, with each row as a base.</li>
+<li>Algorithm: traverse the rows; for every row after the first, if matrix[i][j] isn't zero set matrix[i][j] = matrix[i−1][j] + matrix[i][j]; find the largest histogram area with row i as the bar heights; print the maximum over all rows. Time O(R × C); space O(C) for the stack of columns.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Efficient implementation: Θ(R × C)</h4>
+<pre><code>int maxRectangle(int mat[R][C])
+{
+    int res = largestHist(mat[0], C);
+    for(int i = 1; i &lt; R; i++)
+    {
+        for(int j = 0; j &lt; C; j++)
+            if(mat[i][j] == 1)
+                mat[i][j] += mat[i-1][j];
+        res = max(res, largestHist(mat[i], C));
+    }
+    return res;
+}   // Efficient Implementation: Θ(R × C)</code></pre>
+      <p>Pseudocode close to both C++ and Java (Java: <code>Math.max</code>). <code>largestHist</code> is the histogram function from the previous videos, used as a subroutine. Each row costs Θ(C) to build the heights and Θ(C) for <code>largestHist</code>, over R rows.</p>
+      <p>Auxiliary space: the code modifies the input matrix for ease of implementation. If that isn't allowed (or the matrix is boolean), use a new row of size C, Θ(C); <code>largestHist</code> needs O(C) for its stack anyway — so Θ(C) overall.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-19">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTM3Ng%3D%3D" target="_blank" rel="noopener">Stack with getMin() in O(1)</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Design a stack that supports the usual push, pop, top, isEmpty and size, plus <code>getMin()</code> — the minimum element at any moment — all in O(1). Examples: push(20), push(10), getMin() → 10, push(5), getMin() → 5, pop(), getMin() → 10. Or push(5), push(4), push(3), getMin() → 3, pop(), getMin() → 4, push(2), getMin() → 2.</p>
+    <p><strong>Naive:</strong> normal push and pop; for getMin, traverse the stack by popping items into an auxiliary stack or array and find the minimum. Push and pop are O(1), but getMin is O(n) time and O(n) extra space per call.</p>
+    <p><strong>Efficient:</strong> keep an <strong>auxiliary stack</strong> that always has the current minimum at its top. All pushes and pops happen on the main stack (ms); the auxiliary stack (as) is pushed and popped only when required:</p>
+    <ul>
+      <li>push(x): push to ms; if x ≤ as.top(), also push to as. (Base case: when the stacks are empty, push to both.)</li>
+      <li>pop(): if the item being removed equals as.top() — the current minimum is leaving — pop as too; always pop ms.</li>
+      <li>getMin(): as.top().</li>
+    </ul>
+    <p>Equal items must also go on the auxiliary stack: with push(2) twice, popping one 2 must leave the other 2 as the minimum.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Operations (board)</h4>
+<pre><code>push(x)
+    ms.push(x);
+    if(as.top() &gt;= ms.top())
+        as.push(x);
+
+pop()
+    if(ms.top() == as.top())
+        as.pop();
+    ms.pop();</code></pre>
+      <p>Board dry run: push(5) → ms [5], as [5]; push(10), push(20) → only ms; push(2) → both (2 ≤ 5); push(6), push(4) → only ms; pop() removes 4 and pop() removes 6, as unchanged; push(2) → both again, so as = [5, 2, 2]; pop() removes one 2 from each. After every operation, the minimum is the top of the auxiliary stack.</p>
+      <p>push, pop and getMin are all O(1) time with O(1) extra space per operation. Overall the auxiliary stack needs O(n) space — in practice it may be much less than n, since larger values pushed after a small one never enter it.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-20">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MjAwMg%3D%3D" target="_blank" rel="noopener">Design a Stack with getMin() in O(1) Space</a> · <strong>No transcript</strong>: notes from the board (a frame every 10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A stack with push(), pop(), peek() and getMin() all in O(1) time and O(1) auxiliary space — no auxiliary stack. Keep one variable <code>min</code>; when a new minimum is pushed, store an encoded value instead of the item, from which the previous minimum can be recovered on pop.</p>
+    <p>Board operation sequence for both methods: push(5), push(10), push(20), push(2), push(6), push(4), pop(), pop(), push(2), pop(), push(1), pop(), pop().</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NzM3NQ%3D%3D" target="_blank" rel="noopener">Stack with getMin() in O(1)</a></p>
+<ul>
+<li><code>SpecialStack</code>: push(), pop(), isEmpty(), isFull() and getMin(), all with O(1) time and space, using only a standard stack (no arrays or lists). Example: stack 16 (top), 15, 29, 19, 18 → getMin() 15; after two pops, 29, 19, 18 → getMin() 18.</li>
+<li>A variable <code>minEle</code> holds the current minimum. <strong>push(x):</strong> if empty, insert x and set minEle = x; if x ≥ minEle, insert x; if x &lt; minEle, insert 2x − minEle and set minEle = x (minEle 3, push 2: insert 1, minEle 2). <strong>pop():</strong> remove y; if y ≥ minEle the minimum stays; if y &lt; minEle, the actual removed value is minEle and the new minEle = 2·minEle − y (remove 1 with minEle 2: minEle becomes 3). The stack doesn't hold a minimum's actual value; minEle always does.</li>
+<li>Trace: push 3, 5, 2, 1, 1, −1 → stored 3, 5, 1, 0, 1, −3; pops then restore minEle −1 → 1 → 1 → 2 → 3.</li>
+<li>Why it works: x &lt; minEle gives x − minEle &lt; 0, so 2x − minEle &lt; x, the new minEle — a popped value below minEle signals an update. And with y = 2x − prevMinEle and minEle = x: 2·minEle − y = 2x − (2x − prevMinEle) = prevMinEle.</li>
+<li>Alternative (MinStack class): each node stores <code>val</code> and <code>min</code>, the minimum seen up to that node.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>First method (assuming all elements positive)</h4>
+<pre><code>Stack s
+int min
+
+void push(int x)
+    if(s.isEmpty())
+        min = x
+        s.push(x)
+    else if(x &lt;= min)
+        s.push(x - min)
+        min = x
+    else
+        s.push(x)
+
+int pop()
+    t = s.pop()
+    if(t &lt;= 0)
+        res = min
+        min = min - t
+        return res
+    else
+        return t
+
+int peek()
+    t = s.peek()
+    return (t &lt;= 0) ? min : t
+
+int getMin()
+    return min</code></pre>
+      <p>When x ≤ min, x − min ≤ 0 is pushed, and a value ≤ 0 in the stack marks "the real item here is the current min". On pop, the old min is recovered as min − t. Board state after the first four pushes: 5, 10, 20, −3 with min = 2.</p>
+    </div>
+    <div class="approach">
+      <h4>Second method (handles negatives)</h4>
+<pre><code>void push(int x)
+    if(s.isEmpty())
+        min = x
+        s.push(x)
+    else if(x &lt;= min)
+        s.push(2*x - min)
+        min = x
+    else
+        s.push(x)
+
+int pop()
+    t = s.pop()
+    if(t &lt;= min)
+        res = min
+        min = 2*min - t
+        return res
+    else
+        return t
+
+int peek()
+    t = s.peek()
+    return (t &lt;= min) ? min : t</code></pre>
+      <p><strong>How does this work?</strong> (board): we push 2·x − min only when x ≤ min, so 2·x − min = x + (x − min) is always ≤ x, and x becomes the new min. So a stored value ≤ min marks an encoded entry, and the previous min is 2·min − t. getMin() returns min as before.</p>
+      <p>The course Description links code for both versions ("Assuming all Elements Positive" and "Handles Negatives").</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the empty-stack case in push is written <code>min = t</code> in both methods; it's <code>min = x</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-21">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTU1Mg%3D%3D" target="_blank" rel="noopener">Infix, Prefix and Postfix Introduction</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Three ways to write an expression (binary operators only, for simplicity):</p>
+    <ul>
+      <li><strong>Infix</strong> — operand, operator, operand: <code>x + y</code>. Used in mathematics and in programs.</li>
+      <li><strong>Postfix</strong> — both operands, then the operator: <code>x y +</code>.</li>
+      <li><strong>Prefix</strong> — the operator, then both operands: <code>+ x y</code>.</li>
+    </ul>
+    <p><strong>Advantages of prefix and postfix:</strong> they don't require parentheses, precedence rules or associativity rules; and they can be evaluated by writing a program that traverses the expression exactly once (infix needs more than one pass).</p>
+    <p><strong>Precedence and associativity</strong> decide how to parenthesize an expression with two or more operators. The higher-precedence operator is evaluated first; for operators of the same precedence, the associativity decides (left-to-right evaluates the left side first). All operators of the same precedence have the same associativity. Small table (highest first):</p>
+    <ul>
+      <li><code>^</code> (exponent): right to left</li>
+      <li><code>*</code>, <code>/</code>: left to right</li>
+      <li><code>+</code>, <code>−</code>: left to right</li>
+    </ul>
+    <p>Examples: precedence, 10 + 20 * 2 → 10 + 40 → 50; associativity (L to R), 10 + 2 − 3 → 12 − 3 → 9; associativity (R to L), 2 ^ 1 ^ 2 → 2 ^ 1 → 2 (evaluating left first would give 4). Real programming languages have many more operators.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Examples and simple conversion</h4>
+      <ul>
+        <li><code>x + y * z</code> → prefix <code>+ x * y z</code>, postfix <code>x y z * +</code>.</li>
+        <li><code>(x + y) * z</code> → prefix <code>* + x y z</code>, postfix <code>x y + z *</code>. Infix needs the brackets to change the order; prefix and postfix don't.</li>
+      </ul>
+      <p><strong>Steps for postfix conversion</strong> (naive): fully parenthesize the infix expression using the precedence and associativity rules, then convert from the innermost brackets outward — first operand, second operand, then operator.</p>
+      <ul>
+        <li><code>x + y * z</code> ⇒ <code>(x + (y * z))</code> ⇒ <code>(x + (y z *))</code> ⇒ <code>x y z * +</code>. For prefix, write the operator first instead: <code>+ x * y z</code>.</li>
+        <li><code>(x + y) * z</code> ⇒ <code>((x + y) * z)</code> ⇒ <code>((x y +) * z)</code> ⇒ <code>x y + z *</code>; prefix <code>* + x y z</code>.</li>
+      </ul>
+      <p>Converting infix to prefix or postfix still needs the precedence and associativity rules. The next video gives an efficient approach.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-22">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTUyNzA%3D" target="_blank" rel="noopener">Infix to Postfix (Simple sol.)</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given an infix expression as a string, convert it to its equivalent postfix. The limited set of operators, highest precedence first:</p>
+    <ul>
+      <li><code>^</code> (power, a raised to b): right to left — 5 ^ 2 ^ 3 computes 2 ^ 3 first.</li>
+      <li><code>*</code>, <code>/</code>: left to right.</li>
+      <li><code>+</code>, <code>−</code>: left to right — 5 + 2 + 3 and 5 * 2 / 3 compute the left operator first.</li>
+    </ul>
+    <p>Brackets in the input change the precedence or associativity order; operands are the English letters a–z. Examples:</p>
+    <ul>
+      <li><code>a + b * c</code> → <code>abc*+</code></li>
+      <li><code>(a + b) * c</code> → <code>ab+c*</code></li>
+      <li><code>a ^ b ^ c</code> → <code>abc^^</code></li>
+      <li><code>(a + b) * (c + d)</code> → <code>ab+cd+*</code></li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive approach: fully parenthesize, then convert inside out</h4>
+      <ul>
+        <li><code>a + b * c</code> ⇒ <code>(a + (b * c))</code> ⇒ <code>(a + (bc*))</code> ⇒ <code>abc*+</code>.</li>
+        <li><code>(a + b) * c</code> ⇒ <code>((a + b) * c)</code> ⇒ <code>((ab+) * c)</code> ⇒ <code>ab+c*</code>.</li>
+        <li><code>a ^ b ^ c</code> — same precedence, right-to-left associativity ⇒ <code>(a ^ (b ^ c))</code> ⇒ <code>(a ^ (bc^))</code> ⇒ <code>abc^^</code>.</li>
+        <li><code>(a + b) * (c + d)</code> ⇒ <code>((a + b) * (c + d))</code> ⇒ <code>((ab+) * (cd+))</code> ⇒ <code>ab+cd+*</code>.</li>
+      </ul>
+      <p>Exercises solved on the board:</p>
+      <ul>
+        <li><code>a + b * (c − d)</code> ⇒ <code>(a + (b * (c − d)))</code> ⇒ <code>(a + (b * (cd−)))</code> ⇒ <code>(a + (bcd−*))</code> ⇒ <code>abcd−*+</code>.</li>
+        <li><code>a + b * c / d + e</code> — * and / are left to right, then the two + are left to right ⇒ <code>((a + ((b * c) / d)) + e)</code> ⇒ <code>((a + ((bc*) / d)) + e)</code> ⇒ <code>((a + (bc*d/)) + e)</code> ⇒ <code>((abc*d/+) + e)</code> ⇒ <code>abc*d/+e+</code>.</li>
+      </ul>
+      <p>The next video gives the efficient approach.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-23">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTUyMg%3D%3D" target="_blank" rel="noopener">Infix to Postfix (Efficient Solution)</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A stack-based algorithm; the stack <code>st</code> stores operators.</p>
+    <ol>
+      <li>Create an empty stack, st.</li>
+      <li>Do the following for every character x from left to right.</li>
+      <li>If x is:
+        <ol type="a">
+          <li><strong>Operand:</strong> output it (append to the postfix).</li>
+          <li><strong>Left parenthesis:</strong> push to st.</li>
+          <li><strong>Right parenthesis:</strong> pop from st until a left parenthesis is found; output the popped operators.</li>
+          <li><strong>Operator:</strong> if st is empty, push x to st. Else compare with st top:
+            <ol type="i">
+              <li>Higher precedence (than st top): push to st.</li>
+              <li>Lower precedence: pop st top and output until a higher-precedence operator is found (or st is empty), then push x to st.</li>
+              <li>Equal precedence: use associativity.</li>
+            </ol></li>
+        </ol></li>
+      <li>Pop and output everything from st.</li>
+    </ol>
+    <p>The stack always holds operators from lower to higher precedence, bottom to top. Precedence order on the board: <code>^</code>, then <code>*</code> <code>/</code>, then <code>+</code> <code>−</code>, and the left bracket <code>(</code> lowest (it can be the stack top). For equal precedence, all such operators share the same associativity: with left-to-right associativity the operator that came earlier counts as higher (so it is popped); with right-to-left, as lower (so x is pushed).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NzM3Ng%3D%3D" target="_blank" rel="noopener">Infix to Postfix</a></p>
+<ul>
+<li>Examples: <code>A + B * C + D</code> → <code>ABC*+D+</code>; <code>((A + B) − C * (D / E)) + F</code> → <code>AB+CDE/*−F+</code>.</li>
+<li>Why postfix: for a + b * c + d the compiler scans once for b * c, again to add a, and again to add d — repeated scanning is inefficient, and the computer can't easily tell operators and parentheses apart. Postfix (abc*+d+) is evaluated easily with a stack.</li>
+<li>Steps (left to right): output operands. For an operator: if its precedence and associativity are greater than the stack top's (or the stack is empty or has '(' on top), push it. '^' is right-associative and +, −, *, / are left-associative: with '^' on top and '^' scanned, the scanned one counts as higher and is pushed; in other equal cases pop. Otherwise pop all operators of greater or equal precedence (stopping at a parenthesis), then push. '(' is pushed; ')' pops and outputs until '(' and discards both. At the end pop and output everything. Time O(N), auxiliary space O(N).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board examples</h4>
+      <ul>
+        <li><code>a + b * c</code>: a → "a"; push +; b → "ab"; * is higher than +, push; c → "abc"; pop everything → <code>abc*+</code>.</li>
+        <li><code>(a + b) * c</code>: push (; a; + is higher than (, push; b; ) pops + → "ab+"; push * (stack empty); c → <code>ab+c*</code>.</li>
+        <li><code>a * b / c</code> (associativity): push *; / has equal precedence, left to right, so the earlier * is treated as higher — pop it → "ab*", then push /; c; pop → <code>ab*c/</code>. * is closest to its operands, so ab* is evaluated first and is the first operand of /.</li>
+        <li>Example 4 (exercise), <code>a + b / c − d * e</code>: + pushed; / higher, pushed; c → "abc"; − is lower than /, pop / → "abc/", and + (equal, earlier, left to right) → "abc/+", push −; d; * higher, pushed; e → "abc/+de"; pop everything → <code>abc/+de*−</code>, matching the naive method.</li>
+      </ul>
+      <p><strong>Time: Θ(n).</strong> An operand is appended in constant time; an opening bracket is pushed in constant time; an operator may be pushed once and popped once later — both constant-time stack operations. So every input symbol costs constant work.</p>
+      <p>The course Description links code in Python, C++, Java and C#.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-24">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTUxOQ%3D%3D" target="_blank" rel="noopener">Evaluation of Postfix</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a postfix expression as a string with tokens separated by spaces, find its value. Board examples (with the infix they come from):</p>
+    <ul>
+      <li><code>10 2 * 3 +</code> → 23 — from <code>10 * 2 + 3</code> ⇒ <code>((10 * 2) + 3)</code>.</li>
+      <li><code>10 2 + 3 *</code> → 36 — from <code>(10 + 2) * 3</code>.</li>
+      <li><code>10 2 3 ^ ^</code> → 100000000 (10⁸) — from <code>10 ^ 2 ^ 3</code> ⇒ <code>(10 ^ (2 ^ 3))</code>.</li>
+    </ul>
+    <p>Hint: postfix needs no precedence, no associativity and no brackets, and can be evaluated in one traversal. Traverse left to right; whenever an operator appears, apply it to the previous two operands, and the result becomes an operand: 10 2 * → 20, then 20 3 + → 23; 10 2 + → 12, then 12 3 * → 36; 2 3 ^ → 8, then 10 8 ^ → 10⁸.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NzM3OA%3D%3D" target="_blank" rel="noopener">Evaluation of Postfix</a></p>
+<ul>
+<li>Postfix expressions evaluate faster than infix since no parentheses are needed. Example: <code>"2 3 1 * + 9 −"</code> → push 2, 3, 1; * → 3 * 1 = 3; + → 3 + 2 = 5; push 9; − → 5 − 9 = −4. <code>"100 200 + 2 / 5 * 7 +"</code> → 757.</li>
+<li>Steps: a stack of operands; scan left to right — push numbers; for an operator pop its operands, evaluate, and push the result; at the end the number in the stack is the answer. O(N) time and space.</li>
+<li>Limitations of the basic version: only the 4 binary operators + * − / (more via switch cases) and single-digit operands; an extended program supports multi-digit operands with a separator such as a space between all elements. O(N) time and space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Algorithm for evaluation of postfix</h4>
+      <ol>
+        <li>Create an empty stack st.</li>
+        <li>Traverse through every symbol x of the given postfix.
+          <ol type="i">
+            <li>If x is an operand, push to st.</li>
+            <li>Else (x is an operator): <code>op1 = st.pop(); op2 = st.pop();</code> compute <code>op2 x op1</code> and push the result to st.</li>
+          </ol></li>
+        <li>Return <code>st.top()</code>.</li>
+      </ol>
+      <p>Note the order: op2 (popped second) is the left operand. Board traces:</p>
+      <ul>
+        <li><code>10 2 * 3 5 * + 9 −</code> (infix <code>((10 * 2) + (3 * 5)) − 9</code>): push 10, 2; * → 20; push 3, 5; * → 15; + → 35; push 9; − → 26.</li>
+        <li><code>10 2 3 ^ ^</code>: push 10, 2, 3; ^ → 2³ = 8; ^ → 10⁸.</li>
+      </ul>
+      <p>One traversal, never using precedence, associativity or parentheses: you need those rules to convert infix to postfix, not to evaluate postfix. Infix-to-postfix uses a stack of <em>operators</em> (kept lower to higher precedence, bottom to top); postfix evaluation uses a stack of <em>operands</em> — when an operator comes, take the last two operands, evaluate, and push the result back as an operand.</p>
+      <p>The course Description links code in Python, C++, Java and C#.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-25">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTU0OQ%3D%3D" target="_blank" rel="noopener">Infix to Prefix (Simple Solution)</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given an infix string (operands are English letters; operators and brackets; tokens separated by spaces), return the equivalent prefix string. Operators: <code>^</code> (right to left), <code>*</code> <code>/</code> (left to right), <code>+</code> <code>−</code> (left to right), highest precedence first.</p>
+    <ul>
+      <li>Right-to-left: 4 ^ 3 ^ 2 is computed as 4 ^ (3 ^ 2) = 4⁹, not (4 ^ 3) ^ 2.</li>
+      <li>Left-to-right: 4 + 3 + 6 computes 4 + 3 first; the same with −.</li>
+      <li>General rule: between two operators, the higher precedence goes first; with the same precedence, look at the associativity. In 4 + 3 * 6, * goes first; in 4 + 3 − 6, the left + goes first. Operators of the same precedence always have the same associativity.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive approach: two steps</h4>
+      <ol>
+        <li>Fully parenthesize (using the precedence and associativity rules).</li>
+        <li>Start converting from the innermost brackets outward — operator first, then the first operand, then the second.</li>
+      </ol>
+      <ul>
+        <li><code>x + y * z</code> ⇒ <code>(x + (y * z))</code> ⇒ <code>(x + (*yz))</code> ⇒ <code>+x*yz</code>.</li>
+        <li><code>(x + y) * z</code> ⇒ <code>((x + y) * z)</code> ⇒ <code>((+xy) * z)</code> ⇒ <code>*+xyz</code>.</li>
+        <li><code>x ^ y ^ z</code> (right to left) ⇒ <code>(x ^ (y ^ z))</code> ⇒ <code>(x ^ (^yz))</code> ⇒ <code>^x^yz</code>.</li>
+        <li><code>(x + y) * (z + w)</code> ⇒ <code>((x + y) * (z + w))</code> ⇒ <code>((+xy) * (+zw))</code> ⇒ <code>*+xy+zw</code>.</li>
+      </ul>
+      <p>Exercises solved on the board:</p>
+      <ul>
+        <li><code>x + y * (z − w)</code> ⇒ <code>(x + (y * (z − w)))</code> ⇒ <code>(x + (y * (−zw)))</code> ⇒ <code>(x + (*y−zw))</code> ⇒ <code>+x*y−zw</code>.</li>
+        <li><code>x + y * z / w + u</code> — * and / left to right, then the two + left to right ⇒ <code>((x + ((y * z) / w)) + u)</code> ⇒ <code>((x + ((*yz) / w)) + u)</code> ⇒ <code>((x + (/*yzw)) + u)</code> ⇒ <code>((+x/*yzw) + u)</code> ⇒ <code>++x/*yzwu</code>.</li>
+      </ul>
+      <p>The next video gives an efficient, stack-based method.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-26">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTU1MA%3D%3D" target="_blank" rel="noopener">Infix to Prefix (Efficient Solution)</a> · Notes from the full course transcript and the board (a frame every 45 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Similar to infix-to-postfix with a stack, with differences: traverse the infix from <strong>right to left</strong>, build the <em>reverse</em> of the prefix, and reverse it at the end. Brackets swap roles.</p>
+    <ol>
+      <li>Create an empty stack, st.</li>
+      <li>Create an empty string, prefix.</li>
+      <li>Do the following for every character C from right to left.</li>
+      <li>If C is:
+        <ol type="a">
+          <li><strong>Operand:</strong> push (append) it to prefix.</li>
+          <li><strong>Right parenthesis:</strong> push to st.</li>
+          <li><strong>Left parenthesis:</strong> pop from st until a right parenthesis is found; append the popped characters to prefix.</li>
+          <li><strong>Operator:</strong> if st is empty, push C to st. Else compare with st top:
+            <ol type="i">
+              <li>Higher precedence (than st top): push C to st.</li>
+              <li>Lower precedence: pop st top and append the popped item to prefix until a higher-precedence operator is found (or st becomes empty); push C to st.</li>
+              <li>Equal precedence: use associativity.</li>
+            </ol></li>
+        </ol></li>
+      <li>Pop everything from st and append to prefix.</li>
+      <li>Return the reverse of prefix.</li>
+    </ol>
+    <p>Precedence on the board: <code>^</code>, then <code>*</code> <code>/</code>, then <code>+</code> <code>−</code>, with the closing bracket lowest. Equal precedence is the reverse of postfix, because we traverse from the right: for a <strong>right-to-left</strong> operator (^) the operator that came later counts as lower, so the stack top is popped; for <strong>left-to-right</strong> operators the operator on the left side counts as higher, so C is pushed.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NzM3OQ%3D%3D" target="_blank" rel="noopener">Infix To Prefix</a></p>
+<ul>
+<li>Reuses infix-to-postfix: (1) reverse the infix — A+B*C becomes C*B+A, with each '(' becoming ')' and vice versa; (2) obtain the "nearly" postfix of that — CB*A+; (3) reverse it — <code>+A*BC</code>.</li>
+<li>Step 2's change to the postfix algorithm: pop operators of <em>greater</em> precedence than the scanned one (not greater or equal); only for "^" pop those greater than or equal. Time O(n); auxiliary space O(n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board examples</h4>
+      <ul>
+        <li><code>x + y * z</code>: z → "z"; push *; y → "zy"; + is lower than *, pop * → "zy*", push +; x → "zy*x"; pop + → "zy*x+"; reverse → <code>+x*yz</code>.</li>
+        <li><code>(x + y) * z</code>: z; push *; ) pushed; y; + is higher than ), push; x → "zyx"; ( pops + → "zyx+"; pop * → "zyx+*"; reverse → <code>*+xyz</code>.</li>
+        <li><code>x ^ y ^ z</code>: z; push ^(2); y; ^(1) — equal, right to left, so the later one counts as lower: pop ^(2) → "zy^", push ^(1); x; pop → "zy^x^"; reverse → <code>^x^yz</code>.</li>
+        <li>Example 4, <code>x + y / z − w * u</code>: u; push *; w → "uw"; − is lower, pop * → "uw*", push −; z; / higher, push; y → "uw*zy"; + is lower than /, pop / → "uw*zy/"; then + vs − (equal, left to right) — + counts as higher, push; x; pop + and − → "uw*zy/x+−"; reverse → <code>−+x/yz*wu</code>, matching the naive method.</li>
+      </ul>
+      <p>The course Description links the code (and a C++ version).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-27">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/video/MTUyMA%3D%3D" target="_blank" rel="noopener">Evaluation of Prefix</a> · Notes from the full course transcript and the board (a frame every 25 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a prefix expression as a string (tokens separated by spaces), find its value. Board examples:</p>
+    <ul>
+      <li><code>+ * 10 2 3</code> → 23 — from <code>10 * 2 + 3</code> ⇒ <code>((10 * 2) + 3)</code> ⇒ <code>((* 10 2) + 3)</code>.</li>
+      <li><code>* + 10 2 3</code> → 36 — from <code>(10 + 2) * 3</code>.</li>
+      <li><code>^ 10 ^ 2 3</code> → 100000000 — from <code>10 ^ 2 ^ 3</code> ⇒ <code>(10 ^ (2 ^ 3))</code> = 10⁸ (^ is right to left).</li>
+    </ul>
+    <p>Like postfix, prefix needs no precedence, associativity or brackets and can be evaluated in one traversal. The solution is the postfix evaluation traversed from <strong>right to left</strong>: push operands onto a stack; on an operator, take out the top two operands, apply the operator, and push the result back. At the end the stack top is the answer.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/article/NzM4MA%3D%3D" target="_blank" rel="noopener">Evaluation of Prefix</a></p>
+<ul>
+<li>Similar to evaluating postfix. Linear time: the expression is scanned once with at most O(N) constant-time push and pop operations.</li>
+<li>More operation types need only changes to the switch-case table; the basic version handles single-digit operands, and an extended program supports multi-digit operands separated by a character such as a space. O(n) time and space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Algorithm</h4>
+<pre><code>op1 = st.pop()
+op2 = st.pop()
+push(op1 x op2)     // x is the operator</code></pre>
+      <p>The one difference from postfix: here the result is <code>op1 x op2</code> (the first popped is the left operand), whereas postfix used <code>op2 x op1</code>. It doesn't matter for + and *, but it does for ^.</p>
+      <p>Board traces (right to left):</p>
+      <ul>
+        <li><code>+ * 10 2 3</code>: push 3, 2, 10; * → 10 * 2 = 20 → [3, 20]; + → 20 + 3 = 23.</li>
+        <li><code>* + 10 2 3</code>: push 3, 2, 10; + → 12 → [3, 12]; * → 36.</li>
+        <li><code>^ 10 ^ 2 3</code>: push 3, 2; ^ → 2³ = 8; push 10; ^ → 10⁸.</li>
+      </ul>
+      <p>The course Description links code in Python, C++, Java and C#.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Stack-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (17 problems, in course order). Every Articles-tab item matches a video, so the articles are in the video notes. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/implement-stack-using-array" target="_blank" rel="noopener">Implement Stack using Array</a></td><td>Basic</td><td>Videos 2–3</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/implement-stack-using-linked-list" target="_blank" rel="noopener">Stack using Linked List</a></td><td>Basic</td><td>Videos 4–5</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/operations-on-stack" target="_blank" rel="noopener">Stack Operations</a></td><td>Basic</td><td>Videos 7–8</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/delete-middle-element-of-a-stack" target="_blank" rel="noopener">Delete Mid of Stack</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/parenthesis-checker2744" target="_blank" rel="noopener">Parenthesis Checker</a></td><td>Easy</td><td>Video 9</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/removing-consecutive-duplicates-1587115621" target="_blank" rel="noopener">Removing consecutive duplicates</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/removing-consecutive-duplicates-2-1587115621" target="_blank" rel="noopener">Remove Consecutive Two Same</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/implement-two-stacks-in-an-array" target="_blank" rel="noopener">Two Stacks in Array</a></td><td>Medium</td><td>Video 10</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/stock-span-problem-1587115621" target="_blank" rel="noopener">Stock Span Problem</a></td><td>Medium</td><td>Video 13</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/previous-greater-element" target="_blank" rel="noopener">Previous Greater Element</a></td><td>Medium</td><td>Video 14</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/next-larger-element-1587115620" target="_blank" rel="noopener">Next Greater Element</a></td><td>Medium</td><td>Video 15</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/get-min-at-pop" target="_blank" rel="noopener">Get Min with Stack Pop</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>13</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/maximum-rectangular-area-in-a-histogram-1587115620" target="_blank" rel="noopener">Histogram Max Rectangular Area</a></td><td>Hard</td><td>Videos 16–17</td></tr>
+        <tr><td>14</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/the-celebrity-problem" target="_blank" rel="noopener">Celebrity Problem</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>15</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/infix-to-postfix-1587115620" target="_blank" rel="noopener">Infix to Postfix</a></td><td>Medium</td><td>Videos 22–23</td></tr>
+        <tr><td>16</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/evaluation-of-postfix-expression1735" target="_blank" rel="noopener">Postfix Evaluation</a></td><td>Medium</td><td>Video 24</td></tr>
+        <tr><td>17</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Stack/problem/maximum-of-minimum-for-every-window-size3453" target="_blank" rel="noopener">Max of Min for Every Window Size</a></td><td>Hard</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -21424,7 +23015,36 @@ const TRACKS = [
       ["Merge two sorted linked lists", "15:03"],
       ["Palindrome Linked List", "10:18"]
     ] },
-  { id: "DSASP-Stack", slug: "stack", name: "Stack", counts: [27, 19, 17, 10, 0] },
+  { id: "DSASP-Stack", slug: "stack", name: "Stack", counts: [27, 19, 17, 10, 0],
+    videos: [
+      ["Stack Data Structure", "6:50"],
+      ["Array Implementation of Stack in C++", "12:48"],
+      ["Array Implementation of Stack in Java", "12:52"],
+      ["Linked List Implementation of Stack in C++", "8:38"],
+      ["Linked List Implementation of Stack in Java", "7:47"],
+      ["Applications of Stack", "9:00"],
+      ["Stack in C++ STL", "6:06"],
+      ["Stack in Java Collections", "5:16"],
+      ["Balanced Parenthesis", "12:43"],
+      ["Implement two Stacks in an Array", "12:32"],
+      ["Implement K Stacks in an Array in C++", "9:50"],
+      ["Implement K Stacks in an Array in Java", "9:35"],
+      ["Stock span problem", "26:41"],
+      ["Previous Greater Element", "8:02"],
+      ["Next Greater Element", "14:49"],
+      ["Largest Rectangular Area in a Histogram (Part 1)", "12:39"],
+      ["Largest Rectangular Area in a Histogram (Part 2)", "9:11"],
+      ["Largest Rectangle with all 1's", "13:09"],
+      ["Stack with getMin() in O(1)", "9:05"],
+      ["Design a Stack with getMin() in O(1) Space", "16:25"],
+      ["Infix, Prefix and Postfix Introduction", "9:54"],
+      ["Infix to Postfix (Simple sol.)", "9:35"],
+      ["Infix to Postfix (Efficient Solution)", "12:32"],
+      ["Evaluation of Postfix", "10:24"],
+      ["Infix to Prefix (Simple Solution)", "9:00"],
+      ["Infix to Prefix (Efficient Solution)", "15:47"],
+      ["Evaluation of Prefix", "6:51"]
+    ] },
   { id: "DSASP-Queue", slug: "queue", name: "Queue", counts: [9, 5, 9, 10, 0] },
   { id: "DSASP-Deque", slug: "deque", name: "Deque", counts: [8, 7, 6, 10, 1] },
   { id: "DSASP-Tree", slug: "tree", name: "Tree", counts: [30, 24, 32, 10, 0] },

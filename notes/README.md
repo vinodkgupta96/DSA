@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 11 of 24 tracks · 258 of 470 videos · 197 of 342 articles · 188 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 12 of 24 tracks · 285 of 470 videos · 216 of 342 articles · 205 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -86,8 +86,8 @@ Report back with:
 | 9 | Hashing | 29 | 23 | 22 | ✅ Done: 29/29 videos, 23/23 articles, 22 problems |
 | 10 | Strings | 19 | 12 | 26 | ✅ Done: 19/19 videos, 12/12 articles, 26 problems |
 | 11 | Linked List | 54 | 40 | 25 | ✅ Done: 54/54 videos, 40/40 articles, 25 problems |
-| 12 | Stack | 27 | 19 | 17 | ⏭ Next |
-| 13 | Queue | 9 | 5 | 9 | Not started |
+| 12 | Stack | 27 | 19 | 17 | ✅ Done: 27/27 videos, 19/19 articles, 17 problems |
+| 13 | Queue | 9 | 5 | 9 | ⏭ Next |
 | 14 | Deque | 8 | 7 | 6 | Not started |
 | 15 | Tree | 30 | 24 | 32 | Not started |
 | 16 | Binary Search Tree | 28 | 16 | 23 | Not started |
@@ -437,6 +437,40 @@ Every Strings article matches a video, so the Track practice set lists only the 
 
 "Sample Problems on Linked List", "XOR Linked Lists" and "Circular Linked Lists" match no video, so they're in the Track practice set with the 25 problems. V4, V5, V7, V8, V9, V11, V14, V15, V16, V23, V24, V25, V31, V35, V45, V46 and V54 have no Transcript button and were done from frames and the description. V39's transcript stops at 7:00 of 10:00; the rest is from frames. Course progress was unchanged (4/54 videos watched, 17%, 0/40 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 54 Linked List videos.
 
+### Track 12: Stack, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Stack Data Structure | 6:50 | Board + description | Stack Data Structure |
+| 2 | Array Implementation of Stack in C++ | 12:48 | Board + description | Array Implementation of Stack |
+| 3 | Array Implementation of Stack in Java | 12:52 | Board + description |  |
+| 4 | Linked List Implementation of Stack in C++ | 8:38 | Board + description | Linked List implementation of Stack |
+| 5 | Linked List Implementation of Stack in Java | 7:47 | Board + description |  |
+| 6 | Applications of Stack | 9:00 | Transcript + board | Applications of Stack |
+| 7 | Stack in C++ STL | 6:06 | Transcript + board | Stack in C++ STL |
+| 8 | Stack in Java Collections | 5:16 | Board + description | Stack in Java Collection |
+| 9 | Balanced Parenthesis | 12:43 | Board + description | Balanced Parenthesis |
+| 10 | Implement two Stacks in an Array | 12:32 | Transcript + board | Implement two Stacks in an Array |
+| 11 | Implement K Stacks in an Array in C++ | 9:50 | Transcript + board | Implement K Stacks in an Array |
+| 12 | Implement K Stacks in an Array in Java | 9:35 | Transcript + board |  |
+| 13 | Stock span problem | 26:41 | Board + description | Stock span problem |
+| 14 | Previous Greater Element | 8:02 | Transcript + board | Previous Greater Element |
+| 15 | Next Greater Element | 14:49 | Transcript + board | Next Greater Element |
+| 16 | Largest Rectangular Area in a Histogram (Part 1) | 12:39 | Transcript + board |  |
+| 17 | Largest Rectangular Area in a Histogram (Part 2) | 9:11 | Transcript + board | Largest Rectangular Area in a Histogram |
+| 18 | Largest Rectangle with all 1's | 13:09 | Transcript + board | Largest Rectangle with all 1's |
+| 19 | Stack with getMin() in O(1) | 9:05 | Transcript + board |  |
+| 20 | Design a Stack with getMin() in O(1) Space | 16:25 | Board + description | Stack with getMin() in O(1) |
+| 21 | Infix, Prefix and Postfix Introduction | 9:54 | Transcript + board |  |
+| 22 | Infix to Postfix (Simple sol.) | 9:35 | Transcript + board |  |
+| 23 | Infix to Postfix (Efficient Solution) | 12:32 | Transcript + board | Infix to Postfix |
+| 24 | Evaluation of Postfix | 10:24 | Transcript + board | Evaluation of Postfix |
+| 25 | Infix to Prefix (Simple Solution) | 9:00 | Transcript + board |  |
+| 26 | Infix to Prefix (Efficient Solution) | 15:47 | Transcript + board | Infix To Prefix |
+| 27 | Evaluation of Prefix | 6:51 | Transcript + board | Evaluation of Prefix |
+
+Every Stack article matches a video, so the Track practice set lists only the 17 problems. V1, V2, V3, V4, V5, V8, V9, V13 and V20 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (1/27 videos watched, 10%, 0/19 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 27 Stack videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -459,10 +493,11 @@ Every Strings article matches a video, so the Track practice set lists only the 
 - `671776d`: Add Matrix track notes (12 videos, 11 articles, 15 problems)
 - `4d2a6f6`: Add Hashing track notes (29 videos, 23 articles, 22 problems)
 - `5a47254`: Add Strings track notes (19 videos, 12 articles, 26 problems)
-- (this commit): Add Linked List track notes (54 videos, 40 articles, 25 problems)
+- `3251af2`: Add Linked List track notes (54 videos, 40 articles, 25 problems)
+- (this commit): Add Stack track notes (27 videos, 19 articles, 17 problems)
 
 ### What's next
-- **Track 12: Stack** (27 videos, 19 articles, 17 problems), starting straight away.
+- **Track 13: Queue** (9 videos, 5 articles, 9 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -486,6 +521,7 @@ Every Strings article matches a video, so the Track practice set lists only the 
   - Completed track 9 (Hashing): 29 videos, 23 articles, 22 problems.
   - Completed track 10 (Strings): 19 videos, 12 articles, 26 problems.
   - Completed track 11 (Linked List): 54 videos, 40 articles, 25 problems.
+  - Completed track 12 (Stack): 27 videos, 19 articles, 17 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -502,6 +538,16 @@ Every Strings article matches a video, so the Track practice set lists only the 
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Stack: teacher slips flagged
+- V3 (board): the Java ArrayList stack heads isEmpty with `bool` for `boolean`.
+- V8 (board): after the pop the remaining stack is drawn as just 10, though 10 and 20 remain.
+- V9 (board): the Java version writes `str.CharAt(i)` for `charAt`.
+- V10 (board): push2 omits `arr[top2] = x;`, and the second pop is headed `pop1()` again.
+- V11 (board): the C++ KStacks constructor never allocates `next`.
+- V17 (board): the first loop mixes `st.top()`/`st.pop()` with the stack named `s`.
+- V20 (board): the empty-stack case in push writes `min = t` for `min = x` (both methods).
+- `&&` is drawn like "$$" (V9, V13, V14, V17). Videos without a transcript (V1–V5, V8, V9, V13, V20): spoken slips couldn't be checked.
 
 ### Linked List: teacher slips flagged
 - V13 (board): the Java version's second check is `if(head.next = null)`, an assignment; it should be `==`.
