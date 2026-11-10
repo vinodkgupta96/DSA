@@ -29314,6 +29314,782 @@ int kruskal(Edge arr[])
   </section>
 </template>
 
+<template id="DSASP-Greedy-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/OTIw" target="_blank" rel="noopener">Introduction to Greedy Algorithms</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Greedy algorithms are mainly for <strong>optimization problems</strong>, which maximize or minimize something, e.g. shortest path (minimum distance or weight) and longest path (maximum).</p>
+    <p><strong>Example: minimum coins.</strong> With an infinite supply of 10, 5, 2 and 1 rupee coins, pay an amount with the fewest coins. 15 = 10 + 5 (2 coins); 52 = five 10s + one 2. Consider coins in decreasing order and take as many of each as fit: <code>c = ⌊amount / coin⌋</code>, then <code>amount −= c × coin</code>.</p>
+    <p><strong>General structure:</strong></p>
+    <ol>
+      <li>Initialize res = 0.</li>
+      <li>While not all items are considered: <code>i = selectAnItem()</code>; if <code>feasible(i)</code>, <code>res = res + i</code>.</li>
+      <li>Return res.</li>
+    </ol>
+    <p>Selection is often done by sorting first (fractional knapsack, activity selection, job sequencing), or by finding the min or max inside the loop.</p>
+    <p><strong>Greedy may not be optimal:</strong></p>
+    <ul>
+      <li>With coins 18, 1 and 10 and amount 20, greedy takes 18 + 1 + 1 (3 coins), but 10 + 10 needs 2.</li>
+      <li>For the longest path, taking the longest edge at each step gives 10 + 2 + 1 = 13, but a path of 1 + 20 + 5 = 26 exists.</li>
+    </ul>
+    <p><strong>Where greedy is optimal:</strong> activity selection, fractional knapsack and job sequencing (next videos), Prim's and Kruskal's MST, Dijkstra's shortest path, and Huffman coding (optimal lossless compression).</p>
+    <p><strong>Where it's still useful:</strong> NP-hard problems have no known polynomial solution (none is proved impossible either), and they're common in the real world. Exponential solutions are too costly, so greedy gives approximate solutions within bounds, e.g. never more than 2x the optimal X.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/article/MjM5NA%3D%3D" target="_blank" rel="noopener">Introduction to Greedy Algorithms</a></p>
+<ul>
+<li>Greedy builds a solution piece by piece, always choosing the next piece with the most obvious, immediate benefit. It fits problems where the locally optimal choice also leads to the global optimum.</li>
+<li>Applicable when, at every step, the choice that looks best at the moment yields the optimal solution of the whole problem.</li>
+<li><strong>Fractional knapsack:</strong> pick by maximum value/weight ratio. This is globally optimal because fractions are allowed.</li>
+<li><strong>Activity selection:</strong> sort by finish time, select the first activity, then select each next activity whose start ≥ the finish of the last selected one.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Minimum coins (greedy; works for Indian or US denominations)</h4>
+<pre><code class="language-cpp">int minCoins(int coins[], int n, int amount)
+{
+    sort(coins, coins + n, greater&lt;int&gt;());   // decreasing order
+    int res = 0;
+    for(int i = 0; i &lt; n; i++)
+    {
+        if(coins[i] &lt;= amount)
+        {
+            int c = floor(amount / coins[i]);
+            res = res + c;
+            amount = amount - c * coins[i];
+        }
+        if(amount == 0)
+            break;
+    }
+    return res;
+}</code></pre>
+      <p>Board trace with amount = 57 and coins {5, 10, 2, 1}, sorted to {10, 5, 2, 1}:</p>
+      <ol>
+        <li>i = 0: res = 5, amount = 7.</li>
+        <li>i = 1: res = 6, amount = 2.</li>
+        <li>i = 2: res = 7, amount = 0.</li>
+      </ol>
+      <p>Answer <strong>7</strong>.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the board writes step 1 as "Sort coins[] in decreasing order"; the <code>sort(…, greater&lt;int&gt;())</code> line above is that step in C++. It also mixes <code>coins[]</code> and <code>coin[i]</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/OTIx" target="_blank" rel="noopener">Activity Selection Problem</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Activities are (start, finish) pairs. One machine does one task at a time, so of two overlapping activities only one can be done; e.g. (2, 3) and (1, 4) overlap. Return the <strong>maximum number</strong> of activities. Example: {(3, 8), (2, 4), (1, 3), (10, 11)} → 3.</p>
+    <ul>
+      <li><strong>Naive, exponential:</strong> try every activity as the first, recursively find the best for the rest, and take the max. Dynamic programming can make it polynomial (a longest-increasing-subsequence style problem, in the DP track), but greedy is better.</li>
+      <li><strong>Greedy:</strong>
+        <ol>
+          <li>Sort the activities by finish time.</li>
+          <li>Initialize the solution with the first activity, the smallest finish time.</li>
+          <li>For each remaining activity: if it overlaps the last picked one, ignore it; otherwise add it.</li>
+        </ol>
+      </li>
+    </ul>
+    <p><strong>Why it works</strong> (by contradiction): suppose a solution S2 of size n2 beats the greedy one, S1 of size n1. Replace S2's first activity with the smallest-finish-time activity. It still fits before the other n2 − 1, because it finishes earliest, so a solution of size n2 starts with the greedy choice, contradicting the assumption. Picking the earliest finish is always optimal.</p>
+    <p><strong>Time:</strong> sorting is O(n log n). The loop is n − 1 constant-time checks: does the current start come at or after the last picked finish? So O(n log n) overall.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/article/NzQ5MA%3D%3D" target="_blank" rel="noopener">Activity Selection Problem</a></p>
+<ul>
+<li>The steps are the same as the video's: sort by finish time, select the first activity, then select each activity whose start ≥ the previous selected finish.</li>
+<li><strong>Why picking activity 1 (the earliest finish) is safe:</strong> suppose an optimal solution B starts with some other activity k. Then A = (B − {k}) ∪ {1} is the same size and still valid, since finish(k) ≥ finish(1).</li>
+<li>If the activities are unsorted, make a struct or class for them and sort by finish time first (the article also gives an STL version).</li>
+<li>Time: O(n log n) if the input may be unsorted, O(n) if it is already sorted by finish time.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace</h4>
+      <p>{(3, 8), (2, 4), (1, 3), (10, 11)}, sorted by finish: {(1, 3), (2, 4), (3, 8), (10, 11)}.</p>
+      <ol>
+        <li>s = {(1, 3)}.</li>
+        <li>(2, 4) overlaps (1, 3), so ignore it.</li>
+        <li>(3, 8) doesn't overlap, so add it.</li>
+        <li>(10, 11) doesn't overlap, so add it.</li>
+      </ol>
+      <p>Answer <strong>3</strong>. Picking (2, 4) instead would allow only 2.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/MTY0MQ%3D%3D" target="_blank" rel="noopener">Activity Selection Solution in C++</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Activities are stored as an array of <code>pair&lt;int, int&gt;</code> (start, finish). Sorting pairs uses the first member by default, so a comparator <code>myCmp</code> orders them by <code>second</code> (finish time). The first activity is always selected: <code>res = 1</code>, <code>prev = 0</code>. From the second activity on, include the current one if its start is ≥ the finish of the <em>previously selected</em> activity (not the previous one in the array).</p>
+    <p><strong>Complexity:</strong> O(n log n) for the sort plus Θ(n) for the traversal, so O(n log n). Auxiliary space O(1), since the original array is sorted in place. If it mustn't be modified, a temporary copy needs O(n).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>C++</h4>
+<pre><code class="language-cpp">bool myCmp(pair&lt;int, int&gt; a, pair&lt;int, int&gt; b)
+{
+    return (a.second &lt; b.second);
+}
+int maxActivities(pair&lt;int, int&gt; arr[], int n)
+{
+    sort(arr, arr + n, myCmp);
+    int prev = 0;
+    int res = 1;
+    for(int curr = 1; curr &lt; n; curr++)
+    {
+        if(arr[curr].first &gt;= arr[prev].second)
+        {
+            res++;
+            prev = curr;
+        }
+    }
+    return res;
+}</code></pre>
+      <p>Board trace on {(12, 25), (10, 20), (20, 30)}, sorted to {(10, 20), (12, 25), (20, 30)}:</p>
+      <ol>
+        <li>res = 1, prev = 0.</li>
+        <li>curr = 1 clashes (12 &lt; 20), so ignore it.</li>
+        <li>curr = 2: 20 ≥ 20, so res = 2, prev = 2.</li>
+      </ol>
+      <p>Answer <strong>2</strong>.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> <code>myCmp</code> is declared <code>void</code> but returns a comparison; a sort comparator must return <code>bool</code>, as written above.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/MTY0Mg%3D%3D" target="_blank" rel="noopener">Activity Selection Solution in Java</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The description says this is the Java solution of the activity selection problem. The board implements it with an <code>Activity</code> class (start, finish) and a comparator class <code>MyCmp implements Comparator&lt;Activity&gt;</code>, whose <code>compare</code> returns <code>a1.finish − a2.finish</code>. That sorts by finish time; the rest is the same greedy loop as the C++ version.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Java</h4>
+<pre><code class="language-java">class Activity {
+    int start;
+    int finish;
+    Activity(int s, int f) {
+        start = s;
+        finish = f;
+    }
+}
+class MyCmp implements Comparator&lt;Activity&gt; {
+    public int compare(Activity a1, Activity a2) {
+        return a1.finish - a2.finish;
+    }
+}
+static int maxActivity(Activity[] arr)
+{
+    Arrays.sort(arr, new MyCmp());
+    int res = 1;
+    int prev = 0;
+    for(int curr = 1; curr &lt; arr.length; curr++)
+    {
+        if(arr[curr].start &gt;= arr[prev].finish)
+        {
+            res++;
+            prev = curr;
+        }
+    }
+    return res;
+}</code></pre>
+      <p>Board trace on {(12, 25), (10, 20), (20, 30)}, sorted to {(10, 20), (12, 25), (20, 30)}:</p>
+      <ol>
+        <li>prev = 0, res = 1.</li>
+        <li>curr = 1: ignore it.</li>
+        <li>curr = 2: res = 2, prev = 2.</li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the board calls <code>Arrays.sort(arr, MyCmp)</code>, passing the class name. A comparator <em>instance</em> is needed: <code>new MyCmp()</code>, as written above.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/OTIy" target="_blank" rel="noopener">Fractional Knapsack Problem</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given items with weights and values and a knapsack (bag) of some capacity, collect the maximum value. Items can be taken <em>partially</em>, like a powder, hence "fractional".</p>
+    <ul>
+      <li>Weights {50, 20, 30}, values {600, 500, 400}, capacity 70 → <strong>1140</strong>: I2 and I3 whole, plus 20/50 of I1 (240). Taking I1 and I2 whole gives only 1100, and other mixes give less.</li>
+      <li>Weights {10, 5, 20}, values {200, 50, 100}, capacity 15 → <strong>250</strong> (I1 and I2 whole).</li>
+    </ul>
+    <p><strong>Greedy:</strong></p>
+    <ol>
+      <li>Calculate the ratio value/weight, the value per unit, for every item.</li>
+      <li>Sort the items in decreasing order of that ratio.</li>
+      <li>Initialize <code>res = 0</code> and <code>curr_cap = given_cap</code>.</li>
+      <li>For each item I in sorted order:
+        <ol type="a">
+          <li>If <code>I.weight &lt;= curr_cap</code>, take it whole: <code>curr_cap −= I.weight</code>, <code>res += I.value</code>.</li>
+          <li>Otherwise take the fraction that fits, <code>res += I.value × (curr_cap / I.weight)</code>, and return res, since the capacity is now exhausted.</li>
+        </ol>
+      </li>
+      <li>Return res.</li>
+    </ol>
+    <p><strong>Time:</strong> O(n log n) to sort plus O(n) for the pass, so O(n log n).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/article/NjIzNA%3D%3D" target="_blank" rel="noopener">Fractional Knapsack Problem</a></p>
+<ul>
+<li>Items may be broken to maximise value. In 0-1 knapsack they may not: each item is taken whole or not at all.</li>
+<li>Examples with (value, weight) items:
+  <ul>
+    <li>{(60, 10), (100, 20), (120, 30)}, W = 50 gives 60 + 100 + (2/3)(120) = 240.</li>
+    <li>{(500, 30)}, W = 10 gives 166.667.</li>
+  </ul>
+</li>
+<li>Naive: try every subset with every fraction, which is very inefficient.</li>
+<li>Greedy: compute value/weight and sort in decreasing order. Set res = 0 and curr_cap = W. Add whole items while they fit, then add as much of the next item as fits and break.</li>
+<li>Time O(N log N), auxiliary space O(N).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace (capacity 70)</h4>
+      <p>The ratios are I1 12, I2 25, I3 40/3, so the sorted order is I2, I3, I1. Starting with curr_cap = 70 and res = 0:</p>
+      <ol>
+        <li>Pick I2 whole: curr_cap = 50, res = 500.</li>
+        <li>Pick I3 whole: curr_cap = 20, res = 900.</li>
+        <li>Pick I1 partially: 600 × 20/50 = 240, so res = <strong>1140</strong>.</li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong></p>
+      <ul>
+        <li>Step 4(a) on the board starts with "Else if" though there is no preceding if; it's a plain <code>if</code>.</li>
+        <li>The transcript says "this item completely of 50 kg" for I2, which weighs 5 kg.</li>
+        <li>It says the partial value is "20 multiplied by total value divided by 15"; it's 600 × 20/50 = 240.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/MTYzOQ%3D%3D" target="_blank" rel="noopener">Fractional Knapsack in C++</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Items are <code>pair&lt;int, int&gt;</code> (value, weight). <code>myCmp</code> compares value/weight as <code>double</code>s and puts the higher ratio first, e.g. ratios 4, 5, 6 for the items below. Then traverse the sorted array.</p>
+    <ul>
+      <li>If an item fits (<code>weight ≤ W</code>), take it whole and reduce W.</li>
+      <li>Otherwise take <code>value × W / weight</code> and <code>break</code>. The knapsack is now full; if any space were left, more of this item would have been taken.</li>
+    </ul>
+    <p><strong>Time:</strong> O(n log n) for the sort plus O(n) for the traversal, so O(n log n).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>C++ (STL sort with a ratio comparator)</h4>
+<pre><code class="language-cpp">bool myCmp(pair&lt;int, int&gt; a, pair&lt;int, int&gt; b)
+{
+    double r1 = (double)a.first / a.second;
+    double r2 = (double)b.first / b.second;
+    return r1 &gt; r2;
+}
+double fKnapS(int W, pair&lt;int, int&gt; arr[], int n)
+{
+    sort(arr, arr + n, myCmp);
+    double res = 0.0;
+    for(int i = 0; i &lt; n; i++)
+    {
+        if(arr[i].second &lt;= W)
+        {
+            res += arr[i].first;
+            W = W - arr[i].second;
+        }
+        else
+        {
+            res += arr[i].first * ((double)W / arr[i].second);
+            break;
+        }
+    }
+    return res;
+}</code></pre>
+      <p>Board trace with W = 50 and arr = {(120, 30), (100, 20), (60, 10)}, sorted to {(60, 10), (100, 20), (120, 30)}:</p>
+      <ol>
+        <li>i = 0: res = 60, W = 40.</li>
+        <li>i = 1: res = 160, W = 20.</li>
+        <li>i = 2: res = 160 + (20/30 × 120) = <strong>240</strong>.</li>
+      </ol>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/NzU5MQ%3D%3D" target="_blank" rel="noopener">Fractional Knapsack in Java</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 10–20 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The Java version of fractional knapsack. The board's <code>Item</code> class (wt, val) implements <code>Comparable&lt;Item&gt;</code>, so <code>Arrays.sort</code> orders items by value-per-weight ratio, highest first. The loop is the same greedy loop as the C++ version.</p>
+    <p>The comparison avoids division. "This" should come first when <code>i.val / i.wt − this.val / this.wt &lt; 0</code>, which (multiplying by both weights) is <code>this.wt × i.val − this.val × i.wt &lt; 0</code>. So <code>compareTo</code> returns that cross product: negative if this object should appear first, positive otherwise.</p>
+    <p>Complexity (board): the sort is O(n log n) and the loop is O(n).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Java</h4>
+<pre><code class="language-java">class Item implements Comparable&lt;Item&gt; {
+    int wt, val;
+    public Item(int w, int v) { wt = w; val = v; }
+    public int compareTo(Item i) {
+        return wt * i.val - val * i.wt;
+    }
+}
+public class Test {
+    public static void main(String[] args) {
+        Item arr[] = {new Item(10, 60), new Item(40, 40),
+                      new Item(20, 100), new Item(30, 120)};
+        int W = 50;
+        System.out.println(fracKnapSack(arr, W));
+    }
+    static double fracKnapSack(Item arr[], int W) {
+        Arrays.sort(arr);
+        double res = 0.0;
+        for (int i = 0; i &lt; arr.length; i++) {
+            if (arr[i].wt &lt;= W) {
+                res = res + arr[i].val;
+                W = W - arr[i].wt;
+            } else {
+                res = res + arr[i].val * (double) W / (double) arr[i].wt;
+                break;
+            }
+        }
+        return res;
+    }
+}</code></pre>
+      <p>Board trace. Ratios are 6, 1, 5, 4, so the sorted order is {(10, 60), (20, 100), (30, 120), (40, 40)}:</p>
+      <ol>
+        <li>res = 0.0, W = 50.</li>
+        <li>i = 0: res = 60, W = 40.</li>
+        <li>i = 1: res = 160, W = 20.</li>
+        <li>i = 2: only 20 of 30 fits, so res = 160 + 120 × 20/30 = <strong>240</strong>; break.</li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the board writes <code>Array.sort(arr)</code>. The class is <code>Arrays</code>, as written above.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/OTIz" target="_blank" rel="noopener">Job Sequencing Problem</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> We have n jobs J0, J1, …. Each job has a deadline and a profit. You get the profit only if the job finishes by its deadline. The goal is to maximise total profit. Rules on the board:</p>
+    <ul>
+      <li>Every job takes one unit of time.</li>
+      <li>Only one job can be done at a time.</li>
+      <li>Time starts at 0.</li>
+    </ul>
+    <p>The teacher's picture: a shopkeeper takes one hour per customer. Each customer wants the product by some hour and pays a different amount.</p>
+    <p><strong>Slots view.</strong> Draw a bar from 0 up to the maximum deadline, cut into unit slots. A job can go in a slot only if the slot ends at or before the job's deadline. Some slots may stay empty: if every job but one has deadline 1, those jobs fight for slot 0–1.</p>
+    <p><strong>Greedy algorithm</strong> (it always gives the optimal answer):</p>
+    <ol>
+      <li>Sort the jobs in decreasing order of profit.</li>
+      <li>Put the first job in the result, in the <em>latest</em> possible slot before its deadline.</li>
+      <li>For each of the remaining n − 1 jobs:
+        <ol type="a">
+          <li>if it cannot be added, ignore it;</li>
+          <li>otherwise add it to the latest possible free slot.</li>
+        </ol>
+      </li>
+    </ol>
+    <p>Taking the latest feasible slot keeps the earlier slots free for jobs with tighter deadlines.</p>
+    <p>The teacher suggests representing a job as a struct (C++) or a class (Java) with deadline and profit. The function takes an array of jobs and returns the maximum profit.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/article/MjM5Ng%3D%3D" target="_blank" rel="noopener">Job Sequencing Problem | Greedy Approach</a></p>
+<ul>
+<li>Every job takes one unit of time, so the minimum possible deadline is 1. Only one job runs at a time.</li>
+<li>Examples:
+  <ul>
+    <li>Deadlines and profits a (4, 20), b (1, 10), c (1, 40), d (1, 30) give the sequence c, a.</li>
+    <li>a (2, 100), b (1, 19), c (2, 27), d (1, 25), e (3, 15) give the sequence c, a, e.</li>
+  </ul>
+</li>
+<li>Algorithm: sort by decreasing profit, start the result with the first job, then add each remaining job only if it fits without missing its deadline.</li>
+<li>The code keeps a boolean <code>slot[]</code> array. For each job it scans from <code>min(n, dead) − 1</code> down to 0 for a free slot (the last possible slot first), takes it, and records the job.</li>
+<li>Time O(n²). It can be optimised with a Disjoint Set data structure.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board examples</h4>
+      <table>
+        <tr><th>Deadlines</th><th>Profits</th><th>Picked</th><th>Output</th></tr>
+        <tr><td>4, 1, 1, 1</td><td>70, 80, 30, 100</td><td>J3 (100) in slot 0–1, J0 (70) in any later slot</td><td>170</td></tr>
+        <tr><td>2, 2, 3, 3</td><td>50, 60, 20, 30</td><td>J1, J0, J3</td><td>140</td></tr>
+        <tr><td>2, 1, 2, 1, 3</td><td>100, 50, 10, 20, 30</td><td>J1, J0, J4 (slots 0–1, 1–2, 2–3)</td><td>180</td></tr>
+      </table>
+    </div>
+    <div class="approach">
+      <h4>Run of the algorithm on example 3</h4>
+      <p>Sorted by profit: J0 (2, 100), J1 (1, 50), J4 (3, 30), J3 (1, 20), J2 (2, 10). Slots: 0–1, 1–2, 2–3.</p>
+      <ol>
+        <li>J0 (deadline 2) goes to the latest slot it can, 1–2.</li>
+        <li>J1 (deadline 1) goes to 0–1.</li>
+        <li>J4 (deadline 3) goes to 2–3.</li>
+        <li>J3 and J2 find no free slot by their deadlines, so they are ignored.</li>
+      </ol>
+      <p>Profit = 100 + 50 + 30 = <strong>180</strong>.</p>
+    </div>
+    <div class="approach">
+      <h4>Second run</h4>
+      <p>Deadlines 4, 1, 1, 5, 5 and profits 50, 5, 20, 10, 80. Sorted: J4 (5, 80), J0 (4, 50), J2 (1, 20), J3 (5, 10), J1 (1, 5).</p>
+      <ol>
+        <li>J4 goes to slot 4–5.</li>
+        <li>J0 goes to slot 3–4, the latest slot by its deadline.</li>
+        <li>J2 goes to slot 0–1.</li>
+        <li>J3: slots 4–5 and 3–4 are taken, so it goes to 2–3.</li>
+        <li>J1: slot 0–1 is occupied, so it is ignored.</li>
+      </ol>
+      <p>Profit = 20 + 10 + 50 + 80 = <strong>160</strong>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/MjQ0MQ%3D%3D" target="_blank" rel="noopener">Huffman Coding (introduction)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Huffman coding</strong> is a popular <em>lossless</em> compression technique, and it uses <em>variable-length</em> codes.</p>
+    <ul>
+      <li><strong>Lossless:</strong> decompression gives back exactly the original data. Lossy techniques, used for video, give up a little quality to save space or bandwidth.</li>
+      <li><strong>Variable-length:</strong> different characters get bit sequences of different lengths.</li>
+    </ul>
+    <p>Why compress? To save disk space when the data is stored in a file, and bandwidth when it is sent over a network. The receiver runs the decompression algorithm, and must get the original string back.</p>
+    <p><strong>Example.</strong> A 100-character string has only a, b and c, with frequencies a = 70, b = 20, c = 10.</p>
+    <ul>
+      <li>ASCII: 8 bits each, so 800 bits (100 bytes).</li>
+      <li>Fixed-length code: 3 distinct characters need 2 bits (2 bits give 4 codes). So a = 00, b = 01, c = 10, with 11 unused: 100 × 2 = 200 bits.</li>
+    </ul>
+    <p><strong>Greedy idea:</strong> the most frequent character gets the shortest code, and the least frequent gets the longest.</p>
+    <p><strong>Prefix requirement for decompression:</strong> no code may be a prefix of any other.</p>
+    <ul>
+      <li>With a = 1, b = 0, c = 11, the bits 111 could mean aaa, ca or ac, so we can't decode.</li>
+      <li>With a = 0, b = 00, c = 01, the code 0 is a prefix of 00 and 01, so again a string has several decodings.</li>
+    </ul>
+    <p>On the board's example:</p>
+    <table>
+      <tr><th>Char (freq)</th><th>Prefix-free ✓</th><th>Prefix-free ✓</th><th>Not prefix-free ✗</th><th>Not prefix-free ✗</th></tr>
+      <tr><td>a (70)</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+      <tr><td>b (20)</td><td>10</td><td>01</td><td>00</td><td>0</td></tr>
+      <tr><td>c (10)</td><td>11</td><td>00</td><td>01</td><td>11</td></tr>
+    </table>
+    <p>Both valid codes give a 1 bit and the others 2 bits: 70 × 1 + 20 × 2 + 10 × 2 = <strong>130 bits</strong>, saving 70 bits over fixed length.</p>
+    <p><strong>Decoding with a prefix-free code</strong> (a = 0, b = 10, c = 11) reads left to right, and there is only one answer. A 0 is a. A 1 means look at the next bit: 10 is b and 11 is c. On the board, 001110 decodes to a a c b.</p>
+    <p>The next video gives the algorithm that builds the codes.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <ol>
+      <li>Space for the 100-character string: ASCII 800 bits, fixed 2-bit code 200 bits, Huffman-style code 130 bits.</li>
+      <li>Decode 001110 with a = 0, b = 10, c = 11: 0 | 0 | 11 | 10 = a a c b.</li>
+    </ol>
+    <div class="added">
+      <p><strong>Board slip:</strong> for the code a = 0, b = 00, c = 01 the board writes 00001 with decodings "aac" and "bc". Those decode 0001 (4 bits). For the 5 bits 00001, the decodings are a a a c, b a c and a b c. The point stands either way: the string is ambiguous.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/Mjc4MA%3D%3D" target="_blank" rel="noopener">Huffman Algorithms</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 5 s plus close-ups) and the course description, which links the code. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The board's input: characters ['a', 'd', 'b', 'e', 'f'] with frequencies [10, 50, 20, 40, 80].</p>
+    <h4>High-level idea</h4>
+    <ol>
+      <li><strong>Build a binary tree</strong> where:
+        <ul>
+          <li>every input character is a leaf;</li>
+          <li>every left child edge is labelled 0 and every right child edge 1;</li>
+          <li>every root-to-leaf path spells the Huffman code of that leaf.</li>
+        </ul>
+      </li>
+      <li><strong>Traverse the tree and print the codes.</strong> For the example: f 0, d 10, a 1100, b 1101, e 111.</li>
+    </ol>
+    <p>The board's tree: the root ($, 200) has left child f 80 and right child ($, 120). The ($, 120) node has left d 50 and right ($, 70). The ($, 70) node has left ($, 30) and right e 40. The ($, 30) node has left a 10 and right b 20. The most frequent character (f) is nearest the root and gets the shortest code; the rarest (a, b) get the longest.</p>
+    <h4>Building the tree</h4>
+    <ol>
+      <li>Create leaf nodes and build a <strong>min heap h</strong> of all the leaves.</li>
+      <li>While <code>h.size() &gt; 1</code>:
+        <ol type="a">
+          <li><code>left = h.extractMin()</code></li>
+          <li><code>right = h.extractMin()</code></li>
+          <li>create a new tree node with character '$', frequency left.freq + right.freq, and children left and right;</li>
+          <li>insert the new node into h.</li>
+        </ol>
+      </li>
+      <li>The only node left in h is the required binary tree.</li>
+    </ol>
+    <h4>Printing the codes</h4>
+    <p>Recurse from the root, adding "0" when going left and "1" when going right. A node whose character is not '$' is a leaf, so print its character and the code built so far.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/article/NzQ5Mw%3D%3D" target="_blank" rel="noopener">Huffman Coding</a></p>
+<ul>
+<li>A lossless compression algorithm. Code lengths depend on frequency: the most frequent character gets the shortest code.</li>
+<li><strong>Prefix codes:</strong> no character's code is a prefix of another's, so decoding is never ambiguous.
+  <ul>
+    <li>Counter-example: a = 00, b = 01, c = 0, d = 1. The bits 0001 could be cccd, ccb, acd or ab.</li>
+  </ul>
+</li>
+<li>Two parts: build the Huffman tree, then traverse it to assign codes.</li>
+<li><strong>Building the tree:</strong> make a leaf per unique character and build a min heap on frequency. Repeatedly extract the two minimum nodes and add an internal node whose frequency is their sum, with the first extracted node as left child and the second as right. Stop when one node (the root) remains.</li>
+<li><strong>Example:</strong> a 5, b 9, c 12, d 13, e 16, f 45. Internal nodes are built in this order: 14 (5 + 9), 25 (12 + 13), 30 (14 + 16), 55 (25 + 30), 100 (45 + 55).</li>
+<li>Codes from that tree: f 0, c 100, d 101, a 1100, b 1101, e 111.</li>
+<li>Time O(n log n) for n unique characters: extractMin is called 2(n − 1) times at O(log n) each. There is a linear-time algorithm if the input is sorted.</li>
+<li><strong>Applications:</strong> fax and text transmission, PKZIP and GZIP, and (as prefix codes) JPEG, PNG and MP3.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Contents of h, iteration by iteration (board)</h4>
+      <ol>
+        <li>Start: a 10, b 20, e 40, d 50, f 80.</li>
+        <li>1st iteration: extract a 10 and b 20, insert ($, 30). The heap is now ($, 30), e 40, d 50, f 80.</li>
+        <li>2nd: extract ($, 30) and e 40, insert ($, 70). The heap is now d 50, ($, 70), f 80.</li>
+        <li>3rd: extract d 50 and ($, 70), insert ($, 120). The heap is now f 80, ($, 120).</li>
+        <li>4th: extract f 80 and ($, 120), insert ($, 200), the root. One node is left, so stop.</li>
+      </ol>
+    </div>
+    <div class="approach">
+      <h4>Printing Huffman codes from the built tree (board pseudocode)</h4>
+<pre><code>void printCodes(root, str = "")
+    if (root == null)
+        return
+    if (root.ch != '$')
+        print(root.ch + " " + str)
+        return
+    printCodes(root.left,  str + "0")
+    printCodes(root.right, str + "1")</code></pre>
+      <p>Output: f 0, d 10, a 1100, b 1101, e 111.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong></p>
+      <ul>
+        <li>In the later iterations and the printCodes tree, the board labels the frequency-50 leaf "b 50" and prints "b 10". The frequency-50 character is <strong>d</strong> (b is 20), so it should be d 10, as written above.</li>
+        <li>On the high-level board, the codes list shows "a 1100" twice.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/Mjc0Mg%3D%3D" target="_blank" rel="noopener">CPP Implementation of Huffman coding</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Tree node.</strong> Each node stores:</p>
+    <ul>
+      <li>a frequency;</li>
+      <li>a character: the real character for a leaf, '$' for an internal node;</li>
+      <li>left and right children.</li>
+    </ul>
+    <p>The constructor takes frequency, character, left and right; left and right are optional and default to NULL.</p>
+    <p><strong>Min heap in C++.</strong> <code>priority_queue</code> is a max heap by default. For a heap of <code>Node*</code> we pass the container <code>vector&lt;Node*&gt;</code> and a <code>compare</code> structure. The structure tells the priority queue to order items by frequency, since a node holds several fields.</p>
+    <p><strong><code>printHcodes(arr, freq, n)</code>:</strong></p>
+    <ol>
+      <li>Push a leaf for every character.</li>
+      <li>While the heap has more than one node, take the top two (l = minimum, r = second minimum). Push a new '$' node with frequency l→freq + r→freq, left child l and right child r.</li>
+      <li>Call <code>printCodes(h.top(), "")</code>.</li>
+    </ol>
+    <p><strong><code>printCodes</code>:</strong> if the node is a leaf (its character is not '$'), print the character and the string so far. Otherwise recurse left with "0" appended, then right with "1" appended.</p>
+    <p><strong>Complexity</strong> (teacher):</p>
+    <ul>
+      <li>Pushing the n leaves is O(n log n).</li>
+      <li>The while loop runs O(n) times, and each pop or push is O(log n): O(n log n).</li>
+      <li>With n leaves, a full binary tree has n − 1 internal nodes, so 2n − 1 nodes in all. Traversing it is Θ(n).</li>
+      <li>Total time: <strong>O(n log n)</strong>.</li>
+      <li>Auxiliary space: the heap is Θ(n), the tree is Θ(n), and the recursion depth is bounded by the height, at most O(n). Overall <strong>Θ(n)</strong>.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>C++</h4>
+<pre><code class="language-cpp">struct Node {
+    int freq;
+    char ch;
+    Node *left, *right;
+    Node(int f, char c, Node *l = NULL, Node *r = NULL) {
+        freq = f;
+        ch = c;
+        left = l;
+        right = r;
+    }
+};
+
+struct compare {
+    bool operator()(Node *l, Node *r) {
+        return l-&gt;freq &gt; r-&gt;freq;   // min heap on freq
+    }
+};
+
+void printCodes(Node *root, string str) {
+    if (root-&gt;ch != '$') {
+        cout &lt;&lt; root-&gt;ch &lt;&lt; " " &lt;&lt; str &lt;&lt; "\n";
+        return;
+    }
+    printCodes(root-&gt;left, str + "0");
+    printCodes(root-&gt;right, str + "1");
+}
+
+void printHcodes(char arr[], int freq[], int n) {
+    priority_queue&lt;Node*, vector&lt;Node*&gt;, compare&gt; h;
+    for (int i = 0; i &lt; n; i++)
+        h.push(new Node(freq[i], arr[i]));
+    while (h.size() &gt; 1) {
+        Node *l = h.top(); h.pop();
+        Node *r = h.top(); h.pop();
+        Node *node = new Node(l-&gt;freq + r-&gt;freq, '$', l, r);
+        h.push(node);
+    }
+    printCodes(h.top(), "");
+}</code></pre>
+      <p>Board run on arr = {'a', 'd', 'e', 'f'}, freq = {30, 40, 80, 60}:</p>
+      <ol>
+        <li>Initially h holds a 30, d 40, f 60, e 80.</li>
+        <li>1st iteration: pop a 30 and d 40, push ($, 70). h is now f 60, ($, 70), e 80.</li>
+        <li>2nd: pop f 60 and ($, 70), push ($, 130). h is now e 80, ($, 130).</li>
+        <li>3rd: pop e 80 and ($, 130), push ($, 210), the root. The size is 1, so stop.</li>
+      </ol>
+      <p>printCodes output: e 0, f 10, a 110, d 111.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips, fixed above:</strong></p>
+      <ul>
+        <li>The board's <code>compare</code> returns <code>l-&gt;freq &lt; r-&gt;freq</code>. With <code>priority_queue</code> that comparator gives a <em>max</em> heap. A min heap needs <code>&gt;</code>.</li>
+        <li>The board calls <code>new Node(arr[i], freq[i])</code> and <code>new Node('$', l-&gt;freq + r-&gt;freq, l, r)</code>, with the character first. The constructor is <code>Node(int f, char c, …)</code>, so the arguments are swapped round to frequency first.</li>
+        <li>The function takes <code>int arr[]</code>, but arr holds characters, so it should be <code>char arr[]</code>.</li>
+        <li>The last leaf is d 40, but the transcript says "B 1,1,1" and one board tree labels it "b 40". It is d 111.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/video/Mjc0Mw%3D%3D" target="_blank" rel="noopener">Java Implementation of Huffman coding</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The node class has a character, a frequency, and left and right references. Its constructor takes all four.</p>
+    <p><strong>Min heap in Java.</strong> <code>PriorityQueue</code> is a <em>min</em> heap by default, unlike C++. A priority queue of a user-defined class needs a way to compare items. The constructor accepts one, so the teacher passes a lambda: <code>(n1, n2) -&gt; n1.freq - n2.freq</code>, which compares by frequency.</p>
+    <p>The algorithm matches the C++ version:</p>
+    <ol>
+      <li>Add a leaf <code>new Node(arr[i], freq[i], null, null)</code> for every character.</li>
+      <li>While <code>h.size() &gt; 1</code>, <code>poll()</code> (extract-min) twice and add an internal node. Its character is the dummy '$' (any character that is not a valid input works), its frequency is the sum, and its children are the two polled nodes.</li>
+      <li>Call <code>printRec(h.peek(), "")</code>.</li>
+    </ol>
+    <p><code>printRec</code> is a preorder-style traversal: a leaf prints its character, a space and its code; otherwise recurse left with "0" and right with "1".</p>
+    <p><strong>Complexity</strong> (teacher):</p>
+    <ul>
+      <li>Inserting n items is O(n log n).</li>
+      <li>The loop runs n − 1 times, each with two extract-mins and one insert, all O(log n): O(n log n).</li>
+      <li>The tree is a full binary tree (every node has 0 or 2 children), so n leaves give n − 1 internal nodes, 2n − 1 in all. Traversing it is Θ(n).</li>
+      <li>Total time: <strong>O(n log n)</strong>.</li>
+      <li>Auxiliary space: the heap is Θ(n), the tree is Θ(n), and the recursion is O(n). Overall <strong>Θ(n)</strong>.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Java</h4>
+<pre><code class="language-java">class Node {
+    char ch;
+    int freq;
+    Node left;
+    Node right;
+    Node(char c, int f, Node l, Node r) {
+        ch = c;
+        freq = f;
+        left = l;
+        right = r;
+    }
+}
+
+static void printHcodes(char[] arr, int[] freq) {
+    PriorityQueue&lt;Node&gt; h = new PriorityQueue&lt;&gt;(
+            (n1, n2) -&gt; n1.freq - n2.freq);
+    for (int i = 0; i &lt; arr.length; i++)
+        h.add(new Node(arr[i], freq[i], null, null));
+    while (h.size() &gt; 1) {
+        Node l = h.poll();
+        Node r = h.poll();
+        h.add(new Node('$', l.freq + r.freq, l, r));
+    }
+    printRec(h.peek(), "");
+}
+
+static void printRec(Node root, String s) {
+    if (root.ch != '$') {
+        System.out.println(root.ch + " " + s);
+        return;
+    }
+    printRec(root.left, s + "0");
+    printRec(root.right, s + "1");
+}</code></pre>
+      <p>Board run on arr = {'a', 'd', 'e', 'f'}, freq = {30, 40, 80, 60}:</p>
+      <ol>
+        <li>Initially h holds a 30, d 40, f 60, e 80.</li>
+        <li>1st iteration: poll a 30 and d 40, add ($, 70). h is now f 60, ($, 70), e 80.</li>
+        <li>2nd: poll f 60 and ($, 70), add ($, 130). h is now e 80, ($, 130).</li>
+        <li>3rd: poll e 80 and ($, 130), add ($, 210), the root.</li>
+      </ol>
+      <p>Output: e 0, f 10, a 110, d 111.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Greedy-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (6 problems, in course order). Each problem is listed with its difficulty and a link; solve them on GfG. The problem statements aren't copied here. All 5 articles match a video, so their boxes sit with those videos.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/problem/activity-selection-1587115620" target="_blank" rel="noopener">Activity Selection</a></td><td>Medium</td><td>Videos 2–4</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/problem/n-meetings-in-one-room-1587115620" target="_blank" rel="noopener">Activity Selection (N meetings in one room)</a></td><td>Medium</td><td>Videos 2–4</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/problem/fractional-knapsack-1587115620" target="_blank" rel="noopener">Fractional Knapsack</a></td><td>Easy</td><td>Videos 5–7</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/problem/job-sequencing-problem-1587115620" target="_blank" rel="noopener">Job Sequencing Problem</a></td><td>Medium</td><td>Video 8</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/problem/largest-number-with-given-sum-1587115620" target="_blank" rel="noopener">Largest n Digit Number with Given Digit Sum</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Greedy/problem/huffman-decoding" target="_blank" rel="noopener">Huffman Decoding</a></td><td>Hard</td><td>Videos 9–12</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -29742,7 +30518,21 @@ const TRACKS = [
       ["Tarjans Algorithm", "14:24"],
       ["Kruskal's Algorithm", "24:04"]
     ] },
-  { id: "DSASP-Greedy", slug: "greedy", name: "Greedy", counts: [12, 5, 6, 10, 1] },
+  { id: "DSASP-Greedy", slug: "greedy", name: "Greedy", counts: [12, 5, 6, 10, 1],
+    videos: [
+      ["Introduction to Greedy Algorithms", "12:07"],
+      ["Activity Selection Problem", "8:25"],
+      ["Activity Selection Solution in C++", "3:58"],
+      ["Activity Selection Solution in Java", "5:20"],
+      ["Fractional Knapsack Problem", "7:48"],
+      ["Fractional Knapsack in C++", "5:42"],
+      ["Fractional Knapsack in Java", "9:48"],
+      ["Job Sequencing Problem", "12:23"],
+      ["Huffman Coding (introduction)", "8:56"],
+      ["Huffman Algorithms", "14:25"],
+      ["CPP Implementation of Huffman coding", "9:01"],
+      ["Java Implementation of Huffman coding", "10:40"]
+    ] },
   { id: "DSASP-Backtracking", slug: "backtracking", name: "Backtracking", counts: [4, 4, 7, 10, 0] },
   { id: "DSASP-DP", slug: "dynamic-programming", name: "Dynamic Programming", counts: [31, 25, 28, 10, 1] },
   { id: "DSASP-Trie", slug: "trie", name: "Trie", counts: [4, 3, 6, 5, 0] },

@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 18 of 24 tracks · 404 of 470 videos · 299 of 342 articles · 310 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 19 of 24 tracks · 416 of 470 videos · 304 of 342 articles · 316 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -93,8 +93,8 @@ Report back with:
 | 16 | Binary Search Tree | 28 | 16 | 23 | ✅ Done: 28/28 videos, 16/16 articles, 23 problems |
 | 17 | Heap | 14 | 11 | 11 | ✅ Done: 14/14 videos, 11/11 articles, 11 problems |
 | 18 | Graph | 30 | 20 | 24 | ✅ Done: 30/30 videos, 20/20 articles, 24 problems |
-| 19 | Greedy | 12 | 5 | 6 | ⏭ Next |
-| 20 | Backtracking | 4 | 4 | 7 | Not started |
+| 19 | Greedy | 12 | 5 | 6 | ✅ Done: 12/12 videos, 5/5 articles, 6 problems |
+| 20 | Backtracking | 4 | 4 | 7 | ⏭ Next |
 | 21 | Dynamic Programming | 31 | 25 | 28 | Not started |
 | 22 | Trie | 4 | 3 | 6 | Not started |
 | 23 | Segment and Binary Indexed Trees | 10 | 3 | 6 | Not started |
@@ -632,6 +632,25 @@ Every Heap article matches a video, so the Track practice set lists only the 11 
 
 "Number of Strongly Connected Components in an Undirected Graph" and "Sample Problems on Graphs" match no video, so they're in the Track practice set with the 24 problems. V19, V22, V23, V25 and V27 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (26/30 videos watched, 36%, 0/20 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 30 Graph videos.
 
+### Track 19: Greedy, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Introduction to Greedy Algorithms | 12:07 | Transcript + board | Introduction to Greedy Algorithms |
+| 2 | Activity Selection Problem | 8:25 | Transcript + board | Activity Selection Problem |
+| 3 | Activity Selection Solution in C++ | 3:58 | Transcript + board |  |
+| 4 | Activity Selection Solution in Java | 5:20 | Board + description |  |
+| 5 | Fractional Knapsack Problem | 7:48 | Transcript + board | Fractional Knapsack Problem |
+| 6 | Fractional Knapsack in C++ | 5:42 | Transcript + board |  |
+| 7 | Fractional Knapsack in Java | 9:48 | Board + description |  |
+| 8 | Job Sequencing Problem | 12:23 | Transcript + board | Job Sequencing Problem \| Greedy Approach |
+| 9 | Huffman Coding (introduction) | 8:56 | Transcript + board |  |
+| 10 | Huffman Algorithms | 14:25 | Board + description | Huffman Coding |
+| 11 | CPP Implementation of Huffman coding | 9:01 | Transcript + board |  |
+| 12 | Java Implementation of Huffman coding | 10:40 | Transcript + board |  |
+
+All 5 articles match a video; the Track practice set lists the 6 problems. V4, V7 and V10 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (0%, 0/5 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 12 Greedy videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -661,10 +680,11 @@ Every Heap article matches a video, so the Track practice set lists only the 11 
 - `684a13d`: Add Tree track notes (30 videos, 24 articles, 32 problems)
 - `839335d`: Add Binary Search Tree track notes (28 videos, 16 articles, 23 problems)
 - `cd1b6ea`: Add Heap track notes (14 videos, 11 articles, 11 problems)
-- (this commit): Add Graph track notes (30 videos, 20 articles, 24 problems)
+- `92dabf7`: Add Graph track notes (30 videos, 20 articles, 24 problems)
+- (this commit): Add Greedy track notes (12 videos, 5 articles, 6 problems)
 
 ### What's next
-- **Track 19: Greedy** (12 videos, 5 articles, 6 problems), starting straight away.
+- **Track 20: Backtracking** (4 videos, 4 articles, 7 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -695,6 +715,7 @@ Every Heap article matches a video, so the Track practice set lists only the 11 
   - Completed track 16 (Binary Search Tree): 28 videos, 16 articles, 23 problems.
   - Completed track 17 (Heap): 14 videos, 11 articles, 11 problems.
   - Completed track 18 (Graph): 30 videos, 20 articles, 24 problems.
+  - Completed track 19 (Greedy): 12 videos, 5 articles, 6 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -711,6 +732,17 @@ Every Heap article matches a video, so the Track practice set lists only the 11 
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Greedy: teacher slips flagged
+- V1 (board): mixes `coins[]` and `coin[i]`.
+- V3 (board): `myCmp` is declared `void`; it must return `bool`.
+- V4 (board): `Arrays.sort(arr, MyCmp)` needs an instance, `new MyCmp()`.
+- V5: an "Else if" with no preceding if. The transcript says I2 is "50 kg" (it's 5) and "divided by 15" for the partial value.
+- V7 (board): `Array.sort(arr)` for `Arrays.sort`.
+- V9 (board): 00001 is listed as "aac" and "bc", which decode 0001. The real decodings of 00001 are aaac, bac and abc.
+- V10 (board): the frequency-50 leaf is labelled "b 50" and printed "b 10" (it's d). The high-level code list shows "a 1100" twice.
+- V11 (board): `compare` returns `l->freq < r->freq`, which makes priority_queue a max heap (a min heap needs `>`). `new Node(arr[i], freq[i])` and `new Node('$', …)` swap the constructor's (freq, ch) order. `int arr[]` should be `char arr[]`. The transcript and one tree say "b" for d 40 (d 111).
+- Videos without a transcript (4, 7, 10): spoken slips couldn't be checked.
 
 ### Graph: teacher slips flagged
 - V5 (board): `int V = 5;` for a 4-vertex graph.
