@@ -4438,6 +4438,1203 @@ Output : ""  "a"  "b"  "ab"</code></pre>
   </section>
 </template>
 
+<template id="DSASP-Recursion-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MTYxNw%3D%3D" target="_blank" rel="noopener">Recursion Introduction</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>First: how function calls work</h3>
+    <p>Execution begins at the first line of <code>main</code>. When a function calls another, the caller stops and waits, and control goes to the called function. When the called function finishes its last line, control goes back to the caller, which resumes from the line just after the call. So the <strong>last called function finishes first</strong>, then its caller, then the caller's caller.</p>
+
+    <h3>Recursion</h3>
+    <ul>
+      <li>Recursion is a way to write a program in which <strong>a function calls itself</strong>. A function is recursive if it calls itself <strong>directly or indirectly</strong>.</li>
+      <li><strong>Direct:</strong> fun1 calls fun1. <strong>Indirect:</strong> fun1 calls fun2, and fun2 calls fun1. Indirect recursion is not very common, so the course focuses on direct recursion.</li>
+      <li>A recursive function with no stopping condition never terminates. Every pending call uses a stack frame, and when that memory is full you get a <strong>segmentation fault</strong> in C++ (GCC) or a <strong>StackOverflowError</strong> in Java.</li>
+      <li>The fix is a <strong>base case</strong>: a terminating condition such as <code>if (n == 0) return;</code>, together with a recursive call on a changed parameter (n − 1), so the calls eventually reach the base case.</li>
+    </ul>
+
+    <h3>Typical Structure of Recursive Functions (board)</h3>
+<pre><code class="language-plaintext">....fun(....)
+{
+    Base Cases
+    .......
+    Recursive Call (i.e., call to fun())
+    With at least one change in parameters.
+    .......
+}</code></pre>
+    <p>The teacher assumes no global variables or other tricks stop the recursion. If you call fun with the same parameter again, it never terminates, so the parameters must change until they reach a base case (e.g. 5 → 4 → 3 → 2 → 1 → 0). A function can have more than one base case. Stopping at 1 instead of 0 would just print one fewer line.</p>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>The video covers the background needed for recursion and an introduction to it.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/MTAwODc%3D" target="_blank" rel="noopener">Recursion Introduction</a></p>
+<ul>
+<li>Recursion is a way to write a program in which a function calls itself directly or indirectly. Problems like Towers of Hanoi, inorder/preorder/postorder tree traversals and DFS of a graph can be solved quite easily with it. Direct: fun1 calls fun1. Indirect: fun1 calls fun2, which calls fun1.</li>
+<li><strong>Base condition:</strong> without a breaking condition the function keeps calling itself until a StackOverflow (or segmentation fault). With <code>if (n == 0) return;</code>, a larger value is reduced until the base case is reached. fun1(2) prints GFG twice.</li>
+<li><strong>Memory:</strong> each call gets memory on the stack, on top of its caller's memory, with its own copy of the local variables. When the base case is reached, each function returns to its caller and its memory is de-allocated. printFun(3) (print, recurse, print) outputs <code>3 2 1 1 2 3</code>.</li>
+<li><strong>Disadvantages:</strong> recursive and iterative programs have the same problem-solving power. A recursive program needs more space (every call stays on the stack until the base case) and more time (call and return overhead).</li>
+<li><strong>Advantages:</strong> a clean and simple way to write code, and the natural choice for inherently recursive problems like tree traversals and Tower of Hanoi. Those can also be written iteratively with a stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>1. Function calling (guess the output)</h4>
+<pre><code class="language-java">class Test
+{
+    static void fun1()
+    {   System.out.println("fun1");   }
+    static void fun2()
+    {   System.out.println("Before fun1");
+        fun1();
+        System.out.println("After fun1");
+    }
+    public static void main(String [] args)
+    {   System.out.println("Before fun2");
+        fun2();
+        System.out.println("After fun2");
+    }
+}</code></pre>
+<pre><code class="language-plaintext">Output :            Execution flow :
+Before fun2         main()
+Before fun1           → Before fun2
+fun1                  → fun2()
+After fun1                → Before fun1
+After fun2                → fun1()
+                              → fun1
+                          → After fun1
+                      → After fun2</code></pre>
+      <p>The board writes the same program in C++ (with <code>cout</code>) next to the Java one.</p>
+    </div>
+
+    <div class="approach">
+      <h4>2. Recursion with no base case</h4>
+<pre><code class="language-java">class Test
+{
+    static void fun1()
+    {   System.out.println("GfG");
+        fun1();
+    }
+    public static void main(String args[])
+    {   fun1();   }
+}
+// Output: GfG GfG ... (C++: Segmentation fault, Java: StackOverflowError)</code></pre>
+      <p>The board's diagram: main() → fun1() → GfG → fun1() → GfG → fun1() → … with no end.</p>
+    </div>
+
+    <div class="approach">
+      <h4>3. Fixed with a base case</h4>
+<pre><code class="language-cpp">void fun1(int n)
+{
+    if (n == 0)        // Base Case
+        return;
+    cout &lt;&lt; "GfG" &lt;&lt; endl;
+    fun1(n-1);
+}
+int main()
+{
+    fun1(2);
+    return 0;
+}
+// Output: GfG
+//         GfG</code></pre>
+      <p>fun1(2) prints GfG and calls fun1(1), which prints GfG and calls fun1(0). fun1(0) returns straight away. Then fun1(1), fun1(2) and main finish in turn, each with nothing more to do. fun1(5) would print GfG five times. The board has the same code in Java alongside.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Transcript slips (auto-generated):</strong> 0:23 "function calling really will" means really well. 2:13 "function goal" means function call. 3:13 "outboard" means output. 8:17 "color" means caller.</p>
+      <p><strong>Board notation:</strong> the board's C++ <code>fun2</code> prints "Before fun1" and "After fun1" with <code>\n</code>. The Java column on the right is partly hidden by the teacher, but it matches the C++ code line for line.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MTYxNg%3D%3D" target="_blank" rel="noopener">Applications of Recursion</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Recursion vs. iteration</h3>
+    <p>Any problem that can be programmed with iteration can also be programmed with recursion, and the other way round: they have the <strong>same expressive power</strong>. So why use recursion?</p>
+
+    <h3>Applications of Recursion (board)</h3>
+<pre><code class="language-plaintext">① Many algorithm techniques are based on Recursion
+     → Dynamic Programming
+     → Backtracking
+     → Divide and Conquer (Binary Search, QuickSort and Merge Sort)
+② Many problems inherently recursive
+     → Tower of Hanoi
+     → DFS based Traversals (DFS of Graph and
+       Inorder/Preorder/Postorder traversal of Tree)</code></pre>
+    <ul>
+      <li><strong>Dynamic programming:</strong> the first step is usually a recursive solution. When you see overlapping subproblems, you optimise it with memoization or tabulation. Many standard DP problems are used in real life, e.g. finding the diff between two files is an application of LCS. The teacher also names edit distance.</li>
+      <li><strong>Backtracking</strong> solutions (rat in a maze, N-Queens) are inherently recursive, and much easier to write recursively than iteratively.</li>
+      <li><strong>Divide and conquer</strong> algorithms (quicksort, merge sort, recursive binary search) are mostly implemented with recursion.</li>
+      <li><strong>Inherently recursive problems</strong> such as Tower of Hanoi, DFS of a graph, and inorder/preorder/postorder traversals of a tree become complex and unreadable when written iteratively. A real-world DFS is searching for a file on your computer: start at the root folder, then recursively search each subfolder and its subfolders.</li>
+    </ul>
+
+    <h3>The cost of recursion</h3>
+    <p>When there is an equivalent iterative version, it usually has less overhead. Recursive binary search takes O(log n) auxiliary space, while iterative binary search takes O(1). Recursion also has function-call overhead. It is still used because it's easy to implement: iterative quicksort, merge sort, tree traversals or Tower of Hanoi are very complex, while the recursive versions are very simple.</p>
+    <div class="key">Thinking recursively is a necessary skill for programmers: if you have the solution to a subproblem, how do you use it to solve the bigger problem? Many times we write recursive code first, then convert it to iterative, as in dynamic programming.</div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>No code in this video. The teacher says the upcoming videos solve many problems with recursion.</p>
+    <div class="added">
+      <p><strong>Transcript slips (auto-generated):</strong> "hydration" / "I tration" mean iteration. 1:14 "as he is added distance" means LCS, edit distance. 1:31 "memorization" means memoization. 2:11 "dependent on current people" is unclear; it is about recursive binary search.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MTYyNQ%3D%3D" target="_blank" rel="noopener">Recursion Output Practice - Part 1</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Two "guess the output" programs. Each is on the board in C++ and Java side by side. The key idea from the previous videos: when a function makes a recursive call it <strong>stops and waits</strong>, then resumes from the next line once the call returns. Drawing the execution tree (main → fun(3) → fun(2) → …) makes the order clear.</p>
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul><li>Sample output practice problems on recursion.</li></ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Example 1: print, recurse, print</h4>
+<pre><code class="language-java">class Test
+{
+    static void fun(int n)
+    {   if (n == 0)
+            return;
+        System.out.println(n);
+        fun(n-1);
+        System.out.println(n);
+    }
+    public static void main(String [] args)
+    {   fun(3);   }
+}
+// Output: 3 2 1 1 2 3</code></pre>
+<pre><code class="language-plaintext">main()
+ └→ fun(3)
+     → 3
+     → fun(2)
+         → 2
+         → fun(1)
+             → 1
+             → fun(0)
+             → 1
+         → 2
+     → 3</code></pre>
+      <p>fun(3) prints 3, then waits for fun(2), which prints 2 and waits for fun(1). fun(1) prints 1 and calls fun(0), which returns at once. Then fun(1) prints 1 again and finishes, fun(2) resumes and prints 2, and fun(3) resumes and prints 3.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Example 2: recurse, print, recurse</h4>
+<pre><code class="language-java">class Test
+{
+    static void fun(int n)
+    {   if (n == 0)
+            return;
+        fun(n-1);
+        System.out.println(n);
+        fun(n-1);
+    }
+    public static void main(String [] args)
+    {   fun(3);   }
+}
+// Output: 1 2 1 3 1 2 1</code></pre>
+<pre><code class="language-plaintext">main()
+ └→ fun(3)
+     → fun(2)
+         → fun(1)
+             → fun(0)
+             → 1
+             → fun(0)
+         → 2
+         → fun(1)
+             → fun(0)
+             → 1
+             → fun(0)
+     → 3
+     → fun(2)
+         → fun(1)  ...   (same as the first fun(2) → prints 1 2 1)</code></pre>
+      <p>fun(1) prints just 1. fun(2) = fun(1), then 2, then fun(1), which prints 1 2 1. fun(3) = fun(2), then 3, then fun(2), which prints 1 2 1 3 1 2 1. A call with the same parameter always runs the same way, so the second fun(2) tree is a copy of the first.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Transcript slips (auto-generated):</strong> 1:51 "one one has to do" means fun(1). 3:06 "from being main" means from main.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MTYzNQ%3D%3D" target="_blank" rel="noopener">Recursion Output Practice - Part 2</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li>While the recursive calls are being made, all of them stay on the <strong>function call stack</strong>, each waiting for its child call to finish. For fun(16) the stack holds 16, 8, 4, 2, 1. The return values then flow back up.</li>
+      <li><strong>General rule:</strong> if you keep dividing a number by 2 until it becomes 1, the number of divisions is <strong>log₂ n</strong>. Integer division drops the remainder, so for n that isn't a power of 2 you get ⌊log₂ n⌋.</li>
+      <li>Dividing by 3 instead gives ⌊log₃ n⌋, but the base case must change too: return 0 when n &lt; 3 (n = 1 or 2).</li>
+      <li>Repeatedly dividing by 2 and printing the remainders <strong>after</strong> the recursive call is the same as decimal-to-binary conversion: the remainders come out in reverse order, which is the binary number.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul><li>Sample output practice problems on recursion: Example 1 (log n with base 2) and Example 2 (binary representation).</li></ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Problem 1: what is the return value of fun(16)?</h4>
+<pre><code class="language-cpp">int fun(int n)
+{
+    if (n == 1)
+        return 0;
+    else
+        return 1 + fun(n/2);
+}
+// Answer is 4</code></pre>
+<pre><code class="language-plaintext">fun(16)
+ └→ 1 + fun(8)      ← 3
+     └→ 1 + fun(4)  ← 2
+         └→ 1 + fun(2)  ← 1
+             └→ 1 + fun(1)  ← 0</code></pre>
+      <p><strong>What does it do in general for n ≥ 1?</strong> fun(1) = 0, fun(2) = 1, fun(4) = 2, fun(8) = 3, fun(16) = 4, fun(32) = 5. Each doubling of the input adds 1, so it returns <strong>⌊log₂ n⌋</strong>. 17 → 1 + fun(8), and 18 → 1 + fun(9) → 1 + 1 + fun(4), so 16 to 31 all give 4. The board works out fun(31) = 1 + fun(15) → 1 + fun(7) → 1 + fun(3) → 1 + fun(1), which is 4. 32 gives 5.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Problem 2: what does this print for n = 7, and in general?</h4>
+<pre><code class="language-plaintext">void fun(int n)
+{
+    if (n == 0)
+        return;
+    fun(n/2);
+    print(n % 2);
+}</code></pre>
+      <p>The teacher writes pseudocode: replace <code>print</code> with <code>cout</code> in C++ or <code>System.out.print</code> in Java. <strong>n = 7:</strong> fun(7) → fun(3) → fun(1) → fun(0) returns. Then fun(1) prints 1 % 2 = 1, fun(3) prints 1, fun(7) prints 1. Output: <strong>111</strong>.</p>
+<pre><code class="language-plaintext">fun(13)
+ └→ fun(6)
+     └→ fun(3)
+         └→ fun(1)
+             └→ fun(0)
+             → 1
+         → 1
+     → 0
+ → 1
+Output: 1101       (remainders in order of division: 1011 ←)</code></pre>
+      <p>Board: "It prints binary equivalent of n when n &gt; 0". Ordinary decimal-to-binary conversion divides by 2 (13, 6, 3, 1), stores the remainders (1, 0, 1, 1), and prints them in reverse. The recursion does that reversal for free, because each remainder is printed after the deeper calls return.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Transcript slips (auto-generated):</strong> 3:18 "log two base n" means log base 2 of n. 5:34–5:36 "Log of floor of n" means floor of log₂ n. 6:39–6:42 "log of floor of Base 3" means ⌊log₃ n⌋. 7:26 "111" is triple one.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MTYxOA%3D%3D" target="_blank" rel="noopener">Print N to 1 Using Recursion</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print n first, then let the recursive call print the rest, n − 1 down to 1. The base case <code>n == 0</code> stops it. Board condition: <strong>n ≥ 1</strong>.</p>
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul><li>A recursive solution to print the numbers from N to 1.</li></ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/Njg5Mg%3D%3D" target="_blank" rel="noopener">Print N to 1 Using Recursion</a></p>
+<ul>
+<li>Examples: N = 10 → 10 9 … 1, N = 7 → 7 6 5 4 3 2 1.</li>
+<li><strong>Approach 1 (loop):</strong> from N down to 1. O(N) time, O(1) auxiliary space.</li>
+<li><strong>Approach 2 (recursion):</strong> base case N &lt;= 0 returns. Otherwise print N and recurse with N − 1. O(N) time, O(N) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Problem: Print n to 1 using Recursion</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 5</span><span>O/P</span><span>5 4 3 2 1</span>
+        <span>I/P</span><span>n = 2</span><span>O/P</span><span>2 1</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Code (board, C++ and Java)</h4>
+<pre><code class="language-java">class Test
+{
+    static void printNto1(int n)
+    {
+        if (n == 0)
+            return;
+        System.out.print(n + " ");
+        printNto1(n-1);
+    }
+    public static void main(String [] args)
+    {
+        int n = 4;
+        printNto1(n);
+    }
+}</code></pre>
+<pre><code class="language-plaintext">printNto1(4)
+ → 4
+ → printNto1(3)
+     → 3
+     → printNto1(2)
+         → 2
+         → printNto1(1)
+             → 1
+             → printNto1(0)
+O/P : 4 3 2 1</code></pre>
+      <p>The C++ version on the board is the same function, using <code>cout &lt;&lt; n &lt;&lt; " ";</code>, with <code>main</code> calling <code>printNto1(n)</code> for n = 4.</p>
+    </div>
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. From about 3:20 to the end the teacher is talking in front of the board, and no new board content was written. The time and space complexity, if mentioned, would have been spoken, not written.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MTYxOQ%3D%3D" target="_blank" rel="noopener">Print 1 to N Using Recursion</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li><strong>Think in terms of subproblems:</strong> suppose a function can already print 1 to n − 1 recursively. Then call it for n − 1 first, and print n after it returns.</li>
+      <li><strong>Base case:</strong> n is reduced by 1 each time (4 → 3 → 2 → 1 → 0). At 0 the problem can't be broken down any further, so <code>if (n == 0) return;</code>.</li>
+      <li><strong>Time:</strong> at most n + 1 calls, each doing a constant amount of work (a check, a call, a print). T(n) = T(n − 1) + Θ(1), which the recursion tree method solves to <strong>Θ(n)</strong>.</li>
+      <li><strong>Auxiliary space:</strong> when printing 1ToN(0) starts, n + 1 calls are waiting in the function call stack. So it is <strong>O(n)</strong>.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul><li>A recursive solution to print the numbers from 1 to N.</li></ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/Njg5Mw%3D%3D" target="_blank" rel="noopener">Print 1 to N Using Recursion</a></p>
+<ul>
+<li>Method 1: <code>if (n &gt; 0) { printNos(n - 1); print(n); }</code>. Method 2: pass (initial, last), print initial, then recurse with initial + 1 while initial &lt;= last.</li>
+<li>Both are O(n) time and O(n) auxiliary space. For printNos(10) the output is 1 2 … 10.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Problem: Print 1 to n using Recursion</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 4</span><span>O/P</span><span>1 2 3 4</span>
+        <span>I/P</span><span>n = 5</span><span>O/P</span><span>1 2 3 4 5</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Code (board, C++; Java alongside) <span class="cx">Θ(n) time · O(n) aux space</span></h4>
+<pre><code class="language-cpp">void print1ToN(int n)
+{
+    if (n == 0)
+        return;
+    print1ToN(n-1);
+    cout &lt;&lt; n &lt;&lt; " ";
+}
+int main()
+{
+    int n = 4;
+    print1ToN(n);
+    return 0;
+}</code></pre>
+<pre><code class="language-plaintext">print1ToN(4)
+ → print1ToN(3)
+     → print1ToN(2)
+         → print1ToN(1)
+             → print1ToN(0)
+             → 1
+         → 2
+     → 3
+ → 4</code></pre>
+      <p>Each call waits for its child, so the prints happen on the way back: 1 2 3 4. The Java version uses <code>System.out.print(n + " ");</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MTYyNA%3D%3D" target="_blank" rel="noopener">Tail Recursion</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>What tail recursion is</h3>
+    <div class="key">A recursive function is tail-recursive when the parent has nothing more to do once the child call finishes. In simple words, the last thing that happens in the function is the recursive call.</div>
+    <ul>
+      <li>The n-to-1 printer (print, then recurse) is tail-recursive. When fun(0) finishes, fun(1) can finish immediately, and so on up the chain.</li>
+      <li>The 1-to-n printer (recurse, then print) is not. After each child returns, the parent still has to print.</li>
+      <li>Board: "This takes less time on modern compilers because it is tail recursive."</li>
+    </ul>
+
+    <h3>Why it is faster: tail call elimination</h3>
+    <p>In a normal call, the caller's state is saved so it can resume after the called function returns. In a tail-recursive function there is no need to resume at all. So modern compilers replace the recursive call with a change to the parameters and a jump back to the start, which removes the recursion completely:</p>
+<pre><code class="language-plaintext">void fun(int n)
+{ start:
+    if (n == 0)
+        return;
+    print(n);
+    fun(n-1);   →   n = n-1
+                    goto start;
+}</code></pre>
+    <p>Without this optimisation the recursion needs O(n) auxiliary space to save the function states. All that overhead is gone. Changing the parameters, adding the goto and adding the label is called <strong>tail call elimination</strong>. Given two recursive solutions, one tail-recursive and one not, prefer the tail-recursive one: modern compilers optimise it, so it's likely to take less time.</p>
+
+    <h3>Can every function be made tail-recursive?</h3>
+    <p>No. You can't simply convert every non-tail-recursive function by adding extra parameters.</p>
+    <ul>
+      <li><strong>Quicksort is tail-recursive and merge sort is not.</strong> Merge sort recursively sorts both halves and then calls merge, which has to wait. Quicksort calls partition first and then recursively sorts the left and right parts, so its last call is a tail call. Along with other reasons such as cache friendliness, this is one reason quicksort is faster than merge sort.</li>
+      <li><strong>Tree traversals:</strong> preorder and inorder are tail-recursive (their last step is the recursive call on the right child). Postorder is not, because it processes the root's data after both subtrees. So for a problem that any of them solves, e.g. the sum of all nodes, prefer inorder or preorder over postorder.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/NzUwNg%3D%3D" target="_blank" rel="noopener">Tail Recursion</a></p>
+<ul>
+<li>A recursive function is tail-recursive if it invokes itself at the end, i.e. all its statements run before the self-call. Example: printN prints N, then calls printN(N − 1). For N = 5: 5 4 3 2 1.</li>
+<li>Tail-recursive functions are considered better because the compiler can optimise them. The recursive call is the last statement, so there's nothing left to do in the current function and saving its stack frame is of no use.</li>
+<li><code>fact(N)</code> = N * fact(N − 1) looks tail-recursive but isn't, because fact(N − 1)'s value is used afterwards. Tail-recursive version with an accumulator: <code>factTR(N, a)</code> returns a when N == 0, else <code>factTR(N − 1, N * a)</code>.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>1. Print 1 to n: tail-recursive version</h4>
+<pre><code class="language-plaintext">// Initially Pass k = 1                 void fun(int n)
+void fun(int n, int k)                  {  if (n == 0)
+{                                             return;     Not Tail
+    if (n == 0)                            fun(n-1);      Recursive
+        return;                            print(n);
+    print(k);                           }
+    fun(n-1, k+1);
+}
+   Equivalent Tail Recursive   ⟸</code></pre>
+      <p>Both print 1 to n. The extra parameter k must be 1 on the first call. <code>print</code> means <code>cout</code> in C++ and <code>System.out.println</code> in Java.</p>
+    </div>
+
+    <div class="approach">
+      <h4>2. Factorial: is it tail-recursive?</h4>
+<pre><code class="language-cpp">int fact(int n)
+{
+    if (n == 0 || n == 1)
+        return 1;
+    return n * fact(n-1);
+}</code></pre>
+      <p><strong>Not tail-recursive:</strong> the parent needs the result of fact(n − 1), then multiplies it by n, and only then returns.</p>
+<pre><code class="language-cpp">// Initially Pass k = 1
+int fact(int n, int k)
+{
+    if (n == 0 || n == 1)
+        return k;
+    return fact(n-1, k*n);
+}</code></pre>
+<pre><code class="language-plaintext">fact(3, 1)
+ └→ fact(2, 1*3)
+     └→ fact(1, 1*3*2)   → returns 6
+6 ← 6 ← 6</code></pre>
+      <p>The product is built up in k on the way down, so each call just returns its child's value.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Board notation:</strong> the left-hand factorial on the last board is partly hidden by the teacher. The code above is read from the transcript and the frames before 9:00.</p>
+      <p><strong>Java note:</strong> the JVM (HotSpot) does not do tail call elimination, so in Java a tail-recursive version still uses O(n) stack.</p>
+      <p><strong>Transcript slips (auto-generated):</strong> 2:51 "no point assuming the execution" means resuming. 3:06 "recursion code" means recursive call. 7:06 "cash friendliness" means cache friendliness.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MTM2OA%3D%3D" target="_blank" rel="noopener">Writing Base Cases in Recursion</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The recursive step is often easy to guess: which subproblems to call and how to combine their results. The hard part is writing proper base cases, so that every input is handled and you don't get a stack overflow.</p>
+    <div class="key">Base cases are the inputs for which the problem <strong>cannot be broken further</strong> into smaller subproblems. Draw the recursion tree for small inputs and see where every call ends up.</div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>1. Factorial of n, where n ≥ 0</h4>
+<pre><code class="language-cpp">int fact(int n)
+{
+    if (n == 0)
+        return 1;
+    return n * fact(n-1);
+}</code></pre>
+      <p>fact(2) → fact(1) → fact(0), and fact(3) → fact(2) → fact(1) → fact(0). Whatever you start with, every call eventually reaches 0, so 0 is the base case.</p>
+      <p><strong>Wrong base case:</strong> <code>if (n == 1) return 1;</code>. For input 0 it calls fact(−1), then fact(−2), and so on, never terminating. You get a <strong>segmentation fault</strong> in C++ or a <strong>StackOverflowError</strong> in Java.</p>
+    </div>
+
+    <div class="approach">
+      <h4>2. n-th Fibonacci Number, where n ≥ 0</h4>
+<pre><code class="language-plaintext">0, 1, 1, 2, 3, 5, 8, 13, .....
+I/p : n = 3     O/p : 2
+I/p : n = 0     O/p : 0
+I/p : n = 1     O/p : 1</code></pre>
+<pre><code class="language-cpp">int fib(int n)
+{
+    if (n == 0)
+        return 0;
+    if (n == 1)
+        return 1;
+    return fib(n-1) + fib(n-2);
+}</code></pre>
+      <p>fib(n) = fib(n − 1) + fib(n − 2). fib(2) calls fib(1) and fib(0), and bigger calls (fib(4) → fib(3), fib(2), …) all reduce to those two. Both 0 and 1 must be handled: with only <code>n == 0</code>, fib(1) would call fib(0) and fib(−1), and −1 isn't a valid input. The teacher notes the two can be combined as <code>if (n &lt;= 1) return n;</code>.</p>
+<pre><code class="language-plaintext">int fib(int n)
+{
+    if (n == 0)
+        return 0;        // Wrong
+    return fib(n-1) + fib(n-2);
+}
+fib(1)
+ ├ fib(0)
+ └ fib(-1)
+     └ fib(-2)
+         ⋮
+         fib(-3) ...     → Stack Overflow / Segmentation fault</code></pre>
+    </div>
+
+    <div class="added">
+      <p><strong>Board note:</strong> the factorial code is written on an earlier board (about 1:00–3:30). Only the 10-second sheets show it, and it matches the transcript line for line.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MTYyNg%3D%3D" target="_blank" rel="noopener">Natural Number Sum using Recursion</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li>There is a direct formula, n(n + 1)/2, which gives a one-line function. The video solves the problem recursively as an exercise.</li>
+      <li><strong>Think in smaller problems:</strong> if you have the sum of n − 1 natural numbers, add n to get the sum of n. So getSum(n) = n + getSum(n − 1).</li>
+      <li><strong>Base case:</strong> there can't be fewer than 0 natural numbers, so the problem can't be broken below 0. The sum of 0 natural numbers is 0.</li>
+      <li><strong>Time:</strong> n + 1 calls, each doing constant work (an addition, a check, a return). T(n) = T(n − 1) + Θ(1), and the recursion tree has n + 1 levels of Θ(1) work, so <strong>Θ(n)</strong>.</li>
+      <li><strong>Auxiliary space:</strong> the recursion call stack counts as auxiliary space. When getSum(0) is running, n + 1 calls are waiting in the stack, so <strong>Θ(n)</strong>.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/NzUwNw%3D%3D" target="_blank" rel="noopener">Natural Number Sum using Recursion</a></p>
+<ul>
+<li>Examples: 3 → 6, 5 → 15. <code>recurSum(n)</code>: if n &lt;= 1 return n, else return n + recurSum(n − 1).</li>
+<li>O(n) time, O(n) auxiliary space. The article says the iterative approach is better here: the same O(n) time with O(1) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Problem: Sum of first n natural numbers</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 2</span><span>O/P</span><span>3</span>
+        <span>I/P</span><span>n = 4</span><span>O/P</span><span>10</span>
+        <span>I/P</span><span>n = 5</span><span>O/P</span><span>15</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Code (board, C++; Java alongside) <span class="cx">Θ(n) time · Θ(n) aux space</span></h4>
+<pre><code class="language-cpp">int getSum(int n)
+{
+    if (n == 0)
+        return 0;
+    return n + getSum(n-1);
+}
+int main()
+{
+    int n = 4;
+    cout &lt;&lt; getSum(n);
+    return 0;
+}</code></pre>
+<pre><code class="language-plaintext">getSum(4)                    → 10
+ └→ 4 + getSum(3)            ← 6
+     └→ 3 + getSum(2)        ← 3
+         └→ 2 + getSum(1)    ← 1
+             └→ 1 + getSum(0) ← 0</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slip (about 4:50):</strong> "at most n − 1 functions in the function call stack". The teacher then says n + 1, and the notes use n + 1.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MTYyOQ%3D%3D" target="_blank" rel="noopener">Palindrome Check using Recursion</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">s0  s1  s2 ........ s(n-3)  s(n-2)  s(n-1)
+    └──────── inner part ────────┘
+
+Base Cases :
+n = 0 OR n = 1 : Return true          e.g.  cabac</code></pre>
+    <p>Compare the first and last characters. If they match, the string is a palindrome exactly when its inner part (s₁ … s₍ₙ₋₂₎) is one. A string of length 0 or 1 is always a palindrome. In the code this becomes <code>start &gt;= end</code>.</p>
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul><li>A recursive function to check whether a string is a palindrome.</li></ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/NzUwOA%3D%3D" target="_blank" rel="noopener">Palindrome Check using Recursion</a></p>
+<ul>
+<li>Examples: malayalam → Yes, max → No. Idea: if there is only one character, return true. Otherwise compare the first and last characters and recurse on the remaining substring.</li>
+<li><code>isPalRec(str, s, e)</code>: s == e → true. str[s] != str[e] → false. If s &lt; e + 1, recurse on (s + 1, e − 1). An empty string counts as a palindrome. O(n) time, O(n) auxiliary space.</li>
+<li><strong>Another approach:</strong> check index i against n − i − 1. <code>isPalindrome(s, i)</code> returns true once i &gt; s.length()/2, else <code>s.charAt(i) == s.charAt(s.length() − i − 1) &amp;&amp; isPalindrome(s, i + 1)</code>. Also O(n), O(n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Problem: Palindrome check using Recursion</strong>
+      <div class="io">
+        <span>I/P</span><span>abbcbba</span><span>O/P</span><span>Yes</span>
+        <span>I/P</span><span>abba</span><span>O/P</span><span>Yes</span>
+        <span>I/P</span><span>geeks</span><span>O/P</span><span>No &nbsp;(reversed: skeeg)</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Code (board, Java column; C++ alongside) <span class="cx">O(n)</span></h4>
+<pre><code class="language-java">// Initially : start = 0, end = n-1
+boolean isPalindrome(String str,
+                     int start,
+                     int end)
+{
+    if (start >= end)
+        return true;
+
+    return (str.charAt(start) == str.charAt(end)) &amp;&amp;
+            isPalindrome(str, start+1, end-1);
+}</code></pre>
+      <p>The C++ version uses <code>bool</code>, <code>string &amp;str</code> and <code>str[start] == str[end]</code>.</p>
+<pre><code class="language-plaintext">isPal("acbca")            isPal("abba")
+ └→ isPal("cbc")           └→ isPal("bb")
+     └→ isPal("b")             └→ isPal("")</code></pre>
+      <p>Each call compares one pair and moves both ends inward by one. Board: <strong>O(n)</strong>.</p>
+    </div>
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. The board's recurrence starts "T(n) = T(n…" but the rest is hidden by the teacher in every frame, so only the board's O(n) is given.</p>
+      <p><strong>Board notation:</strong> <code>&amp;&amp;</code> and the C++ <code>&amp;str</code> are handwritten like "$$" and "$str".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/NDI2OTc%3D" target="_blank" rel="noopener">Sum of Digits Using Recursion</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li><strong>Reduce to a smaller subproblem</strong> by removing a corner digit. Removing the first digit needs slightly complex maths. Removing the last digit is easy: <code>n / 10</code> (integer division) drops it, and <code>n % 10</code> gives it.</li>
+      <li>So getSum(n) = getSum(n / 10) + n % 10, with base case n == 0 → 0.</li>
+      <li><strong>Time Θ(d), auxiliary space Θ(d)</strong>, where d is the number of digits: d + 1 calls, and up to d + 1 frames on the call stack.</li>
+      <li>A slight improvement is <code>if (n &lt;= 9) return n;</code> as the base case, which stops at a single digit and saves one call.</li>
+      <li>Whenever there's a simple iterative solution, prefer it. The recursive version has the overhead of function calls and needs extra space. The teacher says this question was done to understand recursion better.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/NzUwOQ%3D%3D" target="_blank" rel="noopener">Sum of Digits Using Recursion</a></p>
+<ul>
+<li>Examples: 12345 → 15, 45632 → 20. Steps for 12345: 12345 % 10 = 5, plus the result for 1234, then 4, 3, 2, 1, and the algorithm stops at 0.</li>
+<li><code>sum_of_digit(n)</code>: if n == 0 return 0, else return n % 10 + sum_of_digit(n / 10). The base case can also be <code>if (n &lt; 10) return n;</code>, which avoids calls for single digits.</li>
+<li>Time O(log n), auxiliary space O(log n) for the recursion stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Problem: Sum of Digits using Recursion</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 253</span><span>O/P</span><span>10</span>
+        <span>I/P</span><span>n = 9987</span><span>O/P</span><span>33</span>
+        <span>I/P</span><span>n = 10</span><span>O/P</span><span>1</span>
+      </div>
+      <p style="margin:8px 0 0;font-size:0.9rem;color:var(--muted)">Condition on the board: n ≥ 0.</p>
+    </div>
+    <div class="approach">
+      <h4>1. Recursive <span class="cx">Θ(d) time · Θ(d) aux space</span></h4>
+<pre><code class="language-cpp">// n >= 0
+int getSum(int n)
+{
+    if (n == 0)
+        return 0;
+    else
+        return getSum(n/10) + n%10;
+}</code></pre>
+<pre><code class="language-plaintext">getSum(873)              → 18
+ └→ getSum(87) + 3       → 15
+     └→ getSum(8) + 7    → 8
+         └→ getSum(0) + 8
+             └→ 0</code></pre>
+    </div>
+    <div class="approach">
+      <h4>2. Iterative Solution <span class="cx">Θ(d) time · Θ(1) aux space</span></h4>
+<pre><code class="language-cpp">int getSum(int n)
+{
+    int res = 0;
+    while (n >= 0)
+    {
+        res = res + n%10;
+        n = n/10;
+    }
+    return res;
+}</code></pre>
+      <p>Same time, but it runs faster because there's no function-call overhead, and it uses less auxiliary space.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the iterative loop is written <code>while (n &gt;= 0)</code>, and the teacher says "greater than equal to zero" at 4:45. Once n reaches 0, <code>n/10</code> stays 0, so this loops forever. It should be <code>while (n &gt; 0)</code>.</p>
+      <p><strong>Transcript slips (auto-generated):</strong> 0:17 "9 plus 918, 18 plus 826 plus 7233" means 9 + 9 = 18, 18 + 8 = 26, 26 + 7 = 33. 1:32 "n per cent n" means n % 10. 3:28 "recursive cause" means calls.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MjMzMw%3D%3D" target="_blank" rel="noopener">Rope Cutting Problem</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>The problem (board)</h3>
+    <p>Cut a rope of length n into the <strong>maximum number of pieces</strong>. The length of every piece (after cuts) should be in the set {a, b, c}, where 0 &lt; a, b, c ≤ n. If it can't be done, return −1.</p>
+
+    <h3>Idea for the recursive solution</h3>
+    <ul>
+      <li>Make the first cut, then recurse on the remaining length. The first piece can be a, b or c, so try all three: n − a, n − b and n − c.</li>
+      <li>Take the <strong>max</strong> of the three results and add 1 for the piece just cut.</li>
+      <li><strong>Base cases</strong> (read them off the leaves of the recursion tree): n == 0 means a valid solution was reached, so return 0. n &lt; 0 means this path isn't valid, so return −1.</li>
+      <li><strong>Corner case:</strong> if all three calls return −1, don't add 1, or an impossible answer turns into a valid-looking one. E.g. n = 9 with a = b = c = 2: 9 → 7 → 5 → 3 → 1 → negatives all return −1, and adding 1 at each level would give a wrong positive count. So if the max is −1, return −1.</li>
+      <li><strong>Time:</strong> it depends on n, a, b, c, but an easy upper bound comes from a = b = c = 1. Then every call makes three calls on n − 1, all the way down to 0, so there are about 3<sup>n</sup> leaves. <strong>O(3<sup>n</sup>)</strong>. The teacher says there's a better dynamic programming solution, covered in the DP track.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/ODUyMA%3D%3D" target="_blank" rel="noopener">Rope Cutting Problem</a></p>
+<ul>
+<li>Maximise the number of cuts of a rope of length N using only sizes A, B and C, or print −1. Examples: N = 17, A = 10, B = 11, C = 3 → 3 (two cuts of 3 and one of 11). N = 10, A = 9, B = 7, C = 11 → −1.</li>
+<li>Recursive <code>maxCuts</code>: n == 0 → 0, n &lt;= −1 → −1, res = max of the three recursive calls, −1 stays −1, otherwise res + 1. For (5, 2, 1, 5) the output is 5. Time O(3<sup>n</sup>), space O(n) for the call stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Problem: Rope Cutting</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 5, a = 2, b = 5, c = 1</span><span>O/P</span><span>5 &nbsp;(5 pieces of length 1 each)</span>
+        <span>I/P</span><span>n = 23, a = 12, b = 9, c = 11</span><span>O/P</span><span>2 &nbsp;(pieces of lengths 11 and 12)</span>
+        <span>I/P</span><span>n = 5, a = 4, b = 2, c = 6</span><span>O/P</span><span>−1</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Code <span class="cx">O(3ⁿ)</span></h4>
+<pre><code class="language-cpp">int maxPieces(int n, int a,
+              int b, int c)
+{   if (n == 0) return 0;
+    if (n &lt; 0) return -1;
+    int res = max(maxPieces(n-a, a, b, c),
+                  maxPieces(n-b, a, b, c),
+                  maxPieces(n-c, a, b, c));
+    if (res == -1)
+        return -1;
+    return res + 1;
+}</code></pre>
+<pre><code class="language-plaintext">n = 23, a = 11, b = 9, c = 12                → 2
+        n=23
+   /      |      \
+ n=12    n=14    n=11          returns 1, -1, 1
+ / | \   / | \   / | \
+ 1  3  0  3 5 2  0  2 -1
+ (1 and 3 → all children negative → -1)</code></pre>
+      <p>n = 12 gets 0 from its c-cut child (−1 from the others), so it returns 1. n = 14 gets −1 from all three. n = 11 gets 0 from its a-cut child, so it returns 1. The root takes max(1, −1, 1) = 1 and returns 2.</p>
+    </div>
+    <div class="added">
+      <p><strong>Java note:</strong> Java's <code>Math.max</code> takes two arguments, so use <code>Math.max(x, Math.max(y, z))</code>.</p>
+      <p><strong>Transcript slips (auto-generated):</strong> 0:03 "given a row" means a rope. 0:47 "to 11 and 12" means two pieces, 11 and 12. 4:16 "after getting 352" means after getting 3, 5, 2. 6:04 "777. Then 5 5 5 …" means the three calls for 7, then for 5, and so on.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MjMzMQ%3D%3D" target="_blank" rel="noopener">Generate Subsets</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li>Board: "All characters in the input string are distinct." "For a string of length n, there are going to be 2<sup>n</sup> subsets."</li>
+      <li>Board: "We can generate all subsets for length n string using subsets for length n − 1 string." Every subset of "AB" either leaves out C or adds C: "" → "", "C". "A" → "A", "AC". "B" → "B", "BC". "AB" → "AB", "ABC". The left column is the subsets of AB, the right column the subsets of ABC.</li>
+      <li>In the recursion, each character at index i gives two choices: leave it out, or include it (<code>curr + s[i]</code>). When i reaches the end of the string, print the current subset.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul><li>The recursive approach to Generate Subsets is explained in the video.</li></ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/NzUxMA%3D%3D" target="_blank" rel="noopener">Generate Subsets</a></p>
+<ul>
+<li>Print all subsets of a set given as a string, in any order. "abc" → "", "a", "b", "c", "ab", "ac", "bc", "abc". "abcd" gives 16.</li>
+<li>Two cases for every character: include it in the current subset, or don't. The article's Java <code>powerSet(str, index, curr)</code> prints curr when index == n, else calls (index + 1, curr + str.charAt(index)) and then (index + 1, curr). Output: abc, ab, ac, a, bc, b, c, and the empty line.</li>
+<li>In the recursion tree for "abc", each level is one index (0 to 3), and the leaves at index 3 are printed.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Problem: Generate Subsets</strong>
+      <div class="io">
+        <span>I/P</span><span>s = "AB"</span><span>O/P</span><span>"" "A" "B" "AB"</span>
+        <span>I/P</span><span>s = "ABC"</span><span>O/P</span><span>"" "A" "B" "C" "AB" "AC" "BC" "ABC"</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Code (board, pseudo code)</h4>
+<pre><code class="language-plaintext">void subsets(string s, string curr = "",
+             int i = 0)
+{
+    if (i == s.length())
+    {
+        print(curr);
+        return;
+    }
+    subsets(s, curr, i+1);
+    subsets(s, curr + s[i], i+1);
+}
+// Pseudo Code        (s[i] → s.charAt(i) in Java)</code></pre>
+<pre><code class="language-plaintext">Recursion Tree for "ABC"
+                    curr = ""                     i = 0
+             /                  \
+           ""                   "A"               i = 1
+         /     \              /      \
+       ""      "B"          "A"      "AB"         i = 2
+      /  \    /   \        /  \     /    \
+     ""  "C" "B"  "BC"   "A" "AC" "AB"  "ABC"     i = 3</code></pre>
+      <p>The leaves, at i = 3, are printed left to right: "", "C", "B", "BC", "A", "AC", "AB", "ABC".</p>
+    </div>
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. The board gives no complexity for this video.</p>
+      <p><strong>Java note:</strong> Java has no default parameters. Call <code>subsets(s, "", 0)</code> explicitly and use <code>s.charAt(i)</code>, as the board's note shows.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/OTYw" target="_blank" rel="noopener">Tower of Hanoi</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>The problem</h3>
+    <p>There are three towers A, B and C. n disks sit on tower A, the largest at the bottom and the smallest at the top. Move them all to tower C, in the same order, using B as an auxiliary tower. Print every move. The rules:</p>
+    <ol>
+      <li>Only one disk can move at a time.</li>
+      <li>The largest must always be below and the smallest on top, even in the intermediate steps.</li>
+      <li>Only the top disk can be moved, never a middle one.</li>
+    </ol>
+
+    <h3>Recursive idea</h3>
+    <p>For 3 disks the solution takes 7 steps. Look at them in terms of the 2-disk solution:</p>
+    <ol>
+      <li>Recursively move the top n − 1 disks from A to B, using C as the auxiliary. C is the final target, but in this call it's only the auxiliary.</li>
+      <li>Move the bottom (n-th) disk from A to C. That's a simple single move.</li>
+      <li>Recursively move the n − 1 disks from B to C, using A as the auxiliary.</li>
+    </ol>
+    <p>Base case: with one disk, just move it from source to destination. A, B and C in the function are <strong>variables</strong>, and the tower names they hold change in every recursive call (in one call, A may hold 'C' or 'B').</p>
+
+    <h3>How do we get the correct disk numbers? (board)</h3>
+    <p>For n = 2: the top disk is 1 and the bottom is 2. The first call moves disk 1 from A to B, then disk 2 (n) is printed as moving from A to C, then the second call moves disk 1 from B to C. The base case always prints "1", and the middle line always prints n. Since it works for 2, the same argument gives correct numbers for 3: the top two move correctly, then "Move 3", then the top two again. And so on for 4 and higher.</p>
+
+    <h3>Number of movements for a given n (board)</h3>
+<pre><code class="language-plaintext">T(1) = 1
+T(n) = 2T(n-1) + 1
+
+          1                    ─ 1
+     T(n-1)  T(n-1)
+          ⇓
+          1                    ─ 1
+       1     1                 ─ 2
+  T(n-2) T(n-2) T(n-2) T(n-2)
+          ⇓
+       ...                     ─ 4 ...
+
+1 + 2 + 4 ... 2^(n-1) = 1 × (2^n - 1)/(2 - 1) = 2^n - 1</code></pre>
+    <p>The recursion tree doubles at each level: n levels, from 2⁰ down to 2<sup>n−1</sup> at n = 1. So the number of moves is <strong>2<sup>n</sup> − 1</strong>: 1 for n = 1, 3 for n = 2, 7 for n = 3.</p>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/NzUxMQ%3D%3D" target="_blank" rel="noopener">Tower of Hanoi</a></p>
+<ul>
+<li>Three rods A, B and C, with N disks on A in decreasing diameter. Move the stack to C: one disk at a time, only the upper disk of a stack, and never on top of a smaller disk.</li>
+<li>Pattern: shift N − 1 disks from A to B using C, shift the last disk from A to C, then shift N − 1 disks from B to C using A. The article's <code>towerOfHanoi(n, from_rod, to_rod, aux_rod)</code> returns when n == 0.</li>
+<li>For N = 3 there are 7 moves (disk 1 A→C, 2 A→B, 1 C→B, 3 A→C, 1 B→A, 2 B→C, 1 A→C). Time O(2<sup>N</sup>), auxiliary space O(N) for the call stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Problem: Tower of Hanoi</strong>
+<pre><code class="language-plaintext">I/p : n = 1     O/p : Move Disc 1 from A to C
+I/p : n = 2     O/p : Move Disc 1 from A to B
+                      Move Disc 2 from A to C
+                      Move Disc 1 from B to C
+I/p : n = 3     O/p : 7 moves (the board shows all seven steps)</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Code (board, Java; C++ below it) <span class="cx">2ⁿ − 1 moves</span></h4>
+<pre><code class="language-java">void TOH(int n, char A, char B, char C)
+{   if (n == 1)
+    {   System.out.println("Move 1 from" + A + "to" + C);
+        return;
+    }
+    TOH(n-1, A, C, B);
+    System.out.println("Move" + n + "from" + A + "to" + C);
+    TOH(n-1, B, A, C);
+}</code></pre>
+<pre><code class="language-plaintext">TOH(2, 'A', 'B', 'C')
+ ├→ TOH(1, 'A', 'C', 'B')
+ │   └→ Move 1 from 'A' to 'B'
+ ├→ Move 2 from 'A' to 'C'
+ └→ TOH(1, 'B', 'A', 'C')
+     └→ Move 1 from 'B' to 'C'</code></pre>
+      <p>For n = 3 the call TOH(3, A, B, C) goes to TOH(2, A, C, B), then TOH(1, A, B, C), which prints "move 1 from A to C". Back in the 2-disk call it prints "move 2 from A to B", then TOH(1, C, A, B) prints "move 1 from C to B". Back at the top it prints "move 3 from A to C", and the final TOH(2, B, A, C) moves the top two from B onto C.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board notation:</strong> the board's print strings have no spaces ("Move 1 from" + A + "to" + C), so the actual output would run words together (e.g. "Move 1 fromAtoC").</p>
+      <p><strong>Transcript slips (auto-generated):</strong> 0:47 "moving these days" means disks. 3:23 "this desk 1 2 here" means disk 1 to here. 8:28 "BAC" means TOH(n−1, B, A, C). 12:14 "n-," means n − 1.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/OTYx" target="_blank" rel="noopener">Josephus Problem</a> · <strong>No transcript:</strong> these notes come from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>n people stand in a circle, numbered 0 to n − 1. Starting at 0, every k-th person is killed, and counting continues from the next person. Return the position of the survivor. The board's examples: n = 7, k = 3 → 3, and n = 8, k = 2 → 0.</p>
+
+    <h3>Worked circles (board)</h3>
+<pre><code class="language-plaintext">n = 7, k = 3 :  0 1 2 3 4 5 6
+  kill 2  →  kill 5  →  kill 1  →  kill 6  →  kill 4  →  kill 0   → survivor 3
+
+n = 4, k = 2 :  kill 1 → kill 3 → kill 2 → survivor 0
+
+n = 5, k = 3 :  kill 2 → kill 0 → kill 4 → kill 1 → survivor 3</code></pre>
+
+    <h3>From jos(n, k) to jos(n − 1, k) (board)</h3>
+<pre><code class="language-plaintext">n = 5, k = 3            jos(5,3)    jos(4,3)
+after killing 2,          3   ←   0
+renumber from 3:          4   ←   1
+                          0   ←   2
+                          1   ←   3
+jos(n, k) ← jos(n-1, k) ......
+
+General Case : after the (k-1)-th person is killed, the circle
+of n-1 starts at position k:
+   (k)   % n  ←  0
+   (k+1) % n  ←  1
+   (k+2) % n  ←  2
+     ⋮
+   (k+i) % n  ←  i</code></pre>
+    <p>So whatever position i survives in the smaller circle of n − 1, the same person sits at (i + k) % n in the circle of n. That gives jos(n, k) = (jos(n − 1, k) + k) % n, with base case jos(1, k) = 0.</p>
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul><li>A detailed description of the popular Josephus Problem and a recursive solution for it.</li></ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/NzUxMg%3D%3D" target="_blank" rel="noopener">Josephus Problem</a></p>
+<ul>
+<li>n people in a circle. In each step k − 1 are skipped and the k-th is killed, until one remains. Find the safe position. With positions numbered from 1: n = 5, k = 2 → 3. n = 7, k = 3 → 4 (killed in order 3, 6, 2, 7, 5, 1).</li>
+<li>Recursive structure: josephus(n, k) = (josephus(n − 1, k) + k − 1) % n + 1, with josephus(1, k) = 1. After the k-th person is killed, numbering restarts from k + 1 in a modular way. The simpler (josephus(n − 1, k) + k) % n could give 0, but positions run from 1 to n, so subtract 1 and add 1 afterwards.</li>
+<li>Time O(n), space O(n) for the recursion call stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Problem: Josephus Problem</strong>
+      <div class="io">
+        <span>I/P</span><span>n = 7, k = 3</span><span>O/P</span><span>3</span>
+        <span>I/P</span><span>n = 8, k = 2</span><span>O/P</span><span>0</span>
+        <span>I/P</span><span>n = 4, k = 2</span><span>O/P</span><span>0</span>
+        <span>I/P</span><span>n = 5, k = 3</span><span>O/P</span><span>3</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Code (board)</h4>
+<pre><code class="language-cpp">int jos(int n, int k)
+{
+    if (n == 1)
+        return 0;
+    else
+        return (jos(n-1, k) + k) % n;
+}
+int myJos(int n, int k)
+{
+    return jos(n, k) + 1;
+}</code></pre>
+<pre><code class="language-plaintext">jos(5, 3)
+⇒ (jos(4, 3) + 3) % 5
+⇒ ((jos(3, 3) + 3) % 4 + 3) % 5
+⇒ (((jos(2, 3) + 3) % 3 + 3) % 4 + 3) % 5
+⇒ ((((jos(1, 3) + 3) % 2) + 3) % 3 + 3) % 4
+     + 3) % 5</code></pre>
+      <p>jos(1, 3) = 0 → (0 + 3) % 2 = 1 → (1 + 3) % 3 = 1 → (1 + 3) % 4 = 0 → (0 + 3) % 5 = <strong>3</strong>. <code>myJos</code> is for when people are numbered 1 to n (the final board draws a circle labelled 1, 2, 3 … n): it shifts the 0-based answer by 1.</p>
+    </div>
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the teacher's spoken explanation and any slips in speech couldn't be checked. The order of kills in the n = 7 circles is read from the crosses drawn on the board. The board gives no time complexity.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-16">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MTQ2OQ%3D%3D" target="_blank" rel="noopener">Subset Sum Problem (Recursive Solution)</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li>Given a set as an array and a sum, find the <strong>count of subsets</strong> whose sum equals the given sum.</li>
+      <li>An array of size n has 2<sup>n</sup> subsets, counting the empty set and the whole array. The subsets of {1, 2, 3} are {}, {1}, {2}, {3}, {1, 2}, {1, 3}, {2, 3}, {1, 2, 3}.</li>
+      <li><strong>Corner case:</strong> for sum = 0 the answer is always at least 1, because the empty set is a subset of every set and has sum 0.</li>
+      <li><strong>Idea:</strong> for every element there are two cases, excluded from the current subset or included in it. Go from the right, using the array size n as the index, so the current element is arr[n − 1]. Excluding copies the parent's subset, and including adds the element to it. For n elements the recursion tree has 2<sup>n</sup> leaves, one per subset.</li>
+      <li><strong>Trick:</strong> instead of keeping the current subset in a vector or ArrayList, keep only <code>sum</code>. Excluding leaves sum unchanged, and including subtracts the element. When n reaches 0 every element has been decided, and the subset matches if sum is 0, so return 1, otherwise 0. Each parent adds up its two children's counts.</li>
+      <li><strong>Time:</strong> 2<sup>n</sup> leaf calls plus 2<sup>n</sup> − 1 internal calls (for n = 3, 8 + 7 = 15), which is <strong>Θ(2<sup>n</sup>)</strong>. The teacher says this basic solution can be optimised with backtracking, and a pseudo-polynomial dynamic programming solution in Θ(n × sum) comes in a later video.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Problem: Subset Sum (count)</strong>
+      <div class="io">
+        <span>I/P</span><span>{10, 5, 2, 3, 6}, sum = 8</span><span>O/P</span><span>2 &nbsp;({5, 3} and {2, 6})</span>
+        <span>I/P</span><span>sum = 4 example</span><span>O/P</span><span>1 &nbsp;({1, 3})</span>
+        <span>I/P</span><span>{10, 20, 15}, sum = 37</span><span>O/P</span><span>0</span>
+        <span>I/P</span><span>{10, 20, 15}, sum = 0</span><span>O/P</span><span>1 &nbsp;(the empty set)</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Code <span class="cx">Θ(2ⁿ)</span></h4>
+<pre><code class="language-cpp">int countSubsets(int arr[], int n, int sum)
+{
+    if (n == 0)
+        return (sum == 0) ? 1 : 0;
+
+    return countSubsets(arr, n-1, sum) +
+           countSubsets(arr, n-1, sum - arr[n-1]);
+}</code></pre>
+<pre><code class="language-plaintext">Idea for the recursive solution for set {10, 20, 15} and sum = 25
+                         {}                          n = 3 (15)
+             sum=25 /          \ sum=10
+                  {}            {15}                 n = 2 (20)
+        sum=25 /     \ 5   sum=10 /    \ -10
+             {}      {20}      {15}    {15,20}       n = 1 (10)
+         25 / \ 15  5 / \ -5  10 / \ 0  -10 / \ -20
+          {} {10} {20}{20,10}{15}{15,10}{15,20}{15,20,10}</code></pre>
+      <p>Only {15, 10} reaches sum = 0, so the answer for {10, 20, 15} with sum 25 is 1.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the I/P for the "sum = 4" example is hidden by the teacher in the frames. The transcript gives only the subset {1, 3}.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-17">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/video/MjMzNA%3D%3D" target="_blank" rel="noopener">Printing all Permutations</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li>A string of length n has <strong>n!</strong> permutations: 6 for "ABC" (ABC, ACB, BAC, BCA, CAB, CBA), 24 for length 4, 2 for length 2 (AB, BA). For an empty string, print nothing.</li>
+      <li><strong>Idea:</strong> fix every character at the first position in turn, then recursively generate all permutations of the rest. For ABCD, the permutations beginning with A are found by fixing B, C, then D in the second position, and so on. Once the second-last character is fixed, only one is left, so print the string.</li>
+      <li>Pass an index <code>i</code>: it is both the number of characters already fixed and the position to fix next. Each recursive call passes i + 1.</li>
+      <li>To fix each remaining character at position i, loop j from i to the end: <code>swap(s[i], s[j])</code>, recurse, then <strong>swap back</strong>. The teacher calls this a really tough recursion exercise, because the recursive calls are made inside a loop.</li>
+      <li><strong>Why swap back:</strong> the same string is being modified. When a child call returns, the parent needs the original string (e.g. ABCD) back, so the next swap (A with B to get BACD) works. Otherwise the logic breaks.</li>
+      <li>The <code>return</code> in the base case saves the unnecessary loop and calls that would otherwise follow.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/article/NzUxMw%3D%3D" target="_blank" rel="noopener">Printing all Permutations</a></p>
+<ul>
+<li>"ABC" → ABC ACB BAC BCA CAB CBA. For every index i, swap the i-th character with the first index to fix it there, recursively generate all permutations with it fixed, then swap back to restore the original string before fixing the next one.</li>
+<li>The article's Java <code>permute(str, l, r)</code> prints when l == r, else loops i from l to r: swap(l, i), permute(l + 1, r), swap(l, i). Since Java strings are immutable, <code>swap</code> works on a <code>toCharArray()</code> copy and returns a new String. Output: ABC ACB BAC BCA CBA CAB.</li>
+<li>Time O(N × N!): there are N! permutations and each takes O(N) to print. Auxiliary space O(N).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Problem: Print all permutations of a string</strong>
+      <div class="io">
+        <span>I/P</span><span>"ABC"</span><span>O/P</span><span>ABC ACB BAC BCA CBA CAB</span>
+        <span>I/P</span><span>"AB"</span><span>O/P</span><span>AB BA</span>
+        <span>I/P</span><span>""</span><span>O/P</span><span>(nothing)</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Code (board, C++)</h4>
+<pre><code class="language-cpp">void permute(string s, int i = 0)
+{
+    if (i == s.length() - 1)
+    {   cout &lt;&lt; s &lt;&lt; " ";
+        return;
+    }
+    for (int j = i; j &lt; s.length(); j++)
+    {
+        swap(s[i], s[j]);
+        permute(s, i+1);
+        swap(s[i], s[j]);
+    }
+}</code></pre>
+<pre><code class="language-plaintext">i=0        i=1         i=2
+ABC  ──  ABC   ──  ABC
+             └──  ACB
+     ──  BAC   ──  BAC
+             └──  BCA
+     ──  CBA   ──  CBA
+             └──  CAB
+
+per("ABC",0)
+ ├ per("ABC",1) ├ per("ABC",2) → print("ABC")
+ │              └ per("ACB",2) → print("ACB")
+ ├ per("BAC",1) ├ per("BAC",2) → print("BAC")
+ │              └ per("BCA",2) → print("BCA")
+ └ per("CBA",1) ├ per("CBA",2) → print("CBA")
+                └ per("CAB",2) → print("CAB")</code></pre>
+      <p>The teacher notes that the default argument <code>int i = 0</code> is C++-specific. In Java, pass 0 explicitly on the first call, and print with <code>System.out.print</code>. The board's first, larger tree does the same for ABCD (i = 0 → A, B, C, D first, then i = 1, 2, 3).</p>
+    </div>
+    <div class="added">
+      <p><strong>Java note:</strong> Java strings are immutable, so <code>swap(s[i], s[j])</code> needs a <code>char[]</code>: convert with <code>s.toCharArray()</code>, swap array elements, and print <code>new String(arr)</code>.</p>
+      <p><strong>Transcript slips (auto-generated):</strong> 3:35 "permute function partially" refers to the first partial code board. 9:06 "unnecessar loops" means unnecessary loops.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Recursion-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (12 problems, in course order). The notes list each problem with a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/power-of-numbers-1587115620" target="_blank" rel="noopener">Raise to Power of Its Own Reverse</a></td><td>–</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/power-using-recursion" target="_blank" rel="noopener">Power Using Recursion</a></td><td>–</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/fibonacci-using-recursion" target="_blank" rel="noopener">Nth Fibonacci Using Recursion</a></td><td>Video 8</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/print-1-to-n-without-using-loops-1587115620" target="_blank" rel="noopener">1 to n Without Loop</a></td><td>Video 6</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/sum-of-digits-of-a-number" target="_blank" rel="noopener">Sum Of Digits</a></td><td>Video 11</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/count-total-digits-in-a-number" target="_blank" rel="noopener">Count Digits in Number</a></td><td>–</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/power-set-using-recursion" target="_blank" rel="noopener">Power Set</a></td><td>Video 13</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/tower-of-hanoi-1587115621" target="_blank" rel="noopener">Tower Of Hanoi</a></td><td>Video 14</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/digital-root" target="_blank" rel="noopener">Digital Root</a></td><td>–</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/josephus-problem" target="_blank" rel="noopener">Josephus Problem</a></td><td>Video 15</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/lucky-numbers2911" target="_blank" rel="noopener">Lucky Numbers</a></td><td>–</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Recursion/problem/possible-words-from-phone-digits-1587115620" target="_blank" rel="noopener">Possible Words From Phone Digits</a></td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <div class="added"><p>"Covered in" points to the video whose idea the problem uses. The Problems tab shows each problem's accuracy rather than a difficulty level, so no level is listed.</p></div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -4467,7 +5664,15 @@ const TRACKS = [
       ["Check if Kth bit is set or not", "7:48"], ["Count Set Bits", "17:12"], ["Power of Two", "6:30"],
       ["One Odd Occurring", "7:35"], ["Two Odd Occurring", "11:15"], ["Power Set using Bitwise", "6:34"]
     ] },
-  { id: "DSASP-Recursion", slug: "recursion", name: "Recursion", counts: [17, 12, 12, 10, 0] },
+  { id: "DSASP-Recursion", slug: "recursion", name: "Recursion", counts: [17, 12, 12, 10, 0],
+    videos: [
+      ["Recursion Introduction", "11:49"], ["Applications of Recursion", "5:24"], ["Recursion Output Practice - Part 1", "6:25"],
+      ["Recursion Output Practice - Part 2", "10:52"], ["Print N to 1 Using Recursion", "4:07"], ["Print 1 to N Using Recursion", "4:53"],
+      ["Tail Recursion", "10:22"], ["Writing Base Cases in Recursion", "7:28"], ["Natural Number Sum using Recursion", "5:48"],
+      ["Palindrome Check using Recursion", "8:39"], ["Sum of Digits Using Recursion", "5:17"], ["Rope Cutting Problem", "10:18"],
+      ["Generate Subsets", "8:21"], ["Tower of Hanoi", "19:20"], ["Josephus Problem", "22:36"],
+      ["Subset Sum Problem (Recursive Solution) (Medium)", "10:53"], ["Printing all Permutations", "11:10"]
+    ] },
   { id: "DSASP-Arrays", slug: "arrays", name: "Arrays", counts: [31, 27, 27, 5, 1] },
   { id: "DSASP-Searching", slug: "searching", name: "Searching", counts: [18, 13, 18, 10, 1] },
   { id: "DSASP-Sorting", slug: "sorting", name: "Sorting", counts: [39, 29, 20, 10, 0] },

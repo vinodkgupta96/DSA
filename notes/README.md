@@ -71,15 +71,15 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-09)
 
-**Notes written: 3 of 24 tracks · 39 of 470 videos · 30 of 342 articles · 23 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 4 of 24 tracks · 56 of 470 videos · 42 of 342 articles · 35 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
 | 1 | Analysis of Algorithms | 15 | 6 | – | ✅ Done: 15/15 videos, 6/6 articles |
 | 2 | Mathematics | 12 | 13 | 11 | ✅ Done: 12/12 videos, 13/13 articles, 11 problems |
 | 3 | Bit Magic | 12 | 11 | 12 | ✅ Done: 12/12 videos, 11/11 articles, 12 problems |
-| 4 | Recursion | 17 | 12 | 12 | ⏭ Next |
-| 5 | Arrays | 31 | 27 | 27 | Not started |
+| 4 | Recursion | 17 | 12 | 12 | ✅ Done: 17/17 videos, 12/12 articles, 12 problems |
+| 5 | Arrays | 31 | 27 | 27 | ⏭ Next |
 | 6 | Searching | 18 | 13 | 18 | Not started |
 | 7 | Sorting | 39 | 29 | 20 | Not started |
 | 8 | Matrix | 12 | 11 | 15 | Not started |
@@ -162,6 +162,30 @@ All 12 videos have the course transcript. Frames every 10 s plus close-ups.
 
 The two "Maximum AND value" articles match no video, so they're in the Track practice set with the 12 problems. Course progress was unchanged (2/12 videos watched, 32%, 0/11 articles read). Resume positions: V1 0:06, the rest 0:00, all restored. Once, a click landed on a transcript row and moved the paused V12 to 6:01. It didn't play and was set back to 0:00.
 
+### Track 4: Recursion, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Recursion Introduction | 11:49 | Transcript + board | Recursion Introduction |
+| 2 | Applications of Recursion | 5:24 | Transcript + board | |
+| 3 | Recursion Output Practice - Part 1 | 6:25 | Transcript + board | |
+| 4 | Recursion Output Practice - Part 2 | 10:52 | Transcript + board | |
+| 5 | Print N to 1 Using Recursion | 4:07 | Board + description | Print N to 1 |
+| 6 | Print 1 to N Using Recursion | 4:53 | Transcript + board | Print 1 to N |
+| 7 | Tail Recursion | 10:22 | Transcript + board | Tail Recursion |
+| 8 | Writing Base Cases in Recursion | 7:28 | Transcript + board | |
+| 9 | Natural Number Sum using Recursion | 5:48 | Transcript + board | Natural Number Sum |
+| 10 | Palindrome Check using Recursion | 8:39 | Board + description | Palindrome Check |
+| 11 | Sum of Digits Using Recursion | 5:17 | Transcript + board | Sum of Digits |
+| 12 | Rope Cutting Problem | 10:18 | Transcript + board | Rope Cutting Problem |
+| 13 | Generate Subsets | 8:21 | Board + description | Generate Subsets |
+| 14 | Tower of Hanoi | 19:20 | Transcript + board | Tower of Hanoi |
+| 15 | Josephus Problem | 22:36 | Board + description | Josephus Problem |
+| 16 | Subset Sum Problem (Recursive Solution) | 10:53 | Transcript + board | |
+| 17 | Printing all Permutations | 11:10 | Transcript + board | Printing all Permutations |
+
+Course progress was unchanged (9/17 videos watched, 57%, 0/12 articles read). All resume positions were 0:00 and were restored.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -176,10 +200,11 @@ The two "Maximum AND value" articles match no video, so they're in the Track pra
 - `660bdd5`: Notes playbook: wait for go before next track
 - `4e205f8`: Notes: add progress log
 - `bffb328`: Add DSA revision notes: Mathematics track (12 videos, 13 articles, 11 problems)
-- (this commit): Add Bit Magic track notes (12 videos, 11 articles, 12 problems)
+- `002a7e3`: Add DSA revision notes: Bit Magic track (12 videos, 11 articles, 12 problems)
+- (this commit): Add Recursion track notes (17 videos, 12 articles, 12 problems)
 
 ### What's next
-- **Track 4: Recursion** (17 videos, 12 articles, 12 problems), starting straight away.
+- **Track 5: Arrays** (31 videos, 27 articles, 27 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -193,6 +218,7 @@ The two "Maximum AND value" articles match no video, so they're in the Track pra
   - The private artifact is on another account, so Track 2 is kept local only.
   - Switched to the faster method (10 s frames for videos with a transcript, page-text article reading).
   - Completed track 3 (Bit Magic): 12 videos, 11 articles, 12 problems. Commit after each track and continue without waiting.
+  - Completed track 4 (Recursion): 17 videos, 12 articles, 12 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -201,6 +227,14 @@ The two "Maximum AND value" articles match no video, so they're in the Track pra
 - V8 2:50: calls c₂ the "Theta" constant; it is the Big O (upper) side.
 - V10 3:48: "Θ(n) times" for the m-loop; the board gives Θ(m²).
 - V15: `c` is undeclared in the board's Fibonacci code; `int f[n+1]` is C++ (Java: `int[] f = new int[n + 1];`).
+
+### Recursion: teacher slips flagged
+- V11 (board): the iterative sum-of-digits loop is `while (n >= 0)`, which never ends once n is 0. It should be `n > 0`.
+- V9 ~4:50: "at most n − 1 functions in the call stack". The teacher then says n + 1.
+- V7: the board's "Equivalent Tail Recursive" print-1-to-n uses an extra parameter k (start at 1). The left-hand factorial on the last board is partly hidden.
+- V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
+- V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
+- Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
 
 ### Bit Magic: teacher slips flagged
 - V6 ~6:37 and 7:41: says Python has `unsigned` ints, alongside C/C++. Python has no unsigned type.
