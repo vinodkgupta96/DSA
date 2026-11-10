@@ -5635,6 +5635,2667 @@ per("ABC",0)
   </section>
 </template>
 
+<template id="DSASP-Arrays-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTE1OA%3D%3D" target="_blank" rel="noopener">Introduction to Arrays</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Array Data Structure (Introduction)</h3>
+    <ul>
+      <li>An array stores <strong>multiple items together at one place</strong>, typically of the same data type. Example: <code>arr[] = {10, 15, 20, 30, 40}</code>.</li>
+      <li><strong>Why not separate variables?</strong> The code would be complex, and the number of items may not be fixed. An array of Facebook friends might hold 100 friends now and 500 later.</li>
+      <li>Arrays aren't the only data structure for this. Linked lists, self-balancing BSTs and hashing (covered later) also store multiple items. The array is usually the first one studied.</li>
+      <li><strong>Elements are accessed by index</strong>, which starts at 0 in C++, Java and Python. arr[0] is the first element and arr[2] the third.</li>
+    </ul>
+
+    <h3>Contiguous Memory (board)</h3>
+<pre><code class="language-plaintext">index :   0     1     2      3      4
+        | 10 |  15 |  20 |  30  |  40  |
+        x    x+y   x+2y  x+3y   x+4y</code></pre>
+    <p>What makes arrays different from linked lists, hashing and self-balancing BSTs is that their elements are stored at contiguous locations. If the first element is at address x and each element has size y, the next ones are at x + y, x + 2y, and so on. With x = 1000 and y = 4 (a typical integer size), the addresses are 1000, 1004, 1008, 1012 and 1016.</p>
+
+    <h3>Advantages (board)</h3>
+    <ol>
+      <li><strong>Random Access:</strong> the i-th item is found in O(1). Every language stores the address of the first element with the array (in C/C++, <code>arr</code> itself gives that address). Address of arr[i] = x + i·y, just a multiplication and an addition.</li>
+      <li><strong>Cache Friendliness:</strong> the cache is the memory closest to the CPU, faster than RAM, which is faster than the hard disk. When a processor accesses an item it usually prefetches nearby items. With contiguous storage, the next item you access is very likely already in the cache. Linked lists and BSTs store items at scattered locations, so prefetching doesn't help them. This is a big advantage of arrays.</li>
+    </ol>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzA4Mg%3D%3D" target="_blank" rel="noopener">Introduction to Arrays</a></p>
+<ul>
+<li>An array is a collection of items of the same variable type stored at contiguous memory locations. It's one of the most popular and simple data structures and is often used to implement other data structures. Each item is indexed starting with 0, and an element is accessed directly by its index.</li>
+<li>Terms: array index (starts from 0), array element (an item, accessed by its index), array length (the number of elements it can contain).</li>
+<li>In Java, when initialising with values you must not give the size: <code>int arr[] = {1, 2, 3};</code> is valid, <code>int arr[3] = {1, 2, 3};</code> is a compilation error. In C++ <code>int arr[3] = {1, 2, 3};</code> is valid.</li>
+<li>That declaration is static (compile-time) allocation: only the fixed size in [] is allocated. If you don't know the size, declaring too large wastes memory and too small doesn't hold all the elements, so static allocation isn't preferred then.</li>
+<li>Why arrays: separate variables (v1, v2, v3, …) work for a few objects, like five students' marks, but are hard to manage for many. An array represents many instances in one variable.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+<pre><code class="language-plaintext">arr[] = {10, 15, 20, 30, 40}
+x = arr[0];     // 10
+y = arr[2];     // 20</code></pre>
+    <div class="added">
+      <p><strong>Transcript slips (auto-generated):</strong> 2:01 "s is thousand" means x is 1000. 4:45 "second readers" is unclear; the order is cache, then RAM, then hard disk.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTE1OQ%3D%3D" target="_blank" rel="noopener">Array Types</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Arrays can be categorised in many ways. This video uses one criterion: <strong>can the array resize itself</strong> when you add items beyond its current capacity? That gives fixed sized arrays and dynamic sized arrays.</p>
+
+    <h3>Fixed Sized Arrays (board)</h3>
+<pre><code class="language-plaintext">C/C++
+int arr[100];                    ┐
+int arr[n];                      ┘ Stack Allocated
+int *arr = new int[n];           ] Heap Allocated
+int arr[] = {10, 15, 30, 40};    ] Stack Allocated
+
+Java
+int [] arr = new int[100];
+int [] arr = new int[n];
+int arr[] = {10, 15, 30, 40};</code></pre>
+    <ul>
+      <li>In C/C++, n can be a user input. <code>new int[n]</code> is C++ syntax; in C you'd use <code>malloc</code>. With an initialiser list, the compiler creates an array of exactly that size (4 here), and you can't add a fifth element.</li>
+      <li>In C/C++, fixed arrays go either in the <strong>stack segment</strong> (where local variables are stored) or the <strong>heap segment</strong> (dynamically allocated memory). That's only an internal, language-specific detail: the time complexities, advantages and disadvantages stay the same either way.</li>
+      <li>In Java, arrays are <strong>always allocated on the heap</strong>, so things are simpler than in C/C++.</li>
+    </ul>
+
+    <h3>Dynamic Sized Arrays (board)</h3>
+<pre><code class="language-plaintext">Resize Automatically
+C++    : vector
+Java   : ArrayList
+Python : list</code></pre>
+    <ul>
+      <li>A fixed array of 100 can't take a 101st element. A dynamic array takes as many as you want. How they work internally depends on the implementation.</li>
+      <li><strong>Example implementation:</strong> start with capacity 100. The first 100 inserts work like a normal array. On the 101st, double the size to 200, copy the 100 elements across, then insert. The next 99 go in normally, then it doubles again to 400, then 800. Doubling is only an example: an implementation might triple, or do something else.</li>
+      <li>Insertion at the end is still <strong>O(1) on average</strong>, as with fixed arrays (shown in the Operations video). And you don't need to know the size in advance.</li>
+      <li>It's strongly recommended to learn your language's dynamic array and to prefer it: vector over arrays in C++, ArrayList over arrays in Java, list in Python. They can act like fixed arrays too: their constructors let you set the initial size (100, 200 or n elements). They also come with built-in operations such as removing or searching for an item, which you'd have to write yourself for a fixed array.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>No problem in this video. The syntax examples are in the Theory part.</p>
+    <div class="added">
+      <p><strong>Board note:</strong> the C/C++ heap line is partly hidden by the teacher in the close-up. Only <code>new int[n]</code> and the label "Heap Allocated" can be read, and the transcript says it's C++ syntax. The <code>int *arr =</code> part is a reading of the hidden left side.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTI5NA%3D%3D" target="_blank" rel="noopener">Vector in C++</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Why vectors? The problem with normal arrays</h3>
+    <p>Normal arrays can have a fixed or variable size, and can be dynamically allocated and deleted. But say you build software for a college that expects at most 500 admissions:</p>
+    <ul>
+      <li>An array of 500 wastes space if only 200–400 students actually join.</li>
+      <li>An array of size n ("tell me the current number of students") can't grow when more students join later (300 → 400). And when students leave (300 → 200), the space is wasted.</li>
+    </ul>
+    <p>With arrays you always end up wasting space by over-allocating, because the size can't change dynamically. That's where vectors come in.</p>
+
+    <h3>Advantages of vector (board)</h3>
+    <ul>
+      <li><strong>Dynamic Size</strong>: the main point.</li>
+      <li><strong>Rich Library functions</strong>: find, erase, insert, etc. Many work on vectors but not on normal arrays.</li>
+      <li><strong>Easy to know size</strong>: <code>v.size()</code>, instead of <code>sizeof(arr)/sizeof(arr[0])</code>.</li>
+      <li><strong>No need to pass size</strong>: a function always receives an array as a pointer (even written with <code>[]</code>, it's the same as <code>*arr</code>), so you'd get the size of a pointer and have to pass n as a parameter. A vector is an object of the vector class and carries its size, so <code>v.size()</code> works inside any function.</li>
+      <li><strong>Can be returned from a function</strong>: returning a locally created array is invalid, because its space is deallocated once the call returns. A dynamically allocated array (<code>new int[…]</code>) can be returned. A vector can simply be returned.</li>
+      <li><strong>By default initialised with default value</strong>: a vector of 100 ints starts all 0, bools all false, strings empty, floats 0, as in Java. Arrays hold random values, so you'd usually have to initialise them first.</li>
+      <li><strong>Can copy a vector to other</strong>: <code>v1 = v2;</code> copies every element (which is also what happens when a vector is returned). With arrays you'd need a loop or a function.</li>
+    </ul>
+    <p>The teacher says this is just a small list. You'll find many more advantages once you start using vectors, and they save a lot of time compared with arrays.</p>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/MjI4OQ%3D%3D" target="_blank" rel="noopener">Implementing Arrays in C++ using STL</a></p>
+<ul>
+<li>Commonly used STL classes for sequential lists or arrays: <strong>vector</strong> and <strong>list</strong>.</li>
+<li><strong>vector</strong> is a dynamic array. Over normal arrays: no size parameter needed when passing it, many built-in functions (insert, erase, …), dynamic size (no initial size needed; it can be resized). Elements are contiguous, so they're accessed and traversed with iterators.</li>
+<li>Vector timings: inserting at the end takes differential time (sometimes the array must be extended); removing the last element is constant (no resizing); inserting or erasing at the beginning or in the middle is linear.</li>
+<li>Vector functions: <code>begin()</code>, <code>end()</code> (the theoretical element after the last), <code>size()</code>, <code>capacity()</code> (storage currently allocated, in elements), <code>empty()</code>, <code>push_back()</code>, <code>pop_back()</code>, <code>insert()</code> (before a position), <code>erase()</code> (a position or range), <code>swap()</code>, <code>clear()</code>, <code>emplace()</code>, <code>emplace_back()</code>.</li>
+<li><strong>list</strong> allows non-contiguous memory: it implements a doubly linked list, not arrays. Compared to vector, traversal is slow, but once a position is found insertion and deletion are quick. For a singly linked list use <code>forward_list</code>.</li>
+<li>List functions: <code>front()</code>, <code>back()</code>, <code>push_front(g)</code>, <code>push_back(g)</code>, <code>pop_front()</code>, <code>pop_back()</code>, <code>begin()</code>/<code>end()</code>, <code>empty()</code>, <code>insert()</code>, <code>reverse()</code>, <code>size()</code>, <code>sort()</code> (increasing order).</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/MTA3MzI%3D" target="_blank" rel="noopener">Iterators in C++ STL</a></p>
+<ul>
+<li>Iterators point at the memory addresses of STL containers. They're mainly used with sequences of numbers, characters etc., and reduce the complexity and execution time of the program.</li>
+<li>Operations: <code>begin()</code> (beginning position), <code>end()</code> (after-end position), <code>advance()</code> (moves the iterator forward by the given number of positions), <code>next()</code> / <code>prev()</code> (return a new iterator that many positions after / before), <code>inserter()</code> (inserts elements at any position; takes the container and an iterator to the position).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+<pre><code class="language-cpp">int *fun()
+{   int *arr = new int[...];
+    ...
+    return arr;          // OK: dynamically allocated
+}
+
+vector&lt;int&gt; fun()
+{   vector&lt;int&gt; v;
+    ...
+    return v;            // OK: a vector can be returned
+}
+
+v1 = v2;                 // copies all elements of v2 into v1</code></pre>
+    <div class="added">
+      <p><strong>Board note:</strong> the size inside <code>new int[…]</code> and the body of the vector function are hidden by the teacher in the close-up, so they're shown as "…".</p>
+      <p><strong>Java note:</strong> this video is C++-specific. The next video covers Java's ArrayList.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTYzMQ%3D%3D" target="_blank" rel="noopener">ArrayList in Java</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li>ArrayList is Java's implementation of <strong>dynamic sized arrays</strong>. A normal array (size 100, or a user-given n) can't take more items once it's full. A dynamic array resizes itself internally. You can start with an empty ArrayList and just keep adding.</li>
+      <li><strong>Advantages over normal arrays (board):</strong>
+        <ul>
+          <li><strong>Dynamic size</strong>: often you don't know how many elements there will be, or the upper bound is so high that pre-allocating wastes space. For an online course, an array of 2000 would waste space for 1800 student objects if only 200 enrol.</li>
+          <li><strong>Rich library functions</strong>: <code>contains</code>; <code>add</code> (at the end by default, or at a given index); finding the first index of an item; removing an item or all its occurrences; and many more.</li>
+        </ul>
+      </li>
+      <li>Import <code>java.util.ArrayList</code>. An ArrayList holds only <strong>non-primitive</strong> types, because it's a collection: use <code>Integer</code>, the wrapper class for <code>int</code>.</li>
+      <li><strong>Three ways to create one:</strong> empty (Java may reserve some space internally, but to the user it's empty); with a capacity, e.g. 10, which pre-allocates like a normal array while keeping all the ArrayList functions; or from another container in the Java Collections framework, such as a HashSet, whose items are copied in.</li>
+      <li>The teacher says the next video shows how ArrayList works internally.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/MjI5NQ%3D%3D" target="_blank" rel="noopener">Implementing Arrays in Java</a></p>
+<ul>
+<li>Java arrays store elements of the same data type at contiguous locations. A declaration has a type (the element type: a primitive such as int, char, float, double, or a user-defined class) and a name.</li>
+<li>Declaring creates only a reference. <code>new type[size]</code> actually allocates the memory. Indexes run from 0 to size − 1, and all elements can be accessed with a for loop.</li>
+<li><strong>ArrayList</strong> (collection framework, <code>java.util</code>) gives dynamic arrays. It may be slower than standard arrays but helps where a lot of array manipulation is needed. Constructors: <code>ArrayList()</code> (empty), <code>ArrayList(Collection c)</code>, <code>ArrayList(int capacity)</code> (initial capacity).</li>
+<li><strong>Vector</strong> is a growable array of objects: a legacy class, now fully compatible with collections. It's very similar to ArrayList, but Vector is <strong>synchronized</strong> and has some legacy methods. It extends AbstractList and implements List. Constructors: <code>Vector()</code> (initial capacity 10), <code>Vector(int size)</code>, <code>Vector(int size, int incr)</code> (incr elements are allocated each time it grows), <code>Vector(Collection c)</code>.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+<pre><code class="language-java">// Normal Arrays
+int[] arr = new int[100];
+int[] arr = new int[n];
+
+// ArrayList
+ArrayList&lt;Integer&gt; al = new ArrayList&lt;Integer&gt;();</code></pre>
+    <div class="approach">
+      <h4>Example Program (board)</h4>
+<pre><code class="language-java">import java.util.ArrayList;
+class Test {
+    public static void main(String args[])
+    {
+        ArrayList&lt;Integer&gt; al = new ArrayList&lt;Integer&gt;();
+        al.add(10);
+        al.add(20);
+        al.add(30);
+        System.out.println(al);
+    }
+}
+// O/p : [10, 20, 30]</code></pre>
+      <p><code>add</code> puts each item at the end, so printing the list gives [10, 20, 30].</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the middle of the example program (the class line and some <code>al.</code> prefixes) is hidden by the teacher. The code is filled in from the transcript.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTE2MA%3D%3D" target="_blank" rel="noopener">Operations on Arrays (Part 1)</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Search (Unsorted Array)</h3>
+    <p>Given an array and an element x, return the index of x's first occurrence, or −1 (not a valid index) if it isn't present. Traverse from index 0 to n − 1 and return i as soon as arr[i] == x. The worst case is when x isn't present: the whole array is traversed. So search takes <strong>O(n)</strong> when there's no ordering. A <strong>sorted</strong> array can be searched in O(log n) with binary search, covered in another track. The loop here is linear search.</p>
+
+    <h3>Insert (fixed size array)</h3>
+    <ul>
+      <li>You can only insert into a fixed size array if it has spare capacity. If <code>n == cap</code>, leave the array unchanged and return the old size.</li>
+      <li>Otherwise compute <code>idx = pos − 1</code> (positions start at 1, indexes at 0). Shift every element from the last one down to idx one place right, put x at idx, and return n + 1.</li>
+      <li><strong>Time Complexity: O(n).</strong> Insert at the end is O(1) (nothing moves: the loop doesn't run when idx = n). Insert at the beginning is Θ(n) (all n elements move).</li>
+    </ul>
+
+    <h3>Insert at the End for Dynamic Sized Array (board)</h3>
+    <p>Recall that a dynamic array pre-allocates capacity n. The first n inserts behave like a fixed array, so each is O(1). The (n + 1)-th insert doubles the size, copies the n elements to the new memory, deletes the old block and then inserts: Θ(n).</p>
+<pre><code class="language-plaintext">Average Time for (n+1) Inserts = (O(1) + O(1) .... O(1) + Θ(n)) / (n+1)
+                                  └─────── n ────────┘  (n+1)th
+                               = (Θ(n) + Θ(n)) / (n+1) = O(1)</code></pre>
+    <ul>
+      <li>Inserts n + 2 to 2n are O(1) again, and the same argument shows the average stays O(1) after the (2n + 1)-th insert. Pre-allocating extra memory is how dynamic arrays keep the <strong>average (amortised) time</strong> constant.</li>
+      <li>But for a <strong>real-time application</strong> where no single insert may be costly, don't use dynamic sized arrays: one insert can be really costly.</li>
+      <li>This insert-at-the-end operation is <code>push_back</code> on a C++ vector and <code>add</code> on a Java ArrayList.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzA4NA%3D%3D" target="_blank" rel="noopener">Operations on Arrays</a></p>
+<ul>
+<li>Operations: traversal, insertion, deletion, searching, sorting (keeping the elements in order).</li>
+<li>Advantages: random access (faster access by position); better cache locality (a big difference in performance); many data items of the same type under one name; used to implement linked lists, stacks, queues, trees, graphs etc.</li>
+<li>Disadvantages: fixed size once allocated (a <strong>static array</strong>), and allocating less than needed loses data; homogeneous (one array can't hold different data types); contiguous storage makes insertion and deletion difficult. Linked lists overcome this with dynamic allocation and efficient insertion/deletion, but don't support random access.</li>
+<li>Applications: implementing array lists, heaps, hash tables, vectors and matrices; database records; lookup tables; sorting algorithms such as bubble, insertion, merge and quick sort.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Search (Unsorted Array)</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {20, 5, 7, 25}, x = 5</span><span>O/P</span><span>1</span>
+        <span>I/P</span><span>arr[] = {20, 5, 7, 25}, x = 15</span><span>O/P</span><span>−1</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Search <span class="cx">O(n)</span></h4>
+<pre><code class="language-java">int search(int arr[], int n, int x)
+{
+    for (int i = 0; i &lt; n; i++)
+        if (arr[i] == x)
+            return i;
+    return -1;
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Insert <span class="cx">O(n)</span></h4>
+<pre><code class="language-java">int insert(int arr[], int n, int x,
+           int cap, int pos)
+{
+    if (n == cap)
+        return n;
+    int idx = pos-1;
+    for (int i = n-1; i >= idx; i--)
+        arr[i+1] = arr[i];
+    arr[idx] = x;
+    return (n+1);
+}</code></pre>
+<pre><code class="language-plaintext">I/p : arr[] = {5, 7, 10, 20}, (capacity 5), x = 3, pos = 2
+pos = 2, x = 3, idx = 1
+| 5 | 3 | 7 | 10 | 20 |       (20, 10, 7 each move one place right; 3 goes at index 1)
+  0   1   2   3    4
+O/p : arr[] = {5, 3, 7, 10, 20}
+
+Best case: pos = 6, idx = 5, x = 8 → | 5 | 3 | 7 | 10 | 20 | 8 |   (nothing moves)</code></pre>
+      <p>The teacher's first example inserts 7 at position 2 into {5, 10, 20} (capacity 5), giving 5 7 10 20.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the board labels the parameter <code>cab</code> in one place and <code>cap</code> in another. It's the capacity.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTE2MQ%3D%3D" target="_blank" rel="noopener">Operations on Arrays (Part 2)</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Deletion</h3>
+    <ul>
+      <li>Given an array, its size and an element x: search x, delete it, move every element after it one position back, reduce the size by one and keep the capacity as it is. The freed last slot may hold any value.</li>
+      <li>Deleting the last element just reduces the size (5 to 4 in the example).</li>
+      <li>Return the new size: n − 1 if x was present, n itself if it wasn't. Only the <strong>first occurrence</strong> of x is deleted.</li>
+      <li><strong>Time Complexity: Θ(n)</strong> for this code: the search loop traverses up to x, the shifting loop traverses the rest, so the array is traversed exactly once overall.</li>
+    </ul>
+
+    <h3>Overview of Operations (board)</h3>
+<pre><code class="language-plaintext">Insert : O(n)
+Search : O(n) for unsorted
+         O(log n) for sorted
+Delete : O(n)
+Get i-th Element : O(1)
+Update i-th Element : O(1)
+Insert at the end and delete from the end can be done in O(1) time.</code></pre>
+    <ul>
+      <li>Insert at the beginning is the most costly (every element moves); insert at the end is constant, assuming there is extra space.</li>
+      <li>Delete is written O(n), not Θ(n), because deleting the last element can be O(1): check <code>if (arr[n-1] == x) return n-1;</code> first.</li>
+      <li>Get and update the i-th element (<code>arr[i]</code>, <code>arr[i] = new value</code>) are O(1) thanks to random access.</li>
+      <li>Later tracks cover data structures with faster insert, search and delete, especially hashing (all O(1) on average). Arrays still win on random access and cache friendliness.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/MjIzMg%3D%3D" target="_blank" rel="noopener">Insertion and Deletion in Arrays</a></p>
+<ul>
+<li>Insertion: at the end, or at a given index. Special case: if the array is already full (len equals the maximum size N), the new element can't be inserted.</li>
+<li>Insert K at the end: if there's space, put it at index len. O(1).</li>
+<li>Insert K at position pos: idx = pos − 1; shift every element from idx to the end one place right, then put K at idx. Worst case O(N), since all elements may shift.</li>
+<li>Deletion: first search for K. If it's not present, tell the user the array doesn't contain it. Otherwise left-shift every element after its index idx by one place and reduce the length by 1. Worst case O(N).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Delete an Element</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {3, 8, 12, 5, 6}, x = 12</span><span>O/P</span><span>arr[] = {3, 8, 5, 6, _}</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>deleteEle <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-java">int deleteEle(int arr[], int n, int x)
+{
+    int i;
+    for(i=0; i&lt;n; i++)
+        if (arr[i] == x)
+            break;
+    if (i==n)
+        return n;
+    for(int j=i; j &lt; n-1; j++)
+        arr[j] = arr[j+1];
+    return (n-1);
+}</code></pre>
+      <p>The search loop stops at i = 2 (x = 12). The second loop copies 5 to index 2 and 6 to index 3, then returns the new size 4. If the loop runs to i == n, x wasn't found and the old size is returned.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTYwMg%3D%3D" target="_blank" rel="noopener">Largest Element in an Array</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Naive Idea</h3>
+    <p>Check every element from left to right: is it the largest? Compare it with all the other elements; as soon as a greater one is found, it isn't the largest. For {5, 8, 20, 10}: 5 loses to 8, 8 loses to 20, and 20 beats 5, 8 and 10, so index 2 is returned.</p>
+    <ul>
+      <li>Worst case: the array is sorted in increasing order (5 8 10 12): the inner loop runs fully for every element, <strong>Θ(n²)</strong>.</li>
+      <li>Best case: the largest is the first element, <strong>Θ(n)</strong>. In general, <strong>O(n²)</strong>.</li>
+      <li>With a single element (10), both loops run once and 0 is returned.</li>
+      <li>The final <code>return -1;</code> is never reached (any array of size &gt; 0 has a largest element). It's there because the return type is int, so there are no warnings.</li>
+    </ul>
+
+    <h3>Efficient Idea (one traversal)</h3>
+    <p>Treat the array as a stream. If you already know the index <code>largest</code> of the maximum of a<sub>0</sub>…a<sub>i−1</sub>, then on seeing a<sub>i</sub> you can decide the new maximum in O(1):</p>
+    <ul>
+      <li>a<sub>i</sub> ≤ a<sub>largest</sub>: ignore a<sub>i</sub>, largest stays the same.</li>
+      <li>a<sub>i</sub> &gt; a<sub>largest</sub>: update largest = i.</li>
+    </ul>
+    <p>O(1) per element, every element processed once: <strong>Θ(n)</strong> always, with no separate best or worst case.</p>
+
+    <h3>C++ vs Java</h3>
+    <ul>
+      <li>In C++ you pass the array and its size. In Java arrays are objects, so the function takes just the array and uses <code>arr.length</code>.</li>
+      <li>A boolean variable is <code>boolean</code> in Java and <code>bool</code> in C++.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzA4Ng%3D%3D" target="_blank" rel="noopener">Largest Element in an Array</a></p>
+<ul>
+<li>The article returns the largest <em>value</em>: {10, 20, 4} → 20, {20, 10, 20, 4, 100} → 100.</li>
+<li>Linear traversal: keep <code>max</code>, initialised with the first element; from the second element to the end, replace max whenever the current element is greater; return max. It also shows a naive method (code only).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Index of the Largest Element</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {5, 8, 20, 10}</span><span>O/P</span><span>2</span>
+      </div>
+      <p>The second example's largest element is 100, at index 3.</p>
+    </div>
+    <div class="approach">
+      <h4>Naive Approach (C++) <span class="cx">O(n²)</span></h4>
+<pre><code class="language-cpp">int getLargest(int arr[], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+    {
+        bool flag = true;
+        for (int j = 0; j &lt; n; j++)
+        {
+            if (arr[j] > arr[i])
+            {
+                flag = false;
+                break;
+            }
+        }
+        if (flag == true)
+            return i;
+    }
+    return -1;
+}
+int main()
+{
+    int arr[] = {5, 8, 20, 10};
+    cout &lt;&lt; getLargest(arr, 4);
+    return 0;
+}</code></pre>
+      <p>The Java version on the board is the same function with <code>getLargest(int arr[])</code>, <code>int n = arr.length;</code> and <code>boolean flag = true;</code>, called from main as <code>getLargest(arr)</code>.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Approach <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-cpp">int getLargest(int arr[], int n)
+{
+    int res = 0;
+    for (int i = 1; i &lt; n; i++)
+        if (arr[i] > arr[res])
+            res = i;
+    return res;
+}</code></pre>
+<pre><code class="language-java">int getLargest(int arr[])
+{
+    int res = 0;
+    for (int i = 1; i &lt; arr.length; i++)
+        if (arr[i] > arr[res])
+            res = i;
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">{5, 8, 20, 10}   res = 0
+i = 1: 8 > 5    res = 1
+i = 2: 20 > 8   res = 2
+i = 3: 10 < 20  res = 2</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTYwMw%3D%3D" target="_blank" rel="noopener">Second Largest Element in Array</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Return the index of the second largest element. Repeated occurrences of the largest all count as largest, so they're never the second largest. If every element is the same there is no second largest: return −1 (not a valid index).</p>
+
+    <h3>Naive Idea (two traversals, still linear)</h3>
+    <ul>
+      <li>It's "not very naive": linear time, but two traversals. First find the index of the largest with <code>getLargest</code>.</li>
+      <li>Then traverse again, looking only at elements not equal to <code>arr[largest]</code>, and find the largest among them.</li>
+      <li>Initialise <code>res = -1</code>, not 0 as in getLargest, because a second largest might not exist. The first element not equal to the largest sets res; after that res only moves to a greater element.</li>
+      <li>For {10, 10, 10}: largest = 0, the if is never entered, and −1 is returned.</li>
+      <li>The board code is close to both C++ and Java. In Java you don't pass n: use <code>arr.length</code>, because arrays are objects.</li>
+    </ul>
+
+    <h3>Efficient Idea (one traversal)</h3>
+    <p>Treat the array as a stream and keep track of the largest and second largest so far. When a<sub>i</sub> comes in, decide both in O(1) (board):</p>
+<pre><code class="language-plaintext">a[i] > a[largest]  : res = largest, largest = i
+a[i] == a[largest] : Ignore
+a[i] < a[largest]
+   ├→ res == -1      : res = i
+   ├→ a[i] <= a[res] : Ignore
+   └→ a[i] > a[res]  : res = i</code></pre>
+    <ul>
+      <li>Case 1: seen 5, 8, 12 and now 20. The earlier largest (12) becomes the second largest and 20 the largest.</li>
+      <li>Case 2: a new element equal to the largest changes nothing.</li>
+      <li>Case 3 (the most complicated): smaller than the largest. If no second largest yet (12, 12, 12 then 7), it becomes res. If it's ≤ the current second largest, ignore it. If it's greater, it becomes res.</li>
+      <li><strong>Time Complexity: Θ(n)</strong>, <strong>Auxiliary Space: Θ(1)</strong>, one traversal only.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzA4Nw%3D%3D" target="_blank" rel="noopener">Second Largest Element in Array</a></p>
+<ul>
+<li>Find the second largest element in a single traversal. Time O(n) (only one traversal), Auxiliary space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Second Largest Element</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {10, 5, 8, 20}</span><span>O/P</span><span>0 // Index of 10</span>
+        <span>I/P</span><span>arr[] = {20, 10, 20, 8, 12}</span><span>O/P</span><span>4 // Index of 12</span>
+        <span>I/P</span><span>arr[] = {10, 10, 10}</span><span>O/P</span><span>-1 // No Second Largest</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Approach <span class="cx">Θ(n), two traversals</span></h4>
+<pre><code class="language-cpp">int getLargest(int arr[], int n)
+{
+    int largest = 0;
+    for (int i = 1; i &lt; n; i++)
+        if (arr[i] > arr[largest])
+            largest = i;
+    return largest;
+}
+
+int secondLargest(int arr[], int n)
+{
+    int largest = getLargest(arr, n);
+    int res = -1;
+    for (int i = 0; i &lt; n; i++)
+    {
+        if (arr[i] != arr[largest])
+        {
+            if (res == -1)
+                res = i;
+            else if (arr[i] > arr[res])
+                res = i;
+        }
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {5, 20, 12, 20, 10}
+largest = 1
+i = 0: 5 != 20, res == -1  → res = 0
+i = 1: 20 == arr[largest]  → ignored
+i = 2: 12 > 5              → res = 2
+i = 3: 20                  → ignored
+i = 4: 10 < 12             → res stays 2</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Approach <span class="cx">Θ(n), Θ(1) space</span></h4>
+<pre><code class="language-cpp">int secondLargest(int arr[], int n)
+{
+    int res = -1, largest = 0;
+    for (int i = 1; i &lt; n; i++)
+    {
+        if (arr[i] > arr[largest])
+        {
+            res = largest;
+            largest = i;
+        }
+        else if (arr[i] != arr[largest])
+        {
+            if (res == -1 || arr[i] > arr[res])
+                res = i;
+        }
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">{5, 20, 12, 20, 8}   largest = 0, res = -1
+i = 1: 20 > 5                 res = 0, largest = 1
+i = 2: 12 != 20, 12 > 5       res = 2
+i = 3: 20 == arr[largest]     ignored
+i = 4: 8 < 12                 ignored        → return 2</code></pre>
+      <p>Equal elements fall through both branches (there's no else part), so they're ignored.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTYyMw%3D%3D" target="_blank" rel="noopener">Check if an Array is Sorted</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Return true if the array is sorted in <strong>non-decreasing</strong> order (increasing, with equal elements allowed), otherwise false. A reverse sorted array such as {200, 100} counts as not sorted.</p>
+
+    <h3>Naive Method</h3>
+    <ul>
+      <li>If an array is sorted, no element has a <strong>smaller</strong> element on its right (equal is allowed).</li>
+      <li>For every element, check every element on its right; if a smaller one is found, return false immediately. If the loops finish, return true.</li>
+      <li><strong>O(n²)</strong>, not Θ(n²): for {10, 5, 20, 40}, 10 finds a smaller element right after it and returns in constant time. The worst case is a sorted array, where every pair is checked.</li>
+    </ul>
+
+    <h3>Efficient Method</h3>
+    <ul>
+      <li>Traverse left to right. If you've reached a<sub>i</sub> without returning, a<sub>0</sub>…a<sub>i−1</sub> are sorted, so a<sub>i−1</sub> is the largest of them.</li>
+      <li>So you only need to compare each element with the one just before it: if <code>arr[i] &lt; arr[i-1]</code>, return false; if no such element is found, return true.</li>
+      <li>With 0 or 1 elements the loop never runs and true is returned: an empty array and a single element array are considered sorted.</li>
+      <li><strong>Time Complexity: O(n)</strong> (for {10, 5, 20, 30} it returns false at the second element), <strong>Auxiliary Space: O(1)</strong> (no auxiliary array or list).</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzA4OA%3D%3D" target="_blank" rel="noopener">Check if an Array is Sorted</a></p>
+<ul>
+<li>Check if the array is sorted in ascending order; equal values are allowed, and two consecutive equal values count as sorted.</li>
+<li>It gives a naive approach and an iterative approach (code only). Iterative: Time O(n), Auxiliary Space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Check if an Array is Sorted</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {8, 12, 15}</span><span>O/P</span><span>Yes</span>
+        <span>I/P</span><span>arr[] = {8, 10, 10, 12}</span><span>O/P</span><span>Yes</span>
+        <span>I/P</span><span>arr[] = {100}</span><span>O/P</span><span>Yes</span>
+        <span>I/P</span><span>arr[] = {100, 20, 200}</span><span>O/P</span><span>No</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Method <span class="cx">O(n²)</span></h4>
+<pre><code class="language-java">boolean isSorted(int arr[])
+{
+    for(int i=0; i &lt; arr.length; i++)
+        for(int j=i+1; j &lt; arr.length; j++)
+            if (arr[j] &lt; arr[i])
+                return false;
+    return true;
+}</code></pre>
+<pre><code class="language-cpp">bool isSorted(int arr[], int n)
+{
+    for (int i=0; i&lt;n; i++)
+        for (int j=i+1; j&lt;n; j++)
+            if (arr[j] &lt; arr[i])
+                return false;
+    return true;
+}</code></pre>
+<pre><code class="language-plaintext">{7, 20, 30, 10}
+i = 0 : nothing smaller on the right
+i = 1 : 10 &lt; 20 (j = 3) → return false</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Method <span class="cx">O(n), O(1) space</span></h4>
+<pre><code class="language-java">boolean isSorted(int []arr)
+{
+    for(int i=1; i&lt;arr.length; i++)
+        if (arr[i] &lt; arr[i-1])
+            return false;
+    return true;
+}</code></pre>
+<pre><code class="language-cpp">bool isSorted(int arr[], int n)
+{
+    for (int i=1; i&lt;n; i++)
+        if (arr[i] &lt; arr[i-1])
+            return false;
+    return true;
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slip:</strong> while explaining the naive idea the transcript calls "5, 20, 100, 80" a sorted array and then walks through it as 5, 20, 80, 100. The sorted order meant is 5, 20, 80, 100.</p>
+      <p><strong>Board note:</strong> the C++ efficient function's return type is hidden behind the teacher in every frame; <code>bool</code> is assumed from the naive C++ version.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTE2Mg%3D%3D" target="_blank" rel="noopener">Reverse an Array</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Two Index Variables</h3>
+    <ul>
+      <li>Reverse the elements by modifying the same array: the last element comes first, the second last comes second, and so on. {10, 5, 7, 30} becomes {30, 7, 5, 10}.</li>
+      <li>Keep <code>low</code> at the index of the first element and <code>high</code> at the index of the last. Swap <code>arr[low]</code> and <code>arr[high]</code>, then move them one position closer (<code>low++</code>, <code>high--</code>).</li>
+      <li>Repeat while <code>low &lt; high</code>. Stop when they cross (even n) or meet at the same element (odd n).</li>
+      <li>The loop runs about n/2 times (2 times for both 4 and 5 elements): <strong>Time Complexity: Θ(n)</strong>.</li>
+      <li>Apart from the input array it needs only low, high and temp: <strong>Aux Space: Θ(1)</strong>.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzE5Mg%3D%3D" target="_blank" rel="noopener">Reverse an Array</a></p>
+<ul>
+<li>Reverse an array (or string). Iterative: start = 0, end = n − 1; in a loop swap arr[start] with arr[end], then start = start + 1, end = end − 1. It also reverses a string the same way. Time O(n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Reverse an Array</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {30, 7, 6, 5, 10}</span><span>O/P</span><span>arr[] = {10, 5, 6, 7, 30}</span>
+        <span>I/P</span><span>arr[] = {10, 5, 7, 30}</span><span>O/P</span><span>arr[] = {30, 7, 5, 10}</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Reverse <span class="cx">Θ(n), Θ(1) space</span></h4>
+<pre><code class="language-cpp">void reverse(int arr[], int n)
+{
+    int low = 0, high = n-1;
+    while (low &lt; high)
+    {
+        int temp = arr[low];
+        arr[low] = arr[high];      // Swap arr[low]
+        arr[high] = temp;          // and arr[high]
+        low++;
+        high--;
+    }
+}</code></pre>
+<pre><code class="language-plaintext">30  7  6  5  10      low = 0, high = 4
+10  7  6  5  30      low = 1, high = 3
+10  5  6  7  30      low = high = 2  → stop</code></pre>
+      <p>Even case: {10, 5, 7, 30} with low = 0, high = 3 → 30 5 7 10 (low 1, high 2) → 30 7 5 10 (low 2, high 1, crossed) → stop.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTQzMw%3D%3D" target="_blank" rel="noopener">Remove duplicates from a sorted array</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <ul>
+      <li>Given a sorted array, keep one copy of every element and remove the duplicates. Distinct elements stay in the same (sorted) order as in the input.</li>
+      <li>Don't deallocate the old space and create a smaller array. Put all the distinct elements at the first positions and <strong>return the new size</strong>. The remaining slots are still allocated, but we don't care what they hold: the size decides how many elements are considered.</li>
+    </ul>
+
+    <h3>Naive Solution: temp array</h3>
+    <ul>
+      <li>Create a temporary array of size n (in the worst case all elements are distinct). The first element is always part of the output, so copy it and set res = 1.</li>
+      <li>From the second element on, compare each element with the <strong>last copied</strong> element <code>temp[res-1]</code>. If it differs, copy it to <code>temp[res]</code> and increment res. Because the array is sorted, all copies of an element are together, so checking only the last copied element is enough.</li>
+      <li>Finally copy temp back to arr (res times) and return res.</li>
+      <li>Time: the first loop is Θ(n) and the copy back is O(n), so Θ(n) overall. <strong>O(n) Time, O(n) Space</strong> (board), since the temp array is of size n.</li>
+    </ul>
+
+    <h3>Efficient Solution: same array</h3>
+    <ul>
+      <li>Same idea, but copy within the array itself. This saves the extra space and the extra work of copying back.</li>
+      <li>res = 1 is both the current size of the result and the index where the next distinct element goes. For each i from 1, if <code>arr[i] != arr[res-1]</code>, write <code>arr[res] = arr[i]</code> and increment res. At i = 1 in the example, 20 is overwritten with itself.</li>
+      <li><strong>O(n) Time, O(1) Space</strong>.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzE5Mw%3D%3D" target="_blank" rel="noopener">Remove duplicates from a sorted array</a></p>
+<ul>
+<li>Method 1 (using extra space): Time O(n), Auxiliary Space O(n). Method 2 (constant extra space): Time O(n), Auxiliary Space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Remove Duplicates from a Sorted Array</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {10, 20, 20, 30, 30, 30, 30}, size = 7</span><span>O/P</span><span>arr[] = {10, 20, 30, _, _, _, _}, size = 3</span>
+        <span>I/P</span><span>arr[] = {10, 10, 10}, size = 3</span><span>O/P</span><span>arr[] = {10, _, _}, size = 1</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive <span class="cx">O(n) Time, O(n) Space</span></h4>
+<pre><code class="language-cpp">int remDups(int arr[], int n)
+{
+    int temp[n];
+    temp[0] = arr[0];
+    int res = 1;
+    for (int i = 1; i &lt; n; i++)
+    {
+        if (temp[res-1] != arr[i])
+        {
+            temp[res] = arr[i];
+            res++;
+        }
+    }
+    for (int i = 0; i &lt; res; i++)
+        arr[i] = temp[i];
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">arr[]  = {10, 20, 20, 30, 30, 30}
+temp[] = {10, -, -, -, -, -}, res = 1
+i = 1: temp[] = {10, 20, -, -, -, -}, res = 2
+i = 2:
+i = 3: temp[] = {10, 20, 30, -, -, -}, res = 3
+i = 4:
+i = 5:
+arr[]  = {10, 20, 30, -, -, -}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient <span class="cx">O(n) Time, O(1) Space</span></h4>
+<pre><code class="language-cpp">int remDups(int arr[], int n)
+{
+    int res = 1;
+    for (int i = 1; i &lt; n; i++)
+    {
+        if (arr[i] != arr[res-1])
+        {
+            arr[res] = arr[i];
+            res++;
+        }
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {10, 20, 20, 30, 30, 30}      res = 1
+i = 1: arr[] = {10, 20 | 20, 30, 30, 30}   res = 2
+i = 2: arr[] = {10, 20 | 20, 30, 30, 30}
+i = 3: arr[] = {10, 20, 30 | 30, 30, 30}   res = 3
+i = 4: arr[] = {10, 20, 30 | 30, 30, 30}
+i = 5: arr[] = {10, 20, 30 | 30, 30, 30}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slip:</strong> explaining the naive loop, the transcript says "if it is same as the last copied element, we increment the result and copy". The board code (and the dry run) copy only when it is <em>not</em> the same (<code>!=</code>).</p>
+      <p><strong>Board note:</strong> the board spells the temporary array <code>temb</code>/<code>tmb</code> in places; it's <code>temp</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTYwNA%3D%3D" target="_blank" rel="noopener">Move Zeros to End</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Move all zeros to the end of the array, keeping the order of the remaining (non-zero) elements as it was. An array with no zeros, or with all zeros, doesn't change.</p>
+
+    <h3>Naive Solution</h3>
+    <ul>
+      <li>Traverse from left to right. Do nothing on a non-zero. On a zero, search to its right for the first non-zero element and swap the two.</li>
+      <li>Once there's no non-zero left on the right (i = 4…7 in the example), nothing more is swapped.</li>
+      <li><strong>O(n²)</strong>: an outer loop plus an inner search.</li>
+      <li>The board code is kind of pseudo code. In C++ use it as it is. In Java drop the n parameter and write <code>int n = arr.length;</code> (the course follows this in all the upcoming videos), and write a separate swap function, since Java has no swap.</li>
+    </ul>
+
+    <h3>Efficient Solution</h3>
+    <ul>
+      <li>One traversal, linear time, constant extra space. Suppose a<sub>0</sub>…a<sub>i−1</sub> are already fixed (e.g. 10 12 0 0). For a<sub>i</sub>:</li>
+      <li>a<sub>i</sub> == 0: nothing to do, the array is still in the required form.</li>
+      <li>a<sub>i</sub> != 0: swap it with the first zero. The index of the first zero equals the <strong>count of non-zero elements</strong> so far, so keep only that count.</li>
+      <li>So for each non-zero: <code>swap(arr[i], arr[count])</code>, then <code>count++</code>. At the start count is 0, so leading non-zeros are swapped with themselves.</li>
+      <li><strong>O(n) time</strong>, one traversal, <strong>O(1) auxiliary space</strong>.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzE5NA%3D%3D" target="_blank" rel="noopener">Move Zeros to End</a></p>
+<ul>
+<li>Move all 0s to the end while keeping the order of the other elements, with only a single traversal. Time O(n), Auxiliary Space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Move all Zeros to End</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {8, 5, 0, 10, 0, 20}</span><span>O/P</span><span>arr[] = {8, 5, 10, 20, 0, 0}</span>
+        <span>I/P</span><span>arr[] = {0, 0, 0, 10, 0}</span><span>O/P</span><span>arr[] = {10, 0, 0, 0, 0}</span>
+        <span>I/P</span><span>arr[] = {10, 20}</span><span>O/P</span><span>arr[] = {10, 20}</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">O(n²)</span></h4>
+<pre><code class="language-cpp">void moveToEnd(int arr[], int n)
+{
+    for (int i=0; i&lt;n; i++)
+    {
+        if (arr[i] == 0)
+        {
+            for (int j=i+1; j&lt;n; j++)
+                if (arr[j] != 0)
+                    swap(arr[i], arr[j]);
+        }
+    }
+}</code></pre>
+<pre><code class="language-plaintext">{10, 5, 0, 0, 8, 0, 9, 0}
+i = 0 :
+i = 1 :
+i = 2 : swap(arr[i], arr[j])  j = 4    → {10, 5, 8, 0, 0, 0, 9, 0}
+i = 3 : swap(arr[i], arr[j])  j = 6    → {10, 5, 8, 9, 0, 0, 0, 0}
+i = 4 … 7 : no non-zero on the right</code></pre>
+      <p>Java version on the board: <code>int n</code> is crossed out of the parameters and <code>int n = arr.length();</code> is written as the first line.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution <span class="cx">O(n), O(1) space</span></h4>
+<pre><code class="language-cpp">void moveZeros(int arr[], int n)
+{
+    int count = 0;
+    for (int i=0; i&lt;n; i++)
+    {
+        if (arr[i] != 0)
+        {
+            swap(arr[i], arr[count]);
+            count++;
+        }
+    }
+}</code></pre>
+<pre><code class="language-plaintext">{10, 8, 0, 0, 12, 0}                  count = 0
+i = 0 : {10, 8, 0, 0, 12, 0}           count = 1
+i = 1 : ...                            count = 2
+i = 2 : ...                            count = 2
+i = 3 : ...                            count = 2
+i = 4 : {10, 8, 12, 0, 0, 0}           count = 3
+i = 5 : ...                            count = 3</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the naive inner loop on the board has no <code>break</code> after the swap, but the teacher describes swapping with the <em>first</em> non-zero only. Without a break the loop keeps swapping arr[i] with later non-zeros, so it needs <code>break;</code> after <code>swap(arr[i], arr[j])</code> to match the description and the dry run.</p>
+      <p><strong>Java note:</strong> the board writes <code>arr.length()</code>; for a Java array it is the field <code>arr.length</code> (no brackets), as in the earlier videos.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTE2Mw%3D%3D" target="_blank" rel="noopener">Left Rotate an Array by One</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Left Rotation</h3>
+    <ul>
+      <li>A rotation that happens <strong>counterclockwise</strong> is a left rotation. Left rotate by 1: every element after the first moves one position back (left), and the first element goes to the end.</li>
+      <li>Do it in place, without extra space: copy <code>arr[0]</code> into <code>temp</code>, shift every element from the second onward one position left (<code>arr[i-1] = arr[i]</code>), then write temp at the last position.</li>
+      <li><strong>Time Complexity: Θ(n)</strong>, <strong>Auxiliary Space: Θ(1)</strong>.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Left Rotate an Array by One</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {1, 2, 3, 4, 5}</span><span>O/P</span><span>arr[] = {2, 3, 4, 5, 1}</span>
+        <span>I/P</span><span>arr[] = {30, 5, 20}</span><span>O/P</span><span>arr[] = {5, 20, 30}</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>lRotateOne <span class="cx">Θ(n), Θ(1) space</span></h4>
+<pre><code class="language-cpp">void lRotateOne(int arr[], int n)
+{
+    int temp = arr[0];
+    for (int i = 1; i &lt; n; i++)
+        arr[i-1] = arr[i];
+    arr[n-1] = temp;
+}</code></pre>
+<pre><code class="language-plaintext">temp = 1;
+arr[] = {2, 3, 4, 5, 5}      (after the loop)
+arr[] = {2, 3, 4, 5, 1}      (after arr[n-1] = temp)</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTMwMA%3D%3D" target="_blank" rel="noopener">Left Rotate an Array by D places</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <ul>
+      <li>Left rotate (counterclockwise) the array by d: every element goes d positions back. The first d elements have nothing on their left, so they go d positions back in a <strong>circular manner</strong>.</li>
+      <li>We may assume d ≤ number of elements in the array. When d is greater than n, the teacher says to subtract n from d to get the effective number of rotations: rotating a size-4 array by 4 gives the same array, and by 5 is effectively a rotation by 1.</li>
+      <li>Three solutions: Θ(nd); Θ(n) with Θ(d) extra space; Θ(n) with Θ(1) extra space.</li>
+    </ul>
+
+    <h3>Method 1 (Naive)</h3>
+    <p>Call left rotate by one (previous video) d times. {1, 2, 3, 4, 5}, d = 2 → {2, 3, 4, 5, 1} → {3, 4, 5, 1, 2}. <strong>Θ(nd) Time, Θ(1) Aux Space</strong> (a Θ(n) operation called d times, no auxiliary array).</p>
+
+    <h3>Method 2 (Better)</h3>
+    <ul>
+      <li>Like rotate by one, but copy the first <strong>d</strong> elements into a temporary array instead of one element into a temp variable.</li>
+      <li>Shift every element from index d (the (d + 1)-th element) d positions back: <code>arr[i-d] = arr[i]</code>. The first d elements have nothing d positions back.</li>
+      <li>Then copy temp to the end: temp[i] goes to index <code>n - d + i</code> (n − d for the first, n − d + 1 for the second; 3 and 4 for n = 5, d = 2).</li>
+      <li>Time: Θ(d) + Θ(n − d) + Θ(d) = Θ(n + d), and since d ≤ n, <strong>Θ(n)</strong>. Space: an auxiliary array of size d, <strong>Θ(d)</strong>.</li>
+    </ul>
+
+    <h3>Method 3 (Reversal Algorithm)</h3>
+    <ul>
+      <li>Three steps: reverse the first d elements (index 0 to d − 1), reverse the remaining n − d elements (index d to n − 1), then reverse the whole array.</li>
+      <li><code>reverse(arr, low, high)</code> reverses the part between the two indexes, including both.</li>
+      <li><strong>Time: Θ(d + n − d + n) = Θ(2n) = Θ(n)</strong>, <strong>Aux Space: Θ(1)</strong>.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzE5NQ%3D%3D" target="_blank" rel="noopener">Left Rotate an Array by D places</a></p>
+<ul>
+<li>{1, 2, 3, 4, 5, 6, 7}, d = 2 → 3 4 5 6 7 1 2; {3, 4, 5, 6, 7, 1, 2}, d = 2 → 5 6 7 1 2 3 4.</li>
+<li>Naive: O(d·n) time, O(1) space. Efficient (temp array): O(n) time, O(d) space. Reversal method: O(n) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Left Rotate an Array by d</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {1, 2, 3, 4, 5}, d = 2</span><span>O/P</span><span>arr[] = {3, 4, 5, 1, 2}</span>
+        <span>I/P</span><span>arr[] = {10, 5, 30, 15}, d = 3</span><span>O/P</span><span>arr[] = {15, 10, 5, 30}</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Method 1 (Naive) <span class="cx">Θ(nd) Time, Θ(1) Aux Space</span></h4>
+<pre><code class="language-cpp">void leftRotateOne(int arr[], int n)
+{
+    int temp = arr[0];
+    for (int i = 1; i &lt; n; i++)
+        arr[i-1] = arr[i];
+    arr[n-1] = temp;
+}
+void leftRotate(int arr[], int n, int d)
+{
+    for (int i = 0; i &lt; d; i++)
+        leftRotate(arr, n);
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Method 2 (Better) <span class="cx">Θ(n) Time, Θ(d) Aux Space</span></h4>
+<pre><code class="language-cpp">void leftRotate(int arr[], int n, int d)
+{
+    int temp[d];
+    for (int i = 0; i &lt; d; i++)
+        temp[i] = arr[i];
+    for (int i = d; i &lt; n; i++)
+        arr[i-d] = arr[i];
+    for (int i = 0; i &lt; d; i++)
+        arr[n-d+i] = temp[i];
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Method 3 (Reversal Algorithm) <span class="cx">Θ(n) Time, Θ(1) Aux Space</span></h4>
+<pre><code class="language-cpp">void leftRotate(int arr[], int n, int d)
+{
+    reverse(arr, 0, d-1);
+    reverse(arr, d, n-1);
+    reverse(arr, 0, n-1);
+}
+void reverse(int arr[], int low, int high)
+{
+    while (low &lt; high)
+    {
+        swap(arr[low], arr[high]);
+        low++;
+        high--;
+    }
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {1, 2, 3, 4, 5}
+After First Reverse   arr[] = {2, 1, 3, 4, 5}
+After Second Reverse  arr[] = {2, 1, 5, 4, 3}
+After Third Reverse   arr[] = {3, 4, 5, 1, 2}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the naive <code>leftRotate(arr, n, d)</code> loop calls <code>leftRotate(arr, n)</code>; it should call <code>leftRotateOne(arr, n)</code>, the function written above it.</p>
+      <p><strong>Teacher slip:</strong> working out the Method 2 index, the transcript says "n is 5 and D is 3"; the example has d = 2, which gives index 5 − 2 = 3 for the first temp element, as he then says.</p>
+      <p><strong>Teacher slip:</strong> "subtract n from d" only works for n &lt; d &lt; 2n. The general effective rotation is <code>d % n</code> (e.g. d = 9, n = 4 → 1).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTE2NA%3D%3D" target="_blank" rel="noopener">Leaders in an Array problem</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>What is a Leader?</h3>
+    <ul>
+      <li>The array may be sorted or unsorted. An element is a <strong>leader</strong> if there is nothing greater than it on its right. All elements on its right must be <strong>smaller</strong>: an equal element on the right means it isn't a leader.</li>
+      <li>The rightmost element is always a leader.</li>
+      <li>Sorted in increasing order: only the last element is a leader. Sorted in decreasing order: every element is a leader.</li>
+      <li>In {7, 10, 4, 10, 6, 5, 2} the first 10 isn't a leader (an equal 10 is on its right), but the second 10 is, so 10 is printed only once.</li>
+    </ul>
+
+    <h3>Naive Solution: O(n²)</h3>
+    <p>For every element, traverse its right side. If an element greater than or equal is found, set <code>flag = true</code> (it can't be a leader) and break. If the flag stays false, print the element.</p>
+
+    <h3>Efficient Solution: Θ(n)</h3>
+    <ul>
+      <li>Traverse from the right. The last element is always a leader, so make it the current leader and print it.</li>
+      <li>From the second last element (<code>i = n-2</code> down to 0): the current leader is the maximum from the right side. If the current element is greater than it, it is also a leader: make it the current leader and print it.</li>
+      <li>Disclaimer: it prints leaders from right to left (2 5 6 10 instead of 10 6 5 2).</li>
+      <li>To print left to right in Θ(n): store the leaders in an array, reverse it, and print it. That needs Θ(n) auxiliary space; time stays Θ(n) because reversing an array is Θ(n) (reverse video).</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzE5Ng%3D%3D" target="_blank" rel="noopener">Leaders in an Array problem</a></p>
+<ul>
+<li>A leader is greater than all the elements to its right; the rightmost element is always a leader. {16, 17, 4, 3, 5, 2} → 17, 5, 2; {1, 2, 3, 4, 5, 2} → 5, 2.</li>
+<li>Naive: two loops; the picked element is a leader if it's greater than everything on its right. O(N·N) time, O(1) space.</li>
+<li>Suffix maximum: scan right to left keeping the maximum so far (<code>max_from_right</code>), and print it when it changes. For {16, 17, 4, 3, 5, 2}: max 2 → ans {2}; 5 → {2, 5}; 4 and 3 change nothing; 17 → {2, 5, 17}; 16 changes nothing.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Leaders in an Array</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {7, 10, 4, 10, 6, 5, 2}</span><span>O/P</span><span>10 6 5 2</span>
+        <span>I/P</span><span>arr[] = {10, 20, 30}</span><span>O/P</span><span>30</span>
+        <span>I/P</span><span>arr[] = {30, 20, 10}</span><span>O/P</span><span>30 20 10</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive <span class="cx">O(n²)</span></h4>
+<pre><code class="language-cpp">void leaders(int arr[], int n)
+{
+    for (int i=0; i&lt;n; i++)
+    {
+        bool flag = false;
+        for (int j=i+1; j&lt;n; j++)
+        {
+            if (arr[i] &lt;= arr[j])
+            {
+                flag = true;
+                break;
+            }
+        }
+        if (flag == false) { print(arr[i]); }
+    }
+}</code></pre>
+      <p>i = 0 (7): breaks at 10, not printed. i = 1 (10): breaks at the second 10. i = 2 (4): breaks. i = 3 (10), j = 4 to 6: nothing greater or equal, so 10 is printed; the same for 6, 5 and 2.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-cpp">void leaders(int arr[], int n)
+{
+    int curr_ldr = arr[n-1];
+    print(curr_ldr);
+    for (int i=n-2; i>=0; i--)
+    {
+        if (curr_ldr &lt; arr[i])
+        {
+            curr_ldr = arr[i];
+            print(curr_ldr);
+        }
+    }
+}</code></pre>
+<pre><code class="language-plaintext">{7, 10, 4, 10, 6, 5, 2}
+curr_ldr = 2  → print 2
+5 > 2         → curr_ldr = 5, print 5
+6 > 5         → curr_ldr = 6, print 6
+10 > 6        → curr_ldr = 10, print 10
+4, 10 (equal), 7 → not printed
+O/p : 2 5 6 10</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-16">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTE2NQ%3D%3D" target="_blank" rel="noopener">Maximum Difference Problem with Order</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <ul>
+      <li>Find the maximum value of <code>arr[j] - arr[i]</code> such that <code>j &gt; i</code>: always subtract the first appearing element from the later appearing one.</li>
+      <li>In {2, 3, 10, 6, 4, 8, 1} the pair (2, 10) gives 8. Others give less: (3, 10) = 7, (3, 6) = 3, (10, 6) = −4, (10, 4) = −6, (4, 8) = 4.</li>
+      <li>A sorted array gives last − first. A reverse sorted array gives a negative answer: the best adjacent difference ({30, 10, 8, 2}: −20, −2, −6 → −2).</li>
+    </ul>
+
+    <h3>Naive Solution: Θ(n²)</h3>
+    <p>Initialise the result as the difference of the first pair (<code>arr[1] - arr[0]</code>). For every element, go to every element on its right, find <code>arr[j] - arr[i]</code>, and update the result if it's more.</p>
+
+    <h3>Efficient Solution: Θ(n)</h3>
+    <ul>
+      <li>Consider every element as arr[j], the right element. It gives its maximum difference with the <strong>minimum element on its left</strong>.</li>
+      <li>So traverse left to right keeping track of the minimum seen so far (<code>minVal</code>). For each arr[j], update res with <code>arr[j] - minVal</code>, then update minVal if arr[j] is smaller.</li>
+      <li>The trick: we don't consider every i for arr[j], only the minimum value.</li>
+      <li><strong>Θ(n) time, Θ(1) auxiliary space</strong>.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzE5Nw%3D%3D" target="_blank" rel="noopener">Maximum Difference Problem with Order</a></p>
+<ul>
+<li>Find the maximum difference between two elements such that the larger element appears after the smaller one.</li>
+<li>Method 1 (simple): two loops, comparing each picked element's difference with every other element against the maximum so far. O(n²) time, O(1) space.</li>
+<li>Method 2 (tricky and efficient): take the difference with the minimum element found so far instead of every element. Track the maximum difference so far (<code>max_diff</code>) and the minimum number visited so far (<code>min_element</code>). O(n) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Maximum Difference</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {2, 3, 10, 6, 4, 8, 1}</span><span>O/P</span><span>8</span>
+        <span>I/P</span><span>arr[] = {7, 9, 5, 6, 3, 2}</span><span>O/P</span><span>2</span>
+        <span>I/P</span><span>arr[] = {10, 20, 30}</span><span>O/P</span><span>20</span>
+        <span>I/P</span><span>arr[] = {30, 10, 8, 2}</span><span>O/P</span><span>-2</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive <span class="cx">Θ(n²)</span></h4>
+<pre><code class="language-cpp">int maxDiff(int arr[], int n)
+{
+    int res = arr[1] - arr[0];
+    for (int i = 0; i &lt; n-1; i++)
+        for (int j = i+1; j &lt; n; j++)
+            res = max(res, arr[j] - arr[i]);
+    return res;
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient <span class="cx">Θ(n), Θ(1) space</span></h4>
+<pre><code class="language-cpp">int maxDiff(int arr[], int n)
+{
+    int res = arr[1] - arr[0], minVal = arr[0];
+    for (int j = 1; j &lt; n; j++)
+    {
+        res = max(res, arr[j] - minVal);
+        minVal = min(minVal, arr[j]);
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {2, 3, 10, 6, 4, 8, 1}
+res = arr[1] - arr[0] = 1
+minVal = arr[0] = 2
+j = 1 : res = max(1, 3-2) = 1      minVal = min(2, 3) = 2
+j = 2 : res = max(1, 10-2) = 8     minVal = min(2, 10) = 2
+j = 3 : res = max(8, 6-2) = 8      minVal = min(2, 6) = 2
+...   : 4 → 2, 8 → 6, 1 → −1: res stays 8; minVal becomes 1 only at the last element</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-17">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTgyNQ%3D%3D" target="_blank" rel="noopener">Frequencies in a Sorted Array</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Idea</h3>
+    <ul>
+      <li>Print the frequency of every element of a sorted array. Corner cases: all elements the same, and all elements distinct.</li>
+      <li>The approach is simple: traverse linearly; while an element equals the previous one, increment the count; on a different element, print the previous element with its count. The implementation is the tricky part (corner cases), so aim for a perfect linear-time code.</li>
+      <li>Begin from the second element. When the current element differs from the previous one, the previous element's frequency is known: print it and reset freq to 1.</li>
+      <li>The last element needs a separate check after the loops: if it differs from the second last, or there is only one element (the loop never runs), print it with frequency 1. If the last element equals the second last, the print inside the loop already handles it.</li>
+      <li><strong>Time Complexity: Θ(n)</strong>: i is incremented every iteration and goes up to n + 1 at most.</li>
+      <li>For an unsorted array, sorting first gives O(n log n) overall. There is a better approach (left as an exercise); frequencies in an unsorted array are covered in another track.</li>
+    </ul>
+
+    <h3>C++ / Java</h3>
+    <p>The board code is pseudo code, close to both languages. C++: replace <code>print</code> with <code>cout</code> and use the insertion operator <code>&lt;&lt;</code> instead of <code>+</code>. Java: use <code>System.out.println</code>, and you don't need to pass n (get the length inside the function).</p>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzE5OA%3D%3D" target="_blank" rel="noopener">Frequencies in a Sorted Array</a></p>
+<ul>
+<li>{1, 1, 1, 2, 3, 3, 5, 5, 8, 8, 8, 9, 9, 10} → 1: 3, 2: 1, 3: 2, 5: 2, 8: 3, 9: 2, 10: 1. {2, 2, 6, 6, 7, 7, 7, 11} → 2: 2, 6: 2, 7: 3, 11: 1.</li>
+<li>Naive: count each element in a HashMap, then print the map. O(N) time, O(N) space.</li>
+<li>Efficient: in a sorted array equal elements are consecutive, so keep one variable <code>freq</code> = 1. For i in [1, N − 1]: if arr[i] == arr[i−1], increment freq; else print arr[i−1] with freq and reset freq to 1. Finally print the last distinct element with freq. O(N) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Frequencies in a Sorted Array</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {10, 10, 10, 25, 30, 30}</span><span>O/P</span><span>10 3<br>25 1<br>30 2</span>
+        <span>I/P</span><span>arr[] = {10, 10, 10, 10}</span><span>O/P</span><span>10 4</span>
+        <span>I/P</span><span>arr[] = {10, 20, 30}</span><span>O/P</span><span>10 1<br>20 1<br>30 1</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>printFreq <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-cpp">void printFreq(int arr[], int n)
+{
+    int freq = 1, i = 1;          // Pseudo Code
+    while (i &lt; n)
+    {
+        while (i &lt; n &amp;&amp; arr[i] == arr[i-1])
+        {
+            freq++;
+            i++;
+        }
+        print(arr[i-1] + " " + freq);
+        i++;
+        freq = 1;
+    }
+    if (n == 1 || arr[n-1] != arr[n-2])
+        print(arr[n-1] + " " + 1);
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {10, 10, 10, 30, 30, 40}
+Initially : freq = 1
+i = 1 : freq = 2
+i = 2 : freq = 3
+i = 3 : print(10 3), freq = 1
+i = 4 : freq = 2
+i = 5 : print(30 2), freq = 1
+After loops : print(40 1)
+
+// Second Example
+arr[] = {40, 50, 50, 50}
+i = 1 : print(40 1), freq = 1
+i = 2 : freq = 2
+i = 3 : freq = 3
+i = 4 : print(50 3)      (i becomes 5; arr[n-1] == arr[n-2], so no extra print)</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the inner while condition is written <code>i&lt;n $$ arr[i] == arr[i-1]</code>; the <code>$$</code> is <code>&amp;&amp;</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-18">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTE2Ng%3D%3D" target="_blank" rel="noopener">Stock Buy and Sell Problem (Part 1)</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <ul>
+      <li>We know the price of a stock for the upcoming n days. You can buy on any day and sell on any upcoming day (and do this again). Maximise the profit.</li>
+      <li>{1, 5, 3, 8, 12}: buy at 1, sell at 5 (profit 4); buy at 3, sell at 12 (profit 9). Total 13.</li>
+      <li>Prices sorted in decreasing order: no profit is possible (0). Increasing order: buy on day one, sell on the last day.</li>
+      <li>{1, 5, 3, 1, 2, 8}: buy on day one, sell on day two (4); buy on day four, sell on day six (7). Total 11.</li>
+      <li>The course covers three solutions; this part is the naive one.</li>
+    </ul>
+
+    <h3>Naive Solution (recursive)</h3>
+    <ul>
+      <li>Pass the start and end index (initially 0 and n − 1). If the range has one element or fewer (<code>end &lt;= start</code>), return 0: a single day's price can't make a profit.</li>
+      <li>Otherwise consider every pair i &lt; j with <code>price[j] &gt; price[i]</code> (buy on day i, sell on day j). Its profit is the pair's difference plus the max profit recursively for the left of i (start to i − 1) and for the right of j (j + 1 to end).</li>
+      <li>Take the maximum over all such pairs.</li>
+      <li>Dry run: i = 0, j = 1 gives (5 − 1) + maxProfit(0, −1) + maxProfit(2, 4) = 4 + 0 + 9 = 13. i = 0, j = 2 gives (3 − 1) + 0 + maxProfit(3, 4) = 2 + 0 + 4 = 6, smaller, so profit stays 13.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Stock Buy and Sell</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {1, 5, 3, 8, 12}</span><span>O/P</span><span>13</span>
+        <span>I/P</span><span>arr[] = {30, 20, 10}</span><span>O/P</span><span>0</span>
+        <span>I/P</span><span>arr[] = {10, 20, 30}</span><span>O/P</span><span>20</span>
+        <span>I/P</span><span>arr[] = {1, 5, 3, 1, 2, 8}</span><span>O/P</span><span>11</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution (recursive)</h4>
+<pre><code class="language-cpp">int maxProfit(int price[], int start, int end)
+{
+    if (end &lt;= start)
+        return 0;
+    int profit = 0;
+    for (int i = start; i &lt; end; i++)
+    {
+        for (int j = i+1; j &lt;= end; j++)
+        {
+            if (price[j] > price[i])
+            {
+                int curr_profit = price[j] - price[i] +
+                                  maxProfit(price, start, i-1) +
+                                  maxProfit(price, j+1, end);
+                profit = max(profit, curr_profit);
+            }
+        }
+    }
+    return profit;
+}</code></pre>
+<pre><code class="language-plaintext">1  5  3  8  12        start = 0, end = 4
+i = 0, j = 1 : curr_profit = (5 - 1) + maxProfit(arr, 0, -1) + maxProfit(arr, 2, 4)
+                           = 4 + 0 + 9
+                           = 13
+i = 0, j = 2 : curr_profit = (3 - 1) + 0 + 4 = 6</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slip:</strong> at the end of the dry run the transcript says 6 "is smaller than 30 … keeping the profit as 30"; the profit kept is 13.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-19">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTE2Nw%3D%3D" target="_blank" rel="noopener">Stock Buy and Sell problem (Part 2)</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Efficient Solution: bottoms and peaks</h3>
+    <ul>
+      <li>The problem has a surprisingly simple and efficient solution. You know the prices in advance: while they go down, let them go down and buy at the <strong>bottom</strong>; while they go up, let them go up and sell at the <strong>peak</strong>. Repeat for the next bottom and peak.</li>
+      <li>For {1, 5, 3, 8, 12}: buy at 1, sell at 5, let it fall to 3 (it would keep falling to 2 if there were a 2), buy at 3, sell at 12.</li>
+      <li>Implementation: traverse from the second element. Whenever <code>price[i] &gt; price[i-1]</code> (going up), add the difference to the profit; when going down, do nothing.</li>
+      <li>It's a cumulative effect: adding the consecutive differences along a rise adds up to the difference between its bottom and top.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/MTAwMzA%3D" target="_blank" rel="noopener">Stock Buy and Sell Problem</a></p>
+<ul>
+<li>The cost of a stock on each day is given; find the maximum profit from buying and selling on those days. Prices sorted in decreasing order give no profit at all.</li>
+<li>Naive: try buying every stock from start to end − 1, recursing for the rest: <code>curr_profit = price[j] − price[i] + maxProfit(start, i − 1) + maxProfit(j + 1, end)</code>, <code>profit = max(profit, curr_profit)</code>. The article gives O(n²) time, O(1) auxiliary space.</li>
+<li>Efficient (Valley Peak Approach): maxProfit = 0; whenever price[i] &gt; price[i − 1], add price[i] − price[i − 1]. A decreasing sequence gives 0. O(n) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Stock Buy and Sell</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {1, 5, 3, 8, 12}</span><span>O/P</span><span>13</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+<pre><code class="language-cpp">int maxProfit(int price[], int n)
+{
+    int profit = 0;
+    for (int i = 1; i &lt; n; i++)
+        if (price[i] > price[i-1])
+            profit += (price[i] - price[i-1]);
+    return profit;
+}</code></pre>
+<pre><code class="language-plaintext">1  5  3  8  12
+profit = 0
+i = 1 : profit = 0 + (5 - 1) = 4
+i = 2 :                           (3 &lt; 5, nothing added)
+i = 3 : profit = 4 + (8 - 3) = 9
+i = 4 : profit = 9 + (12 - 8) = 13</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-20">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/NDUzNTk%3D" target="_blank" rel="noopener">Trapping Raining Water</a> · <strong>Partial transcript:</strong> the course transcript stops at 2:10 of this 23:20 video, and the Description is empty. Notes up to 2:10 are from the transcript; the rest are from the frames only (a frame every 5 seconds plus close-ups of the notebook pages). Code is copied as shown on screen. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem (transcript)</h3>
+    <ul>
+      <li>Given an array of non-negative integers (positive values or 0), each value is the height of a block, and the width of each block is 1. Compute the total amount of water that can be trapped between the blocks in case it rains.</li>
+      <li>Draw the array as blocks: a value of 3 is a block of height 3, a 0 is nothing. The cells between blocks where water would be trapped are the answer.</li>
+    </ul>
+    <p>Problem page on screen: Input arr[] = [3, 0, 1, 0, 4, 0, 2], Output 10. Explanation: Total water trapped = 0 + 3 + 2 + 3 + 0 + 2 + 0 = 10 units.</p>
+
+    <h3>Water stored on every index (frames)</h3>
+    <ul>
+      <li>The screen heading reads "Finding stored water on every Index". For index i, look at the tallest block on its left and the tallest on its right. At index 3 these are 3 and 4, so the level is min(3, 4) = 3.</li>
+      <li>The water at i is that level minus the block's own height: for all i, <code>min(leftmax[i], rightmax[i]) - arr[i]</code>.</li>
+    </ul>
+
+    <h3>leftmax and rightmax arrays (frames)</h3>
+<pre><code class="language-plaintext">leftmax  = 3, 3, 3, 3, 4, 4, 4
+rightmax = 4, 4, 4, 4, 4, 2, 2
+Arr      = 3, 0, 1, 0, 4, 0, 2
+Res      = 0, 3, 2, 3, 0, 2, 0      → 3 + 2 + 3 + 2 = 10
+
+TC = O(N)
+SC = O(N)  →  O(1)  (the arrow points to the next approach)</code></pre>
+
+    <h3>Two pointers (frames)</h3>
+    <ul>
+      <li>Keep <code>l</code> at the left end with <code>lmax</code> (largest from arr[0] to arr[l]) and <code>r</code> at the right end with <code>rmax</code> (largest from arr[n−1] to arr[r]). The dry run on screen starts with lmax = 3, l = 0, rmax = 2, r = 6.</li>
+      <li>If <code>lmax &gt;= rmax</code>, the right side is the smaller wall, so the water at r is limited by rmax: add <code>rmax - arr[r]</code>, move r left and update rmax. Otherwise add <code>lmax - arr[l]</code>, move l right and update lmax.</li>
+      <li>Later in the dry run: lmax = 3, l = 0, rmax = 4, r = 4, with Ans = 0 + 2 + 0 so far from the right side.</li>
+      <li>TC = O(N) is written on the code page; SC is written as "SC =" but the value is never filled in before the video ends.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzIwNA%3D%3D" target="_blank" rel="noopener">Trapping Rain Water</a></p>
+<ul>
+<li>N non-negative integers form an elevation map with bars of width 1. {2, 0, 2} → 2; {3, 0, 2, 0, 4} → 7 (3 between 3 and 2, 1 on top of bar 2, 3 between 2 and 4); {0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1} → 6.</li>
+<li>Intuition: an element stores water if there are higher bars on both sides; the water at each position comes from the heights on its left and right, and the total is their sum. For {3, 0, 2, 0, 4}: 0 + 3 + 1 + 3 + 0 = 7.</li>
+<li>Brute approach: for every element find the highest bar on the left (a) and on the right (b); it stores <code>min(a, b) − arr[i]</code>. O(N²) time, O(1) space.</li>
+<li>Precalculation: store the highest bar on the left and right of every index in left[] and right[], filled by one loop from start to end and one from end to start, each updating a running max. Then add <code>min(left[i], right[i]) − arr[i]</code>. For {3, 0, 2, 0, 4}: left = {3, 3, 3, 3, 4}, right = {4, 4, 4, 4, 4}, total 7. O(N) time, O(N) space (two extra arrays).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Trapping Rain Water</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = [3, 0, 1, 0, 4, 0, 2]</span><span>O/P</span><span>10</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Two Pointers (C++) <span class="cx">TC = O(N)</span></h4>
+<pre><code class="language-cpp">class Solution {
+  public:
+    int maxWater(vector&lt;int&gt; &amp;arr) {
+        // code here
+        int n = arr.size();
+        int totalWater = 0;
+
+        int l = 0, r = n-1;
+        // lmax stores the largest value from arr[0] to arr[l]
+        // rmax stores the largest value from arr[n-1] to arr[r]
+        int lmax = arr[0], rmax = arr[n-1];
+
+        while(l &lt;= r){
+            if(lmax >= rmax){
+                // Since rmax building height is smaller
+                // maximum capacity allowed is equal rmax building length
+                totalWater += (rmax - arr[r]);
+
+                // going to prev index
+                r--;
+
+                if(r >= 0) rmax = max(rmax, arr[r]);
+            }
+            else{
+                // Since leftmax building height is smaller
+                // maximum capacity allowed is equal lmax building length
+                totalWater += (lmax - arr[l]);
+
+                // going to next index
+                l++;
+
+                if(l &lt; n) lmax = max(lmax, arr[l]);
+            }
+        }
+        return totalWater;
+    }
+};</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Two Pointers (Java) <span class="cx">TC = O(N)</span></h4>
+<pre><code class="language-java">class Solution {
+    public int maxWater(int arr[]) {
+
+        int n = arr.length;
+
+        int totalWater = 0;
+        int l = 0, r = n - 1;
+
+        // lmax stores the largest value from arr[0] to arr[l]
+        // rmax stores the largest value from arr[n-1] to arr[r]
+        int lmax = arr[l], rmax = arr[r];
+
+        while (l &lt;= r) {
+            if (lmax >= rmax) {
+                // Since rmax building height is smaller,
+                // the water trapped is limited by rmax.
+                totalWater += (rmax - arr[r]);
+
+                // Move to the previous index
+                r--;
+
+                if (r >= 0) rmax = Math.max(rmax, arr[r]);
+
+            } else {
+                // Since lmax building height is smaller,
+                // the water trapped is limited by lmax.
+                totalWater += (lmax - arr[l]);
+
+                // Move to the next index
+                l++;
+
+                if (l &lt; n) lmax = Math.max(lmax, arr[l]);
+            }
+        }
+        return totalWater;
+    }
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Source note:</strong> the course transcript for this video ends at 2:10, so the explanation after that point was not heard; these notes follow what is written on screen. No code is shown for the leftmax/rightmax approach, only the arrays and the formula.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-21">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTU0MTY%3D" target="_blank" rel="noopener">Maximum consecutive 1s</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated (and noisy in this video), so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Given a binary (Boolean) array, count the maximum number of consecutive 1s. Corner cases: all 1s (size 4 → 4) and all 0s (→ 0, there are no 1s).</p>
+
+    <h3>Naive Solution: O(n²) Time, O(1) Aux Space</h3>
+    <ul>
+      <li>For every element, count how many consecutive 1s begin at it (increment curr on a 1, break on the first 0), and update res if curr is greater.</li>
+      <li>Worst case: all 1s, where the inner loop runs n, n − 1, … 1 times: Θ(n²) work, so an upper bound of O(n²).</li>
+    </ul>
+
+    <h3>Efficient Solution: O(n) Time, O(1) Aux Space</h3>
+    <p>Traverse left to right once. On a 0, reset curr to 0. On a 1, increment curr and compare it with res, updating res if curr is greater. Θ(n) time.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Maximum Consecutive 1's in a Binary Array</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {0, 1, 1, 0, 1, 0}</span><span>O/P</span><span>2</span>
+        <span>I/P</span><span>all 1s, size 4</span><span>O/P</span><span>4</span>
+        <span>I/P</span><span>all 0s</span><span>O/P</span><span>0</span>
+        <span>I/P</span><span>arr[] = {1, 0, 1, 1, 1, 1, 0, 1, 1}</span><span>O/P</span><span>4</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive <span class="cx">O(n²) Time, O(1) Aux Space</span></h4>
+<pre><code class="language-cpp">int maxConsecutiveOnes(bool arr[], int n)
+{
+    int res = 0;
+    for (int i = 0; i &lt; n; i++)
+    {
+        int curr = 0;
+        for (int j = i; j &lt; n; j++)
+        {
+            if (arr[j] == 1) curr++;
+            else break;
+        }
+        res = max(res, curr);
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-java">int maxConsecutiveOnes(boolean arr[])
+{
+    int res = 0;
+    int n = arr.length;
+    for (int i = 0; i &lt; n; i++)
+    {
+        int curr = 0;
+        for (int j = i; j &lt; n; j++)
+        {
+            if (arr[j] == 1) curr++;
+            else break;
+        }
+        res = Math.max(curr, res);
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {0, 1, 1, 1, 0, 1, 1}, res = 0
+i = 0, curr = 0          i = 4, curr = 0
+i = 1, curr = 3, res = 3 i = 5, curr = 2
+i = 2, curr = 2          i = 6, curr = 1
+i = 3, curr = 1</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient <span class="cx">O(n) Time, O(1) Aux Space</span></h4>
+<pre><code class="language-cpp">int maxConsecutiveOnes(bool arr[], int n)
+{
+    int res = 0, curr = 0;
+    for (int i = 0; i &lt; n; i++)
+    {
+        if (arr[i] == 0)
+            curr = 0;
+        else
+        {
+            curr++;
+            res = max(res, curr);
+        }
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-java">int maxConsecutiveOnes(boolean arr[])
+{
+    int res = 0, curr = 0;
+    int n = arr.length;
+    for (int i = 0; i &lt; n; i++)
+    {
+        if (arr[i] == 0)
+            curr = 0;
+        else
+        {
+            curr++;
+            res = Math.max(res, curr);
+        }
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {0, 1, 1, 0, 1, 1, 1}, res = 0, curr = 0
+i = 0, curr = 0          i = 3, curr = 0          i = 6, curr = 3, res = 3
+i = 1, curr = 1, res = 1 i = 4, curr = 1
+i = 2, curr = 2, res = 2 i = 5, curr = 2</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the C++ efficient code on the board declares only <code>int res = 0;</code>, but uses <code>curr</code>; the Java version declares <code>int res = 0, curr = 0;</code>, which is used for both above. The boxes for examples 2 and 3 are hidden by the teacher in every frame; their arrays are from the transcript.</p>
+      <p><strong>Java note:</strong> the board's Java takes <code>boolean arr[]</code> but compares <code>arr[j] == 1</code>, which doesn't compile in Java; with a boolean array the test is just <code>if (arr[j])</code> (and <code>if (!arr[i])</code> for the reset), or use <code>int arr[]</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-22">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTQwMg%3D%3D" target="_blank" rel="noopener">Maximum subarray sum</a> · <strong>No transcript</strong> on this video. Notes from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Subarrays (board)</h3>
+    <p>A subarray is a contiguous part of the array. Subarrays of {1, 2, 3} are {1}, {2}, {3}, {1, 2}, {2, 3} and {1, 2, 3}. The task: find the maximum sum of a subarray.</p>
+
+    <div class="article">
+      <p class="article-h">From the video description (course page)</p>
+      <p>Given an array arr[], find the elements of a contiguous subarray of numbers that has the largest sum. For [−2, −3, 4, −1, −2, 1, 5, −3] the maximum contiguous subarray sum is 7, from [4, −1, −2, 1, 5]; for [−2, −5, 6, −2, −3, 1, 5, −6] it is also 7, from [6, −2, −3, 1, 5].</p>
+      <ul>
+        <li><strong>Naive:</strong> generate all possible subarrays and pick the one with the maximum sum. Time O(n²), Auxiliary Space O(1).</li>
+        <li><strong>Efficient:</strong> keep <code>max_ending</code>, the maximum sum of a contiguous subarray ending at the current index, and <code>res</code>, the maximum found so far; update res whenever max_ending is greater. Time O(n), Auxiliary Space O(1).</li>
+      </ul>
+    </div>
+
+    <h3>Naive: O(n²) (board)</h3>
+    <p>For every starting index i, extend the subarray to the right one element at a time, keeping its running sum <code>curr</code>, and update res with every curr.</p>
+
+    <h3>Efficient: O(n) (board)</h3>
+    <ul>
+      <li>For each index, compute the maximum sum of a subarray <strong>ending</strong> at it. The board writes these under {−5, 1, −2, 3, −1, 2, −2}: −5, 1, −1, 3, 2, 4, 2. The largest of them (4) is the result.</li>
+      <li>The subarray ending at i either extends the best one ending at i − 1 or starts fresh at arr[i]:</li>
+    </ul>
+<pre><code class="language-plaintext">maxEnding(i) = max( maxEnding(i-1) + arr[i],
+                     arr[i] )</code></pre>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzIwNg%3D%3D" target="_blank" rel="noopener">Maximum Subarray Sum</a></p>
+<ul>
+<li>Same examples and naive approach as the video description (all subarrays, O(N²) time, O(1) space). This article prints the subarray itself.</li>
+<li>Efficient: Kadane's algorithm while storing the start and end index. Set endIndex = 0 and currMax = globalMax = the first value. From index 1, <code>currMax = max(nums[i], nums[i] + currMax)</code>; when currMax &gt; globalMax, update globalMax and endIndex = i.</li>
+<li>To find the start index, go left from endIndex, decrementing globalMax until it becomes 0; that point is the start. Print [start, end]. O(N) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Maximum Sum Subarray</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {2, 3, -8, 7, -1, 2, 3}</span><span>O/P</span><span>11</span>
+        <span>I/P</span><span>arr[] = {5, 8, 3}</span><span>O/P</span><span>16</span>
+        <span>I/P</span><span>arr[] = {-6, -1, -8}</span><span>O/P</span><span>-1</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive <span class="cx">O(n²)</span></h4>
+<pre><code class="language-cpp">int maxSum(int arr[], int n)
+{
+    int res = arr[0];
+    for (int i = 0; i &lt; n; i++)
+    {
+        int curr = 0;
+        for (int j = i; j &lt; n; j++)
+        {
+            curr = curr + arr[j];
+            res = max(res, curr);
+        }
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">{1, -2, 3, -1, 2}
+res = 1
+i = 0 :  curr = 0
+         curr = 1
+         curr = 1-2 = -1
+         curr = -1+3 = 2,  res = 2
+         curr = 2-1 = 1
+         curr = 1+2 = 3,   res = 3
+i = 1 :  curr = 0
+         curr = -2
+         curr = -2+3 = 1
+         curr = 1-1 = 0
+         curr = 0+2 = 2
+         ⋮</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient <span class="cx">O(n)</span></h4>
+<pre><code class="language-cpp">int maxSum(int arr[], int sum)
+{
+    int res = arr[0];
+    int maxEnding = arr[0];
+    for (int i = 1; i &lt; n; i++)
+    {
+        maxEnding = max(maxEnding + arr[i], arr[i]);
+        res = max(res, maxEnding);
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">{-3, 8, -2, 4, -5, 6}
+res = -3, maxEnding = -3
+i = 1 : maxEnding = max(-3+8, 8) = 8      res = 8
+i = 2 : maxEnding = max(8-2, -2) = 6
+i = 3 : maxEnding = max(6+4, 4) = 10      res = 10
+i = 4 : maxEnding = max(10-5, -5) = 5
+i = 5 : maxEnding = max(5+6, 6) = 11      res = 11</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the efficient function's second parameter is written <code>int sum</code>, but the loop uses <code>n</code>; it should be <code>int maxSum(int arr[], int n)</code>.</p>
+      <p><strong>Source note:</strong> the video description also links C++, Java, JavaScript and C# code on the GfG IDE; those weren't opened.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-23">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTQwMw%3D%3D" target="_blank" rel="noopener">Longest Even Odd Subarray</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Find the length of the longest subarray with <strong>alternating</strong> even and odd elements. It may begin with even or odd; after an even the next must be odd, after an odd the next must be even. A subarray is contiguous, in the original order. If all elements are even (or all odd), the answer is 1: any single element.</p>
+
+    <h3>Naive Solution: O(n²)</h3>
+    <ul>
+      <li>For every element, find the longest alternating subarray that <strong>begins</strong> with it, and update the result if it's longer. Initialise res = 1, and curr = 1 for each start (a single element counts as alternating).</li>
+      <li>Element j alternates with j − 1 if (current even and previous odd) <strong>or</strong> (current odd and previous even). If it does, increment curr; otherwise break, because the elements must be contiguous.</li>
+      <li>In the worst case the inner loop runs from i + 1 to n − 1: O(n²).</li>
+    </ul>
+
+    <h3>Efficient Solution: O(n), based on Kadane's algorithm</h3>
+    <ul>
+      <li>Like Kadane's algorithm, start from the second element. For every element there are two cases: extend the previous subarray (if it alternates with the previous element) or begin a new subarray (curr = 1).</li>
+      <li>Unlike the naive solution, which finds subarrays beginning with each element, this finds the subarray <strong>ending</strong> at index i.</li>
+      <li>One simple loop with constant work inside: O(n).</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzIwNw%3D%3D" target="_blank" rel="noopener">Longest Even Odd Subarray</a></p>
+<ul>
+<li>{1, 2, 3, 4, 5, 7, 9} → 5 ({1, 2, 3, 4, 5}). The article gives {1, 3, 5} → 0 ("no such alternating sequence possible"); the video counts a single element, so its all-even example gives 1.</li>
+<li>Naive: for every i, a nested loop from j = i + 1 counts while a[j − 1] and a[j] have different parity; keep the max count. O(N²) time, O(1) space.</li>
+<li>Storing the previous element's nature: maxLength = 0, currLen = 1; from index 1 compare each element with the previous. Different parity → currLen++; otherwise reset currLen to 1, storing the max in maxLength before resetting. O(N) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Maximum Length Even-Odd Subarray</strong>
+      <div class="io">
+        <span>I/P</span><span>{10, 12, 14, 7, 8}</span><span>O/P</span><span>3</span>
+        <span>I/P</span><span>{7, 10, 13, 14}</span><span>O/P</span><span>4</span>
+        <span>I/P</span><span>{10, 12, 8, 4}</span><span>O/P</span><span>1</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive <span class="cx">O(n²)</span></h4>
+<pre><code class="language-cpp">int maxEvenOdd(int arr[], int n)
+{
+    int res = 1;
+    for (int i = 0; i &lt; n; i++)
+    {
+        int curr = 1;
+        for (int j = i+1; j &lt; n; j++)
+        {
+            if ((arr[j] % 2 == 0 &amp;&amp; arr[j-1] % 2 != 0) ||
+                (arr[j] % 2 != 0 &amp;&amp; arr[j-1] % 2 == 0))
+                curr++;
+            else
+                break;
+        }
+        res = max(res, curr);
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {5, 10, 20, 6, 3, 8}
+res = 1
+i = 0 : curr = 2, res = 2
+i = 1 : curr = 1
+i = 2 : curr = 1
+i = 3 : curr = 3, res = 3
+i = 4 : curr = 2
+i = 5 : curr = 1</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient <span class="cx">O(n)</span></h4>
+<pre><code class="language-cpp">int maxEvenOdd(int arr[], int n)
+{
+    int res = 1;
+    int curr = 1;
+    for (int i = 1; i &lt; n; i++)
+    {
+        if ((arr[i] % 2 == 0 &amp;&amp; arr[i-1] % 2 != 0) ||
+            (arr[i] % 2 != 0 &amp;&amp; arr[i-1] == 0))
+        {
+            curr++;
+            res = max(res, curr);
+        }
+        else curr = 1;
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {5, 10, 20, 6, 3, 8}
+i = 1 : curr = 2, res = 2
+i = 2 : curr = 1          (20 after 10: both even, new subarray)
+i = 3 : curr = 1
+i = 4 : curr = 2
+i = 5 : curr = 3, res = 3</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> in the efficient code's second condition the board writes <code>arr[i-1] == 0</code>; it should be <code>arr[i-1] % 2 == 0</code> (previous element even), as in the naive version.</p>
+      <p><strong>Board note:</strong> <code>&amp;&amp;</code> is written <code>$$</code> on the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-24">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTQ2NDU%3D" target="_blank" rel="noopener">Maximum Circular Sum Subarray</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Circular Subarrays</h3>
+    <ul>
+      <li>A circular subarray includes the normal subarrays and also the subarrays formed by connecting the last element back to the first.</li>
+      <li>For {10, 5, −5}: Normal: {10}, {5}, {−5}, {10, 5}, {5, −5}, {10, 5, −5}. Only circular: {−5, 10}, {5, −5, 10}, {−5, 10, 5}. The maximum sum is 15 ({10, 5}). The all-elements subarrays all have the same sum, only in a different order.</li>
+      <li>Find the maximum sum over all circular subarrays. The best may be normal ({−3, 4, 6, −2} → 10) or wrap around ({3, −4, 5, 6, −8, 7} → 7 + 3 − 4 + 5 + 6 = 17).</li>
+    </ul>
+
+    <h3>Naive Solution: O(n²)</h3>
+    <ul>
+      <li>Every subarray, normal or circular, begins with some element. For each element, find the maximum sum of all subarrays beginning with it, then take the maximum of those maximums.</li>
+      <li>In the circular case there are n subarrays beginning with each element. The next element's index is found with modular arithmetic: <code>(i + j) % n</code> for j = 1 to n − 1.</li>
+      <li>{5, −2, 3, 4}: from 5 the sums are 5, 3, 6, 10 (max 10); from −2: −2, 1, 5, 10; from 3: 3, 7, 12, 10 (max 12); from 4: max 10. Result 12.</li>
+    </ul>
+
+    <h3>Efficient Solution: O(n)</h3>
+    <ul>
+      <li>Idea: take the maximum of (1) the maximum sum of a normal subarray (easy: Kadane, covered in its own video) and (2) the maximum sum of a circular subarray.</li>
+      <li>A circular subarray takes some first elements x<sub>0</sub>…x<sub>i</sub> and some last elements x<sub>j</sub>…x<sub>n−1</sub>, and leaves out a middle part. The middle elements that are left out are the <strong>minimum sum normal subarray</strong>.</li>
+      <li>So the max circular sum = total array sum − minimum subarray sum (found with a modified Kadane). In {5, −2, 3, 4} the minimum is −2; in {8, −4, 3, −5, 4} it is −4 + 3 − 5 = −6, giving 6 − (−6) = 12; in {3, −4, 5, 6, −8, 7} it is −8.</li>
+      <li>This circular value isn't always the answer, but if the maximum is circular it finds it. Return the maximum of the two.</li>
+      <li>The code doesn't write a separate min-Kadane: it <strong>inverts</strong> the array elements and calls the same function. The max sum in the inverted array is the min sum in the original, so it is <em>added</em> to the array sum instead of subtracted (− − becomes +).</li>
+      <li>The <code>if (max_normal &lt; 0)</code> check is needed for correctness, not only speed: if every element is negative, the circular part always gives 0 (arr_sum + −arr_sum), which would wrongly beat the negative answer. When max_normal &lt; 0, return it straight away (the largest element).</li>
+      <li>Three Θ(n) passes: <strong>Θ(n)</strong> overall.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzIwOA%3D%3D" target="_blank" rel="noopener">Maximum Circular Sum Subarray</a></p>
+<ul>
+<li>Given a circular array of size n, find the maximum sum of a non-empty subarray.</li>
+<li>{8, −8, 9, −9, 10, −11, 12} → 22 (12, 8, −8, 9, −9, 10); {10, −3, −4, 7, 6, 5, −4, −1} → 23 (7, 6, 5, −4, −1, 10); {−1, 40, −14, 7, 6, 5, −4, −1} → 52 (7, 6, 5, −4, −1, −1, 40).</li>
+<li>Naive: O(n·n) time, O(1) space. Efficient: O(n) time, O(1) space (code only).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Maximum Circular Subarray Sum</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {5, -2, 3, 4}</span><span>O/P</span><span>12</span>
+        <span>I/P</span><span>arr[] = {2, 3, -4}</span><span>O/P</span><span>5</span>
+        <span>I/P</span><span>arr[] = {8, -4, 3, -5, 4}</span><span>O/P</span><span>12</span>
+        <span>I/P</span><span>arr[] = {-3, 4, 6, -2}</span><span>O/P</span><span>10</span>
+        <span>I/P</span><span>arr[] = {-8, 7, 6}</span><span>O/P</span><span>13</span>
+        <span>I/P</span><span>arr[] = {3, -4, 5, 6, -8, 7}</span><span>O/P</span><span>17</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">O(n²)</span></h4>
+<pre><code class="language-cpp">int maxCircularSum(int arr[], int n)
+{
+    int res = arr[0];
+    for (int i = 0; i &lt; n; i++)
+    {
+        int curr_max = arr[i];
+        int curr_sum = arr[i];
+        for (int j = 1; j &lt; n; j++)
+        {
+            int index = (i + j) % n;
+            curr_sum += arr[index];
+            curr_max = max(curr_max, curr_sum);
+        }
+        res = max(res, curr_max);
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {5, -2, 3, 4}
+res = 5
+i = 0 : curr_max = 10, res = 10
+i = 1 : curr_max = 10
+i = 2 : curr_max = 12, res = 12
+i = 3 : curr_max = 10</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution <span class="cx">O(n)</span></h4>
+<pre><code class="language-cpp">int normalMaxSum(int arr[], int n)          // Standard Kadane
+{
+    int res = arr[0], maxEnding = arr[0];
+    for (int i = 1; i &lt; n; i++)
+    {
+        maxEnding = max(arr[i], maxEnding + arr[i]);
+        res = max(res, maxEnding);
+    }
+    return res;
+}
+int overallMaxSum(int arr[], int n)
+{
+    int max_normal = normalMaxSum(arr, n);  // Normal Sum
+    if (max_normal &lt; 0)
+        return max_normal;
+    int arr_sum = 0;                        // Circular Sum
+    for (int i = 0; i &lt; n; i++)
+    {
+        arr_sum += arr[i];
+        arr[i] = -arr[i];
+    }
+    int max_circular = arr_sum + normalMaxSum(arr, n);
+    return max(max_normal, max_circular);
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {8, -4, 3, -5, 4}
+max_normal = 8
+arr_sum = 6
+After inversion
+arr[] = {-8, 4, -3, 5, -4}
+max_circular = 6 + 6
+             = 12
+res = max(max_normal, max_circular)
+    = max(8, 12)
+    = 12
+
+arr[] = {-8, -3}           max_normal = -3
+If we remove the condition:
+arr_sum = -11
+arr[] = {8, 3}
+max_circular = -11 + 11 = 0     → res would be 0 (wrong)</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the last example is written <code>arr[] = {-5, -3}</code>, but its working (arr_sum = −11, inverted {8, 3}) and the transcript use {−8, −3}.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-25">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTQyMg%3D%3D" target="_blank" rel="noopener">Majority Element</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <ul>
+      <li>An element is the <strong>majority</strong> if it appears more than n/2 times (size 5: at least 3 times; size 6: at least 4 times, since 6/2 = 3 and it must be more than 3).</li>
+      <li>Return any index of the majority element, or −1 if there is none. In {3, 7, 4, 7, 7, 5}, 7 appears exactly n/2 times, not more, so −1.</li>
+    </ul>
+
+    <h3>Naive Solution: O(n²)</h3>
+    <p>For every element, count how many times it appears (count starts at 1 for arr[i] itself, then check j from i + 1). If the count is more than n/2, return i. If no element qualifies, return −1. For {8, 7, 6, 8, 6, 6, 6, 6} (n/2 = 4): i = 0 count 2, i = 1 count 1, i = 2 count 5 → output 2.</p>
+
+    <h3>Efficient: Moore's Voting Algorithm, O(n) time, O(1) space</h3>
+    <ul>
+      <li><strong>Phase 1</strong> finds a candidate, guaranteed to be the majority if one exists. <strong>Phase 2</strong> checks whether the candidate really is a majority; it's needed only when the array might have no majority (if one is guaranteed, phase 1 is enough).</li>
+      <li>It may not give the first occurrence; it can give a middle one.</li>
+      <li>Phase 1: take the first element as the majority with count 1. For each next element, increment count if it equals arr[res], else decrement. When count becomes 0, reset: res = i, count = 1.</li>
+      <li>Phase 2: count the occurrences of arr[res]; if count ≤ n/2, set res = −1.</li>
+      <li>Two O(n) loops: O(n) + O(n) = O(n).</li>
+    </ul>
+
+    <h3>Why it works (Working of the algorithm)</h3>
+    <ul>
+      <li>Elements that decrement the count cancel the votes of others. Up to index i, split the elements into two sets: those that cancelled each other out, and those that contributed to the current count (the current candidate).</li>
+      <li>Example 1: 6, 8, 7, 6, 6 → cancelled {6, 8, 7, 6}, remaining {6}. Example 2: 8, 8, 6, 6, 6, 6 → cancelled {8, 8, 6, 6}, remaining {6, 6}.</li>
+      <li>The cancelled set is made of pairs of <strong>different</strong> elements (x1 x2, x2 x1, x3 x1, …). Each element is on at most one side of each pair, so it appears at most n/2 times there: the cancelled set has no majority. So if a majority exists, it must be the remaining candidate.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NzIwOQ%3D%3D" target="_blank" rel="noopener">Majority Element</a></p>
+<ul>
+<li>A majority element appears more than n/2 times, so there is at most one. {3, 3, 4, 2, 4, 4, 2, 4, 4} → 4 (5 times); {3, 3, 4, 2, 4, 4, 2, 4} → No Majority Element.</li>
+<li>Basic: two loops tracking the maximum count over all elements; if it's more than n/2, that element is the majority. O(n·n) time, O(1) space.</li>
+<li>Moore's Voting Algorithm, two steps: (1) find a candidate, which is definitely the majority if one exists; (2) check it, since there might be no majority. Keep maj_index and count: same element → count++, different → count−−, and when count reaches 0, set maj_index to the current element and count to 1.</li>
+<li>For {3, 4, 3, 2, 4, 4, 4, 4}: the candidate resets at i = 1, 2, 3 and 4, then count rises to 4 with arr[maj_index] = 4; the second pass finds 4 five times, so 4 is the majority. O(n) time (two traversals), O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Majority Element</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {8, 3, 4, 8, 8}</span><span>O/P</span><span>0 OR 3 OR 4 (Any index of 8)</span>
+        <span>I/P</span><span>arr[] = {3, 7, 4, 7, 7, 5}</span><span>O/P</span><span>-1 (No Majority)</span>
+        <span>I/P</span><span>arr[] = {20, 30, 40, 50, 50, 50, 50}</span><span>O/P</span><span>3 OR 4 OR 5 OR 6 (Any index of 50)</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive <span class="cx">O(n²)</span></h4>
+<pre><code class="language-cpp">int findMajority(int arr[], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+    {
+        int count = 1;
+        for (int j = i+1; j &lt; n; j++)
+            if (arr[i] == arr[j])
+                count++;
+        if (count > n/2)
+            return i;
+    }
+    return -1;
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient: Moore's Voting <span class="cx">O(n)</span></h4>
+<pre><code class="language-cpp">int findMajority(int arr[], int n)
+{
+    int res = 0, count = 1;              // Find a
+    for (int i = 1; i &lt; n; i++)          // Candidate
+    {
+        if (arr[res] == arr[i])
+            count++;
+        else
+            count--;
+        if (count == 0) { res = i; count = 1; }
+    }
+    count = 0;                           // Check if the
+    for (int i = 0; i &lt; n; i++)          // candidate is
+        if (arr[res] == arr[i])          // actually a
+            count++;                     // majority.
+    if (count &lt;= n/2)
+        res = -1;
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {8, 8, 6, 6, 6, 4, 6}
+Initially : count = 1, res = 0
+i = 1 : count = 2
+i = 2 : count = 1
+i = 3 : count = 0 → count = 1, res = 3
+i = 4 : count = 2
+i = 5 : count = 1
+i = 6 : count = 2        → res = 3 (a middle occurrence of 6)
+
+arr[] = {6, 8, 4, 8, 8}
+Initially : count = 1, res = 0
+i = 1 : count = 0 → count = 1, res = 1
+i = 2 : count = 0 → count = 1, res = 2
+i = 3 : count = 0 → count = 1, res = 3
+i = 4 : count = 2        → 8 appears 3 times > 5/2, so res = 3</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-26">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTU4Ng%3D%3D" target="_blank" rel="noopener">Minimum Consecutive Flips</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <ul>
+      <li>Given a binary (Boolean) array, make all elements the same. You may flip either 0s or 1s, not both, and a group of <strong>consecutive</strong> equal elements can be flipped in one go.</li>
+      <li>Find the minimum number of flips and print them. For {1, 1, 0, 0, 0, 1}: flipping 1s needs 2 flips (0 to 1, 5 to 5); flipping 0s needs 1 (2 to 4). Output: From 2 to 4.</li>
+      <li>If all elements are already the same, print nothing. For {0, 1}, either flip is fine: From 0 to 0 OR From 1 to 1.</li>
+    </ul>
+
+    <h3>Naive Solution: two traversals</h3>
+    <p>First traversal: count the groups of 1s and the groups of 0s. Pick the value with fewer groups. Second traversal: print each group of that value: on its first element print "from i", and when the next different element appears print the index before it.</p>
+
+    <h3>Efficient Solution: one traversal</h3>
+    <ul>
+      <li>Fact: the group counts of 1s and 0s differ by <strong>at most one</strong>. Only two possibilities: if the array begins and ends with the same value, the counts differ by one (that value has one more group); if they differ, the counts are the same. All 1s (or all 0s) also fits: counts 1 and 0.</li>
+      <li>So always flip the groups of the <strong>second</strong> group's value (the value different from arr[0]). Its count is either equal to or one less than the first group's, so it is always minimal.</li>
+      <li>Traverse from the second element. Do nothing while an element equals the previous one. When it differs: if it also differs from arr[0], a group to flip begins here (print "From i to"); otherwise a flipped group just ended (print i − 1 and a new line).</li>
+      <li>If the last element differs from arr[0], the last group to flip never got its end inside the loop, so print n − 1 after the loop (happens when the group counts are the same).</li>
+      <li>One traversal, O(1) auxiliary space.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/MTAwNDY%3D" target="_blank" rel="noopener">Minimum Consecutive Flips</a></p>
+<ul>
+<li>Make a binary array all 1s or all 0s with the minimum number of group flips. {1, 1, 0, 0, 0, 1} → From 2 to 4. {1, 0, 0, 0, 1, 0, 0, 1, 0, 1} → From 1 to 3, From 5 to 6, From 8 to 8. {0, 0, 0} and {1, 1, 1} → empty output. {0, 1} → From 0 to 0 OR From 1 to 1.</li>
+<li>Naive: two traversals. Count the groups of 0s and of 1s, take the minimum, then traverse again flipping that type.</li>
+<li>Efficient (one traversal), based on two facts: there are only two types of groups, and their counts are either the same or differ by at most 1 ({1, 1, 0, 1, 0, 0}: two and two; {1, 1, 0, 0, 0, 1, 0, 0, 1, 1}: one more group of 1s).</li>
+<li>So always flip the second group and the groups of the same type. With equal counts either type is correct; with one extra, ignoring the first group turns it into the equal case. O(n) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Minimum Group Flips to Make Same</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {1, 1, 0, 0, 0, 1}</span><span>O/P</span><span>From 2 to 4</span>
+        <span>I/P</span><span>arr[] = {1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1}</span><span>O/P</span><span>From 1 to 3<br>From 5 to 6</span>
+        <span>I/P</span><span>arr[] = {1, 1, 1}</span><span>O/P</span><span>(nothing)</span>
+        <span>I/P</span><span>arr[] = {0, 1}</span><span>O/P</span><span>From 0 to 0 OR From 1 to 1</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Efficient: printGroups <span class="cx">one traversal, O(1) space</span></h4>
+<pre><code class="language-cpp">void printGroups(bool arr[], int n)
+{
+    for (int i = 1; i &lt; n; i++)
+    {
+        if (arr[i] != arr[i-1])
+        {
+            if (arr[i] != arr[0])
+                cout &lt;&lt; "From " &lt;&lt; i &lt;&lt; " to ";
+            else
+                cout &lt;&lt; (i-1) &lt;&lt; endl;
+        }
+    }
+    if (arr[n-1] != arr[0])
+        cout &lt;&lt; (n-1) &lt;&lt; endl;
+}</code></pre>
+<pre><code class="language-plaintext">0 0 1 1 0 0 1 1 0
+i = 1 : same as previous, nothing
+i = 2 : differs, != arr[0]  → "From 2 to "
+i = 3 : same, nothing
+i = 4 : differs, == arr[0]  → "3" + new line      O/p From 2 to 3
+i = 6 : differs, != arr[0]  → "From 6 to "
+i = 8 : differs, == arr[0]  → "7"                 O/p From 6 to 7
+(With one more 1 at index 9: "From 9 to " in the loop, then 9 is printed after it.)</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-27">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/NzAyMw%3D%3D" target="_blank" rel="noopener">Sliding Window Technique</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated and very noisy in this video, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Example Problem</h3>
+    <p>Given an array of integers and a number k, find the maximum sum of k consecutive elements: consider every window (subarray) of size k, find each sum, and take the maximum. For [1, 8, 30, −5, 20, 7] with k = 3 the window sums are 39, 33, 45, 22, so the output is 45.</p>
+
+    <h3>Naive Solution: O(n × k) Time, O(1) Aux Space</h3>
+    <ul>
+      <li>For every starting index i, sum the k elements beginning at i and keep the maximum. Initialise res as −infinity: <code>INT_MIN</code> in C++, <code>Integer.MIN_VALUE</code> in Java.</li>
+      <li>The last valid ending index must be smaller than n, so the outer loop runs while <code>i + k - 1 &lt; n</code>.</li>
+    </ul>
+
+    <h3>Idea of Sliding Window</h3>
+    <ul>
+      <li><strong>Compute the sum of the current window using the sum of the previous window, in O(1) time</strong>, instead of looping k times.</li>
+      <li>When the window slides, remove the first item of the previous window and add the last item of the current window.</li>
+      <li>The same works for any computation the current window can get from the previous one in less than linear time: XOR (XOR out the first item of the previous window, XOR in the last item of the current), product (divide out the first item, multiply in the last), and so on.</li>
+      <li>The board implementation treats <code>i</code> as the <strong>last</strong> index of the current window, so the first item of the previous window is <code>arr[i-k]</code>. You can also write it with i as the first index; both are fine.</li>
+      <li>A loop of k plus a loop of n − k: <strong>Θ(n) Time, O(1) Aux Space</strong>.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/MTAwNDk%3D" target="_blank" rel="noopener">Sliding Window Technique</a></p>
+<ul>
+<li>Maximum sum of k consecutive elements. Naive: compute the sum of every block of k and compare; the article gives O(n²) time, O(1) space.</li>
+<li>Window sliding avoids recomputing each block's sum. Picture a bus window of length n with a pane of length k: pushing the window one unit makes the pane cover the next k elements. The array is the window and current_sum is the pane.</li>
+<li>For arr[] = {5, 2, −1, 0, 3}, k = 3: compute the first k elements' sum in window_sum with a linear loop, then move along the array keeping the maximum, subtracting the first element of the previous block and adding the last element of the current block. O(n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Maximum Sum of k Consecutive Elements</strong>
+      <div class="io">
+        <span>I/P</span><span>[1, 8, 30, -5, 20, 7], k = 3</span><span>O/P</span><span>45</span>
+        <span>I/P</span><span>[5, -10, 6, 90, 3], k = 2</span><span>O/P</span><span>96</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">O(n × k) Time, O(1) Aux</span></h4>
+<pre><code class="language-cpp">int maxSum(int arr[], int n, int k)
+{
+    int res = INT_MIN;     // Integer.MIN_VALUE in Java
+    for (int i = 0; i+k-1 &lt; n; i++)
+    {
+        int curr = 0;
+        for (int j = 0; j &lt; k; j++)
+            curr += arr[i+j];
+        res = max(res, curr);     // Math.max() in Java
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">[10, 5, -2, 20, 1]   k = 3
+i = 0, curr = 13, res = 13
+i = 1, curr = 23, res = 23
+i = 2, curr = 19</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Sliding Window <span class="cx">Θ(n) Time, O(1) Aux Space</span></h4>
+<pre><code class="language-cpp">int maxSum(int arr[], int n, int k)
+{
+    int curr = 0;
+    for (int i = 0; i &lt; k; i++)
+        curr += arr[i];
+    int res = curr;
+    for (int i = k; i &lt; n; i++)
+    {
+        curr = curr + arr[i] - arr[i-k];
+        res = max(res, curr);
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">| 1 | 8 | 30 | -5 | 20 | 7 |,  k = 4
+Initially : curr = 1+8+30-5 = 34, res = 34
+1st Slide : curr = 34 + 20 - 1 = 53, res = 53   (adding last of current window, removing first of previous window)
+2nd Slide : curr = 53 + 7 - 8 = 52               (res stays 53)</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-28">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/MTQ2NTk%3D" target="_blank" rel="noopener">Subarray with Given Sum</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated and noisy in this video, so the board wins where they differ. Code is copied as written on the board (this video's code is JavaScript). Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Given an array of <strong>non-negative</strong> integers (positives and zeros; there are no negative elements in the array) and a sum, return true if some subarray has exactly that sum, otherwise false.</p>
+
+    <h3>Naive Solution: consider every subarray</h3>
+    <ul>
+      <li>For every start i, extend j from i, adding arr[j] to curr; as soon as curr equals sum, return true. If no subarray matches, return false.</li>
+      <li><strong>Time: O(n²), Aux Space: O(1)</strong>. It's O(n²), not Θ(n²): if the first element itself equals the sum, it returns in constant time.</li>
+    </ul>
+
+    <h3>Efficient Solution: variable size window</h3>
+    <ul>
+      <li>If the subarray size k were given, a fixed window (previous video) would do. Here any size is allowed, so use window sliding with a window of <strong>variable size</strong>, tracking both its start s and end e.</li>
+      <li>While curr is smaller than sum, extend the window by increasing e. While curr is greater than sum, shrink the window by increasing s (removing items from the start). When curr equals sum, return true.</li>
+      <li>Shrinking is safe because there are no negatives. Once the window starting at s exceeds the sum, every longer subarray starting at s is even bigger, so s can be dropped. After dropping 1 in the example the window starting at 4 still has 37 &gt; 33, and its shorter subarrays had less than the sum even with the 1 before them, so 4 can be dropped too.</li>
+      <li>It looks quadratic (a loop inside a loop), but every item is added at most once and removed at most once: at most 2n constant-time operations. <strong>Time: O(n), Aux Space: O(1)</strong>.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Subarray with Given Sum</strong>
+      <div class="io">
+        <span>I/P</span><span>[1, 4, 20, 3, 10, 5], sum = 33</span><span>O/P</span><span>Yes</span>
+        <span>I/P</span><span>[1, 4, 0, 0, 3, 10, 5], sum = 7</span><span>O/P</span><span>Yes</span>
+        <span>I/P</span><span>[2, 4], sum = 3</span><span>O/P</span><span>No</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">Time O(n²), Aux Space O(1)</span></h4>
+<pre><code class="language-javascript">function isSubSum(arr, sum) {
+    for (let i = 0; i &lt; arr.length; i++) {
+        let curr = 0;
+        for (let j = i; j &lt; arr.length; j++) {
+            curr += arr[j];
+            if (curr === sum)
+                return true;
+        }
+    }
+    return false;
+}</code></pre>
+<pre><code class="language-plaintext">[3, 2, 0, 4, 7]   sum = 6
+i = 0 : j = 0 : curr = 3
+        j = 1 : curr = 5
+        j = 2 : curr = 5
+        j = 3 : curr = 9
+        j = 4 : curr = 16
+i = 1 : j = 1 : curr = 2
+        j = 2 : curr = 2
+        j = 3 : curr = 6     return true</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution <span class="cx">Time O(n), Aux Space O(1)</span></h4>
+<pre><code class="language-javascript">function isSubSum(arr, sum) {
+    let s = 0, curr = 0;
+    for (let e = 0; e &lt; arr.length; e++) {
+        curr += arr[e];
+        while (sum &lt; curr) {
+            curr -= arr[s];
+            s++;
+        }
+        if (curr === sum)
+            return true;
+    }
+    return false;
+}</code></pre>
+<pre><code class="language-plaintext">Idea: [1, 4, 20, 3, 10, 5]   sum = 33
+s = 0, e = 0, curr = 1  ┐
+s = 0, e = 1, curr = 5  │  While curr is smaller than sum,
+s = 0, e = 2, curr = 25 │  extend the window by increasing e
+s = 0, e = 3, curr = 28 │
+s = 0, e = 4, curr = 38 ┘
+s = 1, e = 4, curr = 37 ┐  While curr is greater,
+s = 2, e = 4, curr = 33 ┘  shrink the window by increasing s
+
+[4, 8, 12, 5]   sum = 17, curr = 0
+s = 0, e = 0, curr = 4
+       e = 1, curr = 12
+       e = 2, curr = 24
+s = 1, e = 2, curr = 20
+s = 2, e = 2, curr = 12
+s = 2, e = 3, curr = 17     return true</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-29">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/NzU4Nw%3D%3D" target="_blank" rel="noopener">Prefix Sum</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated and noisy in this video, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Motivation</h3>
+    <p>The prefix sum technique is used in a lot of popular interview and programming questions. Problem: given a <strong>fixed</strong> array (it never changes) and multiple range sum queries <code>getSum(l, r)</code> (sum from index l to r, both included), how do you answer the queries efficiently?</p>
+
+    <h3>Naive Solution</h3>
+    <p>Loop from l to r adding each element. <strong>Time: Θ(r − l + 1), or O(n)</strong> (l can be 0 and r can be n − 1); <strong>Aux Space: O(1)</strong>. The code assumes arr is a global variable available inside the function.</p>
+
+    <h3>Idea for getSum() in O(1) Time</h3>
+    <ul>
+      <li>Allow some preprocessing (taking time and auxiliary space) so each query is O(1).</li>
+      <li>(1) Precompute the prefix sum array: <code>pSum[i]</code> = sum of arr[0] … arr[i]. (2) Then:</li>
+    </ul>
+<pre><code class="language-plaintext">getSum(l, r) = pSum[r]               if l == 0
+               pSum[r] - pSum[l-1]    otherwise</code></pre>
+    <ul>
+      <li>arr and the prefix sum array are assumed available inside getSum: global in C++, static members in Java. Not a recommended practice, but it keeps the code simple.</li>
+      <li>Preprocessing: <code>ps[i] = ps[i-1] + arr[i]</code> (the previous prefix sum plus the current element). <strong>Θ(n) time, Θ(n) auxiliary space</strong>. Each query: <strong>O(1)</strong>.</li>
+    </ul>
+
+    <h3>Exercise: weighted sum queries</h3>
+    <ul>
+      <li><code>getWSum(l, r) = 1*arr[l] + 2*arr[l+1] + … + (r−l+1)*arr[r]</code> = Σ<sub>i=l..r</sub> (i − l + 1) · arr[i]. For arr = [2, 3, 5, 4, 6, 1]: getWSum(0, 2) = 23, getWSum(2, 3) = 13.</li>
+      <li>Split it: Σ i·arr[i] − (l − 1)·Σ arr[i], both over i = l..r. The second part comes from the normal prefix sum array (multiplied by l − 1); the first from a second, weighted prefix sum array: <code>pwSum[i] = i*arr[i] + pwSum[i-1]</code>.</li>
+      <li>We need to build two prefix sum arrays; then each query is O(1). The teacher leaves the implementation as an exercise.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/NjQxMg%3D%3D" target="_blank" rel="noopener">Prefix Sum Technique</a></p>
+<ul>
+<li>prefixSum[i] = arr[0] + arr[1] + … + arr[i]. {10, 20, 10, 5, 15} → {10, 30, 40, 45, 60}: prefixSum[0] = 10, prefixSum[1] = prefixSum[0] + arr[1] = 30, prefixSum[2] = 40, and so on, running from index 1 to the last and adding each element to the previous prefix value. O(n) time, O(n) space.</li>
+<li>For Q queries (L, R), build prefixSum[] once, then getSum returns prefixSum[R] if L is 0, otherwise prefixSum[R] − prefixSum[L − 1]. O(n) time, O(n) space. (The article's code is in Python.)</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Range Sum Queries</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = [2, 8, 3, 9, 6, 5, 4]; getSum(0, 2), getSum(1, 3), getSum(2, 6)</span><span>O/P</span><span>13 20 27</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">Θ(r−l+1) or O(n), O(1) Aux</span></h4>
+<pre><code class="language-cpp">int getSum(int l, int r)
+{
+    int res = 0;
+    for (int i = l; i &lt;= r; i++)
+        res += arr[i];
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">arr = {2, 8, 3, 9, 6, 5, 4}
+getSum(1, 3) : Initially : res = 0
+               i = 1 : res = 8
+               i = 2 : res = 11
+               i = 3 : res = 20</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Prefix Sum <span class="cx">Θ(n) preprocessing, O(1) per query</span></h4>
+<pre><code class="language-cpp">int arr = {2, 8, 3, 9, 6, 5, 4};
+int n = 7;
+                                // Preprocessing
+int ps[n];   // int[] ps = new int[n]
+ps[0] = arr[0];
+for (int i = 1; i &lt; n; i++)
+    ps[i] = ps[i-1] + arr[i];
+
+int getSum(int l, int r)        // Query in O(1) Time
+{
+    if (l == 0)
+        return ps[r];
+    return ps[r] - ps[l-1];
+}</code></pre>
+<pre><code class="language-plaintext">pSum = [2, 10, 13, 22, 28, 33, 37]
+getSum(0, 2) = pSum[2] = 13
+getSum(1, 3) = pSum[3] - pSum[0] = 22 - 2 = 20
+getSum(2, 6) = pSum[6] - pSum[1] = 37 - 10 = 27</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the array is declared <code>int arr = {…};</code>; it needs brackets, <code>int arr[] = {…};</code>. The last dry run is labelled <code>getSum(6, 2)</code> but computes ps[6] − ps[1], i.e. getSum(2, 6).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-30">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/NzU4OA%3D%3D" target="_blank" rel="noopener">Equilibrium Point</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated and noisy in this video, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <ul>
+      <li>A point is an <strong>equilibrium point</strong> if the sum of the elements before it equals the sum of the elements after it. Return true if the array has one, otherwise false.</li>
+      <li>Corner elements can be equilibrium points: for the leftmost element the left sum is taken as 0, for the rightmost the right sum is 0. In [4, 2, −2], 4 is one (0 on the left, 2 − 2 = 0 on the right).</li>
+    </ul>
+
+    <h3>Naive Solution: O(n²) Time, O(1) Aux Space</h3>
+    <p>For every element compute the left sum (0 to i − 1) and the right sum (i + 1 to n − 1); return true as soon as they match. The outer loop is O(n) (it may stop in the middle) and the inner work is Θ(n). The board code is Java style; for C++ just use <code>bool</code> instead of <code>boolean</code>.</p>
+
+    <h3>Basic Idea for the Efficient Solution</h3>
+    <ol>
+      <li>Compute the prefix sum: ps = [3, 7, 15, 6, 15, 22].</li>
+      <li>Compute the suffix sum (like a prefix sum, filled right to left): ss = [22, 19, 15, 7, 16, 7].</li>
+      <li>For every element (except the corner ones), check if <code>ps[i-1]</code> is the same as <code>ss[i+1]</code>. For the leftmost, check ss[i+1] == 0; for the rightmost, ps[i−1] == 0.</li>
+    </ol>
+    <p>That takes three traversals and auxiliary space for the two arrays.</p>
+
+    <h3>Efficient Solution: Θ(n) Time, O(1) Aux Space</h3>
+    <ul>
+      <li>Two traversals with single variables: first compute the total sum as rs. Then traverse left to right: subtract arr[i] from rs (now the sum after i), compare with ls, then add arr[i] to ls.</li>
+      <li>Θ(n) for the total plus O(n) for the loop (it can return in the middle): Θ(n).</li>
+    </ul>
+
+    <h3>Exercise Problem</h3>
+    <p>Given an array, check if it can be partitioned into three different parts (subarrays) with equal sum. [5, 2, 6, 1, 1, 1, 1, 4] → True (5 + 2, 6 + 1, 1 + 1 + 1 + 4 are all 7). [3, 2, 5, 1, 1, 5] → False. Try a Θ(n) time, Θ(n) space solution first, then O(n) time, O(1) space.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Equilibrium Point</strong>
+      <div class="io">
+        <span>I/P</span><span>arr = [3, 4, 8, -9, 20, 6]</span><span>O/P</span><span>True</span>
+        <span>I/P</span><span>arr = [4, 2, -2]</span><span>O/P</span><span>True</span>
+        <span>I/P</span><span>arr = [4, 2, 2]</span><span>O/P</span><span>False</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">O(n²) Time, O(1) Aux Space</span></h4>
+<pre><code class="language-java">boolean ePoint(int arr[], int n)
+{
+    for (int i = 0; i &lt; n; i++)
+    {
+        int ls = 0, rs = 0;
+        for (int j = 0; j &lt; i; j++)
+            ls += arr[j];
+        for (int k = i+1; k &lt; n; k++)
+            rs += arr[k];
+        if (ls == rs)
+            return true;
+    }
+    return false;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {3, 4, 8, -9, 9, 7}
+i = 0 : ls = 0, rs = 19
+i = 1 : ls = 3, rs = 15
+i = 2 : ls = 7, rs = 7     return true</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution <span class="cx">Θ(n) Time, O(1) Aux Space</span></h4>
+<pre><code class="language-java">boolean ePoint(int arr[], int n)
+{
+    int rs = 0;
+    for (int i = 0; i &lt; n; i++)
+        rs += arr[i];
+    int ls = 0;
+    for (int i = 0; i &lt; n; i++)
+    {
+        rs -= arr[i];
+        if (ls == rs)
+            return true;
+        ls += arr[i];
+    }
+    return false;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {3, 4, 8, -9, 9, 7}
+rs = 22, ls = 0
+i = 0 : ls = 0, rs = 19
+i = 1 : ls = 3, rs = 15
+i = 2 : ls = 7, rs = 7     return true</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Example mismatch:</strong> the first board example uses [3, 4, 8, −9, 20, 6] (3 + 4 + 8 − 9 = 6 on the left of 20, 6 on the right), while the code dry runs use [3, 4, 8, −9, 9, 7], where the equilibrium point is 8 (7 on each side).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-31">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/video/NzU4OQ%3D%3D" target="_blank" rel="noopener">Maximum Appearing Element</a> · <strong>No transcript</strong> on this video. Notes from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Maximum Appearing Element in Ranges (board)</h3>
+    <ul>
+      <li>Given two arrays left[] and right[]: each pair left[i]..right[i] is a range of numbers. Find the number that appears in the most ranges.</li>
+      <li>Constraints on the board: <code>0 ≤ left[i] ≤ right[i] &lt; 100</code> and <code>0 ≤ i &lt; 10<sup>5</sup></code>.</li>
+      <li>left = [1, 2, 5, 15], right = [5, 8, 7, 18]: the ranges are [1…5], [2…8], [5, 6, 7], [15…18], and 5 (circled) is in three of them → 5.</li>
+      <li>left = [1, 2], right = [5, 4]: ranges [1…5] and [2, 3, 4] → 2 (2, 3, 4 all appear twice; the smallest is returned).</li>
+    </ul>
+
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>Given L[] and R[] of size N, where L[i] and R[i] (0 ≤ L[i], R[i] &lt; 10<sup>6</sup>) denote a range, find the maximum occurring integer in all the ranges. If more than one such integer exists, print the smallest one.</li>
+<li>L = {1, 4, 3, 1}, R = {15, 8, 5, 4} → 4. L = {1, 5, 9, 13, 21}, R = {15, 8, 12, 20, 24} → 5 (5 to 15 all appear twice; the smallest is 5).</li>
+<li><strong>Naive:</strong> for every range, increment the frequency of every item in a hash table (array); the item with the highest frequency is the answer. Time O(N·M), where M is the maximum number of elements in any range; Auxiliary Space O(M).</li>
+<li><strong>Efficient:</strong> the difference array technique. Mark the beginning of every range with <code>arr[L[i]]++</code> and the end with <code>arr[R[i]+1]--</code>. In the prefix sum, the +1 at the beginning carries to every later value, and the −1 at R[i] + 1 stops it after the range ends. Time O(N + MAX), Auxiliary space O(MAX).</li>
+</ul></div>
+
+    <h3>Naive Solution (board)</h3>
+    <p>For every range, add 1 to <code>freq[j]</code> for each j from left[i] to right[i], then return the index of the maximum frequency. <strong>Time: O(n * MAX), where MAX = 100.</strong></p>
+
+    <h3>Idea for the Efficient Solution (board)</h3>
+    <ol>
+      <li>Traverse through all ranges and mark the beginning and ending in freq[]: <code>freq[left[i]]++</code>, <code>freq[right[i]+1]--</code>.</li>
+      <li>Do prefix sum in freq[].</li>
+      <li>Return the index of the maximum.</li>
+    </ol>
+    <p>The board writes <strong>n + MAX</strong> for the time of this approach.</p>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/MTAwNTM%3D" target="_blank" rel="noopener">Maximum Appearing Element</a></p>
+<ul>
+<li>The article repeats the video description above (problem, examples, naive and difference-array approaches, complexities) and adds an illustration.</li>
+<li>L[] = {1, 2, 3}, R[] = {3, 5, 7}: after arr[L[i]]++ → {0, 1, 1, 1, 0, 0, 0, 0, …}; after arr[R[i]+1]−− → {0, 1, 1, 1, −1, 0, −1, 0, −1, …}; after the prefix sum → {0, 1, 2, 3, 2, 2, 1, 1, 0, …}. The +1 at a range's start carries forward, and the −1 after its end stops it, so only the values inside each range get their frequency increased by one.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Maximum Appearing Element in Ranges</strong>
+      <div class="io">
+        <span>I/P</span><span>left = [1, 2, 5, 15], right = [5, 8, 7, 18]</span><span>O/P</span><span>5</span>
+        <span>I/P</span><span>left = [1, 2], right = [5, 4]</span><span>O/P</span><span>2</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">O(n * MAX)</span></h4>
+<pre><code class="language-cpp">int maxAppear(int left[], int right[], int n)
+{
+    int freq[100] = {0};
+    for (int i = 0; i &lt; n; i++)
+        for (int j = left[i]; j &lt;= right[i]; i++)
+            freq[j] += 1;
+    int res = 0;
+    for (int i = 1; i &lt; 100; i++)
+        if (freq[i] > freq[res])
+            res = i;
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">left[] = {1, 2, 4}
+right[] = {4, 5, 7}
+freq[] = {0, 0, ... 0}
+After Processing All Ranges:
+freq[] = {0, 1, 2, 2, 3, 2, 1, 1, 0 ...}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution <span class="cx">O(n + MAX)</span></h4>
+<pre><code class="language-cpp">int maxAppear(int left[], int right[], int n)
+{
+    int freq[101] = {0};
+    for (int i = 0; i &lt; n; i++)
+    {
+        freq[left[i]]++;
+        freq[right[i]+1]--;
+    }
+    int res = 0;
+    for (int i = 1; i &lt; 100; i++)
+    {
+        freq[i] = freq[i-1] + freq[i];
+        if (freq[i] > freq[res])
+            res = i;
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">left[] = {1, 2, 4}, right[] = {4, 5, 7}
+freq[] = {0, 0, 0, ... 0}
+i = 0 : freq[] = {0, 1, 0, 0, 0, -1, 0, 0, 0, 0, ... 0}
+i = 1 : freq[] = {0, 1, 1, 0, 0, -1, -1, 0, 0, 0, ... 0}
+i = 2 : freq[] = {0, 1, 1, 0, 1, -1, -1, 0, -1, 0, ... 0}     (After First loop)
+Do Prefix Sum in freq[]:
+freq[] = {0, 1, 2, 2, 3, 2, 1, 1, 0, 0, ... 0}                (After Second loop)
+res = 4</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the naive inner loop is written <code>for (int j = left[i]; j &lt;= right[i]; i++)</code>; it should increment <code>j++</code>, otherwise it never ends.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Arrays-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (27 problems, in course order), plus the one Articles-tab item that doesn't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/array-insert-at-end" target="_blank" rel="noopener">Array End Insert</a></td><td>Basic</td><td>Video 5</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/array-insert-at-index" target="_blank" rel="noopener">Array Insert at Index</a></td><td>Basic</td><td>Video 5</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/maximum-index-1587115620" target="_blank" rel="noopener">Maximum Index</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/max-and-second-max" target="_blank" rel="noopener">Second Largest</a></td><td>Easy</td><td>Video 8</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/mean-and-median-1587115620" target="_blank" rel="noopener">Mean And Median of Array</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/check-if-array-is-sorted-and-rotated-clockwise-1587115620" target="_blank" rel="noopener">Type of array</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/reverse-array-in-groups0255" target="_blank" rel="noopener">Reverse Array in Groups</a></td><td>Basic</td><td>Video 10</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/rearrange-an-array-with-o1-extra-space3142" target="_blank" rel="noopener">Transform Array In-Place</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/rotate-array-by-n-elements-1587115621" target="_blank" rel="noopener">Rotate Array</a></td><td>Medium</td><td>Video 14</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/leaders-in-an-array-1587115620" target="_blank" rel="noopener">Array Leaders</a></td><td>Easy</td><td>Video 15</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/-rearrange-array-alternately-1587115620" target="_blank" rel="noopener">Rearrange Array Alternately</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/smallest-positive-missing-number-1587115621" target="_blank" rel="noopener">Smallest Positive Missing</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>13</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/frequency-of-array-elements-1587115620" target="_blank" rel="noopener">Frequencies in a Limited Array</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>14</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/stock-buy-and-sell-1587115621" target="_blank" rel="noopener">Stock Buy and Sell</a></td><td>Medium</td><td>Videos 18–19</td></tr>
+        <tr><td>15</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/trapping-rain-water-1587115621" target="_blank" rel="noopener">Trapping Rain Water</a></td><td>Hard</td><td>Video 20</td></tr>
+        <tr><td>16</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/kadanes-algorithm-1587115620" target="_blank" rel="noopener">Kadane's Algorithm</a></td><td>Medium</td><td>Video 22</td></tr>
+        <tr><td>17</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/max-circular-subarray-sum-1587115620" target="_blank" rel="noopener">Max Circular Subarray Sum</a></td><td>Hard</td><td>Video 24</td></tr>
+        <tr><td>18</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/minimum-absloute-difference-between-adjacent-elements-in-a-circular-array-1587115620" target="_blank" rel="noopener">Minimum Adjacent Difference in Circular Array</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>19</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/wave-array-1587115621" target="_blank" rel="noopener">Wave Array</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>20</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/maximum-occured-integer4602" target="_blank" rel="noopener">Max Occured in n Ranges</a></td><td>Medium</td><td>Video 31</td></tr>
+        <tr><td>21</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/who-has-the-majority" target="_blank" rel="noopener">Most Frequent of Two</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>22</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/fraction-trouble3803" target="_blank" rel="noopener">Closest Smaller Fraction</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>23</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/print-pattern3549" target="_blank" rel="noopener">Decreasing Increasing Pattern</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>24</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/longest-subarray-of-evens-and-odds" target="_blank" rel="noopener">Longest Subarray of Evens and Odds</a></td><td>Medium</td><td>Video 23</td></tr>
+        <tr><td>25</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/betting-game0634" target="_blank" rel="noopener">Betting game</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>26</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/equilibrium-point-1587115620" target="_blank" rel="noopener">Equilibrium Point</a></td><td>Easy</td><td>Video 30</td></tr>
+        <tr><td>27</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/problem/strongest-neighbour" target="_blank" rel="noopener">Strongest Neighbour</a></td><td>Basic</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Arrays/article/MjYwMA%3D%3D" target="_blank" rel="noopener">Sample Problems on Array</a></p>
+<ul>
+<li><strong>Range sum queries using prefix sum:</strong> with many queries (l, r), iterating for each is inefficient. Store the sum up to each index in a prefix sum array and answer each query in constant time. Time Max(O(n), O(q)), Auxiliary Space O(n).</li>
+<li><strong>Equilibrium index:</strong> find the first index from the left whose lower-index sum equals its higher-index sum. Naive: compute leftsum and rightsum for each i, O(n²), O(1). Tricky: get the total sum, keep a left sum from 0 and get the right sum by subtracting elements one by one, O(n), O(1).</li>
+<li><strong>Largest sum subarray:</strong> look for all positive contiguous segments (<code>max_ending_here</code>) and keep the best (<code>max_so_far</code>), updating it whenever a positive sum is greater. O(n), O(1).</li>
+<li><strong>Merge two sorted arrays</strong> arr1[] (size m) and arr2[] (size n) into arr3[] (size m + n): traverse both together, copy the smaller current element and advance in that array; when one ends, copy the rest of the other. O(m + n) time, O(m + n) space.</li>
+</ul>
+    </div>
+    <div class="added"><p>"Covered in" points to the video whose idea the problem uses.</p></div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -5673,7 +8334,40 @@ const TRACKS = [
       ["Generate Subsets", "8:21"], ["Tower of Hanoi", "19:20"], ["Josephus Problem", "22:36"],
       ["Subset Sum Problem (Recursive Solution) (Medium)", "10:53"], ["Printing all Permutations", "11:10"]
     ] },
-  { id: "DSASP-Arrays", slug: "arrays", name: "Arrays", counts: [31, 27, 27, 5, 1] },
+  { id: "DSASP-Arrays", slug: "arrays", name: "Arrays", counts: [31, 27, 27, 5, 1],
+    videos: [
+      ["Introduction to Arrays", "6:03"],
+      ["Array Types", "6:10"],
+      ["Vector in C++", "7:11"],
+      ["ArrayList in Java", "4:59"],
+      ["Operations on Arrays (Part 1)", "11:21"],
+      ["Operations on Arrays (Part 2)", "5:51"],
+      ["Largest Element in an Array", "9:44"],
+      ["Second Largest Element in Array", "12:42"],
+      ["Check if an Array is Sorted", "7:30"],
+      ["Reverse an Array", "5:14"],
+      ["Remove duplicates from a sorted array", "8:57"],
+      ["Move Zeros to End", "7:56"],
+      ["Left Rotate an Array by One", "2:50"],
+      ["Left Rotate an Array by D places", "9:49"],
+      ["Leaders in an Array problem", "9:52"],
+      ["Maximum Difference Problem with Order", "8:04"],
+      ["Frequencies in a Sorted Array", "6:59"],
+      ["Stock Buy and Sell Problem (Part 1)", "6:57"],
+      ["Stock Buy and Sell problem (Part 2)", "4:43"],
+      ["Trapping Raining Water", "23:20"],
+      ["Maximum consecutive 1s", "4:58"],
+      ["Maximum subarray sum", "11:18"],
+      ["Longest Even Odd Subarray", "8:28"],
+      ["Maximum Circular Sum Subarray", "18:31"],
+      ["Majority Element", "13:43"],
+      ["Minimum Consecutive Flips", "14:42"],
+      ["Sliding Window Technique", "8:20"],
+      ["Subarray with Given Sum", "9:01"],
+      ["Prefix Sum", "9:35"],
+      ["Equilibrium Point", "8:20"],
+      ["Maximum Appearing Element", "10:09"]
+    ] },
   { id: "DSASP-Searching", slug: "searching", name: "Searching", counts: [18, 13, 18, 10, 1] },
   { id: "DSASP-Sorting", slug: "sorting", name: "Sorting", counts: [39, 29, 20, 10, 0] },
   { id: "DSASP-Matrix", slug: "matrix", name: "Matrix", counts: [12, 11, 15, 5, 0] },

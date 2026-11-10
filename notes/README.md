@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-09)
 
-**Notes written: 4 of 24 tracks · 56 of 470 videos · 42 of 342 articles · 35 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 5 of 24 tracks · 87 of 470 videos · 69 of 342 articles · 62 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -79,8 +79,8 @@ Report back with:
 | 2 | Mathematics | 12 | 13 | 11 | ✅ Done: 12/12 videos, 13/13 articles, 11 problems |
 | 3 | Bit Magic | 12 | 11 | 12 | ✅ Done: 12/12 videos, 11/11 articles, 12 problems |
 | 4 | Recursion | 17 | 12 | 12 | ✅ Done: 17/17 videos, 12/12 articles, 12 problems |
-| 5 | Arrays | 31 | 27 | 27 | ⏭ Next |
-| 6 | Searching | 18 | 13 | 18 | Not started |
+| 5 | Arrays | 31 | 27 | 27 | ✅ Done: 31/31 videos, 27/27 articles, 27 problems |
+| 6 | Searching | 18 | 13 | 18 | ⏭ Next |
 | 7 | Sorting | 39 | 29 | 20 | Not started |
 | 8 | Matrix | 12 | 11 | 15 | Not started |
 | 9 | Hashing | 29 | 23 | 22 | Not started |
@@ -186,6 +186,44 @@ The two "Maximum AND value" articles match no video, so they're in the Track pra
 
 Course progress was unchanged (9/17 videos watched, 57%, 0/12 articles read). All resume positions were 0:00 and were restored.
 
+### Track 5: Arrays, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Introduction to Arrays | 6:03 | Transcript + board | Introduction to Arrays |
+| 2 | Array Types | 6:10 | Transcript + board |  |
+| 3 | Vector in C++ | 7:11 | Transcript + board | Implementing Arrays in C++ using STL; Iterators in C++ STL |
+| 4 | ArrayList in Java | 4:59 | Transcript + board | Implementing Arrays in Java |
+| 5 | Operations on Arrays (Part 1) | 11:21 | Transcript + board | Operations on Arrays |
+| 6 | Operations on Arrays (Part 2) | 5:51 | Transcript + board | Insertion and Deletion in Arrays |
+| 7 | Largest Element in an Array | 9:44 | Transcript + board | Largest Element in an Array |
+| 8 | Second Largest Element in Array | 12:42 | Transcript + board | Second Largest Element in Array |
+| 9 | Check if an Array is Sorted | 7:30 | Transcript + board | Check if an Array is Sorted |
+| 10 | Reverse an Array | 5:14 | Transcript + board | Reverse an Array |
+| 11 | Remove duplicates from a sorted array | 8:57 | Transcript + board | Remove duplicates from a sorted array |
+| 12 | Move Zeros to End | 7:56 | Transcript + board | Move Zeros to End |
+| 13 | Left Rotate an Array by One | 2:50 | Transcript + board |  |
+| 14 | Left Rotate an Array by D places | 9:49 | Transcript + board | Left Rotate an Array by D places |
+| 15 | Leaders in an Array problem | 9:52 | Transcript + board | Leaders in an Array problem |
+| 16 | Maximum Difference Problem with Order | 8:04 | Transcript + board | Maximum Difference Problem with Order |
+| 17 | Frequencies in a Sorted Array | 6:59 | Transcript + board | Frequencies in a Sorted Array |
+| 18 | Stock Buy and Sell Problem (Part 1) | 6:57 | Transcript + board |  |
+| 19 | Stock Buy and Sell problem (Part 2) | 4:43 | Transcript + board | Stock Buy and Sell Problem |
+| 20 | Trapping Raining Water | 23:20 | Transcript to 2:10 + board | Trapping Rain Water |
+| 21 | Maximum consecutive 1s | 4:58 | Transcript + board |  |
+| 22 | Maximum subarray sum | 11:18 | Board + description | Maximum Subarray Sum |
+| 23 | Longest Even Odd Subarray | 8:28 | Transcript + board | Longest Even Odd Subarray |
+| 24 | Maximum Circular Sum Subarray | 18:31 | Transcript + board | Maximum Circular Sum Subarray |
+| 25 | Majority Element | 13:43 | Transcript + board | Majority Element |
+| 26 | Minimum Consecutive Flips | 14:42 | Transcript + board | Minimum Consecutive Flips |
+| 27 | Sliding Window Technique | 8:20 | Transcript + board | Sliding Window Technique |
+| 28 | Subarray with Given Sum | 9:01 | Transcript + board |  |
+| 29 | Prefix Sum | 9:35 | Transcript + board | Prefix Sum Technique |
+| 30 | Equilibrium Point | 8:20 | Transcript + board |  |
+| 31 | Maximum Appearing Element | 10:09 | Board + description | Maximum Appearing Element |
+
+The "Sample Problems on Array" article matches no single video, so it's in the Track practice set with the 27 problems (the Problems tab shows a level for each, so the table lists it). V20's course transcript stops at 2:10 of 23:20 and its description is empty, so the rest was done from 5 s frames; V22 and V31 have no Transcript button and were done from 5 s frames and the description. From V21 on, each transcript grab also checks the last timestamp, to catch a cut-off transcript like V20's. Course progress was unchanged (20/31 videos watched, 52%, no article marked as read). All resume positions were 0:00 and were restored.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -201,10 +239,11 @@ Course progress was unchanged (9/17 videos watched, 57%, 0/12 articles read). Al
 - `4e205f8`: Notes: add progress log
 - `bffb328`: Add DSA revision notes: Mathematics track (12 videos, 13 articles, 11 problems)
 - `002a7e3`: Add DSA revision notes: Bit Magic track (12 videos, 11 articles, 12 problems)
-- (this commit): Add Recursion track notes (17 videos, 12 articles, 12 problems)
+- `e864134`: Add Recursion track notes (17 videos, 12 articles, 12 problems)
+- (this commit): Add Arrays track notes (31 videos, 27 articles, 27 problems)
 
 ### What's next
-- **Track 5: Arrays** (31 videos, 27 articles, 27 problems), starting straight away.
+- **Track 6: Searching** (18 videos, 13 articles, 18 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -219,6 +258,8 @@ Course progress was unchanged (9/17 videos watched, 57%, 0/12 articles read). Al
   - Switched to the faster method (10 s frames for videos with a transcript, page-text article reading).
   - Completed track 3 (Bit Magic): 12 videos, 11 articles, 12 problems. Commit after each track and continue without waiting.
   - Completed track 4 (Recursion): 17 videos, 12 articles, 12 problems.
+- **2026-11-10:**
+  - Completed track 5 (Arrays): 31 videos, 27 articles, 27 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -235,6 +276,21 @@ Course progress was unchanged (9/17 videos watched, 57%, 0/12 articles read). Al
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Arrays: teacher slips flagged
+- V9: the transcript calls "5, 20, 100, 80" sorted, then walks it as 5, 20, 80, 100.
+- V11: "if it is same as the last copied element, we … copy". The board copies only when it differs (`!=`).
+- V12 (board): the naive inner loop has no `break` after the swap, though the teacher describes swapping with the first non-zero only. The Java line is written `arr.length()`.
+- V14 (board): the naive `leftRotate(arr, n, d)` calls `leftRotate(arr, n)` instead of `leftRotateOne`. Spoken: "n is 5 and D is 3" (d is 2). "Subtract n from d" only covers n < d < 2n.
+- V18: "keeping the profit as 30"; the profit kept is 13.
+- V21: the C++ efficient code declares only `res`. The Java takes `boolean arr[]` but compares with `== 1`.
+- V22 (no transcript): the efficient `maxSum(int arr[], int sum)` loops on `n`.
+- V23 (board): `arr[i-1] == 0` should be `arr[i-1] % 2 == 0`.
+- V24 (board): the last example is written {−5, −3}; its working uses {−8, −3}.
+- V29 (board): `int arr = {…};` needs `[]`; the dry run "getSum(6, 2)" computes getSum(2, 6).
+- V30: the first example array differs from the dry-run array (flagged as an example mismatch).
+- V31 (no transcript, board): the naive inner loop increments `i++` instead of `j++`.
+- Board notation: `&&` is handwritten like "$$" (V17, V23).
 
 ### Bit Magic: teacher slips flagged
 - V6 ~6:37 and 7:41: says Python has `unsigned` ints, alongside C/C++. Python has no unsigned type.
