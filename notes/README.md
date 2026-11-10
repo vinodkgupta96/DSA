@@ -69,9 +69,9 @@ Report back with:
 - Author and committer: **Vinod Kumar <vinodkgupta.1996@gmail.com>**, set per commit with `git -c user.name=... -c user.email=...` (global git config is never changed)
 - **No** `Co-Authored-By` or other Claude trailer lines in commit messages
 
-## 7. Progress (as of 2026-11-09)
+## 7. Progress (as of 2026-11-10)
 
-**Notes written: 8 of 24 tracks · 156 of 470 videos · 122 of 342 articles · 115 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 9 of 24 tracks · 185 of 470 videos · 145 of 342 articles · 137 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -83,8 +83,8 @@ Report back with:
 | 6 | Searching | 18 | 13 | 18 | ✅ Done: 18/18 videos, 13/13 articles, 18 problems |
 | 7 | Sorting | 39 | 29 | 20 | ✅ Done: 39/39 videos, 29/29 articles, 20 problems |
 | 8 | Matrix | 12 | 11 | 15 | ✅ Done: 12/12 videos, 11/11 articles, 15 problems |
-| 9 | Hashing | 29 | 23 | 22 | ⏭ Next |
-| 10 | Strings | 19 | 12 | 26 | Not started |
+| 9 | Hashing | 29 | 23 | 22 | ✅ Done: 29/29 videos, 23/23 articles, 22 problems |
+| 10 | Strings | 19 | 12 | 26 | ⏭ Next |
 | 11 | Linked List | 54 | 40 | 25 | Not started |
 | 12 | Stack | 27 | 19 | 17 | Not started |
 | 13 | Queue | 9 | 5 | 9 | Not started |
@@ -314,6 +314,42 @@ Every Sorting article matches a video, so the Track practice set lists only the 
 
 "Matrix Operations (Addition, Subtraction, Multiplication)", "Sample Problems on Matrix" and "Determinant of a Matrix | Explanation" match no video, so they're in the Track practice set with the 15 problems. V11 and V12 have no Transcript button and were done from frames and the description; no transcript was cut off early. V6's transcript is heavily garbled, so its notes follow the board. The track page shows 0% and no watched count; it was unchanged, no article was marked as read, and all resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 12 Matrix videos.
 
+### Track 9: Hashing, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Introduction to Hashing | 6:47 | Transcript + board | Introduction to Hashing |
+| 2 | Hashing Application | 5:13 | Transcript + board | Hashing Application |
+| 3 | Direct Address Table | 7:37 | Transcript + board | Direct Address Table |
+| 4 | Hashing Functions | 15:36 | Transcript + board | Hashing Functions |
+| 5 | Collision Handling | 4:15 | Transcript + board | Collision Handling |
+| 6 | Chaining | 12:30 | Transcript + board |  |
+| 7 | Implementation of Chaining | 7:18 | Board + description | Implementation of Chaining |
+| 8 | Open Addressing | 22:23 | Transcript + board | Open Addressing |
+| 9 | Double Hashing | 17:18 | Transcript + board | Double Hashing |
+| 10 | Implementation of Open Addressing | 16:28 | Transcript + board | Implementation of Open Addressing |
+| 11 | Chaining vs Open Addressing | 6:09 | Transcript + board | Chaining vs Open Addressing |
+| 12 | Unordered_set in C++ STL | 11:37 | Board + description | unordered_set in C++ STL |
+| 13 | Unordered_map in C++ STL | 14:16 | Board + description | unordered_map in C++ STL |
+| 14 | HashSet in Java | 7:15 | Transcript + board | HashSet in Java |
+| 15 | HashMap in Java | 7:19 | Transcript + board | HashMap in Java |
+| 16 | Count Distinct Elements | 7:13 | Board + description | Count Distinct Elements |
+| 17 | Frequencies of array elements | 11:18 | Transcript + board | Frequencies of array elements |
+| 18 | Intersection of two unsorted arrays | 8:22 | Transcript + board |  |
+| 19 | Union of two unsorted arrays | 8:23 | Transcript + board |  |
+| 20 | Pair with given sum in unsorted array | 7:52 | Transcript + board |  |
+| 21 | Subarray with zero sum | 9:12 | Board + description | Subarray with Zero Sum |
+| 22 | Subarray with given Sum | 9:26 | Transcript + board | Subarray with given Sum |
+| 23 | Longest subarray with given sum | 16:42 | Transcript + board |  |
+| 24 | Longest subarray with equal number of 0's and 1's | 6:51 | Transcript + board | Longest Subarray with equal number of 0s and 1s |
+| 25 | Longest common span with same sum in binary arrays | 7:56 | Transcript + board |  |
+| 26 | Longest Consecutive Subsequence | 16:00 | Transcript + board | Longest Consecutive Subsequence |
+| 27 | Count Distinct Elements In Every Window | 10:57 | Transcript + board | Count Distinct Elements In Every Window |
+| 28 | More than n/k Occurences | 8:43 | Board + description |  |
+| 29 | More than n/k Occurences (O(nk) solution) | 10:59 | Board + description |  |
+
+"Hashing in C++ using STL" and "Implementing Hashing in Java" match no video, so they're in the Track practice set with the 22 problems. V7, V12, V13, V16, V21, V28 and V29 have no Transcript button and were done from frames and the description (V29's description is only the title and code links); no transcript was cut off early. Course progress was unchanged (6/29 videos watched, 15%, 0/23 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 29 Hashing videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -333,10 +369,11 @@ Every Sorting article matches a video, so the Track practice set lists only the 
 - `f9e9cf3`: Add Arrays track notes (31 videos, 27 articles, 27 problems)
 - `10fb46a`: Add Searching track notes (18 videos, 13 articles, 18 problems)
 - `c40a4e7`: Add Sorting track notes (39 videos, 29 articles, 20 problems)
-- (this commit): Add Matrix track notes (12 videos, 11 articles, 15 problems)
+- `671776d`: Add Matrix track notes (12 videos, 11 articles, 15 problems)
+- (this commit): Add Hashing track notes (29 videos, 23 articles, 22 problems)
 
 ### What's next
-- **Track 9: Hashing** (29 videos, 23 articles, 22 problems), starting straight away.
+- **Track 10: Strings** (19 videos, 12 articles, 26 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -356,6 +393,8 @@ Every Sorting article matches a video, so the Track practice set lists only the 
   - Completed track 6 (Searching): 18 videos, 13 articles, 18 problems.
   - Completed track 7 (Sorting): 39 videos, 29 articles, 20 problems.
   - Completed track 8 (Matrix): 12 videos, 11 articles, 15 problems.
+  - Pushed the branch to origin up to `671776d` (user's OK).
+  - Completed track 9 (Hashing): 29 videos, 23 articles, 22 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -372,6 +411,20 @@ Every Sorting article matches a video, so the Track practice set lists only the 
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Hashing: teacher slips flagged
+- V7 (board, no transcript): the Java `remove` casts the slot index, `remove((Integer)i)`; to remove the key it would be `(Integer)key`.
+- V9: the board's insert ends `table[probe] = m;`; the teacher says key. The transcript says an empty slot in search means "return true"; it means not present. At the analysis it says "Universal hashing" for double hashing.
+- V10 (board): neither constructor allocates `arr` before filling it with −1; `&&` is drawn as "$$". The transcript says search "returns this index"; the function returns true.
+- V12 (board, no transcript): the complexity row reads cbegin(), cend() at first and looks like rbegin(), rend() later.
+- V16 (board, no transcript): the C++ efficient version has no semicolon after `s.insert(arr[i])`.
+- V17 (board): both efficient `countFreq` versions are declared `int` but only print.
+- V18 (board): the Java version calls `s.insert(b[i])`; HashSet's method is `add`.
+- V22 (board): the C++ version declares `unordered_sum<int> h;` for unordered_set.
+- V23 (board): C++ `res == i+1;` for `res = i+1;`; Java declares `Map<Integer, Integer> = new HashMap<>();` without the name m, loops to `n` (not a parameter) and calls `m.contains` for `containsKey`.
+- V26 (board): Java `new Hashet<>()` and `while(s.contains(x+curr))` on s, though the set is h.
+- V28 (board, no transcript): the naive inner loop has `arr[i] = arr[i-1]` (assignment) with "$$"; the C++ efficient line `m[arr[i]]++` has no semicolon; Java loops over `m` instead of `m.entrySet()`, and `n` isn't a parameter.
+- Videos without a transcript (7, 12, 13, 16, 21, 28, 29): spoken slips couldn't be checked.
 
 ### Matrix: teacher slips flagged
 - V2 (board): the array-of-vectors `main` calls `print(arr)` without m; the vector-of-vectors print writes `arr[i].size` without brackets; `&` is drawn like "$".

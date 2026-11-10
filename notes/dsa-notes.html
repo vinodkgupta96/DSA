@@ -14234,6 +14234,2260 @@ min = 11, max = 11</code></pre>
   </section>
 </template>
 
+<template id="DSASP-Hashing-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAwMg%3D%3D" target="_blank" rel="noopener">Introduction to Hashing</a> · Notes from the full course transcript and the board (a frame every 10 seconds). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Hashing
+  Search ┐
+  Insert ├──→ O(1) on average
+  Delete ┘
+Not Useful for:
+  ├─→ Finding closest values ┐  AVL Tree
+  ├─→ Sorted Data            ┘  or Red Black Tree
+  └─→ Prefix Searching       ]─ Trie</code></pre>
+    <ul>
+      <li>Hashing is mainly used to implement <strong>dictionaries</strong> (key–value pairs) and <strong>sets</strong> (only keys). It gives search, insert and delete in O(1) time on average.</li>
+      <li>Example: keys are people's phone numbers. Search quickly finds a person's details from the number; insert adds a number as key with the person's details as value. Keys are unique (no duplicates): inserting an existing key overrides the previous value. Delete removes the key and its value.</li>
+      <li>Hashing beats every other known data structure when you need these three operations, or a subset of them (e.g. only search).</li>
+    </ul>
+
+    <h3>Compared with other data structures</h3>
+    <ul>
+      <li><strong>Array, unsorted:</strong> insert and delete O(1) on average, but search O(n).</li>
+      <li><strong>Array, sorted:</strong> search O(log n), but insert and delete O(n), since items must be moved when inserting in the middle. With arrays, at least one operation is always O(n).</li>
+      <li><strong>Self-balancing BSTs</strong> (AVL tree, red-black tree; covered in later tracks): O(log n) for search, insert and delete. O(1) takes much less time than log n when n is really high.</li>
+    </ul>
+
+    <h3>Where hashing is not used</h3>
+    <ol>
+      <li><strong>Finding closest values:</strong> an AVL or red-black tree finds the key just smaller or just greater than a key that isn't present in O(log n). Hashing does strict search (present or not): only that is O(1); the closest value, or all values in a given range, takes O(n).</li>
+      <li><strong>Sorted data:</strong> hashing doesn't keep keys in sorted order, so printing them in sorted order (sorted traversal) isn't easy. Use a self-balancing BST for these first two.</li>
+      <li><strong>Prefix searching</strong> (all keys matching a prefix): hashing does exact key search only. For strings, the <strong>Trie</strong> is an alternate dictionary implementation that also gives quick prefix search.</li>
+    </ol>
+    <p>The next video covers applications of hashing.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NzYwNg%3D%3D" target="_blank" rel="noopener">Introduction to Hashing</a></p>
+<ul>
+<li>Example system: employee records keyed by phone numbers, with insert, search and delete. An array or linked list needs linear search; a sorted array gives O(log n) search but costly insert and delete; a balanced BST guarantees O(log n) for all three.</li>
+<li>A direct access table (a big array indexed by phone number, NIL if absent, else a pointer to the record) gives O(1) for everything, but needs O(m · 10<sup>n</sup>) space for n-digit numbers (m = pointer size), and an integer may not even store n digits.</li>
+<li>Hashing improves on the direct access table: O(1) search on average (under reasonable assumptions), O(n) in the worst case. A <strong>hash function</strong> maps a big number or string to a small integer used as an index in the <strong>hash table</strong>.</li>
+<li>A good hash function is efficiently computable and distributes keys uniformly. For phone numbers, the first three digits make a bad hash function; the last three are better, though maybe not the best.</li>
+<li><strong>Hash table:</strong> an array of pointers to records; an entry is NIL if no key hashes to that index.</li>
+<li><strong>Collision:</strong> a newly inserted key maps to an already occupied slot. <strong>Chaining</strong> makes each cell point to a linked list of records with the same hash value (simple, but needs memory outside the table). <strong>Open addressing</strong> stores all elements in the table itself, each entry a record or NIL; a search examines slots one by one until the element is found or is clearly absent.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAwMw%3D%3D" target="_blank" rel="noopener">Hashing Application</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Hash table is a data structure; hashing is a technique. After the array, the teacher calls it the second most used data structure, used in all fields of computer science and to solve many algorithmic problems efficiently. The board lists only a few applications:</p>
+    <ol>
+      <li><strong>Dictionaries:</strong> store the set of valid words; check whether a given word (or its variations) is valid with a constant-time lookup.</li>
+      <li><strong>Database Indexing:</strong> primary and secondary indexes are built with either B or B+ trees, or with hashing. Most databases use one of these two.</li>
+      <li><strong>Cryptography:</strong> a decent website never stores your password in plain text. It stores a hash of it; at the next login the hash is computed again and compared with the stored hash.</li>
+      <li><strong>Caches:</strong> e.g. a browser cache, where the URL is the key and the local data for that URL is the value.</li>
+      <li><strong>Symbol Tables in Compilers/Interpreters:</strong> variables are looked up quickly (are they valid, what are their addresses) in symbol tables, which are hash tables.</li>
+      <li><strong>Routers:</strong> a home router connected to many local devices and the Internet typically uses hashing to find the MAC address (the device) for an IP address. Subnetting is a more complex, router-specific problem.</li>
+      <li><strong>Getting data from databases:</strong> libraries return table rows as associative arrays, with columns as keys. An associative array (strings, or anything, as an index) is hashing.</li>
+    </ol>
+    <p>This is not the complete list: hashing is everywhere in software and programming.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NjI0Mw%3D%3D" target="_blank" rel="noopener">Hashing Application</a></p>
+<ul>
+<li>Constant average-time search, insert and delete make hashing one of the most used data structures: e.g. distinct elements, counting frequencies, finding duplicates.</li>
+<li>Applications listed: database indexing; password storage (store the hashed result, not plain text); data compression (e.g. Huffman coding); search structures (hash tables, bloom filters); cryptography (digital signatures, MACs, key derivation functions); load balancing (consistent hashing); blockchain (proof of work); image processing (perceptual hashing to detect duplicates and modifications); file comparison (MD5, SHA-1 to verify integrity); fraud detection (intrusion detection, antivirus).</li>
+<li>Also: message digests, password verification, hash tables in programming languages, compiler symbol tables, the Rabin-Karp pattern search, and caches.</li>
+<li>Advantages listed: efficiency (O(1) average lookups), dynamic (easily resized), secure (hard to reverse), simple, scalable, uniqueness (the article says different inputs give different hash values), verification (a small input change gives a different hash), space-efficient, error detection, speed.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAwNA%3D%3D" target="_blank" rel="noopener">Direct Address Table</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The whole idea of hashing is based on the simple concept of a direct address table.</p>
+<pre><code class="language-plaintext">Direct Address Table
+Imagine a situation where you have 1000 keys with values
+from (0 to 999), how would you implement following in O(1) time
+  1) Search   2) Insert   3) Delete
+
+Example Operations      O/P
+  insert(10)
+  insert(20)
+  insert(119)
+  search(10)            True
+  search(20)            True
+  delete(119)
+  search(119)           False</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NjI0NA%3D%3D" target="_blank" rel="noopener">Direct Address Table</a></p>
+<ul>
+<li>A direct address table maps records to their keys using an array, with the key values used directly as indexes: create an array of size maximum value + 1 (0-based) and use the values as indexes (key 21 goes at index 21).</li>
+<li><strong>Advantages:</strong> search, insertion and deletion in O(1) time, since arrays are random access.</li>
+<li><strong>Limitations:</strong> the maximum key value must be known in advance; it's practically useful only if that maximum is very small; and it wastes memory when the number of records is much smaller than the maximum value. Hashing overcomes these.</li>
+<li>Collisions can be handled as in hashing, with chaining or open addressing; the only difference is that values are used directly as indexes, without a hash function.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Boolean array of size 1000</h4>
+      <p>No hashing needed: create a boolean array <code>table</code> of size 1000 (indexes 0 to 999), all values 0. Insert sets the key's index to 1, delete sets it back to 0, and search returns the value at that index. Arrays have random access, so all three are O(1), even in the worst case.</p>
+<pre><code class="language-plaintext">      ┌─┬─┬───┬─┬─────┬─┬─────┬─┐
+table │0│0│ … │1│  …  │1│  …  │0│ …
+      └─┴─┴───┴─┴─────┴─┴─────┴─┘
+       0 1     10      20     119   999
+
+insert(i)            delete(i)            search(i)
+{                    {                    {
+  table[i] = 1;        table[i] = 0;        return table[i];
+}                    }                    }</code></pre>
+      <p><strong>Small range not starting at 0</strong> (board: 1000 – 1999): subtract 1000 from every key, e.g. <code>table[i - 1000] = 1</code>; inserting 1010 is then the same as inserting 10. Another example is ASCII values: lowercase letters fit an array of size 26 by subtracting the ASCII value of 'a' (97).</p>
+    </div>
+    <h3>Problems with the direct address table</h3>
+    <ul>
+      <li><strong>Large keys:</strong> phone numbers are 10-digit numbers, so used as indexes the array would need size 10<sup>10</sup>.</li>
+      <li><strong>Floating point numbers</strong> (e.g. 10.137) can't be array indexes.</li>
+      <li><strong>Strings or addresses</strong> (e.g. "geeksforgeeks"), or any mix of digits and characters, can't be used as an index either.</li>
+    </ul>
+    <p>That is where the idea of hashing comes in, in the next video.</p>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAwNQ%3D%3D" target="_blank" rel="noopener">Hashing Functions</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The direct address table works only for small key values. It fails for a large universe of keys (phone numbers would need an array of size 10<sup>10</sup>), floating point numbers (a cost like 20.5) and strings or addresses.</p>
+<pre><code class="language-plaintext">Hashing Introduction
+ ╭──────────╮                        0 ┌───┐
+ │ Universe │   ┌───────────────┐    1 ├───┤
+ │    of    │──→│ Hash Function │──→   │ ⋮ │
+ │   Keys   │   └───────────────┘  m-1 └───┘
+ ╰──────────╯
+Example: Phone Numbers, Names, Employee ID [E1021]</code></pre>
+    <ul>
+      <li>The idea of hashing: a <strong>hash function</strong> converts large keys (phone numbers, names, employee IDs mixing characters and integers) into small values used as indexes in an array, the <strong>hash table</strong>. It is the direct address table idea with a hash function added.</li>
+    </ul>
+
+    <h3>How Hash Functions Work?</h3>
+    <ul>
+      <li><strong>Should always map a large key to same small key:</strong> a search must go to the same slot the key was inserted into.</li>
+      <li><strong>Should generate values from 0 to m-1</strong>, where m is the hash table size, so they can be used as indexes.</li>
+      <li><strong>Should be fast, O(1) for integers and O(len) for string of length 'len'</strong> (all characters have to be processed). Otherwise there's no point optimising search, insert and delete.</li>
+      <li><strong>Should uniformly distribute large keys into Hash Table slots.</strong> The most important and toughest part: e.g. 100 phone numbers (out of 10<sup>10</sup> possible) into a table of size 100, each to a different slot. A function that always achieves this is practically impossible, but we can try for good hash functions.</li>
+    </ul>
+
+    <h3>Example Hash Functions</h3>
+    <ol>
+      <li>
+        <p><strong>h(large_key) = large_key % m</strong>, for large integers such as phone numbers. With m = 13 the values are 0 to 12. Many phone numbers can give the same index: this is a <strong>collision</strong> (two large keys mapping to the same small key), covered next; collisions are bound to happen.</p>
+        <ul>
+          <li><strong>Table size</strong> is proportional to the number of keys you'll insert, not the universe: for 100 phone numbers, around 100 (200, 400), not 10 lakh. With a table of size 200, take the phone number % 200 to get an index 0 to 199.</li>
+          <li><strong>m is typically a prime number close to the table size</strong>: fewer common factors, better distribution.</li>
+          <li><strong>Bad values of m are powers of 2 or 10</strong>, and primes close to them. With m = 10<sup>3</sup>, only the last three digits of each phone number are used and the other seven are ignored; with m = 2<sup>3</sup>, only the last three of the 32 bits in the binary representation.</li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>For strings, weighted sum.</strong> The simple idea (sum of the characters' ASCII values % m) maps many strings to the same slot: all permutations of "abcd" (e.g. "dabc"), strings like "bbb" where one value goes up and another down, and words like "dog" and "god". The weighted sum avoids this, with a number x such as 33:</p>
+<pre><code class="language-plaintext">str[] = "abcd"
+( str[0] * x⁰ + str[1] * x¹ + str[2] * x² + str[3] * x³ ) % m</code></pre>
+        <p>This is also not a good hash function, just the typical academic example; better ones exist.</p>
+      </li>
+      <li><strong>Universal Hashing:</strong> keep a group of hash functions and pick one randomly to hash all the data. Each new hash table (like an unordered set in C++ or HashSet in Java) picks a new random one. It makes the expected time O(1), and there's no pattern of data for which it fails to distribute uniformly. More on this with collisions.</li>
+    </ol>
+    <p>The next video covers collision handling: what to do when two large keys map to the same small key.</p>
+    <div class="added">
+      <p><strong>Board note:</strong> the last power in the weighted sum is cut off at the board's edge (x³ for "abcd"), and the teacher adds small blue notes beside item 1 that can't be read in the frames. On the m = 2<sup>3</sup> example the transcript first says "the last eight bits", then "only last three bits".</p>
+    </div>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NjI0NQ%3D%3D" target="_blank" rel="noopener">Hashing Functions</a></p>
+<ul>
+<li>The efficiency of mapping keys into the hash table depends on the hash function. E.g. H(x) = x % 10 stores [11, 12, 13, 14, 15] at positions {1, 2, 3, 4, 5}.</li>
+<li><strong>Division method:</strong> h(k) = k mod M, M the table size, best a prime for more uniform distribution. 12345 mod 95 = 90; 1276 mod 11 = 0. Very fast (a single division) and good for any M, but consecutive keys map to consecutive hash values, and M needs care.</li>
+<li><strong>Mid square method:</strong> square the key and take the middle r digits, r decided by the table size (r = 2 for 100 locations): 60 × 60 = 3600, h(60) = 60. All digits contribute, so the result isn't dominated by the top or bottom digit; but big keys double in digits when squared, and collisions still occur.</li>
+<li><strong>Digit folding method:</strong> split the key into parts of equal digits (the last may be shorter), add them, ignoring any final carry. k = 12345: 12 + 34 + 5 = 51. With a table of size 100, each part has two digits.</li>
+<li><strong>Multiplication method:</strong> pick a constant 0 &lt; A &lt; 1; h(k) = floor(M (kA mod 1)). k = 12345, A = 0.357840, M = 100: 12345 × 0.357840 = 4417.5348, fractional part 0.5348, floor(53.48) = 53. It works with any A between 0 and 1 (some give better results); the article notes it is generally suitable when the table size is a power of two, which makes computing the index very fast.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAwNg%3D%3D" target="_blank" rel="noopener">Collision Handling</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The universe is big and the hash table small, so two keys can map to the same entry. E.g. 10 phone numbers in a table of size 10 with a hash function using the last digit: two numbers can share a last digit. Whatever hash function you design, if you don't know the keys in advance, <strong>collisions are bound to happen</strong>.</p>
+<pre><code class="language-plaintext">Collision Handling
+If we know keys in advance, then we can Perfect Hashing.
+If we do not know keys, then we use one of the following.
+   ├─→ Chaining
+   └─→ Open Addressing
+          ├─→ Linear Probing
+          ├─→ Quadratic Probing
+          └─→ Double Hashing
+
+Birthday Paradox   23 → 50%
+                   70 → 99.9%</code></pre>
+    <ul>
+      <li><strong>Birthday paradox:</strong> with 23 people in a room, there's a 50% chance two share a birthday; with 70 people, 99.9%. That shows how serious collisions are, whatever table size you choose.</li>
+      <li><strong>Perfect hashing</strong> (an advanced method, not covered in detail): if the keys are known in advance (e.g. a dictionary of known English words), preprocessing with extra work guarantees every key maps to a different slot, so no collisions at all.</li>
+      <li><strong>Chaining</strong> makes a chain of the colliding items. <strong>Open addressing</strong> uses the same array: if a position is occupied, the key is tried in some other slot. Each gets its own video.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NjI0Ng%3D%3D" target="_blank" rel="noopener">Collision Handling</a></p>
+<ul>
+<li>A collision is a newly inserted key mapping to an already occupied slot. <strong>Chaining</strong> makes each cell point to a linked list of records with the same hash value (simple, but needs memory outside the table). In <strong>open addressing</strong> every element is in the table itself and a search examines slots one by one.</li>
+<li><strong>Separate chaining:</strong> each bucket holds a linked list or other structure for the colliding elements at that index; flexible and simple but may use more memory.</li>
+<li><strong>Open addressing:</strong> on a collision, probe for another empty slot in the table; no memory overhead, but can suffer from clustering and degraded performance.</li>
+<li><strong>Double hashing:</strong> an open addressing probe technique using a secondary hash function for the interval between probes; distributes elements more evenly, reducing clustering.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAwNw%3D%3D" target="_blank" rel="noopener">Chaining</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The first collision-handling method. Maintain an array of linked list headers (the hash table); whenever a collision happens, insert the item at the end of that slot's linked list. Other structures can replace the linked list (end of the video).</p>
+    <ul>
+      <li>The hash function here is <code>hash(key) = key % 7</code>. The typical recommended way: to insert n values, pick a prime number greater than n and closest to n. A prime gives good space and fewer collisions; with 2<sup>m</sup> (or 10<sup>m</sup>) instead of 7, you'd just pick the last m bits (or m decimal digits).</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Inserting keys = {50, 21, 58, 17, 15, 49, 56, 22, 23, 25}</h4>
+      <p>50 % 7 = 1, 21 → 0, 58 → 2, 17 → 3. 15 → 1: the slot is occupied (it is the head node of a linked list), so add a node 15 to it. 49 → 0, 56 → 0, 22 → 1, 23 → 2, and 25 → 4 becomes the head of slot 4's list.</p>
+<pre><code class="language-plaintext">hash(key) = key % 7
+0 │ 21 → 49 → 56
+1 │ 50 → 15 → 22
+2 │ 58 → 23
+3 │ 17
+4 │ 25
+5 │
+6 │
+Hash Table (Array of linked list headers)</code></pre>
+    </div>
+
+    <h3>Performance</h3>
+<pre><code class="language-plaintext">m = No. of slots in Hash Table
+n = No. of keys to be inserted.
+Load Factor α = n/m
+Expected Chain Length = α
+Expected Time to Search = O(1+α)
+Expected Time to Insert/Delete = O(1+α)</code></pre>
+    <ul>
+      <li>Library hash maps and sets (HashMap / HashSet in Java, unordered_map / unordered_set in C++) let you specify the <strong>load factor</strong>. It's a space–time trade-off: a small table (big load factor) means more collisions, so we want it small.</li>
+      <li>Worst case, every key goes to the same chain: Θ(n). For the average case we <strong>assume the keys are uniformly distributed</strong>: each key is equally likely to go to any of the m slots, so the expected chain length is n/m = α.</li>
+      <li>That's why hashing is O(1): with a table of size n, α = 1 and the expected chain length is 1. Search, insert and delete take 1 (computing the hash function) + α (traversing the chain). E.g. 500 keys in a table of size 500: chain length 1, time 1 + 1. Without uniform distribution none of this analysis holds.</li>
+    </ul>
+
+    <h3>Data Structures for Storing Chains</h3>
+    <ul>
+      <li><strong>Linked List:</strong> search O(l), delete O(l), insert O(l) for chain length l. Insert must search first because duplicates aren't allowed. Not cache friendly (nodes at different locations) and uses extra space for next references.</li>
+      <li><strong>Dynamic Sized Arrays</strong> (vector in C++, ArrayList in Java, list in Python): the same O(l), since keys in a chain have no order and every search goes through all of them. The advantage is cache friendliness (contiguous locations).</li>
+      <li><strong>Self Balancing BST</strong> (AVL Tree, Red Black Tree): O(log l) for search, insert and delete. Since Java 8, HashMap uses self-balancing BSTs. Disadvantage: not cache friendly.</li>
+    </ul>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAwOA%3D%3D" target="_blank" rel="noopener">Implementation of Chaining</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: the practical implementation of chaining using an array of linked lists.</p>
+<pre><code class="language-plaintext">Implementation of Chaining
+BUCKET = 7
+┌──────┐                  0 ┌────┐   ┌────┐
+│ NULL │                    │ 70 │──→│ 56 │
+│ NULL │     Insert       1 │ 71 │   └────┘
+│ NULL │   ─────────→     2 │  9 │──→┌────┐
+│ NULL │   70, 71, 9        ├────┤   │ 72 │
+│ NULL │   56, 72         3 │NULL│   └────┘
+│ NULL │                  4 │NULL│
+│ NULL │                  5 │NULL│      Search(56) ⇒ True
+└──────┘                  6 │NULL│      Search(51) ⇒ False
+                            └────┘</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NzYzMg%3D%3D" target="_blank" rel="noopener">Implementation of Chaining</a></p>
+<ul>
+<li>Each cell points to a linked list of records with the same hash value. With N buckets, hashIndex = key % noOfBuckets. <strong>Insert:</strong> go to that bucket and add the node at the end of its list. <strong>Delete:</strong> go to the bucket, search its list and remove the node with the key (if found). The C++ code uses <code>list</code>, internally a linked list.</li>
+<li><strong>Method 1</strong> (fixed number of buckets, no rehashing): search and delete are O(1 + n/m), n the total elements and m the table size. The load factor n/m should be as small as possible; a larger one means more collisions (a space–time trade-off). Assuming uniform distribution: expected chain length O(α), expected search and insert/delete O(1 + α).</li>
+<li><strong>Method 2</strong> (no bound on buckets): when the load factor exceeds 0.5, <strong>rehash</strong>: double the array size and re-add all values with a hash function that depends on the new number of buckets. Its hash function for string keys: (ASCII value of character × prime<sup>x</sup>) % number of buckets, with prime 31.</li>
+<li>Method 2 complexity, as the article gives it: insert O(N) time and O(N) space (rehashing copies everything into a doubled array); search O(N) time (a linked list of size N) and O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Class structure (BUCKET = number of slots)</h4>
+<pre><code class="language-cpp">struct MyHash
+{
+    int BUCKET;
+    list&lt;int&gt; *table;
+    MyHash(int b)
+    {   BUCKET = b;
+        table = new list&lt;int&gt;[b];
+    }
+    void insert(int key) { .... }
+    bool search(int key) { .... }
+    void remove(int key) { .... }
+};</code></pre>
+<pre><code class="language-java">class MyHash
+{   int BUCKET;
+    ArrayList&lt;LinkedList&lt;Integer&gt;&gt; table;
+    MyHash(int b)
+    {   BUCKET = b;
+        table = new ArrayList&lt;LinkedList&lt;Integer&gt;&gt;();
+        for(int i=0; i&lt;b; i++)
+            table.add(new LinkedList&lt;Integer&gt;());
+    }
+    void insert(int key) { .... }
+    boolean search(int key) { .... }
+    void remove(int key) { .... }
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Insert &amp; Delete</h4>
+<pre><code class="language-cpp">void insert(int key)
+{   int i = key % BUCKET;
+    table[i].push_back(key);
+}
+void remove(int key)
+{   int i = key % BUCKET;
+    table[i].remove(key);
+}</code></pre>
+<pre><code class="language-java">void insert(int key)
+{   int i = key % BUCKET;
+    table.get(i).add(key);
+}
+void remove(int key)
+{   int i = key % BUCKET;
+    table.get(i).remove((Integer)i);
+}</code></pre>
+      <p>The board walks through b = 7 with the keys 70, 71, 56, 9, 72.</p>
+    </div>
+    <div class="approach">
+      <h4>Search</h4>
+<pre><code class="language-cpp">bool search(int key)
+{   int i = key % BUCKET;
+    for(auto x : table[i])
+        if(x == key)
+            return true;
+    return false;
+}</code></pre>
+<pre><code class="language-java">boolean search(int key)
+{   int i = key % BUCKET;
+    return table.get(i).contains(key);
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the Java <code>remove</code> casts the slot index, <code>remove((Integer)i)</code>; to remove the key it would be <code>(Integer)key</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAwOQ%3D%3D" target="_blank" rel="noopener">Open Addressing</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Open addressing is another way of handling collisions: use only a single array, with no chains or other data structure.</p>
+<pre><code class="language-plaintext">Open Addressing
+⟹ No. of slots in Hash Table ≥ No. of keys to be inserted.
+⟹ Cache Friendly</code></pre>
+    <ul>
+      <li>All items go into the same array, so to insert 100 keys the table needs at least 100 slots.</li>
+      <li>Advantage over chaining: everything is in one array, so fewer cache misses.</li>
+      <li>Ways of implementing it: <strong>linear probing</strong>, <strong>quadratic probing</strong> and <strong>double hashing</strong>. The examples use linear probing.</li>
+      <li><strong>Linear probing:</strong> linearly search for the next empty slot when there is a collision. If the last slot is occupied, the search continues in a circular manner (increment the index using modular arithmetic).</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/MjI4Ng%3D%3D" target="_blank" rel="noopener">Open Addressing</a></p>
+<ul>
+<li>All elements are stored in the table itself, so the table size must be ≥ the number of keys (it can be increased by copying old data).</li>
+<li><strong>Insert(k):</strong> probe until an empty slot is found, then insert. <strong>Search(k):</strong> probe until the slot's key equals k or an empty slot is reached. <strong>Delete(k):</strong> simply deleting can make search fail, so deleted slots are marked "deleted"; insert can use a deleted slot, but search doesn't stop at one.</li>
+<li><strong>Linear probing:</strong> probe the next slot (gap 1); the example uses key mod 7 with keys 50, 700, 76, 85, 92, 73, 101. Its main problem is <strong>clustering</strong>: consecutive elements form groups, slowing down finding a free slot or searching.</li>
+<li><strong>Quadratic probing:</strong> in the i-th iteration try (hash(x) + i·i) % S. <strong>Double hashing:</strong> try (hash(x) + i·hash2(x)) % S.</li>
+<li><strong>Comparison:</strong> linear probing has the best cache performance and is easy to compute, but suffers from clustering; quadratic probing lies between the two; double hashing has poor cache performance but no clustering, and needs more computation (two hash functions).</li>
+<li>Performance is evaluated, as for chaining, under simple uniform hashing (each key equally likely to hash to any slot).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Insert with linear probing, hash(key) = key % 7</h4>
+<pre><code class="language-plaintext">keys: 50, 51, 49, 16, 56, 15, 19      keys: 48, 42, 50, 55, 53
+0 │ 49                                0 │ 42
+1 │ 50                                1 │ 50
+2 │ 51                                2 │ 55
+3 │ 16                                3 │
+4 │ 56                                4 │ 53
+5 │ 15                                5 │
+6 │ 19                                6 │ 48</code></pre>
+      <ul>
+        <li>First example: 50 → 1, 51 → 2, 49 → 0. 16 → 2 is occupied, so the next empty slot is 3. 56 → 0: 49, 50, 51, 16 are all occupied, so 4. 15 → 1, goes to 5. 19 → 5 is occupied, goes to 6.</li>
+        <li>Second example (circular search): 48 → 6, 42 → 0, 50 → 1. 55 → 6 is occupied, so the search wraps round past 0 and 1 to slot 2. 53 → 4.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>Search</h4>
+      <p>Board: we compute the hash function, go to that index and compare. If we find the key, we return true. Otherwise we linearly search, and stop when one of three cases arises:</p>
+      <ol>
+        <li><strong>Empty slot:</strong> return false.</li>
+        <li><strong>Key found:</strong> return true (or the corresponding value, for a key–value pair).</li>
+        <li><strong>Traversed the whole table</strong> (back to the starting slot of a full table): return false.</li>
+      </ol>
+      <p>Example: insert(50), insert(51), insert(15) gives slots 1, 2, 3. search(15) starts at slot 1 (50), moves to 51, then finds 15. search(64) also starts at slot 1 and stops at the empty slot 4: not present.</p>
+    </div>
+    <div class="approach">
+      <h4>How to handle deletions in open addressing?</h4>
+<pre><code class="language-plaintext">insert(50), insert(51), insert(15), search(15),
+delete(51), search(15)          hash(key) = key % 7
+0 │
+1 │ 50
+2 │ Deleted
+3 │ 15</code></pre>
+      <ul>
+        <li><strong>Problem with simply making the slot empty when we delete:</strong> after delete(51) empties slot 2, search(15) starts at slot 1, then hits the empty slot 2 and returns false, though 15 is in the table.</li>
+        <li>So mark the slot as <strong>Deleted</strong>, not empty. Search doesn't stop at a deleted slot, only at an empty one; insert can use a deleted slot. Now search(15) passes the deleted slot and finds 15, and search(64) still stops at the empty slot 4.</li>
+      </ul>
+    </div>
+
+    <h3>Clustering (A problem with linear probing)</h3>
+    <ul>
+      <li>Each collision places the key in the next position, forming clusters: one collision gives a cluster of size 2; a key mapping to any of those indexes makes it 3, and so on. A key mapping to any of k clustered indexes makes the cluster k + 1.</li>
+      <li>Search, insert and delete all search first, stopping at the key or an empty slot, so clusters make every operation costly. The worst case is searching for a key that maps into a cluster and isn't there: the whole cluster is traversed.</li>
+    </ul>
+
+    <h3>How to handle clustering problem with linear probing?</h3>
+<pre><code class="language-plaintext">h(key) = key % 7
+Linear probing:       hash(key, i) = (h(key) + i) % 7
+① Quadratic Probing (Secondary Clustering)
+                      hash(key, i) = (h(key) + i²) % m
+② Double Hashing
+                      hash(key, i) = (h1(key) + i * h2(key)) % m
+
+Quadratic probing works if:  ① α &lt; 0.5  (α = n/m)
+                             ② m is a prime</code></pre>
+    <ul>
+      <li>In linear probing, the i-th probe (i = 1 after the first failure, then 2, …) goes to the next slot, then the next to next.</li>
+      <li><strong>Quadratic probing</strong> uses i² instead of i: after the first collision go 1² = 1 slot ahead, then 2² = 4, then 3² = 9, so clusters don't form together. Linear probing has <strong>primary clusters</strong>; quadratic probing still has <strong>secondary clusters</strong>, because every key that collides follows the same fixed probe sequence. That is better than primary clustering.</li>
+      <li>Another disadvantage: quadratic probing might not find an empty slot even when there are empty slots. It is mathematically proven to find a free slot only if the load factor is less than 0.5 and m is a prime number, so the table must be more than double the number of keys inserted.</li>
+      <li>The alternative to secondary clustering is double hashing, next.</li>
+    </ul>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAxMA%3D%3D" target="_blank" rel="noopener">Double Hashing</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Open Addressing
+Double Hashing:-   hash(key, i) = (h1(key) + i·h2(key)) % m
+ ├→ If h2(key) is relatively prime to m, then it will
+ │  always find a free slot if there is one.
+ ├→ Distributes keys more uniformly than linear probing
+ │  and quadratic hashing.
+ └→ No clustering.</code></pre>
+    <ul>
+      <li>Two hash functions: the original one (like key % m), and a second one to find the next slot while probing for a free slot.</li>
+      <li>Quadratic probing needed double the size and a prime m to be sure of finding a free slot. Double hashing doesn't need double size: if m is relatively prime to h2(key), it always finds a free slot if there is one. It also has no secondary clusters.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NjI0OQ%3D%3D" target="_blank" rel="noopener">Double Hashing</a></p>
+<ul>
+<li>The probe increments come from a second hash function: in the i-th rotation try (hash(x) + i·hash2(x)) % S. It reduces clustering in an optimised way.</li>
+<li><strong>Example:</strong> keys 27, 43, 93, 72 into a table of size 7, h1(k) = k mod 7, h2(k) = 1 + (k mod 5). 27 → 6, 43 → 1, 93 → 2 with no collisions. 72 → 2 collides: [2 + 1 · (1 + 72 % 5)] % 7 = 5, an empty slot, so 72 goes to slot 5.</li>
+<li><strong>Cache:</strong> traversing a linked list (chaining) jumps all over memory, so the CPU can't cache unvisited nodes; open addressing keeps data together, so a constantly accessed segment gets cached.</li>
+<li>Under simple uniform hashing, with load factor α = n/m (&lt; 1), the expected time to search, insert or delete is &lt; 1/(1 − α).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Example: m = 7, keys 49, 63, 56, 52, 54, 48</h4>
+<pre><code class="language-plaintext">h1(key) = (key % 7)
+h2(key) = 6 - (key % 6)
+
+0 │ 49
+1 │
+2 │ 54
+3 │ 63
+4 │ 56
+5 │ 52
+6 │ 48</code></pre>
+      <ul>
+        <li><strong>h2 must never return 0</strong>, or the same location is probed again and again. key % 6 gives 0 to 5, so 6 − (key % 6) gives 1 to 6.</li>
+        <li>49 → 0, no collision. 63 → 0 collides: h2 = 6 − 3 = 3, i = 1, so (0 + 1·3) % 7 = 3.</li>
+        <li>56 → 0 collides: h2 = 6 − 2 = 4, slot 4. 52 → 3 collides: h2 = 6 − 4 = 2, (3 + 2) % 7 = 5.</li>
+        <li>54 → 5 collides: h2 = 6 − 0 = 6. (5 + 6) % 7 = 4 collides; i = 2: (5 + 12) % 7 = 3 collides; i = 3: (5 + 18) % 7 = 2 is free. 54 goes in after three collisions.</li>
+        <li>48 → 6, free. So far it works much better than linear probing, with only one collision for most keys.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>Why h2(key) and m should be relatively prime</h4>
+<pre><code class="language-plaintext">h2(key) = 6, m = 7
+(1×6) % 7 = 6
+(2×6) % 7 = 5
+(3×6) % 7 = 4
+(4×6) % 7 = 3
+(5×6) % 7 = 2
+(6×6) % 7 = 1</code></pre>
+      <p>h2(key) is the shift from the current location, under modulo m. Because 6 and 7 are relatively prime, the shifts cover every one of the other 6 slots (the first slot was already tried), so a free slot is found if there is one, as linear probing guarantees. With h2 = 4: 4, 1, 5, … again all of 1 to 6.</p>
+    </div>
+    <div class="approach">
+      <h4>Insert algorithm</h4>
+<pre><code class="language-plaintext">void doubleHashingInsert(key)
+{
+    if (table is full)
+        return error;
+    probe = h1(key), offset = h2(key);
+    while (table[probe] is occupied)
+        probe = (probe + offset) % m;
+    table[probe] = key;
+}</code></pre>
+      <p>Adding the offset each time gives 1·offset, then 2·offset, then 3·offset. Linear probing is the case where the offset is 1, so double hashing is a generalised version of linear probing.</p>
+      <p><strong>Search</strong> works the same way: go to h1(key); if the key is there, return true; if the slot is empty, stop; if it's occupied by something else, try 1·h2(key), then 2·h2(key), and so on.</p>
+    </div>
+
+    <h3>Performance Analysis of search (Unsuccessful)</h3>
+<pre><code class="language-plaintext">α = n/m (should be ≤ 1)
+Assumption: Every probe sequence looks at a random location
+(1-α) fraction of the Table is empty
+Expected No. of probes required = 1/(1-α)
+   α = 0.8 , 5
+   α = 0.9 , 10</code></pre>
+    <ul>
+      <li>An unsuccessful search ends at an empty slot (or after traversing the whole table). Assume every free slot is equally likely to be picked.</li>
+      <li>For open addressing α must be at most 1 (at most half for quadratic probing). With α = 0.8, one fifth of the slots are empty, so on average about four occupied slots and then the fifth is empty: 5 probes. With α = 0.9: 10 probes.</li>
+      <li>Compared with chaining this doesn't look great: as α tends to 1, 1/(1 − α) tends to infinity. With α = 0.99 it's 100 comparisons on average. The next video compares open addressing and chaining in full.</li>
+    </ul>
+    <div class="added">
+      <p><strong>Teacher and board slips:</strong> the board's last line is <code>table[probe] = m;</code>, which the teacher corrects aloud to key. In the search description the transcript says that if the slot is empty "you will return true"; an empty slot means the key isn't present. At the analysis the transcript says "Universal hashing" where double hashing is meant.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAxMQ%3D%3D" target="_blank" rel="noopener">Implementation of Open Addressing</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A very simple implementation: the user gives the hash table's capacity when creating the object, the table is a fixed-size dynamically allocated array, and collisions use <strong>linear probing</strong>. −1 marks an empty cell and −2 a deleted one, assuming −1 and −2 are never keys.</p>
+<pre><code class="language-plaintext">Implementation of Open Addressing
+MyHash mh(7);
+mh.insert(49);                  ┌──┬──┬──┬──┬──┬──┬──┐
+mh.insert(56);                  │49│56│72│-1│-1│-1│-1│
+mh.insert(72);                  └──┴──┴──┴──┴──┴──┴──┘
+if (mh.search(56) == true)        0  1  2  3  4  5  6
+      print("Yes");             erase(56)
+else                            ┌──┬──┬──┬──┬──┬──┬──┐
+      print("No");              │49│-2│72│-1│-1│-1│-1│
+mh.erase(56);                   └──┴──┴──┴──┴──┴──┴──┘
+if (mh.search(56) == true)        0  1  2  3  4  5  6
+      print("Yes");
+else
+      print("No");</code></pre>
+    <ul>
+      <li>Library versions (unordered set in C++, HashSet in Java) don't need a capacity: internally they can use a dynamic size array (vector or ArrayList). This one keeps things simple. A <code>print</code> function can help with debugging.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NzYzMw%3D%3D" target="_blank" rel="noopener">Implementation of Open Addressing</a></p>
+<ul>
+<li>Task: a general hash table of {key, value} pairs with Insert(), Find() and Delete(), collisions handled by linear probing. Example with capacity 20: Insert(1, 5), (2, 15), (3, 20), (4, 7) go to indexes 1 to 4; Find(4) prints 7; after Delete(4), Find(4) prints −1.</li>
+<li>Approach: a <code>HashNode</code> structure for a key–value pair and an array of HashNode pointers <code>*arr[]</code>; hash function key % capacity.</li>
+<li><strong>Insert(Key, Value):</strong> make a node temp, compute HashIndex; while the slot holds another key, HashIndex = (HashIndex + 1) % capacity; then store temp's address there.</li>
+<li><strong>Find(Key):</strong> compute HashIndex and probe linearly the same way; return the value if the key is found, else −1.</li>
+<li><strong>Delete(Key):</strong> probe the same way; if found, assign {−1, −1} to that slot and return true, else false.</li>
+<li>Time O(capacity) for each operation; auxiliary space O(capacity).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Class skeleton</h4>
+<pre><code class="language-cpp">struct MyHash {
+    int *arr;
+    int cap, size;
+    MyHash(int c)
+    {
+        cap = c;
+        size = 0;
+        for(int i=0; i&lt;cap; i++)
+            arr[i] = -1;
+    }
+    int hash(int key)
+    {
+        return key % cap;
+    }
+    bool search(int key) { ...... }
+    bool insert(int key) { .... }
+    bool erase(int key) { .... }
+};</code></pre>
+<pre><code class="language-java">class MyHash {
+    int []arr;
+    int cap, size;
+    MyHash(int c)
+    {   cap = c;
+        size = 0;
+        for(int i=0; i&lt;cap; i++)
+            arr[i] = -1;
+    }
+    int hash(int key)
+    {
+        return key % cap;
+    }
+    boolean search(int key) { .... }
+    boolean insert(int key) { .... }
+    boolean erase(int key) { ... }
+}</code></pre>
+      <p>Size starts at 0 (the hash is empty) and every entry starts at −1. With capacity 7 the hash function is key % 7. The three functions are written inside the class; the syntax is the same in both languages except <code>bool</code> / <code>boolean</code>.</p>
+    </div>
+    <div class="approach">
+      <h4>search</h4>
+<pre><code class="language-cpp">bool search(int key)            // boolean in Java
+{
+    int h = hash(key);
+    int i = h;
+    while(arr[i] != -1)
+    {
+        if(arr[i] == key)
+            return true;
+        i = (i+1) % cap;
+        if(i == h)
+            return false;
+    }
+    return false;
+}</code></pre>
+      <p>Stop in three cases: the key is found (return true); an empty slot (−1) is reached (a deleted slot doesn't stop the search); or the whole table has been traversed, back to the starting index, otherwise a full table would loop forever. The traversal is circular. Board table 49, 50, 51, 63, −1, …: search(63) starts at 0 and matches at 3; search(64) starts at 1 and stops at the −1 in slot 4. If the table is full (e.g. 70, 77 in the last slots), search(64) comes back to index 1 and returns false.</p>
+    </div>
+    <div class="approach">
+      <h4>insert</h4>
+<pre><code class="language-cpp">bool insert(int key)            // boolean in Java
+{
+    if(size == cap)
+        return false;
+    int i = hash(key);
+    while(arr[i] != -1 &amp;&amp; arr[i] != -2 &amp;&amp; arr[i] != key)
+        i = (i+1) % cap;
+    if(arr[i] == key)
+        return false;
+    else
+    {
+        arr[i] = key;
+        size++;
+        return true;
+    }
+}</code></pre>
+      <p>Returns false when the table is full or the key already exists. The probe stops at an empty slot, a <strong>deleted</strong> slot (insert, unlike search, can use one) or the key itself. Walkthrough from an empty table (size = 0), Insert: 49, 50, 63, 64, 69, 68 → 49 at 0, 50 at 1, 63 probes past 49 and 50 to slot 2, 64 probes from 1 to slot 3, 69 goes to 6, 68 to 5 (size 6). Inserting 63 again probes to it and returns false; once the table is full, insert returns false at the first check.</p>
+    </div>
+    <div class="approach">
+      <h4>erase</h4>
+<pre><code class="language-cpp">bool erase(int key)
+{
+    int h = hash(key);
+    int i = h;
+    while(arr[i] != -1)
+    {
+        if(arr[i] == key)
+        {   arr[i] = -2;
+            return true;
+        }
+        i = (i+1) % cap;
+        if(i == h)
+            return false;
+    }
+    return false;
+}</code></pre>
+      <p>Almost the same as search; the only extra line marks the slot −2. Board table 49, 50, 51, 63, −1, 68, 75: erase(50) marks slot 1 as −2; erase(63) probes from 0, doesn't stop at the −2, and marks slot 3; erase(64) starts at slot 1, continues past −2, reaches the −1 in slot 4 and returns false.</p>
+    </div>
+
+    <h3>How to handle the case when −1 and −2 are input keys?</h3>
+    <ul>
+      <li>Library implementations don't store the actual keys in the slots; they store pointers (C++) or references (Java). An empty slot is simply null, so −1 isn't needed.</li>
+      <li>For deleted slots they typically create a <strong>Dummy</strong> node inside the class, shared by all the functions. Deleting stores a reference or pointer to this fixed node, and checking for "deleted" means checking for the dummy node.</li>
+    </ul>
+    <div class="added">
+      <p><strong>Board slip:</strong> neither constructor allocates <code>arr</code> before the loop fills it with −1 (the transcript calls it a dynamically allocated array of the user's size). The insert condition is written with <code>$$</code> for <code>&amp;&amp;</code>. In the search walkthrough the transcript says "return this index", but the function returns true.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAxMg%3D%3D" target="_blank" rel="noopener">Chaining vs Open Addressing</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <div class="scroll"><table>
+      <thead><tr><th></th><th>Chaining</th><th>Open Addressing</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Hash Table never Fills</td><td>Table may become full and resizing becomes mandatory</td></tr>
+        <tr><td>2</td><td>Less Sensitive to Hash Functions</td><td>Extra care required for clustering.</td></tr>
+        <tr><td>3</td><td>Poor cache Performance.</td><td>Cache Friendly</td></tr>
+        <tr><td>4</td><td>Extra space for links<br>(1+α) = 1.9</td><td>Extra space might be needed to achieve same performance as chaining<br>1/(1−α) = 1/(1−0.9) = 1/0.1</td></tr>
+      </tbody>
+    </table></div>
+    <ol>
+      <li><strong>Filling up:</strong> with chaining, more keys than slots just make the chains grow; resizing is advisable so chains don't get longer and longer, but not mandatory. In open addressing every key goes in the same array, so once the keys exceed the slots you must resize, e.g. by doubling as vectors do, which keeps O(1) amortised.</li>
+      <li><strong>Hash function sensitivity:</strong> open addressing suffers from clustering, mostly from a poorly designed hash function (many keys going to the same or nearby slots): worst with linear probing, less with quadratic probing (secondary clustering), least with double hashing, but still possible. In chaining one cluster doesn't affect another, so a slightly poor hash function doesn't hurt the whole table.</li>
+      <li><strong>Cache:</strong> open addressing's big advantage, as all data is in one array at contiguous locations. Chains in linked lists or self-balancing BSTs cache poorly; even dynamic arrays mean multiple arrays.</li>
+      <li><strong>Space vs performance:</strong> chaining needs extra space for links (next pointers, or left and right pointers in a BST); open addressing needs none. But an unsuccessful search (or insert, delete) costs 1 + α with chaining and 1/(1 − α) with open addressing: at α = 0.9 that's 1.9 against 10 comparisons. To get 1.9 with open addressing you need a smaller α, i.e. a bigger table.</li>
+    </ol>
+    <ul>
+      <li>Open addressing also needs table resizing more often, and resizing is costly; chaining can avoid it by accepting longer chains.</li>
+      <li><strong>When to use which:</strong> if the keys themselves are known in advance, perfect hashing is best (no collisions). If you have extra space and know the count of keys in advance, open addressing can put them in a single array. For a dynamic structure where more and more keys are inserted, go with chaining, the better-performing collision handling.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NjI1MQ%3D%3D" target="_blank" rel="noopener">Chaining vs Open Addressing</a></p>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Separate Chaining</th><th>Open Addressing</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Simpler to implement.</td><td>Requires more computation.</td></tr>
+        <tr><td>2</td><td>The table never fills up; more elements can always be added to a chain.</td><td>The table may become full.</td></tr>
+        <tr><td>3</td><td>Less sensitive to the hash function or load factors.</td><td>Needs extra care to avoid clustering and with the load factor.</td></tr>
+        <tr><td>4</td><td>Mostly used when it's unknown how many keys, and how often, may be inserted or deleted.</td><td>Used when the frequency and number of keys is known.</td></tr>
+        <tr><td>5</td><td>Poor cache performance, as keys are stored in linked lists.</td><td>Better cache performance: everything is in the same table.</td></tr>
+        <tr><td>6</td><td>Wastes space (some parts of the table are never used).</td><td>A slot can be used even if no input maps to it.</td></tr>
+        <tr><td>7</td><td>Uses extra space for links.</td><td>No links.</td></tr>
+      </tbody>
+    </table></div>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAxMw%3D%3D" target="_blank" rel="noopener">Unordered_set in C++ STL</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: the practical application of hashing through the unordered_set data structure, with the methods insert(), begin(), end(), size(), clear() and find(). The board adds count() and erase().</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/Mjg3Mg%3D%3D" target="_blank" rel="noopener">unordered_set in C++ STL</a></p>
+<ul>
+<li><code>set</code> and <code>unordered_set</code> both store unique elements: set uses a red-black tree and keeps them sorted, unordered_set uses hashing, no particular order, and faster average operations. Syntax: <code>unordered_set&lt;dataType&gt; us;</code>. The storage order varies from compiler to compiler.</li>
+<li><code>begin()</code> returns an iterator to the first element and <code>end()</code> one beyond the last; <code>size()</code> gives the number of elements; <code>clear()</code> empties the set.</li>
+<li><code>find(e)</code> returns an iterator to e if present, else <code>end()</code>. <code>count(e)</code> returns true if present, false otherwise.</li>
+<li><code>erase</code> removes an item (by value or iterator) or a range: <code>us.erase(it)</code>, <code>us.erase(first, last)</code>.</li>
+<li><strong>Internal working:</strong> a hash function spreads elements evenly over the hash table's buckets, each holding only a few items on average, giving O(1) average insert, delete and search.</li>
+<li><strong>Applications:</strong> when fast search, insert and delete are needed, only keys (not key–value pairs) are stored, and sorted order doesn't matter.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>insert and traversal</h4>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;unordered_set&gt;
+using namespace std;
+
+int main()
+{
+    unordered_set&lt;int&gt; s;
+    s.insert(10);
+    s.insert(5);
+    s.insert(15);
+    s.insert(20);
+    for(int x : s)
+        cout &lt;&lt; x &lt;&lt; " ";
+    return 0;
+}</code></pre>
+      <p>Board O/P: all elements in any order, e.g. 10 5 15 20 or 5 10 15 20.</p>
+    </div>
+    <div class="approach">
+      <h4>begin(), end(), size(), clear()</h4>
+<pre><code class="language-cpp">    for(auto it = s.begin(); it != s.end(); it++)
+        cout &lt;&lt; (*it) &lt;&lt; " ";      // A permutation of (10, 5, 15, 20)
+    cout &lt;&lt; endl;
+    cout &lt;&lt; s.size() &lt;&lt; " ";
+    s.clear();
+    cout &lt;&lt; s.size() &lt;&lt; " ";
+    return 0;</code></pre>
+    </div>
+    <div class="approach">
+      <h4>find() and count()</h4>
+<pre><code class="language-cpp">    if(s.find(15) == s.end())
+        cout &lt;&lt; "Not Found";
+    else
+        cout &lt;&lt; "Found";</code></pre>
+<pre><code class="language-cpp">    if(s.count(15))
+        cout &lt;&lt; "Found";
+    else
+        cout &lt;&lt; "Not Found";</code></pre>
+      <p>Beside the count() version the board adds <code>s.insert(5);</code> after the four inserts, inserting 5 a second time.</p>
+    </div>
+    <div class="approach">
+      <h4>erase()</h4>
+<pre><code class="language-cpp">    cout &lt;&lt; s.size() &lt;&lt; " ";
+    s.erase(15);
+    cout &lt;&lt; s.size() &lt;&lt; " ";
+    auto it = s.find(10);
+    s.erase(it);
+    cout &lt;&lt; s.size() &lt;&lt; " ";
+    return 0;
+O/P: 4 3 2</code></pre>
+      <p>erase takes a value or an iterator. A range erase empties the set: <code>s.erase(s.begin(), s.end());</code></p>
+    </div>
+
+    <h3>Internal Working &amp; Time Complexities</h3>
+<pre><code class="language-plaintext">begin(), end()
+cbegin(), cend()                    > O(1)
+insert(), erase(val),
+erase(it), find(), count()          > O(1) on average.
+size(), empty()                     > O(1)</code></pre>
+
+    <h3>Applications</h3>
+    <p>We can use it anywhere we need the following operations (or a subset of them) quickly: search, insert, delete.</p>
+    <div class="added">
+      <p><strong>Board note:</strong> the second complexity row reads cbegin(), cend() at first; in later frames it looks like rbegin(), rend(). The board doesn't show the printed sizes for the clear() program, and the "size()" before empty() is partly hidden behind the teacher.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAxNA%3D%3D" target="_blank" rel="noopener">Unordered_map in C++ STL</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: unordered_map is a versatile container that stores elements as key–value pairs; the video covers its methods and their uses.</p>
+<pre><code class="language-plaintext">Unordered_map in C++ STL
+ ├→ Used to store key, value pairs
+ ├→ Uses Hashing
+ └→ No order of keys</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/Mjg3NA%3D%3D" target="_blank" rel="noopener">unordered_map in C++ STL</a></p>
+<ul>
+<li>Like <code>map</code>, an unordered map stores key–value pairs, but map is a red-black tree (keys in sorted order) while unordered_map uses hashing (no order). Syntax: <code>unordered_map&lt;keyType, valueType&gt; um;</code>. Values can be inserted with square brackets or <code>insert()</code>.</li>
+<li><code>find(val)</code> returns an iterator to the pair if present, else one beyond the last; <code>begin()</code> / <code>end()</code> point to the first pair and past the last. <code>count(key)</code> returns 1 if the key is present, else 0. <code>size()</code> gives the number of pairs.</li>
+<li><code>erase</code> deletes a pair by key or iterator, or a range <code>um.erase(first, last)</code>, where the second iterator's pair is excluded.</li>
+</ul>
+    <div class="scroll"><table>
+      <thead><tr><th>Operation</th><th>Average</th><th>Worst</th></tr></thead>
+      <tbody>
+        <tr><td>begin(), end(), empty(), size()</td><td>O(1)</td><td>O(1)</td></tr>
+        <tr><td>count(), find(), erase(key), insert()</td><td>O(1)</td><td>O(n)</td></tr>
+        <tr><td>[], at</td><td>O(1)</td><td>O(1)</td></tr>
+      </tbody>
+    </table></div>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Inserting and traversing</h4>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;unordered_map&gt;
+using namespace std;
+
+int main()
+{
+    unordered_map&lt;string, int&gt; m;
+    m["gfg"] = 20;
+    m["ide"] = 30;
+    m.insert({"courses", 15});
+    for(auto x : m)
+        cout &lt;&lt; x.first &lt;&lt; " " &lt;&lt; x.second &lt;&lt; endl;
+    return 0;
+}
+// m ({"gfg", 20}, {"ide", 30}, {"courses", 15})
+O/P  gfg 20
+     courses 15
+     ide 30</code></pre>
+      <p>Keys can be added with <code>[]</code> or with <code>insert</code> of a pair; the output order is not the insertion order.</p>
+    </div>
+    <div class="approach">
+      <h4>find(), begin(), end()</h4>
+<pre><code class="language-cpp">    m["gfg"] = 20;
+    m["ide"] = 30;
+    m["courses"] = 15;
+    if(m.find("ide") != m.end())
+        cout &lt;&lt; "Found \n";
+    else
+        cout &lt;&lt; "Not Found \n";
+    for(auto it = m.begin(); it != m.end(); it++)
+        cout &lt;&lt; (it-&gt;first) &lt;&lt; " " &lt;&lt; (it-&gt;second) &lt;&lt; endl;
+O/P  Found
+     gfg 20
+     courses 15
+     ide 30</code></pre>
+      <p>find returns an iterator, so the value can be used too:</p>
+<pre><code class="language-cpp">auto it = m.find("ide");
+if(it != m.end())
+{
+    cout &lt;&lt; (it-&gt;second);
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>count()</h4>
+<pre><code class="language-cpp">    if(m.count("ide") &gt; 0)
+        cout &lt;&lt; "Found";
+    else
+        cout &lt;&lt; "Not Found";</code></pre>
+    </div>
+    <div class="approach">
+      <h4>size() and erase()</h4>
+<pre><code class="language-cpp">    cout &lt;&lt; m.size() &lt;&lt; " ";
+    m.erase("ide");
+    m.erase(m.begin());
+    cout &lt;&lt; m.size() &lt;&lt; " ";
+O/P: 3 1</code></pre>
+      <p>erase takes a key or an iterator. The teacher then adds <code>m.end()</code> in blue, <code>m.erase(m.begin(), m.end());</code>, to erase a range.</p>
+    </div>
+
+    <h3>Time Complexities</h3>
+<pre><code class="language-plaintext">begin(), end(), size(), empty()    → O(1) in worst case
+count(), find(), erase(key),
+insert(), [], at                   → O(1) on average.</code></pre>
+    <div class="added">
+      <p><strong>Board note:</strong> the O/P 3 1 goes with <code>m.erase(m.begin())</code>; the range version added afterwards would empty the map. The teacher underlines count, find, [] and at on the complexity board for reasons the frames don't show.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAxNQ%3D%3D" target="_blank" rel="noopener">HashSet in Java</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li>HashSet stores a set of keys using hashing: hash tables to store them and hash functions to convert keys into indexes. Its three main operations, add, remove and contains, are O(1) on average.</li>
+      <li>The type must be non-primitive (Integer, String, Character, not int or char). User-defined classes are allowed if they have a hash code function.</li>
+      <li>You can create a HashSet with an initial capacity: if you know it will hold n elements, this helps internal optimisation.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/Nzk5Mg%3D%3D" target="_blank" rel="noopener">HashSet in Java</a></p>
+<ul>
+<li>HashSet implements the Set interface, backed by a hash table (actually a HashMap instance). No duplicates; no guaranteed iteration order (objects are placed by hash code); null is allowed. It extends AbstractSet and implements Set, Cloneable and Serializable; its known subclass is LinkedHashSet. add, remove, contains and size are constant time if the hash function disperses elements well.</li>
+<li>Iteration takes time proportional to the size plus the backing HashMap's capacity (buckets), so don't set the initial capacity too high (or load factor too low) if iteration matters.</li>
+<li><strong>Initial capacity</strong> is the number of buckets at creation; <strong>load factor</strong> is how full it may get before rehashing to about twice the buckets. With capacity 16 and load factor 0.75, it grows at 12 elements. 0.75 balances time and space; a higher value reduces memory overhead but slows add and search. If the initial capacity exceeds the maximum entries divided by the load factor, no rehash ever happens.</li>
+<li>Not synchronized: with concurrent modification, synchronize externally or wrap with <code>Collections.synchronizedSet</code>, preferably at creation.</li>
+<li><strong>Internal working:</strong> <code>add()</code> calls the backing HashMap's <code>put()</code> with the element as key and a constant "PRESENT" as value; <code>remove()</code> works the same way. Before storing, it checks for an existing entry with <code>hashCode()</code> and <code>equals()</code>, so of two equal lists only the first is stored.</li>
+<li><strong>Constructors:</strong> <code>HashSet()</code> (capacity 16, load factor 0.75), <code>HashSet(int initialCapacity)</code>, <code>HashSet(int initialCapacity, float loadFactor)</code>, <code>HashSet(Collection)</code>.</li>
+<li>Operations: <code>add()</code> (duplicates ignored, insertion order not kept), <code>remove()</code>, iterate with <code>iterator()</code> or the enhanced for loop. add, remove and contains take O(1) amortised.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>add(), contains(), iterator()</h4>
+<pre><code class="language-java">import java.util.*;
+class Test {
+    public static void main(String args[])
+    {
+        HashSet&lt;String&gt; h = new HashSet&lt;String&gt;();
+        h.add("gfg");
+        h.add("courses");
+        h.add("ide");
+        System.out.println(h);
+        System.out.println(h.contains("ide"));
+        Iterator&lt;String&gt; i = h.iterator();
+        while(i.hasNext())
+            System.out.print(i.next() + " ");
+    }
+}
+O/P: [gfg courses ide]
+     True
+     gfg courses ide</code></pre>
+      <ul>
+        <li>Printing the set uses its toString function. <code>contains</code> returns true if the key is present, false otherwise.</li>
+        <li><code>h.iterator()</code> returns an iterator to the set; <code>hasNext()</code> checks there are items left and <code>next()</code> gives the next one.</li>
+        <li><code>add</code> returns true if the item is added; if it's already present, it ignores it and returns false (adding "ide" again returns false).</li>
+        <li>Traversal has no guaranteed order; it can differ for different sets of items.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>size(), remove(), isEmpty(), clear()</h4>
+<pre><code class="language-java">        HashSet&lt;String&gt; h = new HashSet&lt;String&gt;();
+        h.add("gfg");
+        h.add("courses");
+        h.add("ide");
+        System.out.println(h.size());
+        h.remove("ide");
+        System.out.println(h.size());
+        for(String s : h)
+            System.out.print(s + " ");
+        System.out.println(h.isEmpty());
+        // h.clear();
+        // System.out.println(h.size());</code></pre>
+      <ul>
+        <li>Size is 3, then 2 after <code>remove("ide")</code>. <code>remove</code> returns true if the item was present and removed, false otherwise.</li>
+        <li>The for-each loop is a simpler traversal than the iterator. <code>isEmpty()</code> returns false here, since two items remain.</li>
+        <li><code>clear()</code> empties the set, so the size printed after it is 0. It's useful when using one HashSet for multiple test cases: clear it after each one.</li>
+      </ul>
+    </div>
+
+    <h3>Time complexities</h3>
+<pre><code class="language-plaintext">add()
+remove()       > O(1) on average.
+contains()
+size()
+isEmpty()      > O(1)</code></pre>
+    <p><code>isEmpty()</code> just checks whether the size, maintained internally by the collection, is 0. Use a HashSet in any Java program needing search, insert and delete (or a subset) on a collection of items.</p>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAxNg%3D%3D" target="_blank" rel="noopener">HashMap in Java</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ul>
+      <li>HashSet stores only keys; <strong>HashMap</strong> stores key–value pairs. It's needed for many hashing problems.</li>
+      <li>The first type parameter is the key's type, the second the value's. Besides the empty constructor there are constructors for an initial capacity (to optimise when you know it will hold n elements), for a load factor, and to create a HashMap from another map. The empty and initial-capacity ones are the ones mainly used.</li>
+      <li>HashMap implements the Map interface (key–value pairs; the Set interface means only keys). TreeMap also implements Map, but HashMap is the one that uses hashing.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/MzI1OQ%3D%3D" target="_blank" rel="noopener">HashMap in Java</a></p>
+<ul>
+<li>Part of Java's collections since Java 1.2 (in <code>java.util</code>), the basic implementation of the Map interface, storing (key, value) pairs; HashSet stores only keys. It extends the abstract class AbstractMap.</li>
+<li>Performance depends on two parameters: initial capacity and load factor.</li>
+<li>No duplicate keys, but duplicate values are allowed: one key can't hold more than one value, but several keys can share a value. Insertion order isn't tracked, so the output order of pairs varies.</li>
+<li>The article's examples cover <code>put()</code>, <code>size()</code> and traversal; <code>containsKey()</code> and <code>remove()</code>; <code>containsValue()</code> and <code>get()</code>.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>put(), size(), traversal</h4>
+<pre><code class="language-java">class Test {
+    public static void main(String args[])
+    {
+        HashMap&lt;String, Integer&gt; m = new HashMap&lt;String, Integer&gt;();
+        m.put("gfg", 10);
+        m.put("ide", 15);
+        m.put("courses", 20);
+        System.out.println(m);
+        System.out.println(m.size());
+        for(Map.Entry&lt;String, Integer&gt; e : m.entrySet())
+            System.out.println(e.getKey() + " " + e.getValue());
+    }
+}
+O/P: {gfg=10, ide=15, courses=20}
+     3
+     gfg 10
+     …</code></pre>
+      <p><code>Map.Entry</code> is the type of an entry; <code>m.entrySet()</code> gives all key–value pairs, for printing or any other operation on every key or value. The output order isn't predictable, since different keys go into slots in any order.</p>
+    </div>
+    <div class="approach">
+      <h4>containsKey(), remove()</h4>
+<pre><code class="language-java">        if(m.containsKey("ide"))
+            System.out.println("Yes");
+        else
+            System.out.println("No");
+        m.remove("ide");
+        System.out.println(m.size());
+O/P: Yes
+     2</code></pre>
+      <p><code>containsKey</code> is one of the most used functions when solving coding problems with a HashMap. After <code>remove("ide")</code>, <code>containsKey("ide")</code> would return false. <code>remove</code> returns the value for the key (15 here), or null if the key isn't present.</p>
+    </div>
+    <div class="approach">
+      <h4>containsValue(), get()</h4>
+<pre><code class="language-java">        if(m.containsValue(15))
+            System.out.println("Yes");
+        else
+            System.out.println("No");
+        System.out.println(m.get("ide"));
+        System.out.println(m.get("practice"));
+O/P: Yes
+     15
+     null</code></pre>
+      <p><code>get</code> returns the value for a key that's present, and null otherwise.</p>
+    </div>
+
+    <h3>Time complexities</h3>
+    <ul>
+      <li><code>put</code>, <code>containsKey</code>, <code>remove</code>, <code>get</code>: O(1) on average, since they use hashing.</li>
+      <li><code>size</code>, <code>isEmpty</code>: O(1) even in the worst case.</li>
+    </ul>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-16">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAxNw%3D%3D" target="_blank" rel="noopener">Count Distinct Elements</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: given an array of integers, find the number of unique elements, first with a naive nested-loop approach, then efficiently with hashing (sets).</p>
+<pre><code class="language-plaintext">Count Distinct Elements
+I/P: arr[] = {15, 12, 13, 12, 13, 13, 18}    O/P: 4
+I/P: arr[] = {10, 10, 10}                    O/P: 1
+I/P: arr[] = {10, 11, 12}                    O/P: 3</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NzYwNw%3D%3D" target="_blank" rel="noopener">Count Distinct Elements</a></p>
+<ul>
+<li><strong>Two loops:</strong> for every element, check whether it appeared before; O(n²).</li>
+<li><strong>Sorting:</strong> sort so all occurrences of each element are consecutive, then count distinct elements in one traversal; O(n log n).</li>
+<li><strong>Hashing:</strong> traverse left to right keeping visited elements in a hash set; O(n) on average.</li>
+<li><strong>Set STL approach:</strong> a set stores only unique values, so insert every element and return <code>set::size()</code>. Arr = [1, 2, 2, 2, 3, 16, 2, 8, 2, 1, 8] has distinct elements [1, 2, 3, 16, 8], a total of 5.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-cpp">int countDist(int arr[], int n)
+{
+    int res = 0;
+    for(int i=0; i&lt;n; i++)
+    {
+        bool flag = false;
+        for(int j=0; j&lt;i; j++)
+        {
+            if(arr[i] == arr[j])
+            {
+                flag = true;
+                break;
+            }
+        }
+        if(flag == false)
+            res++;
+    }
+    return res;
+}</code></pre>
+      <p>Count an element only if it doesn't appear earlier. Board walkthrough for arr[] = {10, 20, 10, 20, 30}: i = 0: res = 1; i = 1: res = 2; i = 2 and i = 3 are repeats; i = 4: res = 3.</p>
+      <p><strong>Time Complexity:</strong> O(n²) · <strong>Aux Space:</strong> O(1)</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+<pre><code class="language-cpp">int countDistinct(int arr[], int n)
+{
+    unordered_set&lt;int&gt; s;
+    for(int i=0; i&lt;n; i++)
+        s.insert(arr[i]);
+    return s.size();
+}</code></pre>
+<pre><code class="language-java">int countDistinct(int arr[])
+{
+    HashSet&lt;Integer&gt; s = new HashSet&lt;&gt;();
+    for(int i=0; i&lt;arr.length; i++)
+        s.add(arr[i]);
+    return s.size();
+}</code></pre>
+      <p>Insert every element into a set, which ignores duplicates, and return its size. Board walkthrough for {10, 20, 10, 20, 30}: s = { }; i = 0: s = {10}; i = 1: s = {10, 20}; i = 2: s = {10, 20}; …</p>
+    </div>
+    <div class="approach">
+      <h4>Improved Efficient Implementations</h4>
+<pre><code class="language-cpp">int countDistinct(int arr[], int n)
+{
+    unordered_set&lt;int&gt; s(arr, arr+n);
+    return s.size();
+}</code></pre>
+<pre><code class="language-java">int countDistinct(Integer arr[])
+{
+    HashSet&lt;Integer&gt; s = new HashSet&lt;&gt;(Arrays.asList(arr));
+    return s.size();
+}</code></pre>
+      <p>The set is built straight from the array: a range constructor in C++, and <code>Arrays.asList</code> in Java, which needs an <code>Integer</code> array.</p>
+      <p><strong>Time Complexity:</strong> Θ(n) · <strong>Aux Space:</strong> O(n)</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the C++ efficient version is missing the semicolon after <code>s.insert(arr[i])</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-17">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTAxOA%3D%3D" target="_blank" rel="noopener">Frequencies of array elements</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print every distinct element of the array with its frequency, in any order.</p>
+<pre><code class="language-plaintext">Frequencies of Array Elements
+I/P: arr[] = {10, 12, 10, 15, 10, 20, 12, 12}    O/P: 10 3
+                                                      12 3
+                                                      15 1
+                                                      20 1
+I/P: arr[] = {10, 10, 10, 10}                    O/P: 10 4
+I/P: arr[] = {10, 20}                            O/P: 10 1
+                                                      20 1</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NzYzNg%3D%3D" target="_blank" rel="noopener">Frequencies of array elements</a></p>
+<ul>
+<li><strong>Simple:</strong> two loops, counting how many times each item occurs and keeping track of processed items to avoid duplicate printing. Time O(n²), auxiliary space O(n).</li>
+<li><strong>Efficient:</strong> hashing. Time O(n), auxiliary space O(n).</li>
+<li>To print the elements in the same order as in the input, there is a variant with the same O(n) time and O(n) space, plus a Java version using HashMap.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-cpp">void printFreq(int arr[], int n)
+{
+    for(int i=0; i&lt;n; i++)
+    {   bool flag = false;                          // Check if seen before
+        for(int j=0; j&lt;i; j++)
+            if(arr[i] == arr[j]) { flag = true; break; }
+        if(flag == true)                            // If seen, ignore
+            continue;
+        int freq = 1;                               // If not seen before,
+        for(int j=i+1; j&lt;n; j++)                    // count frequency
+            if(arr[i] == arr[j])
+                freq++;
+        cout &lt;&lt; arr[i] &lt;&lt; " " &lt;&lt; freq &lt;&lt; endl;
+    }
+}</code></pre>
+      <ul>
+        <li>Traverse left to right. An element must not be printed more than once, so first check its left side (j = 0 to i − 1). If it was seen before, <code>continue</code> to the next element.</li>
+        <li>For a new element, its frequency starts at 1 and only the right side needs counting. Board walkthrough for {10, 20, 20, 30, 10}: i = 0, 1, 3 print; i = 2 and 4 are skipped.</li>
+        <li>Java is very close: <code>boolean</code> for <code>bool</code>, <code>System.out.print</code> for <code>cout</code>.</li>
+      </ul>
+      <p><strong>Time:</strong> O(n²) (nested loops) · <strong>Aux Space:</strong> O(1)</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+<pre><code class="language-plaintext">{10, 20, 20, 10, 30, 10}
+h = { }   // Empty hash map
+i = 0: h = {(10, 1)}
+i = 1: h = {(10, 1), (20, 1)}
+i = 2: h = {(10, 1), (20, 2)}
+i = 3: h = {(10, 2), (20, 2)}
+i = 4: h = {(10, 2), (20, 2), (30, 1)}
+i = 5: h = {(10, 3), (20, 2), (30, 1)}</code></pre>
+      <p>The standard trick for counting: a hash map (unordered_map in C++, HashMap in Java) with the elements as keys and their frequencies as values. A new element is inserted with value 1; a present one has its value incremented. Then traverse the map and print the pairs.</p>
+<pre><code class="language-cpp">int countFreq(int arr[], int n)
+{   unordered_map&lt;int, int&gt; h;
+    for(int i=0; i&lt;n; i++)
+        h[arr[i]]++;
+    for(auto e : h)
+        cout &lt;&lt; e.first &lt;&lt; " " &lt;&lt; e.second &lt;&lt; endl;
+}</code></pre>
+<pre><code class="language-java">int countFreq(int arr[])
+{   HashMap&lt;Integer, Integer&gt; h = new HashMap&lt;&gt;();
+    for(int x : arr)
+        h.put(x, h.getOrDefault(x, 0) + 1);
+    for(Map.Entry&lt;Integer, Integer&gt; e : h.entrySet())
+        System.out.println(e.getKey() + " " + e.getValue());
+}</code></pre>
+      <ul>
+        <li><strong>C++:</strong> the <code>[]</code> operator inserts a missing key with value 0, so <code>++</code> makes the first frequency 1 (seeing 50 first inserts (50, 0), then 50 becomes 1).</li>
+        <li><strong>Java:</strong> <code>getOrDefault(x, 0)</code> returns x's value, or the default 0 if x is absent; adding 1 gives the new frequency. <code>put</code> with an existing key replaces its value, so the second 50 replaces (50, 1) with (50, 2).</li>
+        <li>Print with <code>entrySet()</code> and <code>getKey()</code> / <code>getValue()</code> in Java, or <code>e.first</code> / <code>e.second</code> with <code>auto</code> in C++. Board walkthrough for {50, 50, 10, 40, 10}: m ends as {(50, 2), (10, 2), (40, 1)}, printed 50 2, 10 2, 40 1.</li>
+        <li>The printing order is unpredictable, as it depends on the hash function. To print in order of first appearance: in Java use <strong>LinkedHashMap</strong>, which keeps insertion order. In C++, traverse the array again instead of the map, print each item with its frequency, and mark its frequency −1 once printed to avoid duplicates.</li>
+      </ul>
+      <p><strong>Time Complexity:</strong> Θ(n): insert and get are O(1); the first loop is Θ(n) and printing is O(n) (one distinct element in the best case, n in the worst) · <strong>Aux Space:</strong> O(n)</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> both efficient versions are declared to return <code>int</code> but only print and return nothing (the naive one is <code>void</code>).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-18">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MjY4NA%3D%3D" target="_blank" rel="noopener">Intersection of two unsorted arrays</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print the elements common to two unsorted arrays, in the order they appear in the first array. Both solutions assume all elements in each array are distinct.</p>
+<pre><code class="language-plaintext">Intersection of Two Unsorted Arrays
+I/P: a[] = {10, 15, 20, 25, 30, 50}
+     b[] = {30, 5, 15, 80}          O/P: 15 30
+I/P: a[] = {10, 20}
+     b[] = {20, 30}                 O/P: 20
+I/P: a[] = {10, 20, 30}
+     b[] = {30, 20, 10}             O/P: 10 20 30</code></pre>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-plaintext">void intersection(int a[], int m,
+                  int b[], int n)
+{
+    for(int i=0; i&lt;m; i++)
+    {
+        bool flag = false;
+        for(int j=0; j&lt;n; j++)
+        {   if(a[i] == b[j])
+            {
+                flag = true;
+                break;
+            }
+        }
+        if(flag == true)
+            print(a[i] + " ");
+    }
+}</code></pre>
+      <p>For every element of a, search b; print it if found. This is pseudocode close to both languages: Java gets the lengths from <code>a.length</code> and <code>b.length</code>, and prints with <code>System.out.print</code>. Board walkthrough for a[] = {10, 20, 30}, b[] = {10, 30}, m = 3, n = 2: i = 0: flag = true, print(10); i = 1: flag = false; i = 2: flag = true, print(30).</p>
+      <p><strong>Time:</strong> O(m × n): the inner loop is O(n), not always n, since it breaks on a match.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+      <p>Put b's elements (not a's) into an empty hash table (unordered_set / HashSet), then traverse a and print each element found in the table. Putting a in the table and traversing b would give b's order. Inserting b is Θ(n); traversing a with constant-time lookups is Θ(m).</p>
+<pre><code class="language-cpp">void intersect(int a[], int b[], int m, int n)
+{
+    unordered_set&lt;int&gt; s(b, b+n);
+    for(int i=0; i&lt;m; i++)
+        if(s.find(a[i]) != s.end())
+            cout &lt;&lt; a[i] &lt;&lt; " ";
+}</code></pre>
+<pre><code class="language-java">void intersect(int a[], int b[])
+{
+    HashSet&lt;Integer&gt; s = new HashSet&lt;&gt;();
+    for(int i=0; i&lt;b.length; i++)
+        s.insert(b[i]);
+    for(int i=0; i&lt;a.length; i++)
+        if(s.contains(a[i]))
+            System.out.print(a[i] + " ");
+}</code></pre>
+      <p>The three Java lines that fill the set replace C++'s one-line constructor: the Java shortcut needs an Integer array, and the input here is an int array. Board walkthrough for a[] = {10, 20, 30}, b[] = {30, 10}: after step 1, s = {30, 10}; step 2: i = 0: print(10); i = 1: nothing; i = 2: print(30).</p>
+      <p><strong>Time:</strong> Θ(m + n) · <strong>Aux Space:</strong> Θ(n)</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the Java version calls <code>s.insert(b[i])</code>; HashSet's method is <code>add</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-19">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTQ5NjY%3D" target="_blank" rel="noopener">Union of two unsorted arrays</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Count the distinct elements of two (possibly unsorted) arrays combined.</p>
+<pre><code class="language-plaintext">Union of Two Unsorted Arrays
+I/P: a[] = {15, 20, 5, 15}
+     b[] = {15, 15, 15, 20, 10}     O/P: 4
+I/P: a[] = {10, 12, 15}
+     b[] = {18, 12}                 O/P: 4
+I/P: a[] = {3, 3, 3}
+     b[] = {3, 3}                   O/P: 1</code></pre>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-plaintext">1) Initialize: res = 0.
+2) Create an auxiliary array dist[].
+3) Traverse through a[]. For every element of a[], check if it is present in dist[].
+   If no, a) Increment res
+          b) Append the element to dist[]
+4) Repeat step 3 for every element of b[].
+O(m×m + n×(m+n))</code></pre>
+      <p>dist[] records which elements have already been processed. Board walkthrough for a[] = {10, 30, 10}, b[] = {5, 10, 5}: initially res = 0, dist[] = { }; after traversing a[]: res = 2, dist[] = {10, 30}; after traversing b[]: res = 3, dist[] = {10, 30, 5}.</p>
+      <p>Step 3 runs m times, checking a dist[] of up to m elements (about m(m + 1)/2, so O(m²)). Step 4 checks each of b's n elements against at most m + n (if all are distinct): an upper bound of n × (m + n). That's quadratic.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+      <p>The only operations on dist[] are insert and search, with no order needed: exactly what hashing does in constant time.</p>
+<pre><code class="language-plaintext">1) Create an empty hash table, h
+2) Insert all elements of a[] in h.  Θ(m)
+3) Insert all elements of b[] in h.  Θ(n)
+4) Return h.size().
+a[] = {10, 30, 10}, b[] = {40, 10}
+After ①: h = { }   After ②: h = {10, 30}   After ③: h = {10, 30, 40}</code></pre>
+      <p>unordered_set and HashSet ignore an insert of an element already present.</p>
+<pre><code class="language-cpp">int unionCount(int a[], int b[], int m, int n)
+{   unordered_set&lt;int&gt; h(a, a+m);
+    for(int i=0; i&lt;n; i++)
+        h.insert(b[i]);
+    return h.size();
+}</code></pre>
+<pre><code class="language-java">int unionCount(int a[], int b[])
+{   Set&lt;Integer&gt; h = new HashSet&lt;&gt;();
+    for(int x : a)
+        h.add(x);
+    for(int x : b)
+        h.add(x);
+    return h.size();
+}</code></pre>
+      <p>In Java, an <code>Integer</code> array could build the set directly via <code>Arrays.asList</code>, as in C++; with an <code>int</code> array the elements are added one by one. Board walkthrough for a[] = {10, 30, 10, 40}, b[] = {40, 5, 10, 15}: after processing a[], h = {10, 30, 40}; after b[], h = {10, 30, 40, 5, 15}, size 5.</p>
+      <p><strong>Time:</strong> Θ(m + n) · <strong>Aux Space:</strong> O(m + n): exactly m + n only when all elements are distinct, less with repetitions.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-20">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MjY5Ng%3D%3D" target="_blank" rel="noopener">Pair with given sum in unsorted array</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The array may be unsorted and may contain duplicates and negative numbers. Return true if some pair sums to the given sum, false otherwise.</p>
+<pre><code class="language-plaintext">Pair With Given Sum
+I/P: arr[] = {3, 2, 8, 15, -8}    sum = 17    O/P: True     (15 + 2)
+I/P: arr[] = {2, 1, 6, 3}         sum = 6     O/P: False
+I/P: arr[] = {5, 8, -3, 6}        sum = 3     O/P: True     (6 + -3)</code></pre>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Method</h4>
+<pre><code class="language-plaintext">1) Consider all possible pairs one by one and check for sum.
+   arr[] = {8, 3, 9, 4}, sum = 13
+   pairs: (8, 3), (8, 9), (8, 4), (3, 9), (3, 4), (9, 4)
+2) If we find a pair, return true. Else return false.
+There are n*(n-1)/2 pairs.</code></pre>
+      <p>Each element pairs with the n − 1 others, giving n(n − 1), but every pair is counted twice.</p>
+<pre><code class="language-cpp">bool isPair(int arr[], int n, int sum)
+{
+    for(int i=0; i&lt;n; i++)
+        for(int j=i+1; j&lt;n; j++)
+            if(arr[i] + arr[j] == sum)
+                return true;
+    return false;
+}</code></pre>
+      <p>Board walkthrough for arr[] = {8, 4, 3, 9}, sum = 13: i = 0: j = 1, 2, 3 (8 + 4, 8 + 3, 8 + 9) don't match; i = 1: j = 2 (4 + 3) doesn't; j = 3 (4 + 9 = 13): return true.</p>
+      <p><strong>Time:</strong> O(n²) (constant in the best case, as it returns on the first match) · <strong>Aux Space:</strong> O(1)</p>
+    </div>
+    <div class="approach">
+      <h4>Before the efficient solution</h4>
+      <ul>
+        <li>A sorting-based solution exists: sort, then the <strong>two-pointer approach</strong> from both ends. It's O(n log n) because of the sort, so it's good for an already sorted array, but hashing does better for unsorted ones.</li>
+        <li>A common wrong approach:</li>
+      </ul>
+<pre><code class="language-plaintext">Note: First inserting everything into a hash table then
+traversing through the array does not work.
+arr[] = {8, 3, 2, 5}, sum = 6
+h = {8, 3, 2, 5}
+Now if we traverse and look for (sum - arr[i]) in h,
+we would return incorrect result.</code></pre>
+      <p>At 3, 6 − 3 = 3 is found in h, so it returns true, but there's only one 3 in the array.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+      <p>Before inserting an element, check whether it forms a pair with an element already in the hash table. If so, return true; otherwise insert it. For the first element the check is always false.</p>
+<pre><code class="language-cpp">bool isPair(int arr[], int n, int sum)
+{   unordered_set&lt;int&gt; h;
+    for(int i=0; i&lt;n; i++)
+    {
+        if(h.find(sum - arr[i]) != h.end())
+            return true;
+        else
+            h.insert(arr[i]);
+    }
+    return false;
+}</code></pre>
+<pre><code class="language-java">boolean isPair(int []arr, int sum)
+{   Set&lt;Integer&gt; h = new HashSet&lt;&gt;();
+    for(int x : arr)
+    {   if(h.contains(sum - x))
+            return true;
+        else
+            h.add(x);
+    }
+    return false;
+}</code></pre>
+      <p>Board walkthrough for arr[] = {8, 3, 4, 2, 5}, sum = 6: initially h = { }; i = 0: h = {8}; i = 1: h = {8, 3} (6 − 3 = 3 isn't in h yet); i = 2: h = {8, 3, 4}; i = 3: 6 − 2 = 4 is in h, return true.</p>
+      <p><strong>Time:</strong> O(n), not Θ(n), since it may return after the first two elements · <strong>Aux Space:</strong> O(n)</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-21">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTQ5MDY%3D" target="_blank" rel="noopener">Subarray with zero sum</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: find whether a subarray with sum 0 exists, first with a naive nested-loop approach, then efficiently with hashing.</p>
+<pre><code class="language-plaintext">Subarray with 0 Sum
+I/P: arr[] = {1, 4, 13, -3, -10, 5}     O/P: Yes   (13, -3, -10)
+I/P: arr[] = {-1, 4, -3, 5, 1}          O/P: Yes   (-1, 4, -3)
+I/P: arr[] = {3, 1, -2, 5, 6}           O/P: No
+I/P: arr[] = {5, 6, 0, 8}               O/P: Yes   (0)
+
+Subarrays of {10, 20, 30}:
+{10}, {10, 20}, {10, 20, 30}, {20}, {20, 30}, {30}</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NzYzNA%3D%3D" target="_blank" rel="noopener">Subarray with Zero Sum</a></p>
+<ul>
+<li>Find whether a subarray (of size at least one) has sum 0. {4, 2, −3, 1, 6}: true (indexes 1 to 3). {4, 2, 0, 1, 6}: true (a single 0 is a subarray). {−3, 2, 3, 1, 6}: false.</li>
+<li><strong>Simple:</strong> the outer loop picks a start i, the inner one tries every subarray starting at i; O(n²).</li>
+<li><strong>Hashing:</strong> for every arr[i], compute the sum of elements 0 to i (sum += arr[i]). If the current sum has been seen before, there is a zero-sum subarray; a hash set stores the sums for quick lookup.</li>
+<li>Time O(n) assuming a good hash function with O(1) insertion and retrieval; space O(n) for the unordered_set.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-cpp">bool is0Subarray(int arr[], int n)
+{
+    for(int i=0; i&lt;n; i++)
+    {
+        int curr_sum = 0;
+        for(int j=i; j&lt;n; j++)
+        {
+            curr_sum += arr[j];
+            if(curr_sum == 0)
+                return true;
+        }
+    }
+    return false;
+}</code></pre>
+      <p>Every subarray starting at i is summed as j moves right. Board walkthrough for arr[] = {4, −3, 2, 1}: i = 0: j = 0, curr_sum = 4; j = 1, 1; j = 2, 3; j = 3, 4. i = 1: j = 1, 2, then j = 3, curr_sum = 0: return true.</p>
+      <p><strong>Time:</strong> O(n²)</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+<pre><code class="language-plaintext">Idea: Use Prefix Sum &amp; Hashing
+               pre_sum2
+ ┌────────────────────────────────┐
+ a0, a1, … a(i-1), ai, a(i+1) … aj … a(n-1)
+ └──────────────┘  └───────────────┘
+     pre_sum1              ‖
+                           0
+If sum of a[i:j] is 0, then pre_sum1 must be same as pre_sum2.</code></pre>
+<pre><code class="language-cpp">bool is0Subarray(int arr[], int n)
+{
+    unordered_set&lt;int&gt; h;
+    int pre_sum = 0;
+    for(int i=0; i&lt;n; i++)
+    {
+        pre_sum += arr[i];
+        if(h.find(pre_sum) != h.end())
+            return true;
+        if(pre_sum == 0)
+            return true;
+        h.insert(pre_sum);
+    }
+    return false;
+}</code></pre>
+<pre><code class="language-java">boolean is0Subarray(int []arr)
+{
+    HashSet&lt;Integer&gt; h = new HashSet&lt;&gt;();
+    int pre_sum = 0;
+    for(int i=0; i&lt;arr.length; i++)
+    {
+        pre_sum += arr[i];
+        if(h.contains(pre_sum))
+            return true;
+        if(pre_sum == 0)
+            return true;
+        h.add(pre_sum);
+    }
+    return false;
+}</code></pre>
+      <p>Board walkthrough for [−3, 4, −3, −1, 1]: pre_sum = 0, h = { }. i = 0: pre_sum = −3, h = {−3}; i = 1: 1, h = {−3, 1}; i = 2: −2, h = {−3, 1, −2}; i = 3: pre_sum = −3, already present in h: return true (the subarray 4, −3, −1).</p>
+      <p>The <code>pre_sum == 0</code> check covers a zero-sum subarray starting at index 0. The board's example is [−3, 2, 1, 4], where −3, 2, 1 sums to 0.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> no time or space complexity for the efficient solution is visible in the frames.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-22">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/NzgyNw%3D%3D" target="_blank" rel="noopener">Subarray with given Sum</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The array may contain positive, negative and zero values. Find whether a subarray (contiguous elements) has the given sum. In the first example, sum 11 would be false: 5 + 6 make 11 but aren't contiguous.</p>
+<pre><code class="language-plaintext">Subarray with Given Sum
+I/P: arr[] = {5, 8, 6, 13, 3, -1}      sum = 22    O/P: True   (6, 13, 3)
+I/P: arr[] = {15, 2, 8, 10, -5, -8, …} sum = 3     O/P: True
+I/P: arr[] = {3, 2, 5, 6}              sum = 10    O/P: True   (3, 2, 5)</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NzYzNQ%3D%3D" target="_blank" rel="noopener">Subarray with given Sum</a></p>
+<ul>
+<li>The article's version: an unsorted array of <strong>nonnegative</strong> integers; print the first continuous subarray adding to the sum. {1, 4, 20, 3, 10, 5}, sum = 33: indexes 2 to 4 (20 + 3 + 10). {1, 4, 0, 0, 3, 10, 5}, sum = 7: indexes 1 to 4. {1, 4}, sum = 0: no subarray found.</li>
+<li><strong>Simple:</strong> the outer loop picks a start i, the inner loop extends to the end, adding array[j] to a running sum and printing when it equals the given sum. Time O(n²) worst case, space O(1).</li>
+<li><strong>Efficient (sliding window, all elements positive):</strong> once a window's sum exceeds the target, adding more elements can't bring it back. Keep l = 0, sum = 0; add each element; while the sum is greater than the target, subtract array[l] and do l++; when it equals the target, print and stop.</li>
+<li>Each element enters and leaves the window at most once: O(N) + O(N) = O(N) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-cpp">bool isSubArrSum(int arr[], int n, int sum)
+{
+    for(int i=0; i&lt;n; i++)
+    {   int curr_sum = 0;
+        for(int j=i; j&lt;n; j++)
+        {   curr_sum += arr[j];
+            if(curr_sum == sum)
+                return true;
+        }
+    }
+    return false;
+}</code></pre>
+      <p>The outer loop picks the starting element, the inner one the ending element. Board walkthrough for arr[] = {5, 8, 6, 13}, sum = 14: i = 0: j = 0, curr_sum = 5; j = 1, 13; j = 2, 19; j = 3, 32. i = 1: j = 1, 8; j = 2, 14: we return true.</p>
+      <p><strong>Time:</strong> O(n²) (it may return in the middle), <strong>Aux Space:</strong> O(1)</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+      <p>The same idea as the Subarray with 0 Sum video: prefix sums and hashing.</p>
+<pre><code class="language-plaintext">pre_sum2 = pre_sum1 + sum
+┌────────────────────────┐
+a0 a1 a2 … ai  a(i+1) … aj … a(n-1)
+└──────────┘   └────────┘
+  pre_sum1        sum
+We need to check "Prefix Sum - Sum" exists among Prefix Sums.
+
+arr[] = {5, 8, 6, 13, 3, -1}, sum = 22, h = { }
+i = 0: pre_sum = 5,  h = {5}
+i = 1: pre_sum = 13, h = {5, 13}
+i = 2: pre_sum = 19, h = {5, 13, 19}
+i = 3: pre_sum = 32, h = {5, 13, 19, 32}
+i = 4: pre_sum = 35, the value "35 - 22" is present in h. So we return true.</code></pre>
+      <p>Before storing each prefix sum, search for prefix sum − sum. At i = 4, 35 − 22 = 13 was the prefix sum up to 8, so the subarray after it, 6, 13, 3, has sum 22.</p>
+<pre><code class="language-cpp">bool isSum(int arr[], int n, int sum)
+{   unordered_set&lt;int&gt; h;
+    int pre_sum = 0;
+    for(int i=0; i&lt;n; i++)
+    {   pre_sum += arr[i];
+        if(pre_sum == sum) return true;
+        if(h.find(pre_sum - sum) != h.end())
+            return true;
+        h.insert(pre_sum);
+    }
+    return false;
+}</code></pre>
+<pre><code class="language-java">boolean isSum(int [] arr, int sum)
+{   Set&lt;Integer&gt; h = new HashSet&lt;Integer&gt;();
+    int pre_sum = 0;
+    for(int x : arr)
+    {   pre_sum += x;
+        if(pre_sum == sum) return true;
+        if(h.contains(pre_sum - sum))
+            return true;
+        h.add(pre_sum);
+    }
+    return false;
+}</code></pre>
+      <p>Board walkthrough for arr[] = {5, 3, 2, −1}, sum = 4: initially h = { }; i = 0: pre_sum = 5, h = {5}; i = 1: 8, h = {5, 8}; i = 2: 10, h = {5, 8, 10}; i = 3: pre_sum = 9, since 5 is present, return true.</p>
+      <p><strong>Why the <code>pre_sum == sum</code> check:</strong> it handles subarrays starting at index 0, which have no previous prefix to find. For arr[] = {2, 3, 4, 6}, sum = 9, h becomes {2, 5, 9, 15} and none of 2 − 9, 5 − 9, 9 − 9 = 0, 15 − 9 = 6 is ever found, yet 2 + 3 + 4 = 9. Another way is to insert 0 into the hash table explicitly at the start.</p>
+      <p><strong>Time:</strong> O(n) · <strong>Aux Space:</strong> O(n): upper bounds, as it may return in the middle with fewer prefix sums stored.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the C++ version declares <code>unordered_sum&lt;int&gt; h;</code> for <code>unordered_set</code>. The second example's array is cut off at the board's edge.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-23">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MjcwNQ%3D%3D" target="_blank" rel="noopener">Longest subarray with given sum</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Return the length of the longest subarray with the given sum, or 0 if there is none.</p>
+<pre><code class="language-plaintext">Longest Subarray with Given Sum
+I/P: arr[] = {5, 8, -4, -4, 9, -2, 2}       sum = 0     O/P: 3   (8, -4, -4)
+I/P: arr[] = {3, 1, 0, 1, 8, 2, 3, 6}       sum = 5     O/P: 4   (3, 1, 0, 1)
+I/P: arr[] = {8, 3, 7}                      sum = 15    O/P: 0</code></pre>
+    <p>In the second example, 2, 3 also sums to 5, but it's shorter. In the third, 8 and 7 sum to 15 but aren't contiguous.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-cpp">int maxLen(int arr[], int n, int sum)
+{   int res = 0;
+    for(int i=0; i&lt;n; i++)
+    {   int curr_sum = 0;
+        for(int j=i; j&lt;n; j++)
+        {   curr_sum += arr[j];
+            if(curr_sum == sum)
+                res = max(res, j-i+1);
+        }
+    }
+    return res;
+}</code></pre>
+      <p>For every starting element, sum all subarrays beginning there; when the sum equals the given sum, compare the length j − i + 1 with the longest so far. Board walkthrough for arr[] = {5, 2, 3, 4}, sum = 5: initially res = 0; i = 0: res = 1; i = 1: res = 2 (2, 3); i = 2 and 3 change nothing.</p>
+      <p><strong>Time:</strong> Θ(n²) · <strong>Aux Space:</strong> O(1)</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+      <p>As in Subarray with Given Sum, store prefix sums and look for prefix sum − sum. To get the length, use a map (unordered_map / HashMap) instead of a set: prefix sum as key, its ending index as value. At index j, if pre_sum − sum is found with index i, the subarray from i + 1 to j has length j − i.</p>
+<pre><code class="language-plaintext">        pre_sum + sum
+┌──────────────────────────┐
+a0 a1 … ai a(i+1) … aj … a(n-1)
+└────────┘ └────────┘
+  pre_sum      sum
+
+     0  1  2  3   4  5  6  7
+arr[] = {8, 3, 1, 5, -6, 6, 2, 2}, sum = 4
+m = { } (Initially)
+m = {(8, 0)}                                          res = 0
+m = {(8, 0), (11, 1)}                                 res = 0
+m = {(8, 0), (11, 1), (12, 2)}                        res = 2
+m = {(8, 0), (11, 1), (12, 2), (17, 3)}               res = 2
+m = "   "
+m = "   "
+m = {(8, 0), (11, 1), (12, 2), (17, 3), (19, 6)}      res = 2
+m = {(8, 0), (11, 1), (12, 2), (17, 3), (19, 6), (21, 7)}   res = 4</code></pre>
+      <ul>
+        <li>Index 2: pre_sum 12, and 12 − 4 = 8 is at index 0, so length 2 − 0 = 2.</li>
+        <li>Indexes 4 and 5: the prefix sums 11 and 17 repeat. A repeating prefix sum means a zero-sum subarray in between (1 to 4 here), so <strong>don't replace the old entry</strong>: the older index gives a longer subarray.</li>
+        <li>Index 7: pre_sum 21, and 21 − 4 = 17 is at index 3, so length 7 − 3 = 4. Had (17, 5) replaced (17, 3), the length would have been only 2.</li>
+      </ul>
+<pre><code class="language-cpp">int maxLen(int arr[], int n, int sum)
+{   unordered_map&lt;int, int&gt; m;
+    int pre_sum = 0, res = 0;
+    for(int i=0; i&lt;n; i++)
+    {   pre_sum += arr[i];
+        if(pre_sum == sum)
+            res == i+1;
+        if(m.find(pre_sum) == m.end())
+            m.insert({pre_sum, i});
+        if(m.find(pre_sum - sum) != m.end())
+            res = max(res, i - m[pre_sum - sum]);
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-java">int maxLen(int arr[], int sum)
+{   Map&lt;Integer, Integer&gt; = new HashMap&lt;&gt;();
+    int pre_sum = 0, res = 0;
+    for(int i=0; i&lt;n; i++)
+    {   pre_sum += arr[i];
+        if(pre_sum == sum)
+            res = i+1;
+        if(m.contains(pre_sum) == false)
+            m.put(pre_sum, i);
+        if(m.contains(pre_sum - sum))
+            res = Math.max(res, i - m.get(pre_sum - sum));
+    }
+    return res;
+}</code></pre>
+      <ul>
+        <li><code>pre_sum == sum</code> handles a subarray starting at index 0, which has no earlier prefix to find. Its length i + 1 is the longest so far, so there's no need to compare with res: all elements from 0 to i form it.</li>
+        <li>Board walkthrough for arr[] = {5, 2, 3}, sum = 5: m = { }, res = 0; i = 0: pre_sum = 5, res = 1, m = {(5, 0)}; i = 1: pre_sum = 7, res = 1, m = {(5, 0), (7, 1)}; i = 2: pre_sum = 10, 10 − 5 = 5 is present, res = 2, m = {(5, 0), (7, 1), (10, 2)}.</li>
+      </ul>
+      <p><strong>Time:</strong> Θ(n) · <strong>Aux Space:</strong> O(n)</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the C++ version writes <code>res == i+1;</code> (a comparison) for <code>res = i+1;</code>. The Java version declares <code>Map&lt;Integer, Integer&gt; = new HashMap&lt;&gt;();</code> without the name m, loops to <code>n</code> though only <code>arr</code> and <code>sum</code> are parameters, and calls <code>m.contains</code> for <code>containsKey</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-24">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MjcwNA%3D%3D" target="_blank" rel="noopener">Longest subarray with equal number of 0's and 1's</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a binary array, find the length of the longest subarray (contiguous) with equal numbers of 0s and 1s.</p>
+<pre><code class="language-plaintext">Longest Subarray with equal 0s and 1s
+I/P: arr[] = {1, 0, 1, 1, 1, 0, 0}        O/P: 6   (0, 1, 1, 1, 0, 0)
+I/P: arr[] = {1, 1, 1, 1}                 O/P: 0
+I/P: arr[] = {0, 0, 1, 1, 1, 1, 1, 0}     O/P: 4   (0, 0, 1, 1)
+I/P: arr[] = {0, 0, 1, …}                 O/P: 6   (the whole array)</code></pre>
+    <p>The first example also has equal-count subarrays of length 2 and 4, but 6 is the longest. All 1s (or all 0s) gives 0.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NzYzOQ%3D%3D" target="_blank" rel="noopener">Longest Subarray with equal number of 0s and 1s</a></p>
+<ul>
+<li><strong>Method 1, brute force:</strong> generate all subarrays, taking a cumulative sum with 0s as −1 and 1s as they are. Where the sum is 0, that subarray has equal 0s and 1s; compare its size with the largest so far and store its first index. Time O(n²), auxiliary space O(1).</li>
+<li><strong>Method 2, hash map:</strong> with 0s as −1, a subarray qualifies when the cumulative sum is 0 (from index 0 to the present index), or when a cumulative sum value repeats (from the previous index + 1 to the present index). So find indexes i and j with equal cumulative sums and j − i maximal, storing the first occurrence of each sum.</li>
+<li>Algorithm: build sumleft[i] = sum of arr[0..i]. For subarrays from index 0, find the maximum i with sumleft[i] = 0. For the others, use a hash of size max − min + 1 (all possible sumleft values), initialised to −1, holding each value's leftmost index; on a repeat, the difference from the stored index is a candidate for maxsize.</li>
+<li>maxsize starts at −1 to handle all-1s and all-0s; if it stays −1 there's no such subarray. Time O(n), auxiliary space O(n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-cpp">int longestSub(int arr[], int n)
+{
+    int res = 0;
+    for(int i=0; i&lt;n; i++)
+    {   int c0 = 0, c1 = 0;
+        for(int j=i; j&lt;n; j++)
+        {   if(arr[j] == 0)
+                c0++;
+            else
+                c1++;
+            if(c0 == c1)
+                res = max(res, c0+c1);
+        }
+    }
+    return res;
+}</code></pre>
+      <p>For every starting element, count 0s and 1s over the subarrays beginning there; when the counts match, c0 + c1 is the length. Board walkthrough for arr[] = {1, 1, 1, 0, 1, 0}: i = 0: res = 0; i = 1: res = 0; i = 2: res = 4 (2 first, then 4 at index 5); i = 3, 4, 5: unchanged.</p>
+      <p><strong>Time:</strong> Θ(n²), since the inner loop never breaks · <strong>Aux Space:</strong> O(1)</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+<pre><code class="language-plaintext">1) Replace every 0 with -1.                       Θ(n) time
+   for(int i=0; i&lt;n; i++)
+       if(arr[i] == 0)
+           arr[i] = -1;
+   For example, {1, 0, 1, 1, 1, 0, 0} becomes
+   {1, -1, 1, 1, 1, -1, -1}
+2) Now call the function to find length of the longest
+   subarray with 0 sum.                           Θ(n) time
+                                                  O(n) Aux Space</code></pre>
+      <p>With 0s as −1, a subarray with equal 0s and 1s has sum 0, so this becomes the longest subarray with given sum (sum = 0) problem from the previous video, solved with prefix sums and hashing.</p>
+      <p><strong>Time:</strong> Θ(n) · <strong>Aux Space:</strong> O(n)</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-25">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MjcwMw%3D%3D" target="_blank" rel="noopener">Longest common span with same sum in binary arrays</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>We are given two binary arrays of the same size. Find the length of the longest common subarray (same starting and ending indexes in both) whose sum is the same in both arrays.</p>
+<pre><code class="language-plaintext">Longest Common Subarray with Given Sum
+I/P: arr1[] = {0, 1, 0, 0, 0, 0}
+     arr2[] = {1, 0, 1, 0, 0, 1}      O/P: 4   (indexes 1 to 4)
+I/P: arr1[] = {0, 1, 0, 1, 1, 1, 1}
+     arr2[] = {1, 1, 1, 1, 1, 0, 1}   O/P: 6
+I/P: arr1[] = {0, 0, 0}
+     arr2[] = {1, 1, 1}               O/P: 0
+I/P: arr1[] = {…, 0, 1, 0}
+     arr2[] = {…, 1, 1, 1}            O/P: 1</code></pre>
+    <p>In the first example, indexes 0 to 1 also have sum 1 in both, but 1 to 4 (sum 1: three 0s and a 1 in each) is the longest.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-cpp">int maxCommon(int arr1[], int arr2[], int n)
+{
+    int res = 0;
+    for(int i=0; i&lt;n; i++)
+    {   int sum1 = 0, sum2 = 0;
+        for(int j=i; j&lt;n; j++)
+        {   sum1 += arr1[j];
+            sum2 += arr2[j];
+            if(sum1 == sum2)
+                res = max(res, j-i+1);
+        }
+    }
+    return res;
+}</code></pre>
+      <p>Generate every subarray (i start, j end), keep both sums, and compare j − i + 1 with the result when they match. In Java, sizes come from <code>arr1.length</code> and <code>Math.max</code> replaces <code>max</code>. Board walkthrough for the first example: initially res = 0; i = 0: j = 1, res = 2; i = 1: j = 4, res = 4; i = 2 to 5 give nothing longer.</p>
+      <p><strong>Time:</strong> Θ(n²) · <strong>Aux Space:</strong> O(1)</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+      <p>Hint: reduce this to the longest subarray with 0 sum in an array.</p>
+<pre><code class="language-plaintext">1) Compute a difference array.                   Θ(n) Time, Θ(n) Aux Space
+   int temp[n];
+   for(int i=0; i&lt;n; i++)
+       temp[i] = arr1[i] - arr2[i];
+   For example: arr1[] = {0, 1, 0, 0, 0, 0}
+                arr2[] = {1, 0, 1, 0, 0, 1}
+                temp[] = {-1, 1, -1, 0, 0, -1}
+2) Return length of the longest subarray
+   with 0 sum in temp.                           O(n) Time, O(n) Aux Space
+Values in temp[]:
+ * We get 0 when values are same in both.
+ * We get 1 when arr1[i] = 1 and arr2[i] = 0
+ * We get -1 when arr1[i] = 0 and arr2[i] = 1</code></pre>
+      <ul>
+        <li>arr2[i] − arr1[i] works as well. Here the longest zero-sum subarray of temp is indexes 1 to 4, length 4.</li>
+        <li>Why it works: a 1 means arr1 has an extra 1, a −1 means arr2 does. A run of 0s already has equal sums, and elements added around it keep the sum 0 only in 1, −1 combinations, an extra 1 in each array. If the arrays have no common span (all 0s against all 1s), temp is all −1s (or all 1s) and the answer is 0.</li>
+      </ul>
+      <p><strong>Overall:</strong> Θ(n) + O(n) = Θ(n) time, Θ(n) auxiliary space.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the first values of the fourth example are hidden behind the teacher's hand.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-26">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTM3Nw%3D%3D" target="_blank" rel="noopener">Longest Consecutive Subsequence</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Longest Consecutive Subsequence
+I/P: arr[] = {1, 9, 3, 4, 2, 20}     O/P: 4   (1, 3, 4, 2)
+I/P: arr[] = {8, 20, 7, 30}          O/P: 2   (8, 7)
+I/P: arr[] = {20, 30, 40}            O/P: 1
+We need to find the longest subsequence in the form of x, x+1, x+2, … x+i
+with these elements appearing in any order</code></pre>
+    <p>E.g. 3, 4, 5, 6, 7 or −1, 0, 1, in any order (5, 4, 3 still counts). Single elements are subsequences of length 1.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NzYzNw%3D%3D" target="_blank" rel="noopener">Longest Consecutive Subsequence</a></p>
+<ul>
+<li><strong>Naive:</strong> sort, remove multiple occurrences, then keep a count and a max (both initially zero): if the current element isn't the previous element + 1, set count to 1, else increase it; update max. Time O(n log n), auxiliary space O(1).</li>
+<li><strong>Efficient (hashing):</strong> insert all elements into a set, then check every possible start: arr[i] is the first element of a subsequence if arr[i] − 1 isn't in the hash. For a first element, count from arr[i] + 1 while found, and update the longest. Time O(n), assuming O(1) hash insert and search; auxiliary space O(n).</li>
+<li><strong>Another solution (priority queue), O(N log N):</strong> put the elements in a priority queue, then repeatedly remove the top and compare it with the new peek: a difference of 1 increases the count, more than 1 resets it to 1, 0 changes nothing; keep the maximum count.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution (sorting)</h4>
+<pre><code class="language-java">int longestSub(int [] arr)
+{   Arrays.sort(arr);
+    int res = 1, curr = 1;
+    for(int i=1; i&lt;arr.length; i++)
+    {   if(arr[i] == arr[i-1]+1)
+            curr++;
+        else if(arr[i] != arr[i-1])
+        {   res = Math.max(res, curr);
+            curr = 1;
+        }
+    }
+    return Math.max(res, curr);
+}</code></pre>
+<pre><code class="language-cpp">int longestSub(int arr[], int n)
+{   sort(arr, arr+n);
+    int res = 1, curr = 1;
+    for(int i=1; i&lt;n; i++)
+    {   if(arr[i] == arr[i-1]+1) {curr++;}
+        else if(arr[i] != arr[i-1])
+        {   res = max(res, curr);
+            curr = 1;
+        }
+    }
+    return max(res, curr);
+}</code></pre>
+      <ul>
+        <li>After sorting, consecutive elements come together; one linear pass finds the longest run. Start from the second element, since the first has no previous.</li>
+        <li>An element one more than the previous extends the run. Any other <em>different</em> element starts a new run: compare curr with res, then reset curr to 1. Compare once more after the loop, in case the last run is the longest.</li>
+        <li>Equal elements are simply ignored: with {3, 3, 2, 4}, sorted to {2, 3, 3, 4}, the second 3 neither extends nor restarts the run, so the result stays 3 (distinct elements).</li>
+        <li>Board walkthrough for arr[] = {2, 9, 4, 3, 10}, after sorting {2, 3, 4, 9, 10}: initially res = 1, curr = 1; i = 1: curr = 2; i = 2: curr = 3; i = 3: res = 3, curr = 1; i = 4: curr = 2.</li>
+      </ul>
+      <p><strong>Time:</strong> O(n log n). Auxiliary space: none if the input may be modified; Θ(n) if it's immutable.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Method</h4>
+<pre><code class="language-plaintext">Hints: * We first insert all elements in a hash table.
+       * Then with 2n lookups, we find the result.
+arr[] = {1, 3, 4, 3, 3, 2, 9, 10}
+h = {1, 3, 4, 2, 9, 10}</code></pre>
+      <ul>
+        <li>The hash table holds only distinct elements (in any order), which is fine.</li>
+        <li>For each element x, look up x − 1. If it's absent, x is the <strong>first element</strong> of its subsequence: look up x + 1, x + 2, … while present, counting. For 1: 0 is absent; 2, 3, 4 are found, 5 isn't, so length 4.</li>
+        <li>If x − 1 is present, x isn't a first element, so skip it (3, 4, 2 here). For 9: 8 is absent, 10 is found, 11 isn't, so length 2, and res stays 4. 10 is skipped since 9 is present.</li>
+      </ul>
+<pre><code class="language-java">int longestSub(int [] arr)
+{   Set&lt;Integer&gt; h = new HashSet&lt;&gt;();
+    for(int x : arr)
+        h.add(x);
+    int res = 1;
+    for(Integer x : h)
+    {   if(h.contains(x-1) == false)
+        {   int curr = 1;
+            while(s.contains(x+curr))
+                curr++;
+            res = Math.max(res, curr);
+        }
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-cpp">int longestSub(int arr[], int n)
+{   unordered_set&lt;int&gt; h(arr, arr+n);
+    int res = 1;
+    for(auto x : h)
+    {   if(h.find(x-1) == h.end())
+        {   int curr = 1;
+            while(h.find(x+curr) != h.end())
+                curr++;
+            res = max(res, curr);
+        }
+    }
+    return res;
+}</code></pre>
+      <p>Board walkthrough for arr[] = {1, 3, 9, 2, 8, 2}, h = {1, 3, 9, 2, 8} (hash order is unpredictable; this one is assumed): x = 1: curr = 1, 2, 3, then 4 isn't found, res = 3 (4 lookups). 3, 9, 2 are skipped with one lookup each. x = 8: curr = 2 (3 lookups), res stays 3.</p>
+    </div>
+
+    <h3>Number of lookups is twice the size of hash table</h3>
+<pre><code class="language-plaintext">h = {1, 3, 4, 2}        h = {8, 20, 4}          h = {2, 4, 8, 3}
+x = 1: curr = 1         x = 8:  curr = 1 } 2    x = 2: curr = 1
+       curr = 2 } 5     x = 20: curr = 1 } 2           curr = 2 } 4
+       curr = 3         x = 4:  curr = 1 } 2           curr = 3
+       curr = 4                                 x = 4: } 1
+x = 3: } 1                                      x = 8: curr = 1 } 2
+x = 4: } 1                                      x = 3: } 1
+x = 2: } 1                                      8 lookups
+For first elements: 2 + (len - 1)      len is the length of the subsequence
+For other elements: 1                  with the given as first.</code></pre>
+    <ul>
+      <li>The nested loops look quadratic, but building the table is Θ(n) and, for a table of size m, the lookups total 2m. For x = 1 in the first table: 0, 2, 3, 4, 5 is 5 = 2 + (4 − 1); the other three need one each, so 8 lookups for 4 elements.</li>
+      <li>When every element is a first element of length 1, each costs 2 + 0 = 2. So the overall time complexity is linear.</li>
+    </ul>
+    <div class="added">
+      <p><strong>Board slips:</strong> the Java version writes <code>new Hashet&lt;&gt;()</code> and loops <code>while(s.contains(x+curr))</code> on <code>s</code>, though the set is <code>h</code>. The efficient method's Time and Aux Space lines are hidden behind the teacher, apart from "There are at most …".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-27">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTM3OA%3D%3D" target="_blank" rel="noopener">Count Distinct Elements In Every Window</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given an array of size n and k ≤ n, print the distinct element count in every window of size k. There are n − k + 1 windows.</p>
+<pre><code class="language-plaintext">Count Distinct Elements in Every Window
+I/P: arr[] = {10, 20, 20, 10, 30, 40, 10}    k = 4    O/P: 2 3 4 3
+I/P: arr[] = {10, 10, 10, 10}                k = 3    O/P: 1 1
+I/P: arr[] = {10, 20, 30, 40}                k = 3    O/P: 3 3</code></pre>
+    <p>Here n = 7, so 7 − 4 + 1 = 4 windows; the last, 30, 40, 10 plus the 10 before it, has 3 because 10 repeats. Corner cases: all elements the same prints 1 for each of the n − k + 1 windows; all distinct prints k for each.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/NzYzOA%3D%3D" target="_blank" rel="noopener">Count Distinct Elements In Every Window</a></p>
+<ul>
+<li><strong>Naive:</strong> for every i from 0 to n − k, traverse the window i to i + k, counting an element only if it doesn't appear earlier in the window. Time O(nk²); with sorting O(n · k log k); with hashing inside each window O(n · k). Space O(1).</li>
+<li><strong>Efficient:</strong> reuse the previous window's count while sliding, since k − 1 elements are shared. A hash map holds the window's element–frequency pairs: moving from i..i+k−1 to i+1..i+k, decrease the i-th element's frequency by 1 and increase the (i+k)-th's by 1, each in constant time.</li>
+<li>Algorithm: insert the first window into hM (element → count), updating dist_count, and print it. For each later window, remove the previous window's first element: if it appeared once, remove it from hM and do dist_count−−, else decrement its count. Add the new last element: if absent, add it and do dist_count++, else increment its count.</li>
+<li>Time O(n), a single traversal; space O(n) for the hash map.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O((n − k) * k * k)</h4>
+<pre><code class="language-cpp">void printDistWind(int arr[], int n, int k)
+{
+    for(int i=0; i&lt;=n-k; i++)
+    {
+        int count = 0;
+        for(int j=0; j&lt;k; j++)
+        {   bool flag = false;
+            for(int p=0; p&lt;j; p++)
+                if(arr[i+j] == arr[i+p])
+                { flag = true; break; }
+            if(flag == false)
+                count++;
+        }
+        cout &lt;&lt; count &lt;&lt; " ";
+    }
+}</code></pre>
+      <p>The outer loop picks each window's start i (n − k + 1 times). Inside, j goes over the window's elements <code>arr[i+j]</code>, and p checks the earlier ones <code>arr[i+p]</code>; an element seen before sets the flag. Board walkthrough for arr[] = {10, 10, 5, 3, 20, 5}, k = 4: i = 0: count = 3; i = 1: count = 4; i = 2: count = 3. It can go cubic when k is close to n.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: O(n)</h4>
+<pre><code class="language-plaintext">① Create a frequency map of first k items.
+   freq{10} = 3, freq{20} = 1
+② Print size of the frequency map.
+③ for(int i=k; i&lt;n; i++)
+   (a) Decrease frequency of arr[i-k].
+   (b) If the frequency of arr[i-k] becomes 0, remove it from the map.
+   (c) If arr[i] does not exist in the map, insert it.
+       Else increase its frequency in the map.
+   (d) Print size of the map.</code></pre>
+      <p>Each window's frequency map is computed from the previous one in constant time: remove the first item of the previous window and add the last item of the current one.</p>
+<pre><code class="language-plaintext">      0   1   2   3   4   5
+     {10, 20, 10, 10, 30, 40}, k = 4
+①: | 10 | 3 |        ②: count = 2
+   | 20 | 1 |
+③: i = 4  arr[i] = 30, arr[i-k] = 10   → | 10 2 | 20 1 | 30 1 |   count = 3
+   i = 5  arr[i] = 40, arr[i-k] = 20   → | 10 2 | 30 1 | 40 1 |   count = 3</code></pre>
+      <p>At i = 4, 10's frequency drops to 2 and 30 is inserted. At i = 5, 20's frequency becomes 0, so it's removed, and 40 is inserted. Output: 2 3 3.</p>
+      <p><strong>Time:</strong> O(n): k inserts, then n − k items with constant work each (search, insert, delete and the map's size are O(1)). <strong>Aux Space:</strong> O(k): at most k distinct elements per window.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the naive function's last line is partly behind the teacher; only <code>&lt;&lt; count &lt;&lt; " ";</code> shows.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-28">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTgyOQ%3D%3D" target="_blank" rel="noopener">More than n/k Occurences</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: given an array of n integers and a number k, find the elements occurring more than n/k times, first naively, then efficiently with hashing.</p>
+<pre><code class="language-plaintext">More than n/k Occurrences
+I/P: arr[] = {30, 10, 20, 20, 10, 20, 30, 30}     k = 4
+O/P: 20 30
+Note that n = 8 and n/k = 2
+
+I/P: arr[] = {30, 10, 20, 30, 30, 40, 30, 40, …}  k = 2
+O/P: 30
+Note that n = 9 and n/k = 4.5</code></pre>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-cpp">void printNByK(int arr[], int n, int k)
+{
+    sort(arr, arr+n);        // Arrays.sort(arr) in Java
+    int i = 1, count = 1;
+    while(i &lt; n)
+    {
+        while(i&lt;n &amp;&amp; arr[i] = arr[i-1])
+        {   count++;
+            i++;
+        }
+        if(count &gt; n/k)
+            print(arr[i-1] + " ");   // cout in C++ &amp; System.out.println in Java
+        count = 1;
+        i++;
+    }
+}</code></pre>
+      <p>After sorting, equal elements are together; count each run and print it if the count exceeds n/k. Board walkthrough for n = 7, k = 2, n/k = 3.5, {10, 10, 20, 30, 20, 10, 10}, after sorting {10, 10, 10, 10, 20, 20, 30}: i = 1: count = 2; i = 2: 3; i = 3: 4; i = 4: print(arr[3]), count = 1; i = 5: count = 2; i = 6: count = 1.</p>
+      <p><strong>Time:</strong> O(n log n) + Θ(n) = O(n log n)</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+<pre><code class="language-java">void printNByK(int arr[], int k)
+{
+    HashMap&lt;Integer, Integer&gt; m =
+            new HashMap&lt;Integer, Integer&gt;();
+    for(int x : arr)
+        m.put(x, m.getOrDefault(x, 0) + 1);
+    for(Map.Entry&lt;Integer, Integer&gt; e : m)
+    {
+        if(e.getValue() &gt; n/k)
+            System.out.print(e.getKey() + " ");
+    }
+}</code></pre>
+<pre><code class="language-cpp">void printNByK(int arr[], int n, int k)
+{
+    unordered_map&lt;int, int&gt; m;
+    for(int i=0; i&lt;n; i++)
+        m[arr[i]]++
+    for(auto e : m)
+        if(e.second &gt; n/k)
+            cout &lt;&lt; e.first &lt;&lt; " ";
+}</code></pre>
+      <p>Build a frequency map, then print every key whose frequency exceeds n/k. Board walkthrough for arr[] = {10, 20, 30, 10, 10, 20}, n = 6, k = 3, 6/3 = 2: m = {(10, 3), (20, 2), (30, 1)}, so only 10 is printed.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the naive inner loop is written <code>arr[i] = arr[i-1]</code> (assignment) with <code>$$</code> for <code>&amp;&amp;</code>; both are shown as <code>=</code> and <code>&amp;&amp;</code> above. The C++ efficient version is missing the semicolon after <code>m[arr[i]]++</code>. In Java, the loop is over <code>m</code> rather than <code>m.entrySet()</code>, and <code>n</code> isn't defined in the two-parameter version. The second example's last value and the efficient solution's complexity are hidden in the frames.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-29">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/video/MTgyNA%3D%3D" target="_blank" rel="noopener">More than n/k Occurences (O(nk) solution)</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 5 seconds plus close-ups). The course Description has only the title and code links. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">More than n/k Occurrences (O(nk) Solution)
+{30, 10, 20, 20, 20, 10, 40, 30, 30}
+     k = 4,  n = 9
+Let 'res_count' be the number of elements in the result
+     res_count ≤ k - 1
+
+     k * (n/k + 1)
+     n + k ≰ n</code></pre>
+    <p>On the board: k elements with more than n/k occurrences each would need k × (n/k + 1) = n + k elements, which can't be ≤ n. So res_count ≤ k − 1.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Algorithm</h4>
+<pre><code class="language-plaintext">① Create an empty map m.
+② for(i = 0; i &lt; n; i++)
+   a) if(m contains arr[i])
+          m[arr[i]]++;
+   b) Else if m.size() is less than (k-1)
+          m.put(arr[i], 1)
+   c) Else
+          Decrease all values in m
+          by one. If value becomes 0, remove.
+③ For all elements in m, print the elements
+   that actually appear more than n/k times.</code></pre>
+<pre><code class="language-plaintext"> 0   1   2   3   4   5   6   7   8
+{30, 10, 20, 20, 20, 10, 40, 30, 30}   k = 4, n = 9, n/k = 2.5
+i = 0: m = {(30, 1)}                          2.b
+i = 1: m = {(30, 1), (10, 1)}                 2.b
+i = 2: m = {(30, 1), (10, 1), (20, 1)}        2.b
+i = 3: m = {(30, 1), (10, 1), (20, 2)}        2.a
+i = 4: m = {(30, 1), (10, 1), (20, 3)}        2.a
+i = 5: m = {(30, 1), (10, 2), (20, 3)}        2.a
+i = 6: m = {(10, 1), (20, 2)}                 2.c
+i = 7: m = {(10, 1), (20, 2), (30, 1)}        2.b
+i = 8: m = {(10, 1), (20, 2), (30, 2)}        2.a
+Output: 20 30</code></pre>
+      <p>At i = 6, 40 isn't in the map and the map already holds k − 1 = 3 elements, so every value drops by one and 30 is removed. Step ③ then counts the candidates 10, 20, 30 in the array: 20 and 30 each appear 3 times (more than 2.5), 10 only twice.</p>
+    </div>
+    <div class="approach">
+      <h4>How does the approach work?</h4>
+<pre><code class="language-plaintext">Final Map: {(10, 1), (20, 2), (30, 2)}
+ ┌──────────────┐     ┌──────────────┐
+ │  10, 30,     │     │  10, 20,     │
+ │  20, 40      │     │  20, 30,     │
+ └──────────────┘     │  30          │
+     Rejected         └──────────────┘
+                          Selected
+ 40 Rejected itself
+ and Three Others
+In the rejected set, an element rejects (k-1) distinct others</code></pre>
+      <p>In the example, 40 is rejected together with one occurrence each of 10, 30 and 20; the elements left in the final map are only candidates, which step ③ checks.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the frames don't show a time or space complexity beyond the title's O(nk).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Hashing-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (22 problems, in course order), plus the two Articles-tab items that don't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/linear-probing-in-hashing-1587115620" target="_blank" rel="noopener">Linear Probing in Hashing</a></td><td>Easy</td><td>Video 8</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/separate-chaining-in-hashing-1587115621" target="_blank" rel="noopener">Separate Chaining in Hashing</a></td><td>Easy</td><td>Video 6</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/quadratic-probing-in-hashing-1587115621" target="_blank" rel="noopener">Quadratic Probing in Hashing</a></td><td>Easy</td><td>Video 8</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/check-if-two-arrays-are-equal-or-not3847" target="_blank" rel="noopener">Two Arrays Permutation Check</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/hashing-for-pair-1" target="_blank" rel="noopener">Two Sum - Pair with Given Sum</a></td><td>Easy</td><td>Video 20</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/hashing-for-pair-2" target="_blank" rel="noopener">Two Sum - Pair with Given Sum</a></td><td>Easy</td><td>Video 20</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/count-distinct-elements-1587115620" target="_blank" rel="noopener">Count Non-Repeated Elements</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/print-distinct-elements-1587115620" target="_blank" rel="noopener">Non-Repeating Element</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/sorting-elements-of-an-array-by-frequency-1587115621" target="_blank" rel="noopener">Sort by Decreasing Frequency</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/relative-sorting4323" target="_blank" rel="noopener">Sort According to Another Array</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/first-repeating-element4018" target="_blank" rel="noopener">First Repeating Element</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/intersection-of-two-arrays2404" target="_blank" rel="noopener">Intersection of Arrays with Distinct</a></td><td>Easy</td><td>Video 18</td></tr>
+        <tr><td>13</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/union-of-two-arrays3538" target="_blank" rel="noopener">Union of Arrays with Duplicates</a></td><td>Easy</td><td>Video 19</td></tr>
+        <tr><td>14</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/positive-negative-pair5209" target="_blank" rel="noopener">Pairs with Positive Negative values</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>15</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/subarray-with-0-sum-1587115621" target="_blank" rel="noopener">Zero Sum Subarray</a></td><td>Medium</td><td>Video 21</td></tr>
+        <tr><td>16</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/zero-sum-subarrays1825" target="_blank" rel="noopener">Zero Sum Subarrays</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>17</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/subarray-range-with-given-sum0128" target="_blank" rel="noopener">Subarrays with Sum K</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>18</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/count-subarrays-with-equal-number-of-1s-and-0s-1587115620" target="_blank" rel="noopener">Subarrays With Equal 1s And 0s</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>19</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/longest-consecutive-subsequence2449" target="_blank" rel="noopener">Longest Consecutive Subsequence</a></td><td>Medium</td><td>Video 26</td></tr>
+        <tr><td>20</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/numbers-containing-1-2-and-32555" target="_blank" rel="noopener">Numbers Containing 1, 2 and 3</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>21</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/winner-of-an-election-where-votes-are-represented-as-candidate-names-1587115621" target="_blank" rel="noopener">Election Winner</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>22</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/problem/account-merge" target="_blank" rel="noopener">Account Merge</a></td><td>Hard</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/MjMwOQ%3D%3D" target="_blank" rel="noopener">Hashing in C++ using STL</a></p>
+<ul>
+<li>STL containers for hashing-style problems: <code>set</code>, <code>unordered_set</code>, <code>map</code>, <code>unordered_map</code>.</li>
+<li><strong>set:</strong> an associative container of unique elements kept in sorted order; an element's value can't be modified once added (remove it and add the new value). Useful to check presence (arrays would take a lot of space) and for sorting-related problems. Functions: <code>begin()</code>, <code>end()</code>, <code>size()</code>, <code>insert(val)</code>, <code>find(val)</code>, <code>empty()</code>.</li>
+<li><strong>unordered_set:</strong> a hash table, so no order; O(1) average, up to linear in the worst case depending on the hash function, but constant in practice. Keys can be any type; a user-defined key type needs a comparison function. set is a balanced tree with O(log n) operations; unordered_set is O(1). Both allow only unique keys.</li>
+<li><strong>map:</strong> associative and ordered, storing key–mapped value pairs with unique keys. Functions: <code>begin()</code>, <code>end()</code>, <code>size()</code>, <code>empty()</code>, <code>insert({key, value})</code>, <code>erase(iterator position)</code>, <code>erase(const g)</code>, <code>clear()</code>.</li>
+<li><strong>unordered_map:</strong> key and mapped value of any type, implemented with a hash table, so performance depends heavily on the hash function; O(1) average search, insert and delete.</li>
+<li><strong>unordered_map vs unordered_set:</strong> unordered_set has only keys, for presence or absence; counting word frequencies needs unordered_map, as a set can't store counts. <strong>unordered_map vs map:</strong> map is an ordered balanced tree with O(log n) operations; unordered_map is unordered with O(1) on average.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Hashing/article/MjMxNg%3D%3D" target="_blank" rel="noopener">Implementing Hashing in Java</a></p>
+<ul>
+<li>Java's built-in classes implement hashing without writing a hash table or hash function yourself:</li>
+<li><strong>HashTable:</strong> a synchronized implementation mapping keys to values; any non-null object can be a key or value.</li>
+<li><strong>HashMap:</strong> similar but faster, as it isn't synchronized; stores key–value pairs, typically used to count frequencies of elements in an array or list.</li>
+<li><strong>LinkedHashMap:</strong> like HashMap, but keeps the order of elements.</li>
+<li><strong>HashSet:</strong> like HashMap but only keys; backed by a HashMap instance, constant-time add, remove, contains and size if the hash function disperses well; used to check whether an element is present.</li>
+<li><strong>LinkedHashSet:</strong> like LinkedHashMap, but only keys. <strong>TreeSet:</strong> implements SortedSet; objects are stored in sorted, ascending order.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -14384,7 +16638,38 @@ const TRACKS = [
       ["Median of a Row Wise Sorted Matrix", "13:27"],
       ["Median of a Row Wise Sorted Matrix Java", "13:22"]
     ] },
-  { id: "DSASP-Hashing", slug: "hashing", name: "Hashing", counts: [29, 23, 22, 10, 1] },
+  { id: "DSASP-Hashing", slug: "hashing", name: "Hashing", counts: [29, 23, 22, 10, 1],
+    videos: [
+      ["Introduction to Hashing", "6:47"],
+      ["Hashing Application", "5:13"],
+      ["Direct Address Table", "7:37"],
+      ["Hashing Functions", "15:36"],
+      ["Collision Handling", "4:15"],
+      ["Chaining", "12:30"],
+      ["Implementation of Chaining", "7:18"],
+      ["Open Addressing", "22:23"],
+      ["Double Hashing", "17:18"],
+      ["Implementation of Open Addressing", "16:28"],
+      ["Chaining vs Open Addressing", "6:09"],
+      ["Unordered_set in C++ STL", "11:37"],
+      ["Unordered_map in C++ STL", "14:16"],
+      ["HashSet in Java", "7:15"],
+      ["HashMap in Java", "7:19"],
+      ["Count Distinct Elements", "7:13"],
+      ["Frequencies of array elements", "11:18"],
+      ["Intersection of two unsorted arrays", "8:22"],
+      ["Union of two unsorted arrays", "8:23"],
+      ["Pair with given sum in unsorted array", "7:52"],
+      ["Subarray with zero sum", "9:12"],
+      ["Subarray with given Sum", "9:26"],
+      ["Longest subarray with given sum", "16:42"],
+      ["Longest subarray with equal number of 0's and 1's", "6:51"],
+      ["Longest common span with same sum in binary arrays", "7:56"],
+      ["Longest Consecutive Subsequence", "16:00"],
+      ["Count Distinct Elements In Every Window", "10:57"],
+      ["More than n/k Occurences", "8:43"],
+      ["More than n/k Occurences (O(nk) solution)", "10:59"]
+    ] },
   { id: "DSASP-Strings", slug: "strings", name: "Strings", counts: [19, 12, 26, 10, 0] },
   { id: "DSASP-LinkedList", slug: "linked-list", name: "Linked List", counts: [54, 40, 25, 10, 1] },
   { id: "DSASP-Stack", slug: "stack", name: "Stack", counts: [27, 19, 17, 10, 0] },
