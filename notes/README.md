@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-09)
 
-**Notes written: 5 of 24 tracks · 87 of 470 videos · 69 of 342 articles · 62 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 6 of 24 tracks · 105 of 470 videos · 82 of 342 articles · 80 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -80,8 +80,8 @@ Report back with:
 | 3 | Bit Magic | 12 | 11 | 12 | ✅ Done: 12/12 videos, 11/11 articles, 12 problems |
 | 4 | Recursion | 17 | 12 | 12 | ✅ Done: 17/17 videos, 12/12 articles, 12 problems |
 | 5 | Arrays | 31 | 27 | 27 | ✅ Done: 31/31 videos, 27/27 articles, 27 problems |
-| 6 | Searching | 18 | 13 | 18 | ⏭ Next |
-| 7 | Sorting | 39 | 29 | 20 | Not started |
+| 6 | Searching | 18 | 13 | 18 | ✅ Done: 18/18 videos, 13/13 articles, 18 problems |
+| 7 | Sorting | 39 | 29 | 20 | ⏭ Next |
 | 8 | Matrix | 12 | 11 | 15 | Not started |
 | 9 | Hashing | 29 | 23 | 22 | Not started |
 | 10 | Strings | 19 | 12 | 26 | Not started |
@@ -224,6 +224,31 @@ Course progress was unchanged (9/17 videos watched, 57%, 0/12 articles read). Al
 
 The "Sample Problems on Array" article matches no single video, so it's in the Track practice set with the 27 problems (the Problems tab shows a level for each, so the table lists it). V20's course transcript stops at 2:10 of 23:20 and its description is empty, so the rest was done from 5 s frames; V22 and V31 have no Transcript button and were done from 5 s frames and the description. From V21 on, each transcript grab also checks the last timestamp, to catch a cut-off transcript like V20's. Course progress was unchanged (20/31 videos watched, 52%, no article marked as read). All resume positions were 0:00 and were restored.
 
+### Track 6: Searching, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Binary Search (Iterative) | 11:12 | Transcript + board | Binary Search Functions in C++ STL; BinarySearch using Built-in Methods in Java |
+| 2 | Binary Search (Recursive) | 9:17 | Transcript + board | Binary Search (Recursive) |
+| 3 | Analysis of Binary Search | 9:10 | Transcript + board |  |
+| 4 | Index of first Occurrence in Sorted | 8:58 | Transcript + board | Index of first Occurrence and last Occurrence in Sorted |
+| 5 | Index of last Occurrence in Sorted | 8:48 | Transcript + board |  |
+| 6 | Count Occurrences in Sorted | 5:14 | Transcript + board | Count Occurrences in Sorted |
+| 7 | Count 1s in a Sorted Binary Array | 6:09 | Transcript + board | Count 1s in a Sorted Binary Array |
+| 8 | Square root | 8:29 | Transcript + board | Square root |
+| 9 | Search in Infinite Sized Array | 10:19 | Transcript + board | Search in an Infinite Sized Array |
+| 10 | Search in Sorted Rotated Array | 15:44 | Board + description |  |
+| 11 | Find a Peak Element | 10:54 | Transcript + board | Find a Peak Element |
+| 12 | Two Pointers Approach | 11:06 | Transcript + board |  |
+| 13 | Triplet in a Sorted Array | 8:26 | Transcript + board |  |
+| 14 | Median of two sorted arrays | 25:52 | Transcript + board | Median of Two Sorted Arrays |
+| 15 | Repeating Elements Part (1) | 6:19 | Board + description |  |
+| 16 | Repeating Elements Part (2) | 13:47 | Board + description |  |
+| 17 | Allocate Minimum Pages (Naive Method) | 8:54 | Board + description |  |
+| 18 | Allocate Minimum Pages (Binary Search) | 11:30 | Transcript + board | Allocate Minimum Pages |
+
+"Ternary Search" and "Sample Problems on Searching" match no video, so they're in the Track practice set with the 18 problems. The first/last occurrence article covers both V4 and V5 and sits under V4. V10, V15, V16 and V17 have no Transcript button and were done from 5 s frames and the description. Course progress was unchanged (4/18 videos watched, 42%, no article marked as read). All resume positions were 0:00 and were restored. The built-in browser could no longer open the local page (about 600 KB), so the render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 18 Searching videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -240,10 +265,11 @@ The "Sample Problems on Array" article matches no single video, so it's in the T
 - `bffb328`: Add DSA revision notes: Mathematics track (12 videos, 13 articles, 11 problems)
 - `002a7e3`: Add DSA revision notes: Bit Magic track (12 videos, 11 articles, 12 problems)
 - `e864134`: Add Recursion track notes (17 videos, 12 articles, 12 problems)
-- (this commit): Add Arrays track notes (31 videos, 27 articles, 27 problems)
+- `f9e9cf3`: Add Arrays track notes (31 videos, 27 articles, 27 problems)
+- (this commit): Add Searching track notes (18 videos, 13 articles, 18 problems)
 
 ### What's next
-- **Track 6: Searching** (18 videos, 13 articles, 18 problems), starting straight away.
+- **Track 7: Sorting** (39 videos, 29 articles, 20 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -260,6 +286,7 @@ The "Sample Problems on Array" article matches no single video, so it's in the T
   - Completed track 4 (Recursion): 17 videos, 12 articles, 12 problems.
 - **2026-11-10:**
   - Completed track 5 (Arrays): 31 videos, 27 articles, 27 problems.
+  - Completed track 6 (Searching): 18 videos, 13 articles, 18 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -276,6 +303,17 @@ The "Sample Problems on Array" article matches no single video, so it's in the T
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Searching: teacher slips flagged
+- V3: "high is 15" and "an array of size 16"; the board array is a0 … a14 (15 elements). The board's edge label "x > a15" means x > a13.
+- V4: "initialize low 0 and high as −1"; the board has `high = n-1`.
+- V5 (board): the recursive calls leave out x (`lastOcc(arr, low, mid-1, n)`), and the iterative condition is written `mid != n-1` where `mid == n-1` is meant. "We return 10" means index 4.
+- V8: "while i·i is more than equal to x" (board `<=`); "log x … is greater than x^½" (it's smaller).
+- V9: the walkthrough uses a different array from the board; "10 is more than a hundred" means smaller. The binary search range is spoken as i/2 + 1 to i − 1 but the dry run writes (4, 8).
+- V12/V13: in V13 the board calls `isPair(arr, x - arr[i], i+1)` without n.
+- V14 (board): Java's odd case writes `max` without `Math.`, and neither version returns after the loop.
+- V10, V15, V16, V17 (no transcript): spoken slips couldn't be checked.
+- Board notation: `&&` is handwritten like "$$" and `||` like "¦¦" throughout.
 
 ### Arrays: teacher slips flagged
 - V9: the transcript calls "5, 20, 100, 80" sorted, then walks it as 5, 20, 80, 100.

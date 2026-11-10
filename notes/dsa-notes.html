@@ -8296,6 +8296,1589 @@ res = 4</code></pre>
   </section>
 </template>
 
+<template id="DSASP-Searching-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTQzNw%3D%3D" target="_blank" rel="noopener">Binary Search (Iterative)</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Given a sorted array (increasing order) and an element x, return the index of x, or −1 if it isn't present. If x occurs more than once, return the index of any occurrence. The function should use the fact that the array is sorted.</p>
+
+    <h3>Naive: Linear Search</h3>
+    <p>Compare x with every element one by one and return the index of the first match. Θ(n) in the worst case (x not present at all), and it doesn't use the fact that the array is sorted.</p>
+
+    <h3>Idea of Binary Search</h3>
+    <ul>
+      <li>Mark the first index as <code>low</code> and the last as <code>high</code>. Compute <code>mid = ⌊(low + high)/2⌋</code>; integer division in programming languages already takes the floor.</li>
+      <li>Compare arr[mid] with x. Three cases:</li>
+    </ul>
+<pre><code class="language-plaintext">Compute mid = ⌊(low + high)/2⌋
+Case 1 : (arr[mid] == x)   x = 30   → return mid
+Case 2 : (arr[mid] > x)    x = 10   → skip mid and its right half: high = mid - 1
+Case 3 : (arr[mid] &lt; x)    x = 50   → skip mid and its left half:  low = mid + 1
+         (on 10 20 30 40 50)</code></pre>
+    <ul>
+      <li>That's the optimisation: because the array is sorted, if arr[mid] is greater than x, everything to its right is greater too, so the whole right part (and mid) can be skipped; likewise for the left part when arr[mid] is smaller.</li>
+      <li>If x isn't present, the search reaches the one location where x would have to be, finds it isn't there, and low and high cross each other, so the loop ends and −1 is returned. The analysis is in the next video.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/MjI5Mw%3D%3D" target="_blank" rel="noopener">Binary Search Functions in C++ STL</a></p>
+<ul>
+<li>The C++ STL has built-in functions to run binary search directly on a sorted sequential container: <code>binary_search()</code>, <code>upper_bound()</code>, <code>lower_bound()</code>.</li>
+<li><code>binary_search(start_ptr, end_ptr, ele)</code> only checks whether the element is present (true/false); it gives no information about its location.</li>
+<li><code>upper_bound(first_itr, last_itr, ele)</code> returns an iterator to the element just greater than ele: 30 in 10 20 30 30 40 50 → 40; 45 in 10 20 30 40 50 → 50; 60 → the end iterator. Subtracting the beginning iterator gives the index.</li>
+<li><code>lower_bound(first_itr, last_itr, ele)</code> finds the first element not less than (≥) the value: an iterator to ele if it exists, otherwise to the element just greater than ele.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/MjI5Nw%3D%3D" target="_blank" rel="noopener">BinarySearch using Built-in Methods in Java</a></p>
+<ul>
+<li>Java provides <code>Arrays.binarySearch()</code> and <code>Collections.binarySearch()</code>.</li>
+<li><code>Arrays.binarySearch()</code> works on arrays of byte, char, double, int, float, short, long and Object. The array must be sorted first, otherwise the results are undefined; with duplicates there's no guarantee which one is found.</li>
+<li>It returns the key's index if found, otherwise <code>(−(insertion point) − 1)</code>, where the insertion point is the index of the first element greater than the key (or a.length if all are less). So the return value is ≥ 0 only if the key is found. E.g. after sorting {10, 20, 15, 22, 35}, 35 is at index 4 and 22 at index 3.</li>
+<li><code>Collections.binarySearch()</code> returns an object's position in a sorted list (ascending, or descending with a comparator). It throws ClassCastException if the elements aren't comparable. Arrays.binarySearch works for primitive arrays too; Collections.binarySearch works for object collections like ArrayList and LinkedList.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Binary Search</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {10, 20, 30, 40, 50, 60}, x = 20</span><span>O/P</span><span>1</span>
+        <span>I/P</span><span>arr[] = {5, 15, 25}, x = 25</span><span>O/P</span><span>2</span>
+        <span>I/P</span><span>arr[] = {5, 10, …}, x = 20</span><span>O/P</span><span>-1</span>
+        <span>I/P</span><span>arr[] = {10, 15}, x = 20</span><span>O/P</span><span>-1</span>
+        <span>I/P</span><span>arr[] = {10, 15}, x = 5</span><span>O/P</span><span>-1</span>
+        <span>I/P</span><span>arr[] = {10, 10}</span><span>O/P</span><span>0 OR 1</span>
+      </div>
+      <p>The rest of the third array is hidden by the teacher in every frame.</p>
+    </div>
+    <div class="approach">
+      <h4>Iterative Binary Search</h4>
+<pre><code class="language-cpp">int bSearch(int arr[], int n, int x)
+{
+    int low = 0, high = n-1;
+    while (low &lt;= high)
+    {
+        int mid = (low+high)/2;
+        if (arr[mid] == x)
+            return mid;
+        else if (arr[mid] > x)
+            high = mid-1;
+        else
+            low = mid+1;
+    }
+    return -1;
+}</code></pre>
+<pre><code class="language-plaintext">| 10 | 20 | 30 | 40 | 50 | 60 | 70 |    x = 60, low = 0, high = 6
+mid = (0+6)/2 = 3 : arr[3] = 40 &lt; 60 → low = 4
+mid = (4+6)/2 = 5 : arr[5] = 60 == x → return 5
+
+| 10 | 20 | 30 | 40 | 50 | 60 |    x = 25, low = 0, high = 5
+I   mid = (0+5)/2 = 2   Since arr[mid] > x, high = mid-1 = 1
+II  mid = (0+1)/2 = 0   Since arr[mid] &lt; x, low = mid+1 = 1
+III mid = (1+1)/2 = 1   Since arr[mid] &lt; x, low = mid+1 = 2   → low > high, return -1</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTQzOA%3D%3D" target="_blank" rel="noopener">Binary Search (Recursive)</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Recursive Binary Search</h3>
+    <ul>
+      <li>Same problem as before: return the index of x in the sorted array (any occurrence), or −1. The function searches x between index <code>low</code> and <code>high</code>, and the recursive calls change low and high.</li>
+      <li>Recap: go to the middle; if it matches, stop; if the middle element is greater, go to the left half (<code>high = mid − 1</code>); if smaller, go to the right half (<code>low = mid + 1</code>).</li>
+      <li>Base case: the iterative version loops while <code>low &lt;= high</code> and returns −1 after the loop, so here, if <code>low &gt; high</code>, return −1.</li>
+      <li>When a call returns, its parent (waiting inside the if) returns that same value to its own caller, all the way up.</li>
+    </ul>
+
+    <h3>Iterative vs Recursive</h3>
+    <ul>
+      <li>Time: iterative has O(log n) iterations; recursive makes O(log n) recursive calls (by the same logic: each call goes to the left or right half). Same time complexity.</li>
+      <li>Auxiliary space: iterative uses a constant number of variables, <strong>O(1)</strong>. Recursive keeps the waiting calls in the function call stack (four at one point in the x = 25 example), O(log n) of them for an n-sized array, so <strong>O(log n)</strong>.</li>
+      <li>So iterative is definitely better: no extra function call overhead and O(1) extra space.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/NzIxMw%3D%3D" target="_blank" rel="noopener">Binary Search (Recursive)</a></p>
+<ul>
+<li>Search x in a sorted 0-indexed array: {10, 20, 30, 50, 60, 80, 110, 130, 140, 170}, x = 110 → 6; {10, 20, 30, 40, 60, 110, 120, 130, 170}, x = 175 → −1.</li>
+<li>Binary search repeatedly divides the search interval in half, using the fact that the array is sorted to reduce the time to O(log n). Start with the mid element as the search key; if x equals it return mid; if x is greater, x can only lie in the right half, so recur for it; else recur for the left half.</li>
+<li>Recursive implementation: Time O(log n), Auxiliary Space O(log n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Recursive Binary Search</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {10, 20, 30, 40, 50}, x = 20</span><span>O/P</span><span>1</span>
+        <span>I/P</span><span>arr[] = {10, 20, 30}, x = 30</span><span>O/P</span><span>2</span>
+        <span>I/P</span><span>arr[] = {10, 20, 30}, x = 10</span><span>O/P</span><span>0</span>
+        <span>I/P</span><span>arr[] = {10, 20, 30, 40}, x = 15</span><span>O/P</span><span>-1</span>
+        <span>I/P</span><span>arr[] = {10, 20}, x = 5</span><span>O/P</span><span>-1</span>
+        <span>I/P</span><span>arr[] = {15}, x = 20</span><span>O/P</span><span>-1</span>
+      </div>
+      <p>The x values of the last two examples are hidden on the board; 5 and 20 are from the transcript.</p>
+    </div>
+    <div class="approach">
+      <h4>bSearch (recursive) <span class="cx">O(log n) time, O(log n) aux space</span></h4>
+<pre><code class="language-cpp">int bSearch(int arr[], int low, int high,
+            int x)
+{
+    if (low > high) return -1;
+
+    int mid = (low+high)/2;
+    if (arr[mid] == x) return mid;
+    else if (arr[mid] > x)
+        return bSearch(arr, low, mid-1, x);
+    else
+        return bSearch(arr, mid+1, high, x);
+}</code></pre>
+<pre><code class="language-plaintext">| 10 | 20 | 30 | 40 | 50 | 60 | 70 |    x = 25
+bSearch(arr, 0, 6, 25)                       → -1
+  ├→ mid = (0+6)/2 = 3
+  ├→ arr[mid] > x
+  └→ bSearch(arr, 0, 2, 25)                  → -1
+       ├→ mid = (0+2)/2 = 1
+       ├→ arr[mid] &lt; x
+       └→ bSearch(arr, 2, 2, 25)             → -1
+            ├→ mid = 2, arr[mid] = 30 > x
+            └→ bSearch(arr, 2, 1, 25)        → low > high, return -1</code></pre>
+      <p>With x = 20 instead: bSearch(arr, 0, 6) → mid 3, 40 &gt; 20 → bSearch(arr, 0, 2) → mid 1, arr[1] = 20 → returns 1 to its parent, which returns 1.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTU5Mzg%3D" target="_blank" rel="noopener">Analysis of Binary Search</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>All Possible Execution Paths for Successful Searches</h3>
+    <ul>
+      <li>A search is <strong>successful</strong> if x is present in the array, <strong>unsuccessful</strong> otherwise. Successful searches are analysed first.</li>
+      <li>The board's tree (not a recursion tree) shows every execution path for the array a<sub>0</sub> … a<sub>14</sub>. The first mid is a<sub>7</sub>. If x = a<sub>7</sub>, the search stops after one iteration of the loop.</li>
+      <li>If x &lt; a<sub>7</sub>, high becomes 6 and mid = (0 + 6)/2 = 3: compare with a<sub>3</sub> (two iterations if it matches). If x &lt; a<sub>3</sub>, high = 2 and mid = 1: a<sub>1</sub> (three iterations), and so on. Every node is where a successful search for that value ends.</li>
+      <li>Root: 1 iteration; a<sub>3</sub>, a<sub>11</sub>: 2; a<sub>1</sub>, a<sub>5</sub>, a<sub>9</sub>, a<sub>13</sub>: 3; the leaves: 4. The maximum number of iterations equals the height of this tree (the number of nodes on the longest path).</li>
+      <li>Height 4 covers up to 16 elements; 17 to 32 elements give height 5; 33 to 64, height 6. So the height is <strong>⌈log<sub>2</sub> n⌉</strong>, and a successful search takes <strong>O(log n)</strong>.</li>
+    </ul>
+
+    <h3>Unsuccessful Searches</h3>
+    <ul>
+      <li>x smaller than a<sub>0</sub> (say the smallest is 10 and x is 5): the path goes a<sub>7</sub> → a<sub>3</sub> → a<sub>1</sub> → a<sub>0</sub>. There low = high = 0, mid = 0, a<sub>0</sub> &gt; x, so high = −1 and the loop stops, after 4 iterations.</li>
+      <li>Every unsuccessful search ends at a leaf's child, where low becomes greater than high: x &lt; a<sub>0</sub>, a<sub>0</sub> &lt; x &lt; a<sub>1</sub>, a<sub>1</sub> &lt; x &lt; a<sub>2</sub>, and so on.</li>
+      <li>Each iteration does a constant amount of work. Unsuccessful searches always take the full height: <strong>Θ(log n)</strong>. Successful searches take anywhere from 1 to log n iterations: <strong>O(log n)</strong>.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Code analysed (board)</h4>
+<pre><code class="language-cpp">int bSearch(arr, n, x)
+{   low = 0, high = n-1;
+    while (low &lt;= high)
+    {   mid = (low + high)/2;
+        if (arr[mid] == x)
+            return mid;
+        if (arr[mid] &lt; x)
+            low = mid+1;
+        else
+            high = mid-1;
+    }
+    return -1;
+}</code></pre>
+<pre><code class="language-plaintext">| a0 | a1 | ..... | a6 | a7 | a8 | ..... | a14 |
+                        a7                                   ↑
+             x&lt;a7 /           \ x>a7                         │
+               a3                 a11                     ⌈log₂n⌉
+       x&lt;a3 /     \ x>a3    x&lt;a11 /    \ x>a11               │
+          a1        a5          a9        a13                 │
+        /    \     /   \      /   \      /    \               ↓
+      a0     a2   a4   a6   a8    a10  a12    a14
+     /  \    / \
+x&lt;a0  a0&lt;x&lt;a1  a1&lt;x&lt;a2 ...      (ends of unsuccessful searches)</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slips:</strong> the transcript says "high is 15" and "an array of size 16", but the board array is a<sub>0</sub> … a<sub>14</sub> (15 elements, high = 14, first mid 7). Height 4 holds for both sizes.</p>
+      <p><strong>Board note:</strong> the edge labels on the right read "x &gt; a15" under a<sub>13</sub>; it means x &gt; a<sub>13</sub>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTU5MA%3D%3D" target="_blank" rel="noopener">Index of first Occurrence in Sorted</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>The sorted array may contain duplicates. Return the index of the <strong>first</strong> occurrence of x, or −1 if x isn't present.</p>
+
+    <h3>Naive: O(n) time, O(1) auxiliary space</h3>
+    <p>Traverse from left to right and return the first index where arr[i] == x; if the loop ends, return −1.</p>
+
+    <h3>Binary Search: O(log n)</h3>
+    <ul>
+      <li>Like binary search: if x is greater than the middle element, go to the right half; if smaller, the left half.</li>
+      <li>The only difference is when they're equal: mid might or might not be the first occurrence. Check with the previous element (constant work). If arr[mid − 1] is the same, it isn't the first occurrence, so recursively search the left half; otherwise return mid.</li>
+      <li>Corner case: for {5, 5, 5} with x = 5 you can reach index 0, which has no previous element. So mid is the first occurrence if <code>mid == 0 || arr[mid-1] != arr[mid]</code>.</li>
+      <li>Recursive: every call either returns or halves the range, so T(n) = T(n/2) + constant, which is <strong>O(log n)</strong>. But it uses O(log n) extra space for the recursive calls and has function call overhead.</li>
+      <li>Iterative: <strong>O(log n) time, O(1) extra space</strong>, the best of the solutions discussed.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/NzIxNA%3D%3D" target="_blank" rel="noopener">Index of first Occurrence and last Occurrence in Sorted</a></p>
+<ul>
+<li>Find both: {1, 3, 5, 5, 5, 5, 67, 123, 125}, x = 5 → first 2, last 5; x = 7 in {1, 3, 5, 5, 5, 5, 7, 123, 125} → first 6, last 6.</li>
+<li>Naive: one loop with first = −1, last = −1; set first the first time x is found and update last every time. O(n), O(1).</li>
+<li>Recursive binary search: first occurrence returns mid if <code>(mid == 0 || x &gt; arr[mid-1]) &amp;&amp; arr[mid] == x</code>; last occurrence if <code>(mid == n-1 || x &lt; arr[mid+1]) &amp;&amp; arr[mid] == x</code>. mid = low + (high − low)/2. O(log n) time, O(log n) space.</li>
+<li>Iterative: when arr[mid] == x, record mid as the result and keep searching left (first occurrence, high = mid − 1) or right (last occurrence, low = mid + 1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Index of First Occurrence</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {1, 10, 10, 10, 20, 20, 40}, x = 20</span><span>O/P</span><span>4</span>
+        <span>I/P</span><span>arr[] = {10, 20, 30}, x = 15</span><span>O/P</span><span>-1</span>
+        <span>I/P</span><span>arr[] = {15, 15, 15}, x = 15</span><span>O/P</span><span>0</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive <span class="cx">O(n) time, O(1) aux space</span></h4>
+<pre><code class="language-cpp">int firstOccurrence(int arr[], int n, int x)
+{
+    for (int i = 0; i &lt; n; i++)
+        if (arr[i] == x)
+            return i;
+    return -1;
+}</code></pre>
+      <p>{5, 10, 10, 15, 15}, x = 15 → return 3.</p>
+    </div>
+    <div class="approach">
+      <h4>Recursive Binary Search <span class="cx">O(log n)</span></h4>
+<pre><code class="language-cpp">int firstOcc(int arr[], int low, int high, int x)
+{
+    if (low > high) return -1;                  // Normal
+                                                // Binary
+    int mid = (low + high)/2;                   // Search
+    if (x > arr[mid])
+        return firstOcc(arr, mid+1, high, x);
+    else if (x &lt; arr[mid])
+        return firstOcc(arr, low, mid-1, x);
+    else
+    {
+        if (mid == 0 || arr[mid-1] != arr[mid])
+            return mid;
+        else
+            return firstOcc(arr, low, mid-1, x);
+    }
+}</code></pre>
+<pre><code class="language-plaintext">x = 20   {5, 10, 10, 15, 20, 20, 20}
+low = 0, high = 6
+firstOcc(arr, 0, 6, 20)
+  ├→ mid = 3
+  └→ firstOcc(arr, 4, 6, 20)
+       ├→ mid = 5
+       └→ firstOcc(arr, …)      (the rest is hidden on the board)</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Iterative Solution <span class="cx">O(log n) time, O(1) aux space</span></h4>
+<pre><code class="language-cpp">int firstOcc(int arr[], int n, int x)
+{
+    int low = 0, high = n-1;
+    while (low &lt;= high)
+    {
+        int mid = (low + high)/2;
+        if (arr[mid] > x)
+            high = mid-1;
+        else if (arr[mid] &lt; x)
+            low = mid+1;
+        else
+        {
+            if (mid == 0 || arr[mid-1] != arr[mid])
+                return mid;
+            else
+                high = mid-1;
+        }
+    }
+    return -1;
+}</code></pre>
+<pre><code class="language-plaintext">x = 10   arr[] = {5, 10, 10, 20, 20}
+low = 0, high = 4
+Ist Iteration  : mid = 2   (arr[1] == arr[2]) → high = 1
+IInd Iteration : mid = 0   (5 &lt; 10)           → low = 1
+IIIrd Iteration: mid = 1   (arr[0] != arr[1]) → return 1</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slip:</strong> describing the iterative code, the transcript says "initialize low 0 and high as −1"; the board has <code>high = n-1</code>.</p>
+      <p><strong>Board note:</strong> <code>||</code> is written <code>¦¦</code> on the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTU5MQ%3D%3D" target="_blank" rel="noopener">Index of last Occurrence in Sorted</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Return the index of the <strong>last</strong> occurrence of x in a sorted array, or −1 if it isn't present.</p>
+
+    <h3>Naive: O(n) time, O(1) auxiliary space</h3>
+    <p>Traverse from the right and return as soon as x is found. Since the array is sorted, stop early once an element smaller than x is seen: x can't be present before it.</p>
+
+    <h3>Binary Search: O(log n)</h3>
+    <ul>
+      <li>Going to the left or right half works as in normal binary search. Only the equal case changes.</li>
+      <li>When arr[mid] == x, check in constant time whether it's the last occurrence: it is if mid is the last index of the whole array (<code>mid == n-1</code>), or the next element is different (<code>arr[mid] != arr[mid+1]</code>). Otherwise there may be more copies after it, so go to the <strong>right</strong> half (for the first occurrence you'd go left).</li>
+      <li>The recursive version gets an extra parameter n, just for the last-element check. It takes O(log n) time and O(log n) auxiliary space.</li>
+      <li>Iterative: <strong>O(log n) time, O(1) auxiliary space</strong>. If x isn't present, low and high cross, the loop ends and −1 is returned.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Index of Last Occurrence</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {10, 15, 20, 20, 40, 40}, x = 20</span><span>O/P</span><span>3</span>
+        <span>I/P</span><span>arr[] = {5, 8, 8, 10, 10}, x = 10</span><span>O/P</span><span>4</span>
+        <span>I/P</span><span>arr[] = {8, 10, 10, 12}, x = 7</span><span>O/P</span><span>-1</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Recursive Binary Search <span class="cx">O(log n) time, O(log n) aux space</span></h4>
+<pre><code class="language-cpp">int lastOcc(int arr[], int low, int high,
+            int x, int n)
+{
+    if (low > high) return -1;
+    int mid = (low + high)/2;
+    if (arr[mid] > x)
+        return lastOcc(arr, low, mid-1, n);
+    else if (arr[mid] &lt; x)
+        return lastOcc(arr, mid+1, high, n);
+    else
+    {
+        if (mid == n-1 || arr[mid] != arr[mid+1])
+            return mid;
+        else
+            return lastOcc(arr, mid+1, high, n);
+    }
+}</code></pre>
+<pre><code class="language-plaintext">  0   1   2   3   4   5   6
+  5, 10, 10, 10, 10, 20, 20      x = 10
+lastOcc(arr, 0, 6, 10)
+  ├→ mid = 3
+  └→ lastOcc(arr, 4, 6, 10)
+       ├→ mid = 5
+       └→ lastOcc(arr, 4, 4)
+            ├→ mid = 4
+            └→ Return 4</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Iterative Solution <span class="cx">O(log n) time, O(1) aux space</span></h4>
+<pre><code class="language-cpp">int lastOcc(int arr[], int n, int x)
+{
+    int low = 0, high = n-1;
+    while (low &lt;= high)
+    {   int mid = (low + high)/2;
+        if (arr[mid] &lt; x)
+            low = mid+1;
+        else if (arr[mid] > x)
+            high = mid-1;
+        else
+        {   if (mid != n-1 || arr[mid] != arr[mid+1])
+                return mid;
+            else
+                low = mid+1;
+        }
+    }
+    return -1;
+}</code></pre>
+<pre><code class="language-plaintext">5, 10, 10, 10, 10, 20, 20     x = 10
+low = 0, high = 6
+Ist Iteration  : mid = 3, low = 4
+IInd Iteration : mid = 5, high = 4
+IIIrd Iteration: mid = 4, return 4</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the recursive calls pass <code>(arr, low, mid-1, n)</code> and <code>(arr, mid+1, high, n)</code>, leaving out x; the signature is <code>lastOcc(arr, low, high, x, n)</code>. The iterative condition is written <code>mid != n-1</code>; the teacher says "if mid is equal to n − 1", as in the recursive version (<code>mid == n-1</code>).</p>
+      <p><strong>Teacher slip:</strong> "we return 10 in this case" means return index 4. In the iterative dry run he says "array four is not same as array 3" for {…, 10, 10, …}; they are the same, which is why it goes right.</p>
+      <p><strong>Board note:</strong> <code>||</code> is written <code>¦¦</code> on the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTU5Mg%3D%3D" target="_blank" rel="noopener">Count Occurrences in Sorted</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Given a sorted array that may contain duplicates, and a number x, count how many times x appears.</p>
+
+    <h3>Approaches</h3>
+    <ul>
+      <li><strong>Naive, O(n):</strong> traverse linearly; start counting at the first x and stop at the first different element.</li>
+      <li><strong>The usual first attempt:</strong> use binary search to find any occurrence, then walk both sides counting. That's O(log n + k), where k is the number of occurrences: O(log n) to locate one, then O(k). When k = n (all 10s) it's O(log n + n) = O(n), so it isn't O(log n) in the worst case.</li>
+      <li><strong>O(log n):</strong> two binary searches. Call the first-occurrence function (from the earlier video, O(log n)). If it returns −1, x isn't present: return 0. Otherwise there is definitely a last occurrence (even with one occurrence, it's the same one), so call the last-occurrence function (O(log n)) and return <strong>last − first + 1</strong>. Total O(log n) + O(log n) = O(log n).</li>
+      <li>Refer to the first and last occurrence videos for those functions.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/NzIxNQ%3D%3D" target="_blank" rel="noopener">Count Occurrences in Sorted</a></p>
+<ul>
+<li>Count the occurrences of x in a sorted array; the expected time is O(log n). Method: binary search. Time O(log n), Space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Count Occurrences in a Sorted Array</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {10, 20, 20, 20, 30, 30}, x = 20</span><span>O/P</span><span>3</span>
+        <span>I/P</span><span>arr[] = {10, …, 10}, x = 10</span><span>O/P</span><span>5</span>
+        <span>I/P</span><span>arr[] = {…}, x = 7</span><span>O/P</span><span>0</span>
+      </div>
+      <p>The middle of the second array and the whole third array are hidden by the teacher in every frame; the transcript says 10 appears five times and 7 doesn't appear at all.</p>
+    </div>
+    <div class="approach">
+      <h4>countOcc <span class="cx">O(log n)</span></h4>
+<pre><code class="language-cpp">int countOcc(int arr[], int n, int x)
+{
+    int first = firstOcc(arr, n, x);
+    if (first == -1)
+        return 0;
+    else
+        return (lastOcc(arr, n, x) - first + 1);
+}</code></pre>
+<pre><code class="language-plaintext">10   20   20   20   40   40      x = 20
+     ↑         ↑
+     1         3      → 3 - 1 + 1 = 3</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTU5Mw%3D%3D" target="_blank" rel="noopener">Count 1s in a Sorted Binary Array</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Count the 1s in a <strong>sorted binary</strong> array (only 0s and 1s, 0s first).</p>
+
+    <h3>Naive: O(n)</h3>
+    <p>Traverse until the first 1. Since the array is sorted and binary, everything after it is 1, so the count is n − (index of the first 1): {0, 0, 0, 1, 1, 1, 1} → 7 − 3 = 4. Upper bounded by n: the worst case is an array with no 1 at all.</p>
+
+    <h3>Binary Search: O(log n) time, O(1) auxiliary space</h3>
+    <ul>
+      <li>Binary search is always a good hint when a random-access container like an array is sorted. Here the problem is the same as finding the first occurrence of 1; then return n − that index.</li>
+      <li>If arr[mid] is 0 (the "smaller than x" case), go to the right half. There's no "greater" case: the array holds only 0s and 1s.</li>
+      <li>If arr[mid] is 1, it's the first 1 if mid is 0 or the previous element differs (which can be written more simply as <code>arr[mid-1] == 0</code>); then return n − mid. Otherwise go to the left half (<code>high = mid − 1</code>).</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/NzIxNg%3D%3D" target="_blank" rel="noopener">Count 1s in a Sorted Binary Array</a></p>
+<ul>
+<li>A binary array sorted in non-decreasing order: {0, 0, 0, 0, 0, 1, 1} → 2; {1, 1, 1, 1, 1, 1, 1} → 7; {0, 0, 0, 0, 0, 0, 0} → 0. Method: binary search. O(log N) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Count 1s in a Sorted Binary Array</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {0, 0, 0, 1, 1, 1, 1}</span><span>O/P</span><span>4</span>
+        <span>I/P</span><span>arr[] = {…, 1, 1, 1}</span><span>O/P</span><span>5</span>
+        <span>I/P</span><span>arr[] = {…, 0}</span><span>O/P</span><span>0</span>
+      </div>
+      <p>The second and third arrays are mostly hidden by the teacher; the transcript says they have five 1s and no 1s.</p>
+    </div>
+    <div class="approach">
+      <h4>countOnes <span class="cx">O(log n) time, O(1) aux space</span></h4>
+<pre><code class="language-cpp">int countOnes(int arr[], int n)
+{
+    int low = 0, high = n-1;
+    while (low &lt;= high)
+    {
+        int mid = (low + high)/2;
+        if (arr[mid] == 0)
+            low = mid+1;
+        else
+        {   if (mid == 0 || arr[mid-1] != arr[mid])
+                return (n - mid);
+            else
+                high = mid-1;
+        }
+    }
+    return 0;
+}</code></pre>
+      <p>The condition is later rewritten on the board as <code>if (mid == 0 || arr[mid-1] == 0)</code>.</p>
+<pre><code class="language-plaintext">0  0  ①  1  1  1  1
+low = 0, high = 6
+Ist Iteration  : mid = 3, high = 2
+IInd Iteration : mid = 1, low = 2
+IIIrd Iteration: mid = 2, return (7 - 2)</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>||</code> is written <code>¦¦</code> on the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTU4OA%3D%3D" target="_blank" rel="noopener">Square root</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <ul>
+      <li>Given an integer x, return its square root as an integer: the exact root if x is a perfect square, otherwise the <strong>floor</strong> of the square root. 14 → 3 (3.something, floored).</li>
+      <li>Every number greater than 4 and smaller than 9 has 2 as its answer, 9 has 3, and 10 to 15 all have 3.</li>
+      <li>You're not allowed to use the <code>sqrt()</code> function; implement your own.</li>
+    </ul>
+
+    <h3>Naive Solution: Θ(√x)</h3>
+    <p>Start at i = 1 and keep incrementing while <code>i*i &lt;= x</code>. The loop stops when i·i becomes greater than x, so i − 1 is the answer. x = 9: i goes 1, 2, 3, 4 (16 &gt; 9) → 3. The loop runs in proportion to √x: Θ(x<sup>1/2</sup>).</p>
+
+    <h3>Efficient Solution: Θ(log x), binary search</h3>
+    <ul>
+      <li>Search the range 1 to x. Try mid = (low + high)/2 and compare mid·mid with x.</li>
+      <li>mid·mid == x: mid is the square root. mid·mid &gt; x: the root is on the left, so <code>high = mid − 1</code>. mid·mid &lt; x: store mid as the answer so far and try for a higher value with <code>low = mid + 1</code>.</li>
+      <li>It's like finding the last occurrence: many values satisfy mid·mid ≤ x, and we want the largest one. When the loop ends, return the last stored answer.</li>
+      <li>A great example of binary search for mathematical equations: with a monotonically increasing function, you can use binary search to find the x for a given f(x).</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/NzIxNw%3D%3D" target="_blank" rel="noopener">Square root</a></p>
+<ul>
+<li>Return floor(√x) if x isn't a perfect square: 4 → 2; 11 → 3 (between 3 and 4).</li>
+<li>Naive: handle 0 and 1 as base cases; increment i while i·i ≤ n; the answer is i − 1. O(√X) time, O(1) space.</li>
+<li>Binary search: find the largest i with i·i ≤ x (i·i is monotonically increasing). Base cases 0 and 1 return x. Search l = 0 to r = x/2 (for x &gt; 1 the floor of the root can't exceed x/2). If mid² ≤ x, set ans = mid and search the larger half (l = mid + 1); else r = mid − 1. O(log X) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Square Root (floor)</strong>
+      <div class="io">
+        <span>I/P</span><span>x = 4</span><span>O/P</span><span>2</span>
+        <span>I/P</span><span>x = 14</span><span>O/P</span><span>3</span>
+        <span>I/P</span><span>x = 25</span><span>O/P</span><span>5</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">Θ(√x)</span></h4>
+<pre><code class="language-cpp">int sqRootFloor(int x)
+{
+    int i = 1;
+    while (i*i &lt;= x)
+        i++;
+    return (i-1);
+}</code></pre>
+<pre><code class="language-plaintext">x = 15                       x = 9
+i = 1:                       i = 1:
+i = 2:                       i = 2
+i = 3:                       i = 3
+i = 4:                       i = 4:
+result = (i-1) = 3           (i-1) = 3</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution <span class="cx">Θ(log x)</span></h4>
+<pre><code class="language-cpp">int sqRootFloor(int x)
+{
+    int low = 1, high = x, ans = -1;
+    while (low &lt;= high)
+    {   int mid = (low + high)/2;
+        int mSq = mid * mid;
+        if (mSq == x)
+            return mid;
+        else if (mSq > x)
+            high = mid - 1;
+        else
+        {
+            low = mid + 1;
+            ans = mid;
+        }
+    }
+    return ans;
+}</code></pre>
+<pre><code class="language-plaintext">x = 10
+low = 1, high = 10
+Ist Iteration  : mid = 5, mSq = 25, high = 4
+IInd Iteration : mid = 2, mSq = 4,  low = 3, ans = 2
+IIIrd Iteration: mid = 3, mSq = 9,  low = 4, ans = 3
+IVth Iteration : mid = 4, mSq = 16, high = 3      → return ans = 3</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slips:</strong> describing the naive loop he says "while i·i is more than equal to x"; the board has <code>i*i &lt;= x</code>. In the first iteration of the dry run he says "we change our low to 4", then "we change our high to 4", as the board shows. He also says "log x times log x is greater than x raised to the power half"; log x is smaller, which is why it's the better solution.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTU4OQ%3D%3D" target="_blank" rel="noopener">Search in Infinite Sized Array</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <ul>
+      <li>Given an infinite sized sorted array and x, return the index of x, or −1 if it isn't present. For x = 50 in {20, 40, 100, 300, …}: if 50 were there it would have to be between 40 and 100, so −1.</li>
+      <li>How would a contest set this up, since Java has <code>arr.length</code> and C++ <code>vector.size()</code>? By making arrays of millions of elements with search inputs close to the left side: a program whose time depends on the millions gets TLE; one whose time depends on the element's position works.</li>
+      <li><strong>pos</strong> is the position of x (7 + 1 = 8 in the first example), or where it would have been if it's not there (3 for 50).</li>
+    </ul>
+
+    <h3>Naive Solution: O(pos) time, O(1) aux space</h3>
+    <p>Traverse from the beginning in an infinite loop. Stop when arr[i] == x (return i) or arr[i] &gt; x (return −1). Searching 15 in {1, 10, 200, …}: 1 and 10 are smaller, 200 is greater → −1.</p>
+
+    <h3>Efficient Solution: unbounded binary search, O(log pos)</h3>
+    <ul>
+      <li>Direct binary search needs high for (low + high)/2, and here there is no usable high (even if the size were known, it's really, really big).</li>
+      <li>Hint: logarithmic time comes from dividing a number by 2, or multiplying by 2 to reach it.</li>
+      <li>Handle index 0 explicitly (doubling 0 stays 0). Then start at i = 1 and double the index (1, 2, 4, 8, 16, …) while arr[i] &lt; x. Stop when arr[i] == x (return i) or arr[i] &gt; x.</li>
+      <li>If it's greater, x must lie between the previous index and this one. And since arr[i] was already checked, binary search from <code>i/2 + 1</code> to <code>i − 1</code>.</li>
+      <li>Time: the index goes at most to about 2·pos (x at index 5 → up to 8; at 9 → up to 16). Doubling from 1 to reach 2·pos takes log(2·pos) = O(log pos). The binary search range holds fewer than pos elements, so it's also O(log pos). Total <strong>O(log pos)</strong>. This algorithm is commonly known as <strong>unbounded binary search</strong>.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/ODU5OQ%3D%3D" target="_blank" rel="noopener">Search in an Infinite Sized Array</a></p>
+<ul>
+<li>Binary search needs bounds, which an infinite array doesn't give, so first find the bounds. Start with low at the 1st element and high at the 2nd. If the key is greater than arr[high], copy high into low and double high; otherwise binary search between low and high.</li>
+<li>With p the key's position, finding h takes O(log p) steps, h is less than 2·p, and the elements between h/2 and h are O(p), so the binary search is also O(log p): 2·O(log p) = O(log p) overall.</li>
+<li>Another approach: start = 0, end = 1; while the target is greater than arr[end], set newStart = end + 1 and newEnd = end + (end − start + 1)·2, then binary search. O(log N) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Search in an Infinite Sorted Array</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {1, 10, 15, 20, 40, 80, 90, 100, 120, 500, …}, x = 100</span><span>O/P</span><span>7</span>
+        <span>I/P</span><span>arr[] = {20, 40, 100, 300, …}, x = 50</span><span>O/P</span><span>-1</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">O(pos) time, O(1) aux space</span></h4>
+<pre><code class="language-cpp">int search(int arr[], int x)
+{
+    int i = 0;
+    while (true)
+    {
+        if (arr[i] == x) return i;
+        if (arr[i] > x) return -1;
+        i++;
+    }
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution <span class="cx">O(log pos)</span></h4>
+<pre><code class="language-cpp">int search(int arr[], int x)
+{
+    if (arr[0] == x) return 0;
+    int i = 1;
+    while (arr[i] &lt; x)
+        i = i*2;
+    if (arr[i] == x) return i;
+
+    return binarySearch(arr, x, i/2+1, i-1);
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {1, 10, 15, 20, 40, 60,
+         80, 100, 200, 500, 1000, ...}
+x = 100
+Initially : i = 1
+After While Loop : i = 8
+Return binarySearch(4, 8)
+
+log(2 * pos)  →  log(pos)</code></pre>
+      <p>The board first writes the last line with <code>i</code> as the upper bound and then changes it to <code>i-1</code>; the <code>i/2</code> part is hidden by the teacher in the close-ups and is taken from the transcript.</p>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slips:</strong> in the walkthrough the transcript uses a different array (10, 15, 40, 60 …, 200 at index 8) and says "10 is more than a hundred" while meaning smaller. It also gives the binary search range as index 5 to 7 (i/2 + 1 to i − 1), while the board's dry run writes binarySearch(4, 8).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTUwNjg%3D" target="_blank" rel="noopener">Search in Sorted Rotated Array</a> · <strong>No transcript</strong> on this video. Notes from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>We're given a sorted array that is rotated a certain number of times, and must detect whether a given target element is present. First a naive approach with O(n) time, then an efficient approach that uses binary search for logarithmic time.</li>
+</ul></div>
+
+    <h3>Search in a Sorted Rotated Array (board)</h3>
+    <ul>
+      <li>The board notes <strong>Distinct Elements</strong>. {100, 200, 300, 10, 20} is the sorted 10 20 100 200 300, rotated.</li>
+      <li>Naive Solution: a linear search over the array, returning the index or −1.</li>
+    </ul>
+
+    <h3>Efficient Approach (Binary Search) (board)</h3>
+    <ul>
+      <li>The code is boxed into three parts. Top, <strong>Like Normal Binary Search</strong>: compute mid and return it if arr[mid] == x.</li>
+      <li><strong>Left Half Sorted</strong> (<code>arr[low] &lt;= arr[mid]</code>): if x lies in [arr[low], arr[mid]), go left (<code>high = mid − 1</code>), else go right (<code>low = mid + 1</code>).</li>
+      <li><strong>Right Half Sorted</strong> (otherwise): if x lies in (arr[mid], arr[high]], go right (<code>low = mid + 1</code>), else go left (<code>high = mid − 1</code>).</li>
+      <li>The board works through several arrays: {100, 200, 500, 1000, 2000, 10, 20} with x = 100; {100, 500, 10, 20, 30, 40, 50} with x = 40 and x = 500; and {100, 200, 300, 400, 20, 30, 40} with x = 50, where 100, 200, 300 are crossed out and 20, 30, 40 bracketed.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Search in a Sorted Rotated Array</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {10, 20, 30, 40, 50, 8, 9}, x = 30</span><span>O/P</span><span>2</span>
+        <span>I/P</span><span>arr[] = {100, 200, 300, 10, 20}, x = 40</span><span>O/P</span><span>-1</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">O(n)</span></h4>
+<pre><code class="language-cpp">int search(int arr[], int n, int x)
+{
+    for (int i = 0; i &lt; n; i++)
+        if (arr[i] == x)
+            return i;
+    return -1;
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Approach (Binary Search)</h4>
+<pre><code class="language-cpp">int search(int arr[], int n, int x)
+{
+    int low = 0, high = n-1;                        // Like
+    while (low &lt;= high)                             // Normal
+    {   int mid = (low + high)/2;                   // Binary
+        if (arr[mid] == x) return mid;              // Search
+        if (arr[low] &lt;= arr[mid])
+        {   if (x >= arr[low] &amp;&amp; x &lt; arr[mid])      // Left Half
+                high = mid - 1;                     // Sorted
+            else
+                low = mid + 1;
+        }
+        else
+        {   if (x > arr[mid] &amp;&amp; x &lt;= arr[high])     // Right Half
+                low = mid + 1;                      // Sorted
+            else
+                high = mid - 1;
+        }
+    }
+    return -1;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {10, 20, 40, 60, 5, 8}
+x = 5
+Initially : low = 0, high = 5
+Ist Iteration  : mid = 2, low = 3
+IInd Iteration : mid = 4, return 4
+
+Example 2
+arr[] = {10, 20, 40, 60, 5, 8}     (x hidden on the board)
+low = 0, high = 5
+mid = 2, low = 3
+mid = 4, low = 5
+mid = 5, high = 4</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;&amp;</code> is written <code>$$</code> on the board. The description also links C++, Java, JavaScript and C# code on the GfG IDE; those weren't opened.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTU3MDQ%3D" target="_blank" rel="noopener">Find a Peak Element</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated and noisy in this video, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <ul>
+      <li>Given an <strong>unsorted</strong> array, find a peak element: one that is <strong>not smaller than its neighbours</strong> (equal is allowed). Return any one of the peaks.</li>
+      <li>The leftmost element only needs to be checked against the element after it; the rightmost only against the element before it. In {80, 70, 90}, both 80 and 90 are peaks.</li>
+    </ul>
+
+    <h3>Naive Solution: O(n)</h3>
+    <p>A single element is a peak. Otherwise check the corners: arr[0] ≥ arr[1] → arr[0]; arr[n−1] ≥ arr[n−2] → arr[n−1]. Then check each middle element against both neighbours. For {6, 7, 8, 20, 12}: not 6, not 12, not 7, not 8 → 20. In the worst case it traverses all the elements.</p>
+
+    <h3>Efficient Solution: O(log n), binary search on an unsorted array</h3>
+    <ul>
+      <li>An odd problem: the input isn't sorted, but binary search works because of an interesting property.</li>
+      <li>Go to the middle. If it's a peak (not smaller than either neighbour that exists), return it.</li>
+      <li>Otherwise, if the left neighbour is greater than or equal to mid, there will always be a peak on the left side: go left. Else the right neighbour must be greater (otherwise mid would be a peak), so there will be a peak on the right side: go right.</li>
+      <li>Why: an <strong>independent array</strong> always has a peak (size 1: the element; size 2: 10 20 or 20 10; size 3: increasing → last, decreasing → first, otherwise a middle one greater than both). When arr[mid − 1] ≥ arr[mid], the left part behaves like an independent array, because its right edge is not smaller than mid. For {5, 20, 40, 30, 20, 50, 60} the left side has peak 40; for {120, 80, 40, …} it has 120.</li>
+      <li>Going right doesn't mean the left has no peak: in {5, 10, 20, 40, 60, 80, 70}, the left part {5, 10, 20} has no peak inside the whole array (an element greater than 20 is on its right), but the right part surely has one.</li>
+      <li>Every input always has a peak, so the loop never actually returns −1. <strong>Time O(log n), auxiliary space O(1).</strong></li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/MTAxMDQ%3D" target="_blank" rel="noopener">Find a Peak Element</a></p>
+<ul>
+<li>{5, 10, 20, 15} → 20; {10, 20, 15, 2, 23, 90, 67} → 20 or 90. Corner elements have only one neighbour.</li>
+<li>Naive: check arr[0] against arr[1] and arr[n−1] against arr[n−2], then traverse the rest. O(N), O(1).</li>
+<li>Iterative binary search on the unsorted array: if the element left of mid is greater, a peak is definitely in the left part; if the one on the right is greater, in the right part. mid = (low + high)/2 while low ≤ high.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Find a Peak Element</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {5, 10, 20, 15, 7}</span><span>O/P</span><span>20</span>
+        <span>I/P</span><span>arr[] = {10, 20, 15, 5, 23, 90, …}</span><span>O/P</span><span>20 OR 90</span>
+        <span>I/P</span><span>arr[] = {80, 70, 90}</span><span>O/P</span><span>80 OR 90</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">O(n)</span></h4>
+<pre><code class="language-cpp">int getPeak(int arr[], int n)
+{
+    if (n == 1) return arr[0];
+    if (arr[0] >= arr[1]) return arr[0];
+    if (arr[n-1] >= arr[n-2]) return arr[n-1];
+    for (int i = 1; i &lt; n-1; i++)
+        if (arr[i] >= arr[i-1] &amp;&amp;
+            arr[i] >= arr[i+1])
+            return arr[i];
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution <span class="cx">O(log n) time, O(1) aux space</span></h4>
+<pre><code class="language-cpp">int getAPeak(int arr[], int n)
+{   int low = 0, high = n-1;
+    while (low &lt;= high)
+    {
+        int mid = (low + high)/2;
+        if ((mid == 0 || arr[mid-1] &lt;= arr[mid]) &amp;&amp;
+            (mid == n-1 || arr[mid+1] &lt;= arr[mid]))
+            return mid;
+        if (mid > 0 &amp;&amp; arr[mid-1] >= arr[mid])
+            high = mid-1;
+        else
+            low = mid+1;
+    }
+    return -1;
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the naive version returns the peak's <em>value</em>, the efficient one its <em>index</em> (<code>return mid;</code>). <code>&amp;&amp;</code> is written <code>$$</code> and <code>||</code> as <code>¦¦</code> on the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/NzAyMQ%3D%3D" target="_blank" rel="noopener">Two Pointers Approach</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated and noisy in this video, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Example Problem: is there a pair with sum x in a sorted array?</h3>
+    <p>Return true if even a single pair has sum x (there can be several), otherwise false.</p>
+
+    <h3>Naive Solution: Time O(n²), Aux Space O(1)</h3>
+    <ul>
+      <li>Consider every pair: for each i from the first to the second-last element, pair it with every j on its right; return true when a pair sums to x.</li>
+      <li>Worst case Θ(n²) when there's no pair at all (all pairs are tried). Best case O(1) if the first two elements are the pair.</li>
+      <li>The code is pseudocode close to C++. In Java use <code>boolean</code>, and you don't need to pass n: use <code>arr.length</code>.</li>
+    </ul>
+
+    <h3>Idea for the Efficient Solution: two pointer technique</h3>
+    <ul>
+      <li>The naive approach doesn't use the fact that the array is sorted. Start with <code>i = 0</code> (leftmost) and <code>j = n − 1</code> (rightmost) and move them toward each other, one at a time.</li>
+      <li>If <code>arr[i] + arr[j] == x</code>, return true. If the sum is greater than x, <code>j = j − 1</code>; else <code>i = i + 1</code>.</li>
+      <li>No valid pair is ever missed. If 2 + 30 &gt; 23 with 2 the smallest element, then 30 gives an even bigger sum with every other element, so 30 can be ignored safely. If 2 + 20 &lt; 23 with 20 the largest remaining element, 2 gives an even smaller sum with every other element, so 2 can be ignored.</li>
+      <li>When i and j become the same (or cross), there's no pair: return false.</li>
+      <li>Each iteration moves one of the two pointers, so <strong>Time: O(n), Aux Space: O(1)</strong>.</li>
+      <li>Best suited when the input is sorted. For an unsorted array you'd sort first, O(n log n) overall: better than O(n²), but hashing (covered in the hashing videos) works in linear time even for unsorted arrays. Hashing needs auxiliary space and is costlier, so for a sorted array two pointers is the best solution; for unsorted, hashing is recommended.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Pair with Sum x in a Sorted Array</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = [2, 5, 8, 12, 30], x = 17</span><span>O/P</span><span>True // Pair is (5, 12)</span>
+        <span>I/P</span><span>arr[] = [3, 8, 13, 18], x = 14</span><span>O/P</span><span>False</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">Time O(n²), Aux Space O(1)</span></h4>
+<pre><code class="language-cpp">bool isPair(int arr[], int n, int x)
+{
+    for (int i = 0; i &lt; n-1; i++)
+        for (int j = i+1; j &lt; n; j++)
+            if (arr[i] + arr[j] == x)
+                return true;
+    return false;
+}</code></pre>
+<pre><code class="language-plaintext">arr = [2, 3, 8, 11]
+x = 14
+i = 0 : j = 1
+        j = 2
+        j = 3
+i = 1 : j = 2
+        j = 3
+        return True</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Two Pointer Technique <span class="cx">Time O(n), Aux Space O(1)</span></h4>
+<pre><code class="language-cpp">bool isPair(int arr[], int n,
+            int x)
+{
+    int i = 0, j = n-1;
+    while (i &lt; j)
+    {
+        if (arr[i] + arr[j] == x)
+            return true;
+        else if (arr[i] + arr[j] &lt; x)
+            i++;
+        else
+            j--;
+    }
+    return false;
+}</code></pre>
+<pre><code class="language-plaintext">[2, 4, 8, 9, 11, 12, 20, 30], x = 23
+i = 0, j = 7
+(2 + 30) > 23 : i = 0, j = 6         (4 + 12) &lt; 23 : i = 2, j = 5
+(2 + 20) &lt; 23 : i = 1, j = 6         (8 + 12) &lt; 23 : i = 3, j = 5
+(4 + 20) > 23 : i = 1, j = 5         (9 + 12) &lt; 23 : i = 4, j = 5
+                                     (11 + 12) == 23, return true
+
+arr = [2, 5, 8, 12, 30], x = 17
+Initially : i = 0, j = 4
+(2 + 30) > 17 : j = 3
+(2 + 12) &lt; 17 : i = 1
+(5 + 12) == 17 : return True</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/NzAyMg%3D%3D" target="_blank" rel="noopener">Triplet in a Sorted Array</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Given a sorted array and a number x, return true if some triplet has sum x, otherwise false. In [1, 2, 5, 6] with x = 14, even the largest triplet sum (13) is less than 14, so false.</p>
+
+    <h3>Naive Solution: Time O(n³), Space O(1)</h3>
+    <p>Consider every triplet: i from 0 up to n − 3 (there must be two elements after it), j on the right of i, k on the right of j. Return true when the sum is x; false after all triplets.</p>
+
+    <h3>Idea for the Efficient Solution: Time O(n²), Space O(1)</h3>
+    <ul>
+      <li>Hint (strongly recommended to try first): use the pair sum problem (two pointer approach, previous video) as a subroutine.</li>
+      <li>(1) Traverse the array from left to right. (2) For every element arr[i], check if there is a pair on its right side with sum <code>x − arr[i]</code>.</li>
+      <li>isPair gets an extra parameter, the starting index <code>si</code>: it starts with <code>i = si</code> instead of 0, so it searches only the right side.</li>
+      <li>O(n) outer loop times O(n) isPair: <strong>O(n²)</strong>, O(1) auxiliary space.</li>
+      <li>For an <strong>unsorted</strong> array, sort it first (O(n log n)), then run the same code: O(n log n) + O(n²) is still O(n²).</li>
+      <li>C++-style code; in Java use <code>boolean</code> and <code>arr.length</code> instead of passing n.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Triplet with Sum x in a Sorted Array</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = [2, 3, 4, 8, 9, 20, 40], x = 32</span><span>O/P</span><span>True // Triplet is (4, 8, 20)</span>
+        <span>I/P</span><span>arr[] = [1, 2, 5, 6], x = 14</span><span>O/P</span><span>False</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">Time O(n³), Space O(1)</span></h4>
+<pre><code class="language-cpp">bool isTriplet(int arr[], int n, int x)
+{
+    for (int i = 0; i &lt; n-2; i++)
+        for (int j = i+1; j &lt; n-1; j++)
+            for (int k = j+1; k &lt; n; k++)
+                if (arr[i] + arr[j] + arr[k] == x)
+                    return true;
+    return false;
+}</code></pre>
+<pre><code class="language-plaintext">arr = [2, 3, 5, 6, 15]
+x = 20
+i = 0 : j = 1
+        k = 2
+        k = 3
+        k = 4
+        return True</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution <span class="cx">Time O(n²), Space O(1)</span></h4>
+<pre><code class="language-cpp">bool isPair(int arr[], int n, int x,
+            int si)
+{
+    int i = si, j = n-1;
+    while (i &lt; j)
+    {   if (arr[i] + arr[j] == x)
+            return true;
+        else if (arr[i] + arr[j] &lt; x) { i++; }
+        else { j--; }
+    }
+    return false;
+}
+bool isTriplet(int arr[], int n, int x)
+{   sort(arr)
+    for (int i = 0; i &lt; n-2; i++)
+        if (isPair(arr, x - arr[i], i+1))
+            return true;
+    return false;
+}</code></pre>
+<pre><code class="language-plaintext">[2, 3, 4, 8, 9, 20, 40]
+x = 32
+2 : Search for (32 - 2) in arr[1:6]
+3 : Search for (32 - 3) in arr[2:6]
+    We find a pair with sum 29, we return true
+
+arr = [2, 5, 10, 15, 18]
+x = 33
+i = 0 : isPairSum(arr, 5, 31, 1)
+i = 1 : isPairSum(arr, 5, 28, 2)
+        return True
+The Triplet is (5, 10, 18)</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> isTriplet calls <code>isPair(arr, x - arr[i], i+1)</code> without n; the dry run and the signature use <code>isPair(arr, n, x, si)</code>. The "sort(arr)" line is squeezed in later on the board, with O(n log n) written beside it.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTQyMA%3D%3D" target="_blank" rel="noopener">Median of two sorted arrays</a> · Notes from the full course transcript and the board (a frame every 10–20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Problem</h3>
+    <p>Given two sorted arrays, find the median of their combined elements: the middle element (odd total) or the average of the middle two (even total). The answer is a double.</p>
+
+    <h3>Naive: O((n1 + n2) * log(n1 + n2))</h3>
+    <ol>
+      <li>Create an array temp[] of size (n1 + n2), where n1 is the size of a1[] and n2 of a2[].</li>
+      <li>Copy the elements of a1[] and a2[] to temp[].</li>
+      <li>Sort temp[].</li>
+      <li>If (n1 + n2) is odd, return the middle of temp.</li>
+      <li>Else return the average of the middle two elements.</li>
+    </ol>
+    <p>Using the merge process of merge sort (sorting track) improves this to O(n1 + n2). The question is whether it can be done in logarithmic time.</p>
+
+    <h3>Efficient: O(log n1) where n1 ≤ n2</h3>
+    <ul>
+      <li>Assume a1 is the smaller array (n1 ≤ n2); if not, swap the pointers in C++ or the references in Java. Binary search over a1, starting from its middle.</li>
+      <li>Keep two sets of equal size. <strong>Left half:</strong> a1[0 … i1−1] and a2[0 … i2−1]. <strong>Right half:</strong> a1[i1 … n1−1] and a2[i2 … n2−1]. With an odd total, the left half holds one extra element.</li>
+      <li>For a chosen i1 (start of a1's right part), <code>i2 = ⌊(n1 + n2 + 1)/2⌋ − i1</code> makes the halves equal. This formula handles both even and odd totals. With n1 = 5, n2 = 9 and i1 = 2: (5 + 9 + 1)/2 = 7, so i2 = 5.</li>
+      <li>Stop when every element of the left half is ≤ every element of the right half. Then the median is max of the left half (and, for an even total, averaged with min of the right half). Because each array is sorted, these come from four boundary values:</li>
+    </ul>
+<pre><code class="language-plaintext">min1 : Minimum element in right side of a1    a1[i1]
+max1 : Maximum element in left side of a1     a1[i1-1]
+min2 : Minimum element in right side of a2    a2[i2]
+max2 : Maximum element in left side of a2     a2[i2-1]</code></pre>
+    <ul>
+      <li>Found the median when <code>max1 &lt;= min2 &amp;&amp; max2 &lt;= min1</code>. Even total: (max(max1, max2) + min(min1, min2))/2; odd total: max(max1, max2).</li>
+      <li>Otherwise, if max1 &gt; min2, a1's left part has elements that are too big: go to the left half (<code>end1 = i1 − 1</code>). Else (max2 &gt; min1), a smaller element of a1 went to the right side: go to the right half (<code>begin1 = i1 + 1</code>).</li>
+      <li>Corner cases: if i1 == n1 (nothing on a1's right), min1 = +infinity (<code>INT_MAX</code>, Java <code>Integer.MAX_VALUE</code>); if i1 == 0 (nothing on the left), max1 = −infinity (<code>INT_MIN</code> / <code>Integer.MIN_VALUE</code>). The same for min2 and max2.</li>
+      <li>Each iteration does constant work (no loops inside the while): <strong>O(log n1)</strong>.</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/NzIyMg%3D%3D" target="_blank" rel="noopener">Median of Two Sorted Arrays</a></p>
+<ul>
+<li>Arrays of unequal size N and M are handled too. a = {−5, 3, 6, 12, 15}, b = {−12, −10, −6, −3, 4, 10} → merged {−12, −10, −6, −5, −3, 3, 4, 6, 10, 12, 15}, median 3. a = {2, 3, 5, 8}, b = {10, 12, 14, 16, 18, 20} → even count, (10 + 12)/2 = 11.</li>
+<li>Merging is costly, so use a modified binary search that divides the arrays instead. Illustration for the first example: real mid in the merged array = 6; start = 0, end = 5 → mid = 2; leftAsize = 2, leftBsize = 4; leftA = 3, leftB = −3, rightA = 6, rightB = 4. Since leftA ≤ rightB and leftB ≤ rightA, 3 is returned as the median.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Median of Two Sorted Arrays</strong>
+      <div class="io">
+        <span>I/P</span><span>a1[] = {10, 20, 30, 40, 50}, a2[] = {5, 15, 25, 35, 45}</span><span>O/P</span><span>27.5 // {5, 10, 15, 20, 25, 30, 35, 40, 45, 50}</span>
+        <span>I/P</span><span>a1[] = {1, 2, 3, 4, 5, …}, a2[] = {10, 20, 30, 40, 50}</span><span>O/P</span><span>6.0 // {1, 2, 3, 4, 5, 6, 10, 20, …}</span>
+        <span>I/P</span><span>a1[] = {10, 20, 30, 40, 50, 60}, a2[] = {1, 2, 3, 4, 5}</span><span>O/P</span><span>10.0 // {1, 2, 3, 4, 5, 10, 20, 30, 40, 50, 60}</span>
+      </div>
+      <p>The end of the second a1 is hidden by the teacher's hand; the transcript lists the merged array as 1, 2, 3, 4, 5, 6, 10, 20, 30, 40, 50.</p>
+    </div>
+    <div class="approach">
+      <h4>Naive (board dry run)</h4>
+<pre><code class="language-plaintext">a1[] = {10, 20, 30},  a2 = {5, 15, 25}
+temp[] = {10, 20, 30, 5, 15, 25}
+After Sorting
+temp[] = {5, 10, 15, …, 25, 30}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient (C++) <span class="cx">O(log n1)</span></h4>
+<pre><code class="language-cpp">double getMed(int a1[], int a2[], int n1,
+              int n2)
+{
+    int begin1 = 0, end1 = n1;
+    while (begin1 &lt;= end1)
+    {
+        int i1 = (begin1 + end1)/2;
+        int i2 = (n1 + n2 + 1)/2 - i1;
+
+        int min1 = (i1 == n1) ? INT_MAX : a1[i1];
+        int max1 = (i1 == 0) ? INT_MIN : a1[i1-1];
+
+        int min2 = (i2 == n2) ? INT_MAX : a2[i2];
+        int max2 = (i2 == 0) ? INT_MIN : a2[i2-1];
+
+        if (max1 &lt;= min2 &amp;&amp; max2 &lt;= min1)
+        {   if ((n1 + n2) % 2 == 0)
+                return ((double) max(max1, max2) +
+                        min(min1, min2))/2;
+            else return (double) max(max1, max2);
+        }
+        else if (max1 > min2) end1 = i1 - 1;
+        else begin1 = i1 + 1;
+    }
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient (Java) <span class="cx">O(log n1)</span></h4>
+<pre><code class="language-java">double getMed(int a1[], int a2[])
+{   int n1 = a1.length, n2 = a2.length;
+    int begin1 = 0, end1 = n1;
+    while (begin1 &lt;= end1)
+    {
+        int i1 = (begin1 + end1)/2;
+        int i2 = (n1 + n2 + 1)/2 - i1;
+        int min1 = (i1 == n1) ? Integer.MAX_VALUE : a1[i1];
+        int max1 = (i1 == 0) ? Integer.MIN_VALUE : a1[i1-1];
+
+        int min2 = (i2 == n2) ? Integer.MAX_VALUE : a2[i2];
+        int max2 = (i2 == 0) ? Integer.MIN_VALUE : a2[i2-1];
+        if (max1 &lt;= min2 &amp;&amp; max2 &lt;= min1)
+        {   if ((n1 + n2) % 2 == 0)
+                return ((double) Math.max(max1, max2) +
+                                 Math.min(min1, min2))/2;
+            else
+                return (double) max(max1, max2);
+        }
+        else if (max1 > min2) end1 = i1 - 1;
+        else begin1 = i1 + 1;
+    }
+}</code></pre>
+<pre><code class="language-plaintext">{10, 20, 30}  {5, 15, 25, 35, 45}
+Ist Iteration : i1 = 1, i2 = (3+5+1)/2 - 1 = 3
+                min1 = 20, max1 = 10, min2 = 35, max2 = 25
+IInd Iteration: begin = 2, end = 3
+                i1 = 2
+                i2 = (3+5+1)/2 - 2 = 2
+                min1 = 30, max1 = 20
+                min2 = 25, max2 = 15
+
+Example 2:  begin1 = 0, end1 = 4
+            i1 = 2, i2 = (4+5+1)/2 - 2 = 3
+            min1 = 50, max1 = 40, min2 = 8, max2 = 7
+IInd Iteration
+            begin = 0, end = 1
+            i1 = 0
+            i2 = (4+5+1)/2 - 0 = 5
+            {30, 40, 50, 60}  {5, 6, 7, 8, 9}
+            min1 = 30, max1 = -INF
+            min2 = INF, max2 = 9
+            Result = max(9, -INF)</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the Java odd case writes <code>max(max1, max2)</code> without <code>Math.</code>. Neither version has a return after the loop, which C++ and Java compilers warn about or reject for a non-void function. <code>&amp;&amp;</code> is written <code>$$</code> on the board.</p>
+      <p><strong>Teacher slip:</strong> stating the stop condition, the transcript says "max2 is smaller than equal to min1" in one place and "min1" for both in another; the board has <code>max1 &lt;= min2 &amp;&amp; max2 &lt;= min1</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTg4NA%3D%3D" target="_blank" rel="noopener">Repeating Elements Part (1)</a> · <strong>No transcript</strong> on this video. Notes from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>Every element appears only once except a single element that has multiple occurrences. The array always contains 0, and if the maximum element is x, all elements from 0 to x are present. The video covers both a naive and an efficient approach.</li>
+</ul></div>
+
+    <h3>Repeating Element (board)</h3>
+    <ul>
+      <li>Array size n ≥ 2.</li>
+      <li>Only one element repeats (any number of times).</li>
+      <li>All the elements from 0 to max(arr) are present. Therefore 0 ≤ max(arr) ≤ n − 2.</li>
+      <li>A board at about 2:10 lists the requirements: O(n) Time, O(1) Aux Space, No Modifications to original Array.</li>
+    </ul>
+
+    <h3>Solutions (board)</h3>
+    <ul>
+      <li><strong>Super Naive Solution: O(n²) Time and O(1) Space</strong>: compare every pair.</li>
+      <li><strong>Naive Solution: O(n log n) Time and O(1) Space</strong>: (1) sort the array, e.g. {0, 1, 2, 2, 2, 3}; (2) return the first element equal to its next one.</li>
+      <li><strong>Efficient Approach: O(n) time and O(n) Space</strong>: (1) create a boolean array <code>visited[]</code> (the board first writes size n, then changes it to n − 1); (2) for every element, if <code>visited[arr[i]]</code> is already true, return arr[i]; else mark it true.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Repeating Element</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {0, 2, 1, 3, 2, 2}</span><span>O/P</span><span>2</span>
+        <span>I/P</span><span>arr[] = {1, 2, 3, 0, 3, 4, 5}</span><span>O/P</span><span>3</span>
+        <span>I/P</span><span>arr[] = {0, 0}</span><span>O/P</span><span>0</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Super Naive Solution <span class="cx">O(n²) Time and O(1) Space</span></h4>
+<pre><code class="language-cpp">for (int i = 0; i &lt; n-1; i++)
+    for (int j = i+1; j &lt; n; j++)
+        if (arr[i] == arr[j])
+            return arr[i];</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Naive Solution <span class="cx">O(n log n) Time and O(1) Space</span></h4>
+<pre><code class="language-cpp">1) Sort the Array : arr[] = {0, 1, 2, 2, 2, 3}
+2) for (int i = 0; i &lt; n-1; i++)
+       if (arr[i] == arr[i+1])
+           return arr[i];</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Efficient Approach <span class="cx">O(n) time and O(n) Space</span></h4>
+<pre><code class="language-cpp">1) Create a boolean array of size n-1
+       visited[] = {F, F, F, F, F}
+2) for (int i = 0; i &lt; n; i++)
+   {
+       if (visited[arr[i]])
+           return arr[i]
+       visited[arr[i]] = true;
+   }</code></pre>
+      <p>For arr[] = {0, 2, 1, 3, 2, 2}, the board marks the first four entries T, one by one, as 0, 2, 1 and 3 are visited.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>return arr[i]</code> has no semicolon on the board. The description also links C++, Java, JavaScript and C# code on the GfG IDE; those weren't opened.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-16">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MTg4NQ%3D%3D" target="_blank" rel="noopener">Repeating Elements Part (2)</a> · <strong>No transcript</strong> on this video. Notes from the board (a frame every 5–10 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>A continuation of the previous video's problem: an efficient solution that achieves O(n) time and O(1) space.</li>
+</ul></div>
+
+    <h3>Repeating Element: O(n) Time, O(1) Space and No changes to original array (board)</h3>
+    <ul>
+      <li>This version first takes arrays whose elements run from 1: all elements from 1 to max(arr) are present, so 1 ≤ max(arr) ≤ n − 1.</li>
+      <li>The board draws {1, 3, 2, 4, 6, 5, 7, 3} (indexes 0–7) as a chain 1 → 3 → 4 → 6 → 7 with an arrow from 7 back to 3, labelled arr[0] = 1, arr[1] = 3, arr[3] = 4, arr[4] = 6, arr[6] = 7, arr[7] = 3.</li>
+      <li><strong>The first element of the cycle will always be the repeating element.</strong></li>
+      <li>The code has two phases. Phase I: <code>slow = arr[slow]</code>, <code>fast = arr[arr[fast]]</code> until they are equal. Phase II: <code>slow = arr[0]</code>, then <code>slow = arr[slow]</code>, <code>fast = arr[fast]</code> until they are equal; return slow.</li>
+    </ul>
+
+    <h3>Working of Phase 1 (board)</h3>
+    <ol>
+      <li>Fast will enter the cycle first (or at the same time).</li>
+      <li>In every iteration, the distance (k, between slow and fast inside the cycle) increases by one.</li>
+    </ol>
+
+    <h3>Working of Phase 2 (board)</h3>
+<pre><code class="language-plaintext">(diagram: ← m → ← x → along the chain, c around the cycle, slow and fast at the meeting node)
+Before First Meeting :
+    Fast Distance = 2 x (Slow Distance)
+    m + x + c x i = 2 x (m + x + c x j)
+    m + x = c x (i - 2j)
+m + x is a multiple of c
+i, j → Number of cycle iterations made by fast and slow respectively before they meet.</code></pre>
+
+    <h3>Solution for arrays having elements from 0 (board)</h3>
+    <p>For {0, 2, 1, 3, 5, 4, 6, 2} (values from 0), the code adds 1 to every value read and returns slow − 1. A later board asks "Why do we increase slow and fast by 1?" with two examples: {0, 2, 1, 3, 5, 4, 6, 2} drawn as 0 pointing to itself (Example 1), and {1, 0, 2, 2, 2} drawn as 1 ⇄ 0 (Example 2).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Repeating Element (elements from 1)</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {1, 3, 2, 4, 3, 3}</span><span>O/P</span><span>3</span>
+        <span>I/P</span><span>arr[] = {1, …}</span><span>O/P</span><span>1</span>
+        <span>I/P</span><span>arr[] = {3, 4, 5, …}</span><span>O/P</span><span>4</span>
+      </div>
+      <p>Parts of the second and third arrays are hidden by the teacher in every frame.</p>
+    </div>
+    <div class="approach">
+      <h4>findRepeating (elements from 1) <span class="cx">O(n) time, O(1) space</span></h4>
+<pre><code class="language-cpp">int findRepeating(int arr[], int n)
+{
+    int slow = arr[0], fast = arr[0];
+    do {                                         // Phase I
+        slow = arr[slow];
+        fast = arr[arr[fast]];
+    } while (slow != fast);
+
+    slow = arr[0];                               // Phase II
+    while (slow != fast)
+    {
+        slow = arr[slow];
+        fast = arr[fast];
+    }
+    return slow;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {1, 3, 2, 4, 6, 5, 7, 3}
+① → ③ → ④ → ⑥ → ⑦ ⤴ (back to ③)
+Phase I :  slow = 1, fast = 1
+           slow = 3, fast = 4
+           slow = 4, fast = 7
+           slow = 6, fast = 4
+           slow = 7, fast = 7
+Phase II : slow = 1, fast = 7
+           slow = 3, fast = 3</code></pre>
+    </div>
+    <div class="approach">
+      <h4>findRepeating (elements from 0) <span class="cx">O(n) time, O(1) space</span></h4>
+<pre><code class="language-cpp">int findRepeating(int arr[], int n)
+{
+    int slow = arr[0]+1, fast = arr[0]+1;
+    do {
+        slow = arr[slow] + 1;
+        fast = arr[arr[fast] + 1] + 1;
+    } while (slow != fast);
+    slow = arr[0] + 1;
+    while (slow != fast)
+    {
+        fast = arr[fast] + 1;
+        slow = arr[slow] + 1;
+    }
+    return slow - 1;
+}</code></pre>
+<pre><code class="language-plaintext">  0  1  2  3  4  5  6  7
+{ 0, 2, 1, 3, 5, 4, 6, 2 }
+① → ③ → ④ → ⑥ → ⑦ ⤴ (back to ③)
+slow = 1, fast = 1      slow = 6, fast = 4
+slow = 3, fast = 4      slow = 7, fast = 7
+slow = 4, fast = 7      slow = 1, fast = 7
+                        slow = 3, fast = 3</code></pre>
+      <p>The <code>fast = arr[0]+1</code> initialisation is partly hidden in the close-up and follows the pattern of the other lines.</p>
+    </div>
+    <div class="added">
+      <p><strong>Source note:</strong> with no transcript, the spoken explanation of the two phases and of the +1 couldn't be covered; only what the board shows is here. The description also links C++, Java, JavaScript and C# code on the GfG IDE; those weren't opened.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-17">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MjEyMA%3D%3D" target="_blank" rel="noopener">Allocate Minimum Pages (Naive Method)</a> · <strong>No transcript</strong> on this video. Notes from the board (a frame every 5 seconds plus close-ups) and the video's description on the course page. What the teacher says is not covered. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <div class="article"><p class="article-h">From the video description (course page)</p>
+<ul>
+<li>An array gives the number of pages in each book, and there is a number of students. Each student must read books in a contiguous manner. Find the maximum number of pages a single student has to read, so that the allocation is minimised.</li>
+</ul></div>
+
+    <h3>Allocate Minimum No. of Pages (board)</h3>
+    <ul>
+      <li>Minimize the maximum pages allocated.</li>
+      <li>Only contiguous pages can be allocated.</li>
+      <li>{10, 20, 30, 40}, k = 2 → 60 ({10, 20, 30} and {40}). {10, 20, 30}, k = 1 → 60. {10, 5, 30, 1, 2, 5, 10, 10}, k = 3 → 30 ({10, 5}, {30}, {1, 2, 5, 10, 10}).</li>
+    </ul>
+
+    <h3>Naive Recursive Solution (board)</h3>
+    <ul>
+      <li>Between x<sub>0</sub>, x<sub>1</sub>, …, x<sub>n−1</sub> there are n − 1 possible cuts. We need to choose (k − 1) cuts out of the (n − 1) cuts: total ways <sup>n−1</sup>C<sub>k−1</sub>. Example: [10, 20, 30, …] with k = 2: we need to choose 1 cut out of 3 cuts.</li>
+      <li>Place the first cut from the right before x<sub>i</sub>: the elements before it (i of them) go to the remaining k − 1 students, and the last student gets sum(i, n−1).</li>
+    </ul>
+<pre><code class="language-plaintext">                 n-1
+mP(n, k) = min ( max ( mP(i, k-1),
+                 i=1         sum(arr, i, n-1)
+               ))
+mP(1, k) = arr[0]
+mP(n, 1) = sum(arr, 0, n-1)
+
+| arr[0] | .... | arr[i-1] | arr[i] | ... | arr[n-1] |
+ \_____ i, k-1 _____/  First cut   \__ sum(i, n-1) __/</code></pre>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Allocate Minimum Number of Pages</strong>
+      <div class="io">
+        <span>I/P</span><span>arr[] = {10, 20, 30, 40}, k = 2</span><span>O/P</span><span>60</span>
+        <span>I/P</span><span>arr[] = {10, 20, 30}, k = 1</span><span>O/P</span><span>60</span>
+        <span>I/P</span><span>arr[] = {10, 5, 30, 1, 2, 5, 10, 10}, k = 3</span><span>O/P</span><span>30</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Naive Recursive Solution</h4>
+<pre><code class="language-cpp">int minPages(int arr[], int n, int k)
+{
+    if (k == 1)
+        return sum(arr, 0, n-1);
+    if (n == 1)
+        return arr[0];
+
+    int res = INF;
+
+    for (int i = 1; i &lt; n; i++)
+        res = min(res, max(minPages(arr, i, k-1),
+                           sum(arr, i, n-1)
+                          ));
+
+    return res;
+}
+int sum(int arr[], int b, int e)
+{   int s = 0;
+    for (int i = b; i &lt;= e; i++)
+        s += arr[i];
+    return s;
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>INF</code> stands for a large value (e.g. <code>INT_MAX</code>); the board doesn't define it. The description also links C++, Java, JavaScript, C# and Python code on the GfG IDE; those weren't opened.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-18">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/video/MjEyNw%3D%3D" target="_blank" rel="noopener">Allocate Minimum Pages (Binary Search)</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Code is copied as written on the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Recap</h3>
+    <ul>
+      <li>One special problem where the input is <strong>not sorted</strong>, yet binary search applies.</li>
+      <li>Books (with page counts) go to k students so that the maximum pages read by a student is minimised. A student reads only a contiguous set of books, and must finish a book completely (no splitting a book between students).</li>
+      <li>The recursive solution was the previous video; a dynamic programming solution is covered in the DP track.</li>
+    </ul>
+
+    <h3>Binary search on the answer</h3>
+    <ul>
+      <li>The answer is upper bounded by the total pages (k = 1: one student reads everything, 70 for [10, 20, 10, 30]). It can't be less than the maximum pages in one book (whoever gets the 30-page book must finish it). So the answer lies in <strong>[max, sum]</strong>, here [30, 70].</li>
+      <li>Try mid as the answer: is it <strong>feasible</strong>? Scan left to right counting how many students are needed so that no one reads more than mid pages. If that's ≤ k, it's feasible.</li>
+      <li>Feasible (50 needs 2 students): every larger value is feasible too, so record it as the result and go to the <strong>left half</strong> for a smaller one. Not feasible (39 needs 3): every smaller value fails too, so go to the <strong>right half</strong>.</li>
+      <li>The last feasible value recorded is the final result. For [10, 20, 10, 30], k = 2: 50 ✓, 39 ✗, 44 ✓, 41 ✓, 40 ✓ → 40.</li>
+      <li>The code is close to C++. In Java: no need to pass n (use the length), <code>boolean</code> instead of <code>bool</code>, <code>Math.max</code> instead of <code>max</code>.</li>
+    </ul>
+
+    <h3>Time complexity</h3>
+    <ul>
+      <li>Binary search over [mx, sum] takes log(sum − mx) iterations, each calling the Θ(n) isFeasible: <strong>O(n × log(sum − mx))</strong> (O because the search may stop early). An upper bound can also be written as O(n log sum).</li>
+      <li>This is good when sum isn't very, very high; otherwise the dynamic programming solution works in O(n² k).</li>
+    </ul>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/NzIyMw%3D%3D" target="_blank" rel="noopener">Allocate Minimum Pages</a></p>
+<ul>
+<li>pages[] = {12, 34, 67, 90}, m = 2 → 113: the splits [12] | [34, 67, 90] (max 191), [12, 34] | [67, 90] (157), [12, 34, 67] | [90] (113); the best is 113.</li>
+<li>Naive (recursive partitioning): for each split point i, the last student gets books i to n − 1 and the other k − 1 students share 0 to i − 1; take the minimum over splits of the maximum. O(N² · K) time, O(K) space (recursion depth).</li>
+<li>Binary search on the answer, O(N log(sum of pages)) time, O(1) space. If M &gt; N no valid allocation exists. Otherwise the answer lies in [max(pages), sum(pages)]. For each mid, add pages and move to the next student when the sum exceeds mid; if more than M students are needed, mid is invalid. If valid, try smaller (end = mid − 1), else larger (start = mid + 1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="problem">
+      <strong>Allocate Minimum Pages</strong>
+      <div class="io">
+        <span>I/P</span><span>[10, 20, 10, 30], k = 2</span><span>O/P</span><span>40</span>
+        <span>I/P</span><span>arr = [10, 5, 20], k = 2</span><span>O/P</span><span>20</span>
+      </div>
+    </div>
+    <div class="approach">
+      <h4>Binary Search Solution <span class="cx">O(n × log(sum − mx))</span></h4>
+<pre><code class="language-cpp">int minPages(int arr[], int n, int k)
+{
+    int sum = 0, mx = 0;
+    for (int i = 0; i &lt; n; i++)
+    {   sum += arr[i];
+        mx = max(mx, arr[i]);
+    }
+    int low = mx, high = sum, res = 0;
+    while (low &lt;= high)
+    {
+        int mid = (low + high)/2;
+        if (isFeasible(arr, n, k, mid))
+        {   res = mid;              // If feasible, go to
+            high = mid - 1;         // the left half
+        }
+        else
+            low = mid + 1;          // Else go the right half
+    }
+    return res;
+}
+
+bool isFeasible(int arr[], int n,
+                int k, int ans)
+{   int req = 1, sum = 0;
+    for (int i = 0; i &lt; n; i++)
+    {   if (sum + arr[i] > ans)
+        {
+            req++;
+            sum = arr[i];
+        }
+        else
+            sum += arr[i];
+    }
+    return (req &lt;= k);
+}</code></pre>
+<pre><code class="language-plaintext">[10 20 10, 30]   K = 2
+Sum of all Pages = 10 + 20 + 10 + 30 = 70
+Answer will be in range [30, 70]
+x = (30 + 70)/2 = 50, res = 50          x = (40 + 43)/2 = 41, res = 41
+x = (30 + …)/2 = 39                     x = (40 + 40)/2 = 40, res = 40
+x = … = 44, res = 44
+
+arr = [10, 5, 20], K = 2
+mid = (20 + 35)/2 = 27, res = 27        mid = (20 + 22)/2 = 21, res = 21
+mid = (20 + 26)/2 = 23, res = 23        mid = (20 + 20)/2 = 20, res = 20</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Searching-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (18 problems, in course order), plus the two Articles-tab items that don't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/search-an-element-in-an-array-1587115621" target="_blank" rel="noopener">Array Search</a></td><td>Basic</td><td>Video 1</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/who-will-win-1587115621" target="_blank" rel="noopener">Binary Search</a></td><td>Basic</td><td>Videos 1–2</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/floor-in-a-sorted-array-1587115620" target="_blank" rel="noopener">Floor in Sorted Array</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/majority-element-1587115620" target="_blank" rel="noopener">Majority Element</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/left-index-1587115620" target="_blank" rel="noopener">Left Index</a></td><td>Basic</td><td>Video 4</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/count-element-occurences" target="_blank" rel="noopener">Count Frequent Elements</a></td><td>Easy</td><td>Video 6</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/count-1s-in-binary-array-1587115620" target="_blank" rel="noopener">Count 1's in binary array</a></td><td>Easy</td><td>Video 7</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/smallest-positive-missing-number-1587115621" target="_blank" rel="noopener">Smallest Positive Missing</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/square-root" target="_blank" rel="noopener">Square Root</a></td><td>Easy</td><td>Video 8</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/minimum-number-in-a-sorted-rotated-array-1587115620" target="_blank" rel="noopener">Minimum Number in a sorted rotated array</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/peak-element" target="_blank" rel="noopener">Peak in Array</a></td><td>Medium</td><td>Video 11</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/roof-top-1587115621" target="_blank" rel="noopener">Roof Top</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>13</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/subarray-with-given-sum-1587115621" target="_blank" rel="noopener">Indexes of Subarray Sum</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>14</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/median-of-two-sorted-arrays1618" target="_blank" rel="noopener">Median of 2 Sorted Arrays of Different Sizes</a></td><td>Hard</td><td>Video 14</td></tr>
+        <tr><td>15</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/count-only-repeated2047" target="_blank" rel="noopener">Count Only Repeated</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>16</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/two-repeated-elements-1587115621" target="_blank" rel="noopener">Two Repeated Elements</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>17</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/allocate-minimum-number-of-pages0937" target="_blank" rel="noopener">Allocate Minimum Pages</a></td><td>Medium</td><td>Videos 17–18</td></tr>
+        <tr><td>18</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/problem/maximum-water-between-two-buildings" target="_blank" rel="noopener">Maximum Area Between Bars</a></td><td>Medium</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/MjI3Mw%3D%3D" target="_blank" rel="noopener">Ternary Search</a></p>
+<ul>
+<li>A divide and conquer search in a sorted array, like binary search but dividing the array into <strong>three</strong> parts using mid1 and mid2 (l and r start at 0 and N − 1).</li>
+<li>Compare the key with arr[mid1], then arr[mid2]; if neither matches, recur on the first part if key &lt; arr[mid1], the third part if key &gt; arr[mid2], else the middle part. It can be written recursively or iteratively.</li>
+<li>Time Complexity: O(log<sub>3</sub> N).</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Searching/article/MjYwMg%3D%3D" target="_blank" rel="noopener">Sample Problems on Searching</a></p>
+<ul>
+<li><strong>Missing and repeating number:</strong> an unsorted array of size n with elements 1 to n, one missing and one repeated. Sorting: O(n log n), O(1). Sum and product equations. Hashing with an auxiliary count array: O(n), O(n). Negative indexing: use each absolute value as an index and negate the value there to mark it visited; an already negative mark means the repeating element; a second pass finds the positive value for the missing one. O(n), O(1).</li>
+<li><strong>Count occurrences in a sorted array:</strong> linear search O(n), or binary search for the first (i) and last (j) occurrence and return j − i + 1, O(log n).</li>
+<li><strong>Index of first 1 in a sorted array of 0s and 1s:</strong> traverse, or binary search on the sorted array, O(log n).</li>
+<li><strong>Peak element in an unsorted array</strong> (not smaller than its neighbours; corners have one neighbour): {5, 10, 20, 15} → 20; {10, 20, 15, 2, 23, 90, 67} → 20 or 90. Strictly increasing → the last element; strictly decreasing → the first; all equal → every element. There is always a peak. Naive: check the corners, then each middle element. Binary search: if mid isn't a peak, go to whichever side has a greater neighbour (mid = low + (high − low)/2). O(log N).</li>
+</ul>
+    </div>
+    <div class="added"><p>"Covered in" points to the video whose idea the problem uses.</p></div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -8368,7 +9951,27 @@ const TRACKS = [
       ["Equilibrium Point", "8:20"],
       ["Maximum Appearing Element", "10:09"]
     ] },
-  { id: "DSASP-Searching", slug: "searching", name: "Searching", counts: [18, 13, 18, 10, 1] },
+  { id: "DSASP-Searching", slug: "searching", name: "Searching", counts: [18, 13, 18, 10, 1],
+    videos: [
+      ["Binary Search (Iterative)", "11:12"],
+      ["Binary Search (Recursive)", "9:17"],
+      ["Analysis of Binary Search", "9:10"],
+      ["Index of first Occurrence in Sorted", "8:58"],
+      ["Index of last Occurrence in Sorted", "8:48"],
+      ["Count Occurrences in Sorted", "5:14"],
+      ["Count 1s in a Sorted Binary Array", "6:09"],
+      ["Square root", "8:29"],
+      ["Search in Infinite Sized Array", "10:19"],
+      ["Search in Sorted Rotated Array", "15:44"],
+      ["Find a Peak Element", "10:54"],
+      ["Two Pointers Approach", "11:06"],
+      ["Triplet in a Sorted Array", "8:26"],
+      ["Median of two sorted arrays", "25:52"],
+      ["Repeating Elements Part (1)", "6:19"],
+      ["Repeating Elements Part (2)", "13:47"],
+      ["Allocate Minimum Pages (Naive Method)", "8:54"],
+      ["Allocate Minimum Pages (Binary Search)", "11:30"]
+    ] },
   { id: "DSASP-Sorting", slug: "sorting", name: "Sorting", counts: [39, 29, 20, 10, 0] },
   { id: "DSASP-Matrix", slug: "matrix", name: "Matrix", counts: [12, 11, 15, 5, 0] },
   { id: "DSASP-Hashing", slug: "hashing", name: "Hashing", counts: [29, 23, 22, 10, 1] },
