@@ -69,13 +69,78 @@ Report back with:
 - Author and committer: **Vinod Kumar <vinodkgupta.1996@gmail.com>**, set per commit with `git -c user.name=... -c user.email=...` (global git config is never changed)
 - **No** `Co-Authored-By` or other Claude trailer lines in commit messages
 
-## 7. Progress
+## 7. Progress (as of 2026-11-10)
 
-| # | Track | Videos | Articles | Status |
-|---|-------|-------:|---------:|--------|
-| 1 | Analysis of Algorithms | 15 | 6 | Done (no Problems tab in this track) |
-| 2 | Mathematics | 12 | 13 | Next |
-| 3–24 | Bit Magic … Disjoint Set | | | Not started |
+**Notes written: 1 of 24 tracks · 15 of 470 videos · 6 of 342 articles.** All work is on branch `claude/project-thread-8jxc30` and in the private artifact.
+
+| # | Track | Videos | Articles | Problems | Notes status |
+|---|-------|-------:|---------:|---------:|--------------|
+| 1 | Analysis of Algorithms | 15 | 6 | – | ✅ Done: 15/15 videos, 6/6 articles |
+| 2 | Mathematics | 12 | 13 | 11 | ⏭ Next |
+| 3 | Bit Magic | 12 | 11 | 12 | Not started |
+| 4 | Recursion | 17 | 12 | 12 | Not started |
+| 5 | Arrays | 31 | 27 | 27 | Not started |
+| 6 | Searching | 18 | 13 | 18 | Not started |
+| 7 | Sorting | 39 | 29 | 20 | Not started |
+| 8 | Matrix | 12 | 11 | 15 | Not started |
+| 9 | Hashing | 29 | 23 | 22 | Not started |
+| 10 | Strings | 19 | 12 | 26 | Not started |
+| 11 | Linked List | 54 | 40 | 25 | Not started |
+| 12 | Stack | 27 | 19 | 17 | Not started |
+| 13 | Queue | 9 | 5 | 9 | Not started |
+| 14 | Deque | 8 | 7 | 6 | Not started |
+| 15 | Tree | 30 | 24 | 32 | Not started |
+| 16 | Binary Search Tree | 28 | 16 | 23 | Not started |
+| 17 | Heap | 14 | 11 | 11 | Not started |
+| 18 | Graph | 30 | 20 | 24 | Not started |
+| 19 | Greedy | 12 | 5 | 6 | Not started |
+| 20 | Backtracking | 4 | 4 | 7 | Not started |
+| 21 | Dynamic Programming | 31 | 25 | 28 | Not started |
+| 22 | Trie | 4 | 3 | 6 | Not started |
+| 23 | Segment and Binary Indexed Trees | 10 | 3 | 6 | Not started |
+| 24 | Disjoint Set | 5 | 3 | 4 | Not started |
+
+### Track 1: Analysis of Algorithms, per video
+
+| # | Video | Duration | Articles folded in |
+|---|-------|---------:|--------------------|
+| 1 | Analysis of Algorithms (Background) | 6:20 | Analysis of Algorithms (Background) |
+| 2 | Asymptotic Analysis | 13:10 | |
+| 3 | Order of Growth | 9:41 | |
+| 4 | Best, Average and Worst cases | 6:54 | Worst, Average and Best Case Time Complexities |
+| 5 | Asymptotic Notation | 7:05 | Asymptotic Notations |
+| 6 | Big O Notation | 13:10 | Big O Notation |
+| 7 | Omega Notation | 8:56 | Omega Notation |
+| 8 | Theta Notation | 8:33 | Theta Notation |
+| 9 | Analysis of Common loops | 9:16 | |
+| 10 | Analysis of multiple loops | 5:03 | |
+| 11 | Analysis of Recursion (Introduction) | 4:06 | |
+| 12 | Recursion Tree Method for Solving Recurrences | 6:34 | |
+| 13 | More Example Recurrences | 5:23 | |
+| 14 | Upper Bounds Using Recursion Tree Method | 7:06 | |
+| 15 | Space Complexity | 22:37 | |
+
+Method notes for track 1: video 1 was first done from a few frames, then redone with a full pass (a frame at least every 10 s). Videos 2–15 used a frame every 5 s plus close-ups. Course progress was unchanged throughout (12/15 videos watched, 68%), and every resume position was restored.
+
+### Open uncertainties
+- V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
+- Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
+
+### Commits so far (branch `claude/project-thread-8jxc30`)
+- `8b14d49`: Add DSA revision notes: Analysis of Algorithms track (15 videos + articles)
+- `6e573a4`: Document how the DSA revision notes are prepared
+- `660bdd5`: Notes playbook: wait for go before next track
+- (this commit): Add progress log
+
+### What's next
+- **Track 2: Mathematics** (12 videos, 13 articles, 11 problems), using the same method. **Waiting for Vinod's go.**
+
+### History
+- **2026-11-10:**
+  - Agreed the format (track tabs, per-video Theory + Practice) and the strict "course content only" rule.
+  - Did a trial on video 1.
+  - Completed all of track 1, and folded in the 6 articles.
+  - Committed the notes and this playbook.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
