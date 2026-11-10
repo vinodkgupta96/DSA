@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 19 of 24 tracks · 416 of 470 videos · 304 of 342 articles · 316 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 20 of 24 tracks · 420 of 470 videos · 308 of 342 articles · 323 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -94,8 +94,8 @@ Report back with:
 | 17 | Heap | 14 | 11 | 11 | ✅ Done: 14/14 videos, 11/11 articles, 11 problems |
 | 18 | Graph | 30 | 20 | 24 | ✅ Done: 30/30 videos, 20/20 articles, 24 problems |
 | 19 | Greedy | 12 | 5 | 6 | ✅ Done: 12/12 videos, 5/5 articles, 6 problems |
-| 20 | Backtracking | 4 | 4 | 7 | ⏭ Next |
-| 21 | Dynamic Programming | 31 | 25 | 28 | Not started |
+| 20 | Backtracking | 4 | 4 | 7 | ✅ Done: 4/4 videos, 4/4 articles, 7 problems |
+| 21 | Dynamic Programming | 31 | 25 | 28 | ⏭ Next |
 | 22 | Trie | 4 | 3 | 6 | Not started |
 | 23 | Segment and Binary Indexed Trees | 10 | 3 | 6 | Not started |
 | 24 | Disjoint Set | 5 | 3 | 4 | Not started |
@@ -651,6 +651,17 @@ Every Heap article matches a video, so the Track practice set lists only the 11 
 
 All 5 articles match a video; the Track practice set lists the 6 problems. V4, V7 and V10 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (0%, 0/5 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 12 Greedy videos.
 
+### Track 20: Backtracking, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Concepts of Backtracking | 10:27 | Transcript + board | Concept of Backtracking |
+| 2 | Rat In a Maze | 10:27 | Transcript + board | Rat in a Maze |
+| 3 | N Queen Problem | 20:06 | Transcript + board | N-Queen Problem |
+| 4 | Sudoku Problem | 14:06 | Board + description | Sudoku Problem |
+
+All 4 articles match a video; the Track practice set lists the 7 problems. V4 has no Transcript button and was done from frames and the description. Course progress was unchanged (0%). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 4 Backtracking videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -681,10 +692,11 @@ All 5 articles match a video; the Track practice set lists the 6 problems. V4, V
 - `839335d`: Add Binary Search Tree track notes (28 videos, 16 articles, 23 problems)
 - `cd1b6ea`: Add Heap track notes (14 videos, 11 articles, 11 problems)
 - `92dabf7`: Add Graph track notes (30 videos, 20 articles, 24 problems)
-- (this commit): Add Greedy track notes (12 videos, 5 articles, 6 problems)
+- `ef72ced`: Add Greedy track notes (12 videos, 5 articles, 6 problems)
+- (this commit): Add Backtracking track notes (4 videos, 4 articles, 7 problems)
 
 ### What's next
-- **Track 20: Backtracking** (4 videos, 4 articles, 7 problems), starting straight away.
+- **Track 21: Dynamic Programming** (31 videos, 25 articles, 28 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -716,6 +728,7 @@ All 5 articles match a video; the Track practice set lists the 6 problems. V4, V
   - Completed track 17 (Heap): 14 videos, 11 articles, 11 problems.
   - Completed track 18 (Graph): 30 videos, 20 articles, 24 problems.
   - Completed track 19 (Greedy): 12 videos, 5 articles, 6 problems.
+  - Completed track 20 (Backtracking): 4 videos, 4 articles, 7 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -732,6 +745,12 @@ All 5 articles match a video; the Track practice set lists the 6 problems. V4, V
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Backtracking: teacher slips flagged
+- V1 (board): `&&` is drawn like "88"; the naive cost is written "!n × n" for n! × n. The second isSafe condition is a typed overlay.
+- V2 (board): `boolean maze[N][N], sol[N][N]` holds 1/0 values. The destination check comes before isSafe, so a blocked bottom-right cell still returns true.
+- V3 (board): `boolean board[N][N]` holds 1/0 values; the loop header is written `i < N < i++`. The N = 5 output's last row is hidden (0 0 1 0 0 is the only one that fits).
+- V4 (board): in solve(), `break` exits only the inner loop, so the first empty cell is lost (fixed with `if (j < N) break;`). The `rs` line reads like `i - j % s` (should be `i - i % s`). `int g[N][N]` needs a constant N. Spoken slips couldn't be checked (no transcript).
 
 ### Greedy: teacher slips flagged
 - V1 (board): mixes `coins[]` and `coin[i]`.

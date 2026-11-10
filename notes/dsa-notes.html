@@ -30090,6 +30090,407 @@ static void printRec(Node root, String s) {
   </section>
 </template>
 
+<template id="DSASP-Backtracking-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/video/MTUzNTI%3D" target="_blank" rel="noopener">Concepts of Backtracking</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Example problem:</strong> given a string, print all its permutations that do not contain "AB" as a substring. For "ABC" there are 6 permutations. ABC and CAB contain AB, so the output is ACB, BAC, BCA, CBA.</p>
+    <p><strong>Naive solution:</strong> take the standard permutation generator and, at the leaf (<code>l == r</code>), print only if <code>str.find("AB") == string::npos</code>. <code>npos</code> is a constant of the string class meaning "not found".</p>
+    <p><strong>How the generator works:</strong></p>
+    <ul>
+      <li>For each i from l to r, swap str[l] with str[i] to fix a character at position l, then recurse on l + 1.</li>
+      <li>When l reaches r, print the string.</li>
+      <li>After the recursive call, swap back so the string is restored to its original order before the next character is placed at position l.</li>
+    </ul>
+    <p>The naive solution generates all n! permutations and checks each one, about n! × n work.</p>
+    <p><strong>Backtracking:</strong> don't generate everything and filter. Cut the recursion as soon as the current partial solution cannot lead to a valid answer. Put the swap–recurse–swap steps inside <code>if (isSafe(str, l, i, r))</code>. With ABC, once A is fixed, the branch that would place B right after it is never explored. For a string of hundreds of characters starting with AB, that one cut skips a huge number of calls.</p>
+    <p>The actual work depends on the input. For "BCD" every permutation is valid, so the work is the same as the naive solution. With many A–B pairs it is much less than n!.</p>
+    <p><strong>General rule:</strong> whenever a solution generates all permutations or combinations and then checks which are valid, backtracking can optimise it. Add an isSafe check before each recursive call that asks whether the current configuration can still produce valid output. Examples: N Queen (stop as soon as two queens attack each other), Hamiltonian cycle, Sudoku.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/article/NzQyMg%3D%3D" target="_blank" rel="noopener">Concept of Backtracking</a></p>
+<ul>
+<li>Backtracking solves a problem recursively by building a solution one piece at a time. Any partial solution that breaks the problem's constraints at any point (any level of the search tree) is removed.</li>
+<li>Three types of problem:
+  <ul>
+    <li><strong>decision:</strong> find a feasible solution;</li>
+    <li><strong>optimisation:</strong> find the best solution;</li>
+    <li><strong>enumeration:</strong> find all feasible solutions.</li>
+  </ul>
+</li>
+<li>Sudoku example: fill digits one by one, and remove a digit (backtrack) as soon as it can't lead to a solution. That beats generating every combination, because each backtrack drops a whole set of permutations.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive solution (C++)</h4>
+<pre><code class="language-cpp">void permute(string str, int l, int r) {
+    if (l == r) {
+        if (str.find("AB") == string::npos)
+            cout &lt;&lt; str &lt;&lt; " ";
+        return;
+    } else {
+        for (int i = l; i &lt;= r; i++) {
+            swap(str[l], str[i]);
+            permute(str, l + 1, r);
+            swap(str[l], str[i]);
+        }
+    }
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Backtracking solution (C++)</h4>
+<pre><code class="language-cpp">bool isSafe(string str, int l, int i, int r) {
+    // the character before position l is 'A' and we are about to put 'B' there
+    if (l != 0 &amp;&amp; str[l - 1] == 'A' &amp;&amp; str[i] == 'B')
+        return false;
+    // last two positions: the swap (or no swap) would leave "AB" at the end
+    if (r == l + 1 &amp;&amp; ((str[i] == 'A' &amp;&amp; str[l] == 'B') ||
+                       (str[i] == 'A' &amp;&amp; str[r] == 'B')))
+        return false;
+    return true;
+}
+
+void permute(string str, int l, int r) {
+    if (l == r) {
+        cout &lt;&lt; str &lt;&lt; " ";
+        return;
+    } else {
+        for (int i = l; i &lt;= r; i++) {
+            if (isSafe(str, l, i, r)) {
+                swap(str[l], str[i]);
+                permute(str, l + 1, r);
+                swap(str[l], str[i]);
+            }
+        }
+    }
+}</code></pre>
+      <p>The first check covers almost every case. The second handles the case where the last two characters are swapped into "AB", e.g. CBA becomes CAB: there str[l − 1] is C, so the first check doesn't fire. (The teacher's other example is a string ending in "DA" where swapping B and D leaves AB at the end.)</p>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong> the second <code>isSafe</code> condition is a typed overlay added to the board. On the board, <code>&amp;&amp;</code> is drawn like "88", and the naive cost is written "!n × n" for n! × n.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Backtracking-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/video/OTI2" target="_blank" rel="noopener">Rat In a Maze</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> A binary matrix is a maze: 0 cells are blocked, and 1 cells are open. The rat starts at the top-left cell and the cheese is at the bottom-right. From (i, j) the rat can make only two moves, and only into an unblocked cell:</p>
+    <ul>
+      <li>down, to (i + 1, j);</li>
+      <li>right, to (i, j + 1).</li>
+    </ul>
+    <p>Return true or false for whether a path exists. If it does, print a binary matrix with 1s on the path taken.</p>
+    <p>Board examples:</p>
+    <ul>
+      <li>maze = {{1, 0, 0, 0}, {1, 1, 0, 1}, {0, 1, 0, 0}, {1, 1, 1, 1}} gives <strong>Yes</strong>, with path {{1, 0, 0, 0}, {1, 1, 0, 0}, {0, 1, 0, 0}, {0, 1, 1, 1}}.</li>
+      <li>{{1, 0, 0}, {0, 1, 0}, {1, 1, 1}} gives <strong>No</strong>: both the right and down cells of the start are blocked.</li>
+    </ul>
+    <p><strong>Naive:</strong> generate all paths from top-left to bottom-right, then check each one, and print the first that works.</p>
+    <p><strong>Backtracking:</strong> build the path step by step, and return true as soon as the current path reaches the cheese. If the steps chosen so far cannot lead to a solution, generate no path that begins with them. This cuts the recursion tree.</p>
+    <p>The code has three functions:</p>
+    <ul>
+      <li><code>isSafe(i, j)</code>: the cell is inside the maze (i &lt; N and j &lt; N) and not blocked. The bounds check is needed because the recursive calls blindly use i + 1 and j + 1. Most backtracking algorithms have an isSafe check before a move.</li>
+      <li><code>solveMaze()</code>: calls the recursive function from (0, 0). It returns false if that fails, otherwise prints the solution matrix and returns true.</li>
+      <li><code>solveMazeRec(i, j)</code>: the main logic.
+        <ol>
+          <li>At the destination, mark it in sol and return true.</li>
+          <li>If the cell is safe, mark it in sol, then try down; if that fails, try right.</li>
+          <li>If neither leads to the cheese, unmark it (backtrack) and return false.</li>
+        </ol>
+      </li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/article/NzQyMw%3D%3D" target="_blank" rel="noopener">Rat in a Maze</a></p>
+<ul>
+<li>Source maze[0][0], destination maze[N−1][N−1]. Moves are forward (right) and down only; 0 is a dead end. Harder versions allow 4 directions or a limited number of moves.</li>
+<li>The article's algorithm:
+  <ol>
+    <li>Start with an all-0 solution matrix. Recurse on (i, j), returning if the cell is out of the matrix or invalid.</li>
+    <li>Mark output[i][j] = 1. If it is the destination, print the output and return.</li>
+    <li>Otherwise recurse on (i + 1, j) and (i, j + 1).</li>
+    <li>Unmark output[i][j] = 0 on the way back.</li>
+  </ol>
+</li>
+<li>Time O(2^(n²)), the upper bound on recursive calls. Space O(n²) for the output matrix.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Backtracking solution (board)</h4>
+<pre><code class="language-java">int maze[N][N], sol[N][N];
+
+boolean isSafe(int i, int j) {
+    return (i &lt; N &amp;&amp; j &lt; N &amp;&amp; maze[i][j] == 1);
+}
+
+boolean solveMaze() {
+    if (solveMazeRec(0, 0) == false)
+        return false;
+    else {
+        printMatrix(sol);
+        return true;
+    }
+}
+
+boolean solveMazeRec(int i, int j) {
+    if (i == N - 1 &amp;&amp; j == N - 1) { sol[i][j] = 1; return true; }
+    if (isSafe(i, j) == true) {
+        sol[i][j] = 1;
+        if (solveMazeRec(i + 1, j) == true) return true;
+        else if (solveMazeRec(i, j + 1) == true) return true;
+        sol[i][j] = 0;
+    }
+    return false;
+}</code></pre>
+      <p>Recursion tree on maze {{1, 0, 1}, {1, 1, 0}, {0, 1, 1}}, N = 3 (SMR = solveMazeRec):</p>
+      <ol>
+        <li>SMR(0, 0) marks (0, 0) and goes down to SMR(1, 0).</li>
+        <li>SMR(1, 0) marks (1, 0) and goes down to SMR(2, 0). That cell is 0, so isSafe fails and it returns false.</li>
+        <li>SMR(1, 0) tries right: SMR(1, 1) marks (1, 1) and goes down to SMR(2, 1).</li>
+        <li>SMR(2, 1) marks (2, 1). Its down call, SMR(3, 1), is out of bounds (3 = N) and returns false. Its right call, SMR(2, 2), is the destination: mark it and return true.</li>
+        <li>true propagates up to every caller. The sol matrix holds the path (0, 0) → (1, 0) → (1, 1) → (2, 1) → (2, 2).</li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong></p>
+      <ul>
+        <li>The board declares <code>boolean maze[N][N], sol[N][N]</code> but compares <code>maze[i][j] == 1</code> and stores <code>sol[i][j] = 1</code>/<code>0</code>. Integer arrays are used above.</li>
+        <li><code>&amp;&amp;</code> is drawn like "$$".</li>
+        <li>The destination check comes before isSafe, so the code returns true even when the bottom-right cell itself is 0. That holds both on the board and above.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Backtracking-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/video/OTI3" target="_blank" rel="noopener">N Queen Problem</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> Given N, place N queens on an N × N chessboard so that no two attack each other. A queen moves any distance horizontally, vertically or diagonally. Return true and print one arrangement if a solution exists, otherwise return false.</p>
+    <ul>
+      <li>N = 4: Yes. One answer is shown in Practice; other arrangements exist, and any one will do.</li>
+      <li>N = 3: No. No placement of 3 queens works.</li>
+      <li>N = 5: Yes.</li>
+    </ul>
+    <p><strong>Super naive:</strong> try all C(N², N) placements and check each; for N = 4 that's C(16, 4). This is very expensive.</p>
+    <p><strong>Better naive:</strong> every queen must be in a different row and a different column. So generate all permutations of 0 … N − 1, where the permutation's k-th number is the row of the queen in column k. For example, 1 0 3 2 puts the column-0 queen in row 1, the column-1 queen in row 0, and so on. Check each permutation.</p>
+    <p>In the recursion tree, column 0 has N choices of row, column 1 has the remaining N − 1, and so on.</p>
+    <p><strong>Backtracking:</strong> place queens column by column as in that tree. As soon as a placement clashes with an earlier queen (isSafe fails), cut that whole subtree and return false so the parent tries the next row. Also stop at the first full solution. For N = 8 or 16, much bigger subtrees are cut.</p>
+    <p>The teacher's N = 4 walk:</p>
+    <ol>
+      <li>Starting with the first queen in row 0 leads nowhere: every branch clashes.</li>
+      <li>The first queen moves to row 1. Row 0 in column 1 clashes, row 2 clashes, row 3 works.</li>
+      <li>Then row 0 in column 2 and row 2 in column 3 give the solution <strong>1 3 0 2</strong>.</li>
+    </ol>
+    <p>To print every solution, continue the recursion instead of stopping.</p>
+    <p><strong>Implementation</strong> (three functions):</p>
+    <ul>
+      <li><code>solve()</code> is a wrapper. It calls <code>solveRec(0)</code>, returns false if that fails, otherwise prints the board and returns true. The board is an N × N matrix, initially all 0, with 1 where a queen is.</li>
+      <li><code>isSafe(row, col)</code> checks only against queens already placed, which are in columns 0 … col − 1. Queens go in different columns, so the column itself needs no check. It looks at:
+        <ul>
+          <li>the current row to the left;</li>
+          <li>the upper-left diagonal (i−−, j−−);</li>
+          <li>the lower-left diagonal (i++, j−−).</li>
+        </ul>
+      </li>
+      <li><code>solveRec(col)</code>:
+        <ol>
+          <li>If col == N, every queen is placed: return true.</li>
+          <li>Otherwise try each row i. If isSafe, place the queen and recurse on col + 1, returning true if it succeeds.</li>
+          <li>If it fails, remove the queen (the backtrack) and try the next row.</li>
+          <li>If no row works, return false.</li>
+        </ol>
+      </li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/article/NzQyNA%3D%3D" target="_blank" rel="noopener">N-Queen Problem</a></p>
+<ul>
+<li>Its 4-queen output matrix: {0, 1, 0, 0}, {0, 0, 0, 1}, {1, 0, 0, 0}, {0, 0, 1, 0}.</li>
+<li>Naive: generate all configurations and print one that satisfies the constraints.</li>
+<li>Backtracking: place queens column by column from the leftmost. In each column, take a row with no clash against the placed queens; if none exists, backtrack and return false.</li>
+<li>Time O(N!), auxiliary space O(N²).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Backtracking solution (board)</h4>
+<pre><code class="language-java">int board[N][N];
+
+boolean isSafe(int row, int col) {
+    for (int i = 0; i &lt; col; i++)
+        if (board[row][i] == 1) return false;
+    for (int i = row, j = col; i &gt;= 0 &amp;&amp; j &gt;= 0; i--, j--)
+        if (board[i][j] == 1) return false;
+    for (int i = row, j = col; j &gt;= 0 &amp;&amp; i &lt; N; i++, j--)
+        if (board[i][j] == 1) return false;
+    return true;
+}
+
+boolean solve() {
+    if (solveRec(0) == false)
+        return false;
+    else {
+        printMatrix(board);
+        return true;
+    }
+}
+
+boolean solveRec(int col) {
+    if (col == N) return true;
+    for (int i = 0; i &lt; N; i++) {
+        if (isSafe(i, col)) {
+            board[i][col] = 1;
+            if (solveRec(col + 1))
+                return true;
+            board[i][col] = 0;
+        }
+    }
+    return false;
+}</code></pre>
+      <p>Board outputs:</p>
+      <ul>
+        <li>N = 4: rows 0 0 1 0 / 1 0 0 0 / 0 0 0 1 / 0 1 0 0.</li>
+        <li>N = 5: rows 1 0 0 0 0 / 0 0 0 1 0 / 0 1 0 0 0 / 0 0 0 0 1 / 0 0 1 0 0.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong></p>
+      <ul>
+        <li>The board declares <code>boolean board[N][N]</code> but stores 1 and 0. Integers are used above.</li>
+        <li>The <code>solveRec</code> loop header is written <code>i &lt; N &lt; i++</code> (a "&lt;" for ";").</li>
+        <li><code>&amp;&amp;</code> is drawn like "88".</li>
+        <li>The last row of the N = 5 output is hidden by the teacher. 0 0 1 0 0 is the only row that completes the other four.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Backtracking-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/video/MTUwMjA%3D" target="_blank" rel="noopener">Sudoku Problem</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 5–10 s plus close-ups) and the course description, which links the code. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem</strong> (from the description and board): fill an N × N Sudoku grid, where 0 marks an empty cell. Each row, each column and each √N × √N box must hold every number 1 … N exactly once.</p>
+    <p>Board example (N = 4):</p>
+    <ul>
+      <li>Input grid {{1, 0, 3, 0}, {0, 0, 2, 1}, {0, 1, 0, 2}, {2, 4, 0, 0}}.</li>
+      <li>Output grid {{1, 2, 3, 4}, {4, 3, 2, 1}, {3, 1, 4, 2}, {2, 4, 1, 3}}.</li>
+    </ul>
+    <p><strong>Naive solution:</strong> try all N<sup>X</sup> configurations, where X is the number of empty cells and the grid is N × N. Each empty cell can take any of N values. For the example, N = 4 and X = 8.</p>
+    <p><strong>Efficient solution:</strong> backtracking. Begin with an empty cell and a number, and try filling the rest of the cells. Undo the number and try the next one when the rest can't be completed.</p>
+    <ul>
+      <li><code>isSafe(i, j, x)</code>: x must not already be in row i or column j. It must not be in the √N × √N box containing (i, j), whose top-left corner is (i − i % s, j − j % s) with s = √N.</li>
+      <li><code>solve()</code>:
+        <ol>
+          <li>Find the first empty cell. If there is none, the grid is solved: return true.</li>
+          <li>Otherwise try x = 1 … N in that cell. Whenever isSafe holds, set the cell and recurse; return true if the recursion solves the grid.</li>
+          <li>If it doesn't, reset the cell to 0.</li>
+          <li>If no x works, return false.</li>
+        </ol>
+      </li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/article/NzQyNQ%3D%3D" target="_blank" rel="noopener">Sudoku Problem</a></p>
+<ul>
+<li>Standard 9 × 9 version: every row, column and 3 × 3 subgrid holds each digit 1–9 exactly once.</li>
+<li><strong>Method 1 (simple):</strong> recurse over the cells in order.
+  <ul>
+    <li>When j = N, move to the next row.</li>
+    <li>An empty cell tries 1–9 and recurses on (i, j + 1); a filled cell just recurses.</li>
+    <li>At the end of the grid, check validity using hash maps of row, column and box counts.</li>
+  </ul>
+  Time O(9^(n·n)), space O(n·n).</li>
+<li><strong>Method 2 (backtracking):</strong> find an unassigned cell. Try 1–9, checking row, column and subgrid before assigning (loops can replace the hash maps), and recurse. Undo and try the next digit when the recursion fails. Return true when no cell is unassigned.
+  <ul>
+    <li>The upper bound is still O(9^(n·n)), but early pruning makes it much faster than the naive method in practice.</li>
+  </ul>
+</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>C++ (board, with fixes)</h4>
+<pre><code class="language-cpp">int N = 4;
+int g[N][N];
+
+bool isSafe(int i, int j, int x) {
+    for (int k = 0; k &lt; N; k++)
+        if (g[k][j] == x || g[i][k] == x)
+            return false;
+    int s = sqrt(N);
+    int rs = i - i % s;
+    int cs = j - j % s;
+    for (int i = 0; i &lt; s; i++)
+        for (int j = 0; j &lt; s; j++)
+            if (g[i + rs][j + cs] == x)
+                return false;
+    return true;
+}
+
+bool solve() {
+    int i, j;
+    for (i = 0; i &lt; N; i++) {
+        for (j = 0; j &lt; N; j++)
+            if (g[i][j] == 0)
+                break;
+        if (j &lt; N) break;          // first empty cell found
+    }
+    if (i == N &amp;&amp; j == N) return true;   // no empty cell
+    for (int x = 1; x &lt;= N; x++) {
+        if (isSafe(i, j, x)) {
+            g[i][j] = x;
+            if (solve()) return true;
+            g[i][j] = 0;
+        }
+    }
+    return false;
+}</code></pre>
+      <p>On the example, the board traces the solve() calls filling the empty cells in row-major order: g[0][1] = 2, then g[0][3] = 4, and so on, until the grid matches the output above.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips, fixed above:</strong></p>
+      <ul>
+        <li>In <code>solve()</code>, the board's <code>break</code> leaves only the inner j loop, so the outer loop runs on and i always ends at N. The added <code>if (j &lt; N) break;</code> stops at the first empty cell.</li>
+        <li>The board's <code>rs</code> line reads like <code>i - j % s</code>. The box's top row must be <code>i - i % s</code>.</li>
+        <li><code>int g[N][N]</code> with <code>int N = 4</code> needs N to be a constant (<code>const int N = 4;</code>) in standard C++.</li>
+        <li><code>&amp;&amp;</code> is drawn like "$$" and <code>||</code> like "¦¦".</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Backtracking-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (7 problems, in course order). Each problem is listed with its difficulty and a link; solve them on GfG. The problem statements aren't copied here. All 4 articles match a video, so their boxes sit with those videos.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/problem/combination-sum-1587115620" target="_blank" rel="noopener">Target Sum Combinations</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/problem/m-coloring-problem-1587115620" target="_blank" rel="noopener">M-Coloring Problem</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/problem/rat-maze-with-multiple-jumps-1587115621" target="_blank" rel="noopener">Rat Maze With Multiple Jumps</a></td><td>Medium</td><td>Video 2</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/problem/largest-number-in-k-swaps-1587115620" target="_blank" rel="noopener">Largest With K Swaps</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/problem/subsets-1587115621" target="_blank" rel="noopener">Distinct Subsets</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/problem/solve-the-sudoku-1587115621" target="_blank" rel="noopener">Solve the Sudoku</a></td><td>Hard</td><td>Video 4</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Backtracking/problem/non-attacking-black-and-white-knights" target="_blank" rel="noopener">Non-Attacking Black and White Knights</a></td><td>Medium</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -30533,7 +30934,13 @@ const TRACKS = [
       ["CPP Implementation of Huffman coding", "9:01"],
       ["Java Implementation of Huffman coding", "10:40"]
     ] },
-  { id: "DSASP-Backtracking", slug: "backtracking", name: "Backtracking", counts: [4, 4, 7, 10, 0] },
+  { id: "DSASP-Backtracking", slug: "backtracking", name: "Backtracking", counts: [4, 4, 7, 10, 0],
+    videos: [
+      ["Concepts of Backtracking", "10:27"],
+      ["Rat In a Maze", "10:27"],
+      ["N Queen Problem", "20:06"],
+      ["Sudoku Problem", "14:06"]
+    ] },
   { id: "DSASP-DP", slug: "dynamic-programming", name: "Dynamic Programming", counts: [31, 25, 28, 10, 1] },
   { id: "DSASP-Trie", slug: "trie", name: "Trie", counts: [4, 3, 6, 5, 0] },
   { id: "DSASP-Segment-Tree", slug: "segment-and-bit", name: "Segment and Binary Indexed Trees", counts: [10, 3, 6, 5, 0] },
