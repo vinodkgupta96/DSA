@@ -18143,6 +18143,3026 @@ j = 6 : i = 5, maxEnd = 2, res = 4, prev['d'] = 6</code></pre>
   </section>
 </template>
 
+<template id="DSASP-LinkedList-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTEyMA%3D%3D" target="_blank" rel="noopener">Problems With Array Data Structures</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>An array is a sequential data structure storing elements at contiguous locations. A linked list, also linear and sequential, drops the contiguity requirement. The two are the biggest competitors: stack, queue and deque can be implemented with either.</p>
+<pre><code class="language-plaintext">Linked List (Background and Introduction)
+C++   int arr[100];
+      int arr[n];            // where n is an integer
+      int *arr = new int[n];
+      vector&lt;int&gt; v;
+Java  int arr[100];
+      int arr[] = new int[n];
+      ArrayList&lt;Integer&gt; = new ArrayList&lt;Integer&gt;();</code></pre>
+    <ul>
+      <li>C++: a fixed-size array (100, 200, 1000…); a variable-sized array of user size n; both are on the function's stack frame if local and go out of scope when it ends. <code>new int[n]</code> is dynamically allocated on the heap and stays. <code>vector</code> is a dynamically sized array that grows automatically (a size can be given for optimisation).</li>
+      <li>Java: arrays are always allocated on the heap; <code>ArrayList</code> is like vector. Vector and ArrayList keep elements contiguous; their implementation is up to the compiler.</li>
+    </ul>
+<pre><code class="language-plaintext">Problems with Arrays:
+① Either size is fixed and pre-allocated (in both fixed and variable sized arrays),
+   OR the worst case insertion at the end is Θ(n).
+② Insertion in the middle (or beginning) is costly.
+③ Deletion from the middle (or beginning) is costly.
+④ Implementation of data structures like queue and deque is complex with arrays.</code></pre>
+    <ul>
+      <li><strong>①</strong> Once n elements are allocated, no more fit. Dynamic sized arrays (vector, ArrayList, Python list) double their size and copy the elements when full, so an insertion at the end is usually O(1) but sometimes Θ(n). Amortised it's O(1) on average, but not suitable for real-time systems where no single operation may be costly.</li>
+      <li><strong>②③</strong> Elements must stay contiguous: inserting 25 into 10, 20, 30, 40 moves 30 and 40 one position ahead; deleting 20 moves 30 and 40 back. With thousands of elements, inserting or deleting near the beginning moves almost all of them (999).</li>
+      <li><strong>④</strong> A stack inserts and deletes at the same end (the array's last end works). A queue inserts at one end and deletes at the other; a deque does both at both ends. All can be O(1) with arrays, but the implementation is complex; with a linked list it's super easy.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Problems that are hard with arrays</h4>
+<pre><code class="language-plaintext">① How to implement Round Robin Scheduling?
+      P0  P1  P2  P3  P4  P5
+     [10 | 5 | 3 | 15 | 10 | 8]       Token Time = 5</code></pre>
+      <p>Each process gets a quantum of 5 units. P0 (needs 10) runs 5 and moves to the end of the queue, needing 5 more. P1 (5) finishes and is removed; P2 (3) finishes and is removed; and so on. Items must be removed from their position or moved to the end, which is really difficult with a simple array. A variation, the <strong>circular linked list</strong> (a later video), makes it easy.</p>
+<pre><code class="language-plaintext">② Given a sequence of items. Whenever we see an item x in the sequence,
+   we need to replace it with 5 instances of another item y.
+   d e a x q r x p y
+   d e a y y y y y q r y y y y y p y</code></pre>
+      <p>The count of x isn't known beforehand. With arrays: count the x's (n), allocate a new array with 4n extra places and copy, replacing each x by 5 y's (two passes); or append to an empty vector/ArrayList (one pass, still extra space). Modifying the same sequence in place is really difficult with arrays; with linked lists it's super easy.</p>
+      <p><strong>③ Merging sequences</strong> (taken from merge sort): queries like merge(0, 1) merge two of several sequences into one. Arrays need an auxiliary array for every merge, plus copying (higher constants in time too); linked lists merge without extra space, which is also why merge sort on a linked list needs no auxiliary space.</p>
+      <p><strong>System programming:</strong> with limited, fragmented memory, a large array may be impossible to allocate since no contiguous chunk exists; a linked list can link the available pieces.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTEyMQ%3D%3D" target="_blank" rel="noopener">Introduction to Linked List</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">        ┌────┬─┐   ┌───┬─┐   ┌────┬─┐   ┌────┬─┐
+head ──→│ 10 │ │──→│ 5 │ │──→│ 20 │ │──→│ 25 │ │──→ NULL
+        └────┴─┘   └───┴─┘   └────┴─┘   └────┴─┘
+          2000
+The idea is to drop the contiguous memory requirements so that
+insertions, deletions can efficiently happen at the middle also.
+And no need to pre-allocate the space (No extra nodes)</code></pre>
+    <ul>
+      <li>Like an array, a linked list is a linear data structure storing items one after the other, but unlike any kind of array (fixed, variable or dynamic size) the elements needn't be contiguous.</li>
+      <li>Every node stores a pointer (C/C++) or reference (Java, Python) to the next node; that's how they form a chain. The last node's next is null. In memory (an array of bytes) the nodes can be anywhere: if a node at 2000 takes 8 bytes, the next needn't be at 2008, it can be at 5000 or 6000.</li>
+      <li><strong>Advantages:</strong> insertion and deletion in the middle or at the beginning just change a few links, instead of moving elements; and no pre-allocation: n items use exactly n nodes, since node memory is allocated dynamically and linked.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/MjMxNA%3D%3D" target="_blank" rel="noopener">Linked List | Introduction</a></p>
+<ul>
+<li>A linear data structure whose elements are stored at non-contiguous memory locations and linked with pointers. Each node has <strong>data</strong> and a <strong>next pointer</strong> holding the next node's address.</li>
+<li><strong>Advantages over arrays:</strong> an array's size is fixed (the upper limit must be known in advance, and that much memory is generally allocated whatever the usage), while a linked list grows and shrinks at run time. Inserting into an array (e.g. keeping a sorted id[] and adding 1005 means moving everything after 1000) or deleting from it (deleting 1010 moves everything after it) needs shifting; linked-list nodes are inserted or deleted without shifts.</li>
+<li><strong>Disadvantages:</strong> no random access (sequential from the first node, so no efficient binary search; lookup costs more than in arrays), extra memory for a pointer with each element, and not cache-friendly (no locality of reference, unlike contiguous array elements).</li>
+<li><strong>Representation:</strong> a pointer to the first node, the <strong>head</strong>; an empty list has head = NULL. In C/C++ a node is a structure; in Java the LinkedList is a class holding a reference of the separate Node class type. The article builds a 3-node list and a general <code>printList()</code> traversal.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ4Ng%3D%3D" target="_blank" rel="noopener">Simple Linked List Implementation in C++</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Linked List Implementation in C++
+[10 | ]──→[20 | ]──→[30 | NULL]
+ ↑ head
+ …  [20 | 8000]  …  [10 | 2000]  …  [30 | NULL]  …     (memory as an array of bytes)
+     2000             ↑ head (5000)    8000</code></pre>
+    <ul>
+      <li>A list of three nodes (10, 20, 30); the last node's next is null. The pointer to the first node (head) represents the whole list.</li>
+      <li>In the example each node takes 8 bytes, 4 for the integer data and 4 for the address (sizes vary by compiler). The first node at 5000 holds 10 and 2000; at 2000 is 20 and 8000; at 8000 is 30 and NULL.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Creating three linked nodes</h4>
+<pre><code class="language-cpp">struct Node
+{   int data;
+    Node *next;
+    Node(int x)
+    {   data = x;
+        next = NULL;
+    }
+};
+int main()
+{
+    Node *head = new Node(10);
+    Node *temp1 = new Node(20);
+    Node *temp2 = new Node(30);
+    head-&gt;next = temp1;
+    temp1-&gt;next = temp2;
+    return 0;
+}</code></pre>
+      <ul>
+        <li>A structure holds mixed data types: the data (an integer for simplicity, but like arrays it can be char, float, double or a custom type like student) and the next node's address.</li>
+        <li><code>Node *next</code> has the structure's own type: a <strong>self-referential structure</strong>, since every node stores the address of a node of the same type.</li>
+        <li>The constructor initialises data with the given value and next with NULL; cleaner than a separate function. A class with private data and getters/setters would be ideal object-oriented style but longer; a struct is public by default.</li>
+        <li>The three <code>new</code> nodes are dynamically allocated anywhere in memory (not necessarily in increasing order), unlinked at first; then head-&gt;next = temp1 and temp1-&gt;next = temp2 link them.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>Short implementation</h4>
+<pre><code class="language-cpp">int main()
+{
+    Node *head = new Node(10);
+    head-&gt;next = new Node(20);
+    head-&gt;next-&gt;next = new Node(30);
+    return 0;
+}</code></pre>
+      <p>No temp1 and temp2 needed. This isn't the general way to create a list: the coming videos insert at the beginning, at the end and at a given position, creating lists of any length, all reachable through head.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> in the short version the third line is written <code>head -&gt; next =&gt; next</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTU1OA%3D%3D" target="_blank" rel="noopener">Simple Linked List Implementation in Java</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Simple Linked List Implementation in Java
+[10 | ]──→[20 | ]──→[30 | null]
+ ↑ head
+…  [20 | Ref(30)]  …  [10 | Ref(20)]  …  [30 | null]  …
+                        ↑ head</code></pre>
+    <p>The same three-node list as the C++ video, with Java references in place of addresses.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Creating three linked nodes</h4>
+<pre><code class="language-java">class Node
+{   int data;
+    Node next;
+    Node(int x)
+    {   data = x;
+        next = null;
+    }
+}
+class Test
+{   public static void main(String []args)
+    {   Node head = new Node(10);
+        Node temp1 = new Node(20);
+        Node temp2 = new Node(30);
+        head.next = temp1;
+        temp1.next = temp2;
+    }
+}</code></pre>
+<pre><code class="language-plaintext">After Creating Three Objects:   [20 | null] … [10 | null] … [30 | null]
+After linking the three objects: [20 | Ref(30)] … [10 | Ref(20)] … [30 | null]</code></pre>
+      <p>The three objects are created anywhere in memory with next = null, then linked by setting <code>head.next</code> and <code>temp1.next</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MjAzMA%3D%3D" target="_blank" rel="noopener">Applications of Linked List</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Applications of Linked List
+① Worst case insertion at the end and begin are Θ(1)
+② Worst case deletion from the beginning is Θ(1)
+③ Insertions and deletions in the middle are Θ(1) if
+   we have reference to the previous node.
+④ Round Robin Implementation
+⑤ Merging two sorted linked lists is faster than arrays
+⑥ Implementation of simple memory manager where we
+   need to link free blocks
+⑦ Easier implementation of Queue and Deque data structures</code></pre>
+    <p>The Description lists the same points: insertions at the end and beginning take O(1) in the worst case; deletion from the beginning O(1); insertions and deletions in the middle Θ(1) with a reference to the previous node; round robin; merging two sorted linked lists faster than arrays; a simple memory manager linking free blocks is easier; queue and deque are easy to implement.</p>
+    <div class="added">
+      <p><strong>Board note:</strong> the end of items ⑤–⑦ is behind the teacher; the wording is completed from the Description. The small diagrams the teacher draws beside items ③ and ⑥ aren't readable in the frames.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ4Mg%3D%3D" target="_blank" rel="noopener">Traversing a Linked List in C++</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given the head pointer of an existing list, print every node's data in order: 10 → 20 → 30 → 40 → NULL prints 10 20 30 40; a single node 10 prints 10; an empty list (head is NULL) prints nothing.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>printList</h4>
+<pre><code class="language-cpp">struct Node
+{   int data;
+    Node *next;
+    Node(int x)
+    {   data = x;
+        next = NULL;
+    }
+};
+void printList(Node *head)
+{
+    Node *curr = head;
+    while(curr != NULL)
+    {
+        cout &lt;&lt; (curr-&gt;data) &lt;&lt; " ";
+        curr = curr-&gt;next;
+    }
+}
+int main()
+{
+    Node *head = new Node(10);
+    head-&gt;next = new Node(20);
+    head-&gt;next-&gt;next = new Node(30);
+    head-&gt;next-&gt;next-&gt;next = new Node(40);
+    printList(head);
+    return 0;
+}</code></pre>
+      <p>Start a pointer curr at head; print its data, move to curr-&gt;next, and stop at NULL (the end of the list). For the single node, curr prints 10, becomes NULL, and the loop ends.</p>
+    </div>
+    <div class="approach">
+      <h4>Using head itself</h4>
+<pre><code class="language-cpp">void printList(Node *head)
+{
+    while(head != NULL)
+    {
+        cout &lt;&lt; (head-&gt;data) &lt;&lt; " ";
+        head = head-&gt;next;
+    }
+}
+int main()
+{   Node *head = new Node(10);
+    printList(head);
+    printList(head);
+    return 0;
+}
+O/P: 10 10</code></pre>
+      <p>It prints 10 twice. A pointer argument is copied like any other variable: printList's head and main's head are different variables holding the same address (say 5000). The loop changes only the local copy to NULL; main's head still holds 5000.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ4Mw%3D%3D" target="_blank" rel="noopener">Traversing a Linked List in Java</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Traversing a Singly Linked List in Java
+I/P: 10 → 20 → 30 → 40   (head)    O/P: 10 20 30 40
+I/P: 10   (head)                   O/P: 10
+I/P: head = null                   O/P:</code></pre>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>printList</h4>
+<pre><code class="language-java">class Node
+{   int data;
+    Node next;
+    Node(int x)
+    {   data = x;
+        next = null;
+    }
+}
+class Test
+{   public static void main(String args[])
+    {   Node head = new Node(10);
+        head.next = new Node(20);
+        head.next.next = new Node(30);
+        head.next.next.next = new Node(40);
+        printList(head);
+    }
+    public static void printList(Node head)
+    {
+        Node curr = head;
+        while(curr != null)
+        {
+            System.out.print(curr.data + " ");
+            curr = curr.next;
+        }
+    }
+}</code></pre>
+      <p>The board traces curr through 10, 20, 30, 40 until curr = null, printing 10 20 30 40; with head = null the loop never runs, so nothing is printed.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQzOQ%3D%3D" target="_blank" rel="noopener">Recursive Traversal of Singly Linked List</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 8 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: traverse a linked list recursively and print its data items.</p>
+<pre><code class="language-plaintext">Recursive Display of Linked List
+I/P: 10 → 20 → 30 → 40      O/P: 10 20 30 40
+I/P: 10                     O/P: 10
+I/P: NULL (or null)         O/P:</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzIyNA%3D%3D" target="_blank" rel="noopener">Recursive Traversal of Singly Linked List</a></p>
+<ul>
+<li>Print the current node, then recur for the remaining list (C++ and Java implementations only).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>rPrint</h4>
+<pre><code class="language-cpp">void rPrint(Node *head)
+{   if(head == NULL)
+        return;
+    cout &lt;&lt; (head-&gt;data) &lt;&lt; " ";
+    rPrint(head-&gt;next);
+}</code></pre>
+<pre><code class="language-java">void rPrint(Node head)
+{   if(head == null)
+        return;
+    System.out.print(head.data + " ");
+    rPrint(head.next);
+}</code></pre>
+<pre><code class="language-plaintext">rPrint(ref(10))
+ ├→ print(10)
+ └→ rPrint(ref(20))
+     ├→ print(20)
+     └→ rPrint(ref(30))
+         ├→ print(30)
+         └→ rPrint(ref(40))
+             ├→ print(40)
+             └→ rPrint(NULL)</code></pre>
+      <p>Print the current node, then recurse on the rest; an empty list (NULL) is the base case.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ4MA%3D%3D" target="_blank" rel="noopener">Insert at Begin of Singly Linked List</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Insert at Beginning of Singly Linked List
+I/P: 10 → 20 → 30 → NULL,  x = 5      O/P: 5 → 10 → 20 → 30 → NULL
+I/P: 10 → NULL,            x = 5      O/P: 5 → 10 → NULL
+I/P: NULL,                 x = 5      O/P: 5   (head)</code></pre>
+    <p>The Description's examples: 10→20→30→40 with element 5 gives 5→10→20→30→40; Null with element 50 gives 50.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/MjMyMQ%3D%3D" target="_blank" rel="noopener">Insertion in Singly Linked Lists</a></p>
+<ul>
+<li>Three most frequent cases: at the start, after a given node, and at the end.</li>
+<li><strong>At the beginning</strong> (a four-step process, <code>push()</code>): the new node goes before head and becomes the new head (10→15→20→25 with 5 gives 5→10→15→20→25), so the function must receive a pointer to the head to change it. O(1).</li>
+<li><strong>After a given node</strong> (<code>insertAfter()</code>, which receives a pointer to the previous node): allocate the node, set its next to the previous node's next, then point the previous node's next to it. O(1).</li>
+<li><strong>At the end</strong> (a six-step process): traverse to the last node, then change its next to the new node (5→…→25 with 30 gives 5→…→25→30). O(N), since the whole list is traversed to find the last node.</li>
+</ul>
+    </div>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzIzMA%3D%3D" target="_blank" rel="noopener">Insert at Begin of Singly Linked List</a></p>
+<ul>
+<li>A 4-step process (<code>push()</code>): the new node is added before head and becomes the new head; 10→15→20→25 with 5 gives 5→10→15→20→25. <code>push()</code> must receive a pointer to the head pointer, since it changes the head.</li>
+<li>Time O(1): with the head pointer the node is attached directly, a constant amount of work. Auxiliary space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>insertBegin</h4>
+<pre><code class="language-cpp">Node *insertBegin(Node *head, int x)
+{
+    Node *temp = new Node(x);
+    temp-&gt;next = head;
+    return temp;
+}
+int main()
+{
+    Node *head = NULL;
+    head = insertBegin(head, 30);
+    head = insertBegin(head, 20);
+    head = insertBegin(head, 10);
+    return 0;
+}</code></pre>
+<pre><code class="language-java">static Node insertBegin(Node head, int x)
+{
+    Node temp = new Node(x);
+    temp.next = head;
+    return temp;
+}
+public static void main(String []args)
+{   Node head = null;
+    head = insertBegin(head, 30);
+    head = insertBegin(head, 20);
+    head = insertBegin(head, 10);
+}</code></pre>
+      <p>Create the new node, point its next at the current head, and return it as the new head (the caller assigns it back). Starting from head = NULL, inserting 30 gives 30 → NULL; then 20 and 10 give 10 → 20 → 30.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ4MQ%3D%3D" target="_blank" rel="noopener">Insert at the end of Singly Linked List</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Insert a value at the end: 10 → 20 → 30 with 40 gives 10 → 20 → 30 → 40; an empty list with 10 gives 10 as the new head; 10 with 20 gives 10 → 20, head unchanged. Inserting at the end changes the head only when the list is empty.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzIzMQ%3D%3D" target="_blank" rel="noopener">Insert at the end of Singly Linked List</a></p>
+<ul>
+<li>A 6-step process: the new node is added after the last node (5→10→15→20→25 with 30 gives …→25→30). Since the list is represented by its head, traverse to the end, then change the last node's next to the new node.</li>
+<li>Time O(N) for the loop from head to end; it can be optimised to O(1) by keeping an extra pointer to the tail. Auxiliary space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>insertEnd</h4>
+<pre><code class="language-cpp">Node *insertEnd(Node *head, int x)
+{
+    Node *temp = new Node(x);
+    if(head == NULL)
+        return temp;
+    Node *curr = head;
+    while(curr-&gt;next != NULL)
+        curr = curr-&gt;next;
+    curr-&gt;next = temp;
+    return head;
+}</code></pre>
+<pre><code class="language-java">public static Node insertEnd(Node head, int x)
+{
+    Node temp = new Node(x);
+    if(head == null)
+        return temp;
+    Node curr = head;
+    while(curr.next != null)
+        curr = curr.next;
+    curr.next = temp;
+    return head;
+}</code></pre>
+      <ul>
+        <li>Allocate the new node, find the last node (the one whose next is null), and set its next to the new node. The loop checks <code>curr.next</code>, not <code>curr</code>, so it stops <em>at</em> the last node rather than past it.</li>
+        <li>The empty list must be handled explicitly: otherwise curr starts at null and accessing its next causes a segmentation fault in C++ or a NullPointerException in Java. It's also the only case that changes the head.</li>
+        <li>In main, starting from head = NULL: insertEnd(head, 10) returns the new head 10; inserting 20 and 30 return the same head.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQxMTA%3D" target="_blank" rel="noopener">Insert at given position in Singly Linked List</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Positions start at 1 (the Description: the 1st element is at the 1st position; 10→20→30→40 with pos = 2 and data = 5 gives 10→5→20→30→40).</p>
+<pre><code class="language-plaintext">Insert at given Position in Singly Linked List
+I/P: 10 → 30 → 50 → 70        pos = 2, data = 20    O/P: 10 → 20 → 30 → 50 → 70
+      1    2    3    4
+I/P: 5 → 15 → …               pos = 5, data = 10    O/P: 5 → 15 → … → 10   (at the end)
+I/P: 10 → 20                  pos = 4, data = 5     O/P: 10 → 20           (unchanged)
+      1    2</code></pre>
+    <p>A position one past the end inserts at the end; a position beyond that leaves the list unchanged.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzIzMg%3D%3D" target="_blank" rel="noopener">Insert at given position in Singly Linked List</a></p>
+<ul>
+<li>This article covers adding a node <em>after a given node</em> (5 steps), given a pointer to that node:
+  <ol>
+  <li>Check whether the given previous node is NULL.</li>
+  <li>Allocate a new node.</li>
+  <li>Assign it the data.</li>
+  <li>Make its next the previous node's next.</li>
+  <li>Make the previous node's next the new node.</li>
+  </ol></li>
+<li>Time O(1), since prev_node is passed in and there is no need to iterate to find it. Auxiliary space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>insertPos</h4>
+<pre><code class="language-plaintext">10 → 20 → 30 → 40 → 50      insert 45 at position 4
+ 1    2    3    4    5
+             ↑ curr
+temp = new Node(45);
+temp.next = curr.next;
+curr.next = temp;</code></pre>
+<pre><code class="language-java">Node insertPos(Node head, int pos, int data)
+{
+    Node temp = new Node(data);
+    if(pos == 1)
+    {   temp.next = head;
+        return temp;
+    }
+    Node curr = head;
+    for(int i=1; i&lt;=pos-2 &amp;&amp; curr!=null; i++)
+        curr = curr.next;
+    if(curr == null)
+        return head;
+    temp.next = curr.next;
+    curr.next = temp;
+    return head;
+}</code></pre>
+<pre><code class="language-cpp">Node *insertPos(Node *head, int pos, int data)
+{
+    Node *temp = new Node(data);
+    if(pos == 1)
+    {   temp-&gt;next = head;
+        return temp;
+    }
+    Node *curr = head;
+    for(int i=1; i&lt;=pos-2 &amp;&amp; curr!=NULL; i++)
+        curr = curr-&gt;next;
+    if(curr == NULL)
+        return head;
+    temp-&gt;next = curr-&gt;next;
+    curr-&gt;next = temp;
+    return head;
+}</code></pre>
+      <ul>
+        <li>Position 1 is an insert at the beginning, the only case returning a new head.</li>
+        <li>Otherwise move curr pos − 2 steps to the node at position pos − 1 (30 for position 4), then link: the new node's next becomes curr's next, and curr's next becomes the new node, in that order.</li>
+        <li>If curr becomes null, the position is beyond the end, so return the list unchanged.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;&amp;</code> is drawn like "$$" in both loops. The last line of the C++ version is behind the teacher; it's shown as <code>return head;</code>, matching the Java version.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTU2MA%3D%3D" target="_blank" rel="noopener">Delete First Node of Singly Linked List</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Delete the head node and return the new head: 10 → 20 → 30 → 40 becomes 20 → 30 → 40 (return 20); a single node becomes NULL; an empty list stays NULL. Except for the empty list, the head always changes.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzIzMw%3D%3D" target="_blank" rel="noopener">Delete First Node of Singly Linked List</a></p>
+<ul>
+<li>Remove the first node and update head: 1→2→3→4→5→NULL gives 2→3→4→5→NULL; 2→4→6→8→33→67→NULL gives 4→6→8→33→67→NULL.</li>
+<li>Make the second node the head and delete the memory allocated to the first node. Time O(1), auxiliary space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>delHead</h4>
+<pre><code class="language-cpp">Node *delHead(Node *head)
+{
+    if(head == NULL)
+        return NULL;
+    else
+    {   Node *temp = head-&gt;next;
+        delete head;
+        return temp;
+    }
+}</code></pre>
+<pre><code class="language-java">Node delHead(Node head)
+{
+    if(head == null)
+        return null;
+    else
+        return head.next;
+}</code></pre>
+      <ul>
+        <li>Move head to head's next. In Java there's no memory deallocation to worry about, so just return <code>head.next</code> (null for a single node, as expected).</li>
+        <li>In C++, store head's next in temp, deallocate head with <code>delete</code>, then return temp.</li>
+      </ul>
+      <p><strong>Time:</strong> O(1): only a few pointers or references change.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTU2MQ%3D%3D" target="_blank" rel="noopener">Delete Last Node of Singly Linked List</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Delete the last (tail) node and return the head: 10 → 20 → 30 → 40 becomes 10 → 20 → 30, head unchanged. The head never changes when there are two or more nodes; a single node becomes empty (head = NULL); an empty list stays NULL. The function still returns the head, for the single-node case.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzIzNA%3D%3D" target="_blank" rel="noopener">Delete Last Node of Singly Linked List</a></p>
+<ul>
+<li>Find the second last node and make its next null.</li>
+<li>Algorithm:
+  <ol>
+  <li>If head is null, return null.</li>
+  <li>If head's next is null, free head and return null.</li>
+  <li>Traverse with <code>secondLast</code> while <code>secondLast.next.next != null</code>.</li>
+  <li>Delete <code>secondLast.next</code> and set <code>secondLast.next</code> to null.</li>
+  </ol></li>
+<li>Time O(n), since it traverses to the end; space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>delLast</h4>
+<pre><code class="language-cpp">Node *delLast(Node *head)
+{
+    if(head == NULL) return NULL;
+    if(head-&gt;next == NULL)
+    {   delete head;
+        return NULL;
+    }
+    Node *curr = head;
+    while(curr-&gt;next-&gt;next != NULL)
+        curr = curr-&gt;next;
+    delete (curr-&gt;next);
+    curr-&gt;next = NULL;
+    return head;
+}</code></pre>
+<pre><code class="language-java">Node delNode(Node head)
+{
+    if(head == null) return null;
+    if(head.next == null) return null;
+    Node curr = head;
+    while(curr.next.next != null)
+        curr = curr.next;
+    curr.next = null;
+    return head;
+}</code></pre>
+      <ul>
+        <li>Stop at the second-last node (the one whose next's next is null) and set its next to null; in C++ first deallocate the last node (Java deallocates automatically). For 10 → 20 → 30 → 40 → 50, curr stops at 40 and 50 is removed.</li>
+        <li>The loop needs at least two nodes, so the empty list and the single node are handled first; otherwise accessing NULL's next causes a segmentation fault (C++) or a NullPointerException (Java). The single node is the only case that changes the head.</li>
+      </ul>
+      <p><strong>Time:</strong> Θ(n): it traverses every node except the last.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the Java version's second check is written <code>if(head.next = null)</code> (an assignment); it's shown above as <code>==</code>, matching the C++ version.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTU1OQ%3D%3D" target="_blank" rel="noopener">Search in a Linked List (Iterative and Recursive)</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: search a given key x in a singly linked list, iteratively or recursively. The board returns the 1-based position of x, or −1 if absent.</p>
+<pre><code class="language-plaintext">Search in Linked List (Iterative and Recursive)
+I/P: 10 → 5 → 20 → 15,   x = 20      O/P: 3
+I/P: 10 → 15,            x = 20      O/P: -1
+I/P: 3 → 20 → 5,         x = 3       O/P: 1</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzIzNQ%3D%3D" target="_blank" rel="noopener">Search in a Linked List (Iterative and Recursive)</a></p>
+<ul>
+<li>Search a given key x in a singly linked list; iterative and recursive solutions in C++ and Java (code only).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Iterative</h4>
+<pre><code class="language-cpp">int search(Node *head, int x)
+{
+    int pos = 1;
+    Node *curr = head;
+    while(curr != NULL)
+    {
+        if(curr-&gt;data == x)
+            return pos;
+        else
+        {   pos++;
+            curr = curr-&gt;next;
+        }
+    }
+    return -1;
+}</code></pre>
+<pre><code class="language-java">int search(Node head, int x)
+{   int pos = 1;
+    Node curr = head;
+    while(curr != null)
+    {   if(curr.data == x)
+            return pos;
+        else
+        {   pos++;
+            curr = curr.next;
+        }
+    }
+    return -1;
+}</code></pre>
+      <p>For x = 20 in 10 → 5 → 20 → 15, curr reaches 20 at pos = 3. From the Description: iterate element by element comparing with x; <strong>Time O(n), Space O(1)</strong>.</p>
+    </div>
+    <div class="approach">
+      <h4>Recursive</h4>
+<pre><code class="language-cpp">int search(Node *head, int x)
+{
+    if(head == NULL) return -1;
+    if(head-&gt;data == x)
+        return 1;
+    else
+    {   int res = search(head-&gt;next, x);
+        if(res == -1) return -1;
+        else return (res+1);
+    }
+}</code></pre>
+<pre><code class="language-java">int search(Node head, int x)
+{
+    if(head == null) return -1;
+    if(head.data == x)
+        return 1;
+    else
+    {   int res = search(head.next, x);
+        if(res == -1) return -1;
+        else return (res+1);
+    }
+}</code></pre>
+<pre><code class="language-plaintext">x = 20:  search(ref(10), 20) → search(ref(5), 20) → search(ref(20), 20) returns 1
+         then 2, then 3
+x = 30:  search(ref(10), 30) → … → search(ref(15), 30) → search(NULL, 30) returns -1,
+         passed back up as -1</code></pre>
+      <p>If x is found in the rest of the list at position res, it's at res + 1 here; −1 is passed back unchanged. From the Description: <strong>Time O(n), Space O(n)</strong> (the recursion).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MjA3Ng%3D%3D" target="_blank" rel="noopener">Doubly Linked List in C++</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 6 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: a doubly linked list (DLL) node has an extra pointer, typically called the previous pointer, besides the next pointer and data of a singly linked list.</p>
+<pre><code class="language-plaintext">NULL ←[ | 10 | ]⇄[ | 20 | ]⇄[ | 30 | ]→ NULL
+         ↑ head</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzIzNg%3D%3D" target="_blank" rel="noopener">Doubly Linked List</a></p>
+<ul>
+<li>A DLL node holds an extra pointer, typically called <code>prev</code>, together with the next pointer and data of a singly linked list (node representations in C++, Java and C#).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Creating three linked nodes</h4>
+<pre><code class="language-cpp">struct Node {
+    int data;
+    Node *prev;
+    Node *next;
+    Node(int d) {
+        data = d;
+        prev = NULL;
+        next = NULL;
+    }
+};
+int main()
+{
+    Node *head = new Node(10);
+    Node *temp1 = new Node(20);
+    Node *temp2 = new Node(30);
+    head-&gt;next = temp1;
+    temp1-&gt;prev = head;
+    temp1-&gt;next = temp2;
+    temp2-&gt;prev = temp1;
+}</code></pre>
+      <p>After the first three lines the nodes 10, 20, 30 exist unlinked; each pair of links then connects two neighbours both ways (next forward, prev back).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-16">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MjA3Nw%3D%3D" target="_blank" rel="noopener">Doubly Linked List in Java</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 6 seconds plus a close-up) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: a doubly linked list node has a previous pointer as well as next and data. The same list as the C++ video: null ← 10 ⇄ 20 ⇄ 30 → null.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Creating three linked nodes</h4>
+<pre><code class="language-java">class Node {
+    int data;
+    Node prev;
+    Node next;
+    Node(int d) {
+        data = d;
+        prev = null;
+        next = null;
+    }
+}
+class Test {
+    public static void main(String args[])
+    {   Node head = new Node(10);
+        Node temp1 = new Node(20);
+        Node temp2 = new Node(30);
+        head.next = temp1;
+        temp1.prev = head;
+        temp1.next = temp2;
+        temp2.prev = temp1;
+    }
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the teacher marks the two lines <code>prev = null; next = null;</code> with a cross, with no transcript to say why. The two middle linking lines are partly behind the teacher's hand.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-17">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MjA1OQ%3D%3D" target="_blank" rel="noopener">Singly Vs Doubly Linked List (Advantages + Disadvantages)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Singly vs Doubly Linked Lists
+Advantages:    * Can be traversed in both directions
+               * Delete a given node in O(1) time with given reference/pointer to it.
+               * Insert/Delete before a given node
+               * Insert/Delete from both ends in O(1) time by maintaining tail.
+Disadvantages: * Extra space for prev
+               * Code becomes more complex</code></pre>
+    <ul>
+      <li><strong>Both directions:</strong> e.g. undo history in an editor or browser history: from any node (page) you can go back and forward.</li>
+      <li><strong>Delete a given node in O(1):</strong> reach its previous and next and relink them. A singly linked list can't in general. A tricky interview method copies the next node's data (40) into the given node (30) and deletes the next node instead; but it can't delete the last node, which needs its previous node, so no general function exists for singly linked lists.</li>
+      <li><strong>Insert/delete before a given node:</strong> to insert 25 before 30, reach 20 through prev and link 20 ⇄ 25 ⇄ 30 in O(1); the previous node can be deleted likewise. A singly linked list allows O(1) only after a given node.</li>
+      <li><strong>Both ends:</strong> a singly linked list with head and tail can insert at the beginning, delete from the beginning and insert at the end in O(1), but not delete the last node (that needs the second last). A doubly linked list with head and tail does all four in O(1): the <strong>deque</strong> (doubly ended queue), available in Python, Java and C++, is easily implemented this way.</li>
+      <li><strong>Disadvantages:</strong> each node also stores prev (one lakh items need one lakh × 2 extra pointers, against × 1); and every insertion or deletion must keep both next and prev right.</li>
+    </ul>
+    <p>The singly linked list is simpler with less functionality; the doubly linked list is slightly more complex but much more capable.</p>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-18">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQzMA%3D%3D" target="_blank" rel="noopener">Insert at Begin of Doubly Linked List</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Insert a new node with the given data at the beginning of a doubly linked list and return the new head: 10 ⇄ 20 ⇄ 30 with 5 gives 5 ⇄ 10 ⇄ 20 ⇄ 30; an empty list gives the single node. The node has data, prev and next, all initialised by the constructor. The Description gives Time Complexity O(1).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/MTA2MDU%3D" target="_blank" rel="noopener">Insertion in a Doubly Linked List</a></p>
+<ul>
+<li>Like a singly linked list, with a little extra work to maintain the previous links. Four ways: at the front, in between two nodes (after or before a given node), and at the end.</li>
+<li><strong>At the front</strong> (5 steps, O(1)): allocate new_node, put the data in, point its next to the current head, point the current head's prev to new_node, then point head to new_node.</li>
+<li><strong>After a given node</strong> prev_node (O(1)): new_node's next = prev_node's next, prev_node's next = new_node, new_node's prev = prev_node, and the node after new_node points back to it.</li>
+<li><strong>Before a given node</strong> next_node (O(1)):
+  <ol>
+  <li>new_node's prev = next_node's prev.</li>
+  <li>next_node's prev = new_node.</li>
+  <li>new_node's next = next_node.</li>
+  <li>If new_node's prev isn't NULL, set that node's next to new_node; otherwise new_node becomes the new head.</li>
+  </ol></li>
+<li><strong>At the end</strong> (7 steps, O(n)):
+  <ol>
+  <li>Set new_node's next to null.</li>
+  <li>If the list is empty, make new_node the head.</li>
+  <li>Otherwise travel to the last node and point its next to new_node.</li>
+  <li>Set new_node's prev to that last node.</li>
+  </ol></li>
+<li>Auxiliary space O(1) in all cases.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>insertBegin</h4>
+<pre><code class="language-java">Node insertBegin(Node head, int data)
+{
+    Node temp = new Node(data);
+    temp.next = head;
+    if(head != null)
+        head.prev = temp;
+    return temp;
+}</code></pre>
+<pre><code class="language-cpp">Node *insertBegin(Node *head, int data)
+{
+    Node *temp = new Node(data);
+    temp-&gt;next = head;
+    if(head != NULL)
+        head-&gt;prev = temp;
+    return temp;
+}</code></pre>
+      <ul>
+        <li>Allocate the node, make its next the current head, and if the list wasn't empty, set the old head's prev (previously null) to the new node; return the new node as the head.</li>
+        <li>The only difference from singly linked list insertion is the <code>head.prev = temp</code> line.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-19">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQzNA%3D%3D" target="_blank" rel="noopener">Insert at End Doubly Linked List</a> · Notes from the full course transcript and the board (a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Insert a data item at the end of a doubly linked list and return the head: 10 ⇄ 20 ⇄ 30 with 40 gives 10 ⇄ 20 ⇄ 30 ⇄ 40. The head changes only for an empty list, where the new node becomes the head.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>insertEnd</h4>
+<pre><code class="language-java">Node insertEnd(Node head, int data)
+{
+    Node temp = new Node(data);
+    if(head == null)
+        return temp;
+    Node curr = head;
+    while(curr.next != null)
+        curr = curr.next;
+    curr.next = temp;
+    temp.prev = curr;
+    return head;
+}
+public static void main(String args[])
+{   Node head = null;
+    head = insertEnd(head, 10);
+    head = insertEnd(head, 20);
+}</code></pre>
+<pre><code class="language-cpp">Node *insertEnd(Node *head, int data)
+{
+    Node *temp = new Node(data);
+    if(head == NULL)
+        return temp;
+    Node *curr = head;
+    while(curr-&gt;next != NULL)
+        curr = curr-&gt;next;
+    curr-&gt;next = temp;
+    temp-&gt;prev = curr;
+    return head;
+}</code></pre>
+      <ul>
+        <li>Reach the last node (its next is null): its next must change and it becomes the new node's prev. The condition must be <code>curr.next != null</code>; a common beginner mistake is <code>curr != null</code>, which leaves curr null after the loop.</li>
+        <li>Then link both ways: curr's next = temp and temp's prev = curr.</li>
+        <li>In main, inserting 10 into an empty list returns the new node as head; inserting 20 returns the same head.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-20">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ3NQ%3D%3D" target="_blank" rel="noopener">Reverse a Doubly Linked List</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Reverse 10 ⇄ 20 ⇄ 30 ⇄ 40 into 40 ⇄ 30 ⇄ 20 ⇄ 10 with head at 40: 10's prev was null and next 20; now prev is 20 and next null. Every node's prev and next change.</p>
+    <p>The idea: traverse all nodes and <strong>swap prev and next</strong> for each one. The last node (40) gets prev null and next 30, ready to be the new head.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzIzOQ%3D%3D" target="_blank" rel="noopener">Reverse a Doubly Linked List</a></p>
+<ul>
+<li>Traverse the list with a pointer, swap the prev and next pointers of every node, and at last change the head pointer. Time O(N), auxiliary space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>reverseDLL</h4>
+<pre><code class="language-cpp">Node *reverseDLL(Node *head)
+{   if(head == NULL || head-&gt;next == NULL) return head;
+    Node *prev = NULL; Node *curr = head;
+    while(curr != NULL)
+    {   prev = curr-&gt;prev;
+        curr-&gt;prev = curr-&gt;next;
+        curr-&gt;next = prev;
+        curr = curr-&gt;prev;
+    }
+    return prev-&gt;prev;
+}</code></pre>
+<pre><code class="language-java">Node reverseDLL(Node head)
+{   if(head == null || head.next == null) return head;
+    Node prev = null; Node curr = head;
+    while(curr != null)
+    {   prev = curr.prev;
+        curr.prev = curr.next;
+        curr.next = prev;
+        curr = curr.prev;
+    }
+    return prev.prev;
+}</code></pre>
+      <ul>
+        <li>prev is the swap's temporary variable and also tracks the new head. After swapping, move with <code>curr = curr.prev</code>: the old next is now prev.</li>
+        <li>For 10 ⇄ 20 ⇄ 30: after the 1st iteration 10's next is null, curr at 20, prev null; after the 2nd, prev = 10, curr at 30; after the 3rd, prev = 20, curr = null. Then <code>prev.prev</code> is 20's new prev, 30: the new head.</li>
+        <li>An empty list or single node is returned as it is: with one node, prev stays null after the swap and <code>prev.prev</code> would fail.</li>
+      </ul>
+      <p>One traversal, constant auxiliary space (the Description: Time O(N), Auxiliary Space O(1)).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-21">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTU1Mw%3D%3D" target="_blank" rel="noopener">Delete Head of a Doubly Linked List</a> · Notes from the full course transcript and the board (a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Delete the first node and return the new head: 10 ⇄ 20 ⇄ 30 becomes 20 ⇄ 30; a single node becomes NULL (C++) or null (Java); an empty list stays empty. In a DLL the first node's prev and the last node's next are always null.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI0MA%3D%3D" target="_blank" rel="noopener">Delete Head of a Doubly Linked List</a></p>
+<ul>
+<li>A function to delete the head node of a doubly linked list (C++ and Java code). Time O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>delHead</h4>
+<pre><code class="language-cpp">Node *delHead(Node *head)
+{
+    if(head == NULL) return NULL;
+    if(head-&gt;next == NULL)
+    {   delete head;
+        return NULL;
+    }
+    else
+    {   Node *temp = head;
+        head = head-&gt;next;
+        head-&gt;prev = NULL;
+        delete temp;
+        return head;
+    }
+}</code></pre>
+<pre><code class="language-java">Node delHead(Node head)
+{
+    if(head == null) return null;
+    if(head.next == null) return null;
+    else
+    {   head = head.next;
+        head.prev = null;
+        return head;
+    }
+}</code></pre>
+      <ul>
+        <li>With two or more nodes: move head to head's next and set the new head's prev to null. C++ also keeps the old head in temp to deallocate it; Java's garbage collection handles that.</li>
+        <li>A single node is deleted (C++) and NULL returned.</li>
+      </ul>
+      <p><strong>Time:</strong> Θ(1): a constant number of operations.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-22">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTU1NA%3D%3D" target="_blank" rel="noopener">Delete Last of a Doubly Linked List</a> · Notes from the full course transcript and the board (a close-up). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Delete the last node: 10 ⇄ 20 ⇄ 30 becomes 10 ⇄ 20; a single node becomes empty, which changes the head, so the function returns the head; an empty list stays null.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>delLast</h4>
+<pre><code class="language-cpp">Node *delLast(Node *head)
+{
+    if(head == NULL) return NULL;
+    if(head-&gt;next == NULL)
+    {   delete head;
+        return NULL;
+    }
+    Node *curr = head;
+    while(curr-&gt;next != NULL)
+        curr = curr-&gt;next;
+    curr-&gt;prev-&gt;next = NULL;
+    delete curr;
+    return head;
+}</code></pre>
+<pre><code class="language-java">Node delNode(Node head)
+{
+    if(head == null) return null;
+    if(head.next == null) return null;
+    Node curr = head;
+    while(curr.next != null)
+        curr = curr.next;
+    curr.prev.next = null;
+    return head;
+}</code></pre>
+      <ul>
+        <li>Reach the last node (curr at 50 in 10 ⇄ 20 ⇄ 30 ⇄ 40 ⇄ 50), then reach its previous through prev and set that node's next to null. 50 still points back to 40, but it's unlinked; C++ also deletes it to avoid a memory leak.</li>
+        <li>A single node has no previous (prev is null), so <code>curr.prev.next</code> would cause a NullPointerException or segmentation fault: that case, and the empty list, are handled first.</li>
+      </ul>
+      <p><strong>Time:</strong> Θ(n) for the loop. Maintaining a <strong>tail</strong> pointer makes it Θ(1) (<code>tail.prev.next = null</code>, no loop), but then every operation (insert at beginning, insert at end, …) must keep the tail updated.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> on the Java side the teacher crosses out the loop lines while explaining the tail version.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-23">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MjA3OA%3D%3D" target="_blank" rel="noopener">Circular Linked List in C++</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 6 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: in a circular linked list all nodes are connected to form a circle; the first and last nodes are connected to each other, and there is no NULL at the end.</p>
+<pre><code class="language-plaintext">     ↓ head
+  ┌→[10]→[5]→[20]→[15]─┐
+  └────────────────────┘</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI2OQ%3D%3D" target="_blank" rel="noopener">Circular Linked in C++</a></p>
+<ul>
+<li>All nodes are connected to form a circle: the first and last nodes are connected, and there is no NULL at the end.</li>
+<li><strong>Circular singly linked list:</strong> the last node points to the first. Traverse until you reach the node you started from; the list has no beginning or end, and no next part is null.</li>
+<li><strong>Circular doubly linked list:</strong> has the properties of both. Consecutive elements are linked by prev and next, the last node's next points to the first, and the first node's prev points to the last.</li>
+<li>Node representation is the same as a singly linked list, except the last node connects to the first. Example: nodes one, two, three with values 3, 5, 9, where three's next points back to one.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Creating a circular list</h4>
+<pre><code class="language-cpp">struct Node
+{   int data;
+    Node *next;
+    Node(int d)
+    {   data = d;
+        next = NULL;
+    }
+};
+int main()
+{
+    Node *head = new Node(10);
+    head-&gt;next = new Node(5);
+    head-&gt;next-&gt;next = new Node(20);
+    head-&gt;next-&gt;next-&gt;next = new Node(15);
+    head-&gt;next-&gt;next-&gt;next-&gt;next = head;
+    return 0;
+}</code></pre>
+      <p>The node is the same as a singly linked list's; the last node's next is set back to head. The board also shows head = NULL for an empty list, and a single node 10 whose next points to itself.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-24">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MjA3OQ%3D%3D" target="_blank" rel="noopener">Circular Linked List in Java</a> · <strong>No transcript</strong> for this video: notes from the board (a close-up) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: all nodes form a circle, the last node connected to the first, with no null at the end. The same list as the C++ video: 10 → 5 → 20 → 15 → back to 10.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Creating a circular list</h4>
+<pre><code class="language-java">class Test {
+    public static void main(String args[])
+    {   Node head = new Node(10);
+        head.next = new Node(5);
+        head.next.next = new Node(20);
+        head.next.next.next = new Node(15);
+        head.next.next.next.next = head;
+    }
+}</code></pre>
+<pre><code class="language-plaintext">head = null                 (empty)
+head = new Node(10);
+head.next = head;           (single node pointing to itself)</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-25">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MjA1NQ%3D%3D" target="_blank" rel="noopener">Circular Linked List (Advantages + Disadvantages)</a> · <strong>No transcript</strong> for this video: notes from the board (a frame every 10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Circular Linked List (Advantages &amp; Disadvantages)
+     ↓ head
+  ┌→[10]→[5]→[20]→[15]─┐
+  └────────────────────┘
+Advantages:    * We can traverse the whole list from any node.
+               * Implementation of algorithms like round robin
+               * We can insert at the beginning and end by
+                 just maintaining one tail reference/pointer
+Disadvantages: * Implementations of operations become complex</code></pre>
+    <p>Beside the list the teacher marks a node x (20) in the circular list, and draws the singly linked list 10 → 5 → 20 → 15 below for comparison.</p>
+    <div class="added">
+      <p><strong>Board note:</strong> the right end of the advantages and the disadvantage is behind the teacher in most frames; the wording above is from the clearest frames. The Description only says the video covers the advantages and disadvantages.</p>
+    </div>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI3MQ%3D%3D" target="_blank" rel="noopener">Circular Linked List (Advantages &amp; Disadvantages)</a></p>
+<ul>
+<li>Every node has a successor; the last node points to the first. The list has no end, so traversal needs care.</li>
+<li><strong>Applications:</strong> managing computing resources; implementing stacks and queues; advanced structures such as the Fibonacci heap; token scheduling in computer networking. Real-life uses: round-robin scheduling in games, audio/video streaming, circular escalators.</li>
+<li><strong>Advantages:</strong>
+  <ul>
+  <li>You can traverse from the last node back to the head, and any node can be the start.</li>
+  <li>The previous node can be easily identified.</li>
+  <li>No NULL checks are needed in the code.</li>
+  <li>End operations are convenient because start and finish coincide; round robin can run online queues without meeting NULL.</li>
+  </ul></li>
+<li><strong>Disadvantages:</strong>
+  <ul>
+  <li>Improper handling can cause an infinite loop.</li>
+  <li>Doubly linked lists are more complex than singly linked ones.</li>
+  <li>No direct access to elements.</li>
+  <li>Reversing a circular linked list is generally complex.</li>
+  </ul></li>
+</ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-26">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ4NA%3D%3D" target="_blank" rel="noopener">Circular Linked List Traversal in C++</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given the head of a circular singly linked list, print all nodes in order: 10 → 20 → 30 (back to 10) prints 10 20 30. Corner cases: a single node prints one item; an empty list prints nothing; two nodes print both.</p>
+    <ul>
+      <li>The singly linked list loop (<code>while(p != NULL)</code>) never ends here, since the last node's next points back to head. Stopping when <code>p-&gt;next == head</code> instead fails for a single node: the loop never runs and 10 isn't printed. So something extra is needed.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI3Mg%3D%3D" target="_blank" rel="noopener">Circular Linked List Traversal</a></p>
+<ul>
+<li>A conventional list stops at NULL; a circular list stops when it reaches the first node again. Two versions are given, with a do-while loop and with a for loop. Both are O(n) time and O(1) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 1 (For Loop)</h4>
+<pre><code class="language-cpp">void printList(Node *head)
+{   if(head == NULL) return;
+    cout &lt;&lt; (head-&gt;data) &lt;&lt; " ";
+    for(Node *p = head-&gt;next; p != head; p = p-&gt;next)
+        cout &lt;&lt; (p-&gt;data) &lt;&lt; " ";
+}</code></pre>
+      <p>A non-empty list has at least one node, so print the head first, then run p from head's next until it comes back to head. For a single node, head's next is head itself, so the loop doesn't run and only 10 is printed.</p>
+    </div>
+    <div class="approach">
+      <h4>Method 2 (Do While)</h4>
+<pre><code class="language-cpp">void printList(Node *head)
+{   if(head == NULL) return;
+    Node *p = head;
+    do {
+        cout &lt;&lt; (p-&gt;data) &lt;&lt; " ";
+        p = p-&gt;next;
+    } while(p != head);
+}</code></pre>
+      <p>The implementation generally given in textbooks and blogs: do-while prints at least one node, then checks whether p has come back to head after each move.</p>
+      <p>From the Description: both methods take <strong>Time O(n)</strong>, <strong>Auxiliary Space O(1)</strong>.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the opening lines of the do-while version are behind the teacher; they're shown as described in the transcript.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-27">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ4NQ%3D%3D" target="_blank" rel="noopener">Circular Linked List Traversal in Java</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The same problem as the C++ video: print 10 → 20 → 30 (circular) as 10 20 30; one node prints one item, an empty list nothing. There's no null to stop at, so stop on coming back to head; but the reference starts at head, so the first node needs handling.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 1 (For loop)</h4>
+<pre><code class="language-java">void printList(Node head)
+{
+    if(head == null) return;
+    System.out.print(head.data + " ");
+    for(Node r = head.next; r != head; r = r.next)
+        System.out.print(r.data + " ");
+}</code></pre>
+      <p>Print the first node explicitly, then loop from the second node until r is back at head. For 10 → 20 → 30: print 10; r = 20, print; r = 30, print; r is head, stop. For a single node, r = head.next is head, so only 10 is printed.</p>
+    </div>
+    <div class="approach">
+      <h4>Method 2 (Do While)</h4>
+<pre><code class="language-java">void printList(Node head)
+{
+    if(head == null) return;
+    Node r = head;
+    do {
+        System.out.print(r.data + " ");
+        r = r.next;
+    } while(r != head);
+}</code></pre>
+      <p>A non-empty list prints at least one node: print, move to next, then check whether r is back at head. A single node 10 (pointing to itself) prints 10, moves r to head, and stops.</p>
+      <p>From the Description: Time O(n), Auxiliary Space O(1) for both.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-28">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTUxNw%3D%3D" target="_blank" rel="noopener">Insert at Begin of Circular Linked List</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Insert x at the beginning of a circular linked list and make it the new head: 10 → 30 → 20 with x = 15 gives 15 → 10 → 30 → 20 (circular). An empty list gives a single node pointing to itself; a single node 10 with x = 3 gives 3 → 10.</p>
+    <p>Unlike a singly linked list, the last node's next must also change, and only head is given.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI3Mw%3D%3D" target="_blank" rel="noopener">Insert at Begin of Circular Linked List</a></p>
+<ul>
+<li><strong>Naive, O(n):</strong> traverse to the last node, insert the new node after it, and point the new node's next to head.</li>
+<li><strong>Efficient, O(1):</strong> don't traverse; attach the new node after head and interchange the data of head and the new node.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O(n)</h4>
+<pre><code class="language-cpp">Node *insertBegin(Node *head, int x)
+{
+    Node *temp = new Node(x);
+    if(head == NULL)
+        temp-&gt;next = temp;
+    else
+    {   Node *curr = head;
+        while(curr-&gt;next != head)
+            curr = curr-&gt;next;
+        curr-&gt;next = temp;
+        temp-&gt;next = head;
+    }
+    return temp;
+}</code></pre>
+      <p>Traverse to the last node (whose next is head), link it to the new node, and the new node to head; return the new node as head (the caller assigns it). The Java version is the same with <code>.</code> for <code>-&gt;</code> and <code>null</code>.</p>
+      <p>Keeping a <strong>tail</strong> pointer in the representation makes it O(1): <code>tail-&gt;next = temp; temp-&gt;next = head;</code> (inserting at the beginning doesn't change the tail).</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: O(1), same representation</h4>
+<pre><code class="language-java">Node insertBegin(Node head, int x)
+{   Node temp = new Node(x);
+    if(head == null)
+    {   temp.next = temp;
+        return temp;
+    }
+    else
+    {   temp.next = head.next;
+        head.next = temp;
+        int t = head.data;
+        head.data = temp.data;
+        temp.data = t;
+        return head;
+    }
+}</code></pre>
+<pre><code class="language-cpp">Node *insertBegin(Node *head, int x)
+{   Node *temp = new Node(x);
+    if(head == NULL)
+    {   temp-&gt;next = temp;
+        return temp;
+    }
+    else
+    {   temp-&gt;next = head-&gt;next;
+        head-&gt;next = temp;
+        int t = head-&gt;data;
+        head-&gt;data = temp-&gt;data;
+        temp-&gt;data = t;
+        return head;
+    }
+}</code></pre>
+      <p>Insert the new node <em>after</em> head (two link changes), then swap the data of head and the new node: 15 moves into the head node and 10 into the second. The old head is returned unchanged.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-29">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTUxOA%3D%3D" target="_blank" rel="noopener">Insert at the end of Circular Linked List</a> · Notes from the full course transcript and the board (close-ups of both boards). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Insert x at the end of a circular linked list: after the current last node and before head, so the new node becomes the last node. 10 → 20 → 30 with x = 5 gives 10 → 20 → 30 → 5 (circular); a single node 10 gives 10 → 5. An empty list gives a single node linked to itself.</p>
+    <p>Head changes only when the list is empty; otherwise the old head is returned.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI3NA%3D%3D" target="_blank" rel="noopener">Insert at the end of Circular Linked List</a></p>
+<ul>
+<li><strong>Naive, O(n):</strong> traverse to the last node, insert the new node after it, and point the new node's next to head.</li>
+<li><strong>Efficient, O(1):</strong> attach the new node after head and interchange the data of head and the new node, without traversing.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O(n)</h4>
+<pre><code class="language-cpp">Node *insertEnd(Node *head, int x)
+{
+    Node *temp = new Node(x);
+    if(head == NULL)
+    {   temp-&gt;next = temp;
+        return temp;
+    }
+    else
+    {   Node *curr = head;
+        while(curr-&gt;next != head)
+            curr = curr-&gt;next;
+        curr-&gt;next = temp;
+        temp-&gt;next = head;
+        return head;
+    }
+}</code></pre>
+      <p>Loop from head until a node whose next is head (the last node), link it to the new node and the new node to head. The Java version on the board is the same with <code>.</code> and <code>null</code>.</p>
+      <p>Maintaining a <strong>tail</strong> pointer as well as head (passed to these functions) makes it O(1): insert after the tail, then update the tail to the new node.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: O(1), only head given</h4>
+<pre><code class="language-cpp">Node *insertEnd(Node *head, int x)
+{
+    Node *temp = new Node(x);
+    if(head == NULL)
+    {   temp-&gt;next = temp;
+        return temp;
+    }
+    else
+    {   temp-&gt;next = head-&gt;next;   // insert temp
+        head-&gt;next = temp;         // after head
+        int t = temp-&gt;data;        // swapping
+        temp-&gt;data = head-&gt;data;
+        head-&gt;data = t;
+        return temp;               // temp is new head
+    }
+}</code></pre>
+      <p>Insert the new node after head, then swap the data of head and the new node: the old head node now holds x and is the last node, and the new node holds the old head's value. Return <code>temp</code> as the new head (the caller assigns it). Example: 10 → 30 → 20 with x = 15 becomes 10 → 30 → 20 → 15.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-30">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTU1NQ%3D%3D" target="_blank" rel="noopener">Delete Head of Circular Linked List</a> · Notes from the full course transcript and the board (close-ups of both boards). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Delete the head node of a circular linked list and return the new head: 10 → 20 → 30 (circular) becomes 20 → 30. A single node gives NULL (C++) / null (Java); an empty list stays empty.</p>
+    <p>In C++ the deleted node's memory must be deallocated; Java's garbage collection takes care of it.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI3NQ%3D%3D" target="_blank" rel="noopener">Delete Head of Circular Linked List</a></p>
+<ul>
+<li>Deleting the head node of a singly circular linked list: naive and efficient methods in C++ and Java (code only).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: Θ(n)</h4>
+<pre><code class="language-cpp">Node *delHead(Node *head)
+{
+    if(head == NULL) return NULL;
+    if(head-&gt;next == head)
+    {   delete head;
+        return NULL;
+    }
+    Node *curr = head;
+    while(curr-&gt;next != head)
+        curr = curr-&gt;next;
+    curr-&gt;next = head-&gt;next;
+    delete head;
+    return (curr-&gt;next);
+}</code></pre>
+      <p>The last node's next must change, so traverse from head to the node whose next is head, point it at <code>head-&gt;next</code>, delete head and return <code>curr-&gt;next</code> as the new head. The single-node case is handled explicitly because only there do we deal with null. Java is the same without the <code>delete</code>.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: Θ(1)</h4>
+<pre><code class="language-cpp">Node *delHead(Node *head)
+{
+    if(head == NULL) return NULL;
+    if(head-&gt;next == head)
+    {   delete head;
+        return NULL;
+    }
+    head-&gt;data = head-&gt;next-&gt;data;
+    Node *temp = head-&gt;next;
+    head-&gt;next = head-&gt;next-&gt;next;
+    delete temp;
+    return head;
+}</code></pre>
+<pre><code class="language-java">Node delHead(Node head)
+{   if(head == null) return null;
+    if(head.next == head) return null;
+    head.data = head.next.data;
+    head.next = head.next.next;
+    return head;
+}</code></pre>
+      <p>Copy the next node's data into head, then delete the next node (always Θ(1) given the previous node). 10 → 20 → 30 → 40 becomes 20 → (20) → 30 → 40, then 20 → 30 → 40. The <code>temp</code> and <code>delete</code> lines are needed only in C++.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-31">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTU1Ng%3D%3D" target="_blank" rel="noopener">Delete Kth of a Circular Linked List</a> · <strong>No transcript</strong>: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Delete the k-th node of a circular linked list. Board examples: 10 → 20 → 30 with k = 2 gives 10 → 30; 10 → 20 → 30 → 40 with k = 1 gives 20 → 30 → 40; a single node 10 with k = 1 gives head = NULL (C++) / null (Java).</p>
+    <p>Assumption written on the board: number of nodes ≥ k.</p>
+    <p>Approach (Description): if k = 1, delete the head node and return the new head. Otherwise iterate to the (k−1)-th node, keep the k-th node in a temporary, point the (k−1)-th node's next at the (k+1)-th node, delete the temporary and return head. Time O(k).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation</h4>
+<pre><code class="language-java">Node deleteKth(Node head, int k)
+{   if(head == null) return head;
+    if(k == 1)
+        return deleteHead(head);
+    Node curr = head;
+    for(int i = 0; i &lt; k-2; i++)
+        curr = curr.next;
+    curr.next = curr.next.next;
+    return head;
+}</code></pre>
+      <p><code>deleteHead</code> is the delete-head function from the previous video. The loop runs k−2 times starting from head, so <code>curr</code> stops at the (k−1)-th node (board trace: 10 → 20 → 30 → 40, k = 3: one step, curr = 20, and 30 is unlinked).</p>
+      <p>The C++ version on the board is the same with <code>-&gt;</code> and <code>NULL</code>, plus <code>Node *temp = curr-&gt;next;</code> before relinking and <code>delete temp;</code> after (part of it was hidden behind the teacher in the frames).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-32">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTU1Nw%3D%3D" target="_blank" rel="noopener">Circular Doubly Linked List</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Every node has <code>prev</code> and <code>next</code>, as in a doubly linked list, but the first node's prev is the last node and the last node's next is the first node. An empty list is NULL/null; a single node has prev and next both pointing to itself.</p>
+    <p>Advantages:</p>
+    <ul>
+      <li>All advantages of a circular list (circular traversal: round-robin, Josephus problem) and of a doubly list (insert/delete before a node in O(1), traverse backwards).</li>
+      <li>The last node is available in O(1) as <code>head-&gt;prev</code>, without an extra tail pointer, so insert at end and delete from end become quick.</li>
+    </ul>
+    <p>Traversal: <code>curr</code> never becomes null, so use the same loops as for a circular linked list.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI3Ng%3D%3D" target="_blank" rel="noopener">Circular Doubly Linked List</a></p>
+<ul>
+<li>Has the properties of both doubly and circular lists: consecutive nodes are linked by prev and next, the last node's next points to the first, and the first node's prev points to the last.</li>
+<li><strong>Insert at the beginning</strong> (node T with data 5):
+  <ol>
+  <li>T's next = the first node; T's prev = the last node.</li>
+  <li>The last node's next = T; the first node's prev = T.</li>
+  <li>Finally, shift the 'Start' pointer to T.</li>
+  </ol></li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Insert at head: O(1)</h4>
+<pre><code class="language-cpp">Node *insertHead(Node *head, int x)
+{
+    Node *temp = new Node(x);
+    if(head == NULL)
+    {   temp-&gt;next = temp;
+        temp-&gt;prev = temp;
+        return temp;
+    }
+    temp-&gt;prev = head-&gt;prev;
+    temp-&gt;next = head;
+    head-&gt;prev-&gt;next = temp;
+    head-&gt;prev = temp;
+    return temp;
+}</code></pre>
+      <p>Board example: 10 ⇄ 20 ⇄ 15 ⇄ 30 (circular), insert 5: 5's prev becomes 30 and next becomes 10, then 30's next and 10's prev become 5, and 5 is returned as the new head. Java is the same with <code>.</code> and <code>null</code>.</p>
+      <p>The empty case must be handled separately: <code>head-&gt;prev</code> on null gives a segmentation fault in C++ and a NullPointerException in Java.</p>
+      <p><strong>Insert at end</strong>: do exactly the same steps but return the old <code>head</code> instead of <code>temp</code>; the new node then sits just before head, i.e. at the end.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-33">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ3Ng%3D%3D" target="_blank" rel="noopener">Sorted Insert in a Singly Linked List</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a sorted singly linked list and x, insert x so the list stays sorted, and return the head (it changes when the list is empty or x is smaller than the head's data).</p>
+    <ul>
+      <li>10 → 20 → 30 → 40, x = 25: inserted between 20 and 30.</li>
+      <li>10 → 25, x = 5: inserted at the beginning.</li>
+      <li>x larger than every item: inserted at the end.</li>
+      <li>Empty list: the new node becomes head.</li>
+    </ul>
+    <p>Idea: move <code>curr</code> while <code>curr</code>'s next data is smaller than x; it stops at the node <em>before</em> the insert position, then insert after it.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI3OA%3D%3D" target="_blank" rel="noopener">Sorted Insert in a Singly Linked List</a></p>
+<ul>
+<li>Insert a value into a linked list sorted in increasing order so it stays sorted (the example inserts 9). Time O(n), since one traversal is needed; auxiliary space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation: Θ(pos)</h4>
+<pre><code class="language-cpp">Node *sortedInsert(Node *head, int x)
+{
+    Node *temp = new Node(x);
+    if(head == NULL)
+        return temp;
+    if(x &lt; head-&gt;data)
+    {   temp-&gt;next = head;
+        return temp;
+    }
+    Node *curr = head;
+    while(curr-&gt;next != NULL &amp;&amp;
+          curr-&gt;next-&gt;data &lt; x)
+    {   curr = curr-&gt;next; }
+    temp-&gt;next = curr-&gt;next;
+    curr-&gt;next = temp;
+    return head;
+}</code></pre>
+      <p>Java is the same with <code>.</code> and <code>null</code>.</p>
+      <ul>
+        <li>Check <code>curr-&gt;next != NULL</code> before reading <code>curr-&gt;next-&gt;data</code>; <code>curr</code> itself can't be null because the empty case returned earlier.</li>
+        <li>Insert at the end needs no special case: the loop stops when <code>curr-&gt;next</code> is NULL, so <code>temp-&gt;next</code> becomes NULL and <code>curr-&gt;next</code> becomes temp.</li>
+        <li>The order of the last two lines matters. Doing <code>curr-&gt;next = temp</code> first loses the rest of the list, and then <code>temp-&gt;next = curr-&gt;next</code> makes temp point to itself.</li>
+        <li>Time: constant when inserting at the first position, Θ(n) after the last node; in general Θ(pos).</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Source slips:</strong></p>
+      <ul>
+        <li>The Java board writes <code>curr.next.dat</code>; it's <code>data</code>, matching the C++ version.</li>
+        <li>The course Description's second example gives 10 → 20 → 30, x = 25 → "5->10->20->25->30". The leading 5 is a slip; inserting 25 gives 10 → 20 → 25 → 30.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-34">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NjI1" target="_blank" rel="noopener">Middle of linked list</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print the middle of a singly linked list. With an even number of nodes there are two middles; print the <strong>second</strong>.</p>
+    <ul>
+      <li>10 → 5 → 20 → 15 → 25: 20.</li>
+      <li>10 → 5 → 20 → 15 → 25 → 30: 15.</li>
+      <li>10: 10.</li>
+      <li>10 → 20: 20.</li>
+      <li>NULL: print nothing.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI3OQ%3D%3D" target="_blank" rel="noopener">Middle of linked list</a></p>
+<ul>
+<li>1→2→3→4→5 gives 3; with an even count, print the second middle: 1→2→3→4→5→6 gives 4.</li>
+<li><strong>Method 1:</strong> count the nodes, then traverse again up to count/2. O(n) time, O(1) space.</li>
+<li><strong>Method 2:</strong> two pointers, one moving by one and the other by two; when the fast pointer reaches the end, the slow one is at the middle. O(N) with a single traversal, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: two traversals</h4>
+<pre><code class="language-cpp">void printMiddle(Node *head)
+{
+    if(head == NULL) return;
+    int count = 0;
+    Node *curr;
+    for(curr = head; curr != NULL; curr = curr-&gt;next)
+        count++;
+    curr = head;
+    for(int i = 0; i &lt; count/2; i++)
+        curr = curr-&gt;next;
+    cout &lt;&lt; curr-&gt;data;
+}</code></pre>
+      <p>Count the nodes, then move <code>curr</code> from head count/2 times. Five nodes: move 2 times; six nodes: move 3 times, which gives the second middle. One node: count/2 = 0, so head is printed; two nodes: move once, so the second is printed. Java is the same with <code>System.out.print(curr.data)</code>.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: one traversal (slow and fast)</h4>
+<pre><code class="language-java">void printMiddle(Node head)
+{   if(head == null) return;
+    Node slow = head, fast = head;
+    while(fast != null &amp;&amp; fast.next != null)
+    {   slow = slow.next;
+        fast = fast.next.next;
+    }
+    System.out.print(slow.data);
+}</code></pre>
+      <p>Slow moves one node at a time and fast moves two, so when fast reaches the end, slow is at the middle. Stop when fast becomes null (even count, e.g. 10 → 20 → 30 → 40 gives 30) or fast's next becomes null (odd count). The <code>fast != null</code> check also guards against ever reading <code>null.next</code>. C++ is the same with <code>-&gt;</code>, <code>NULL</code> and <code>cout</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-35">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/Nzk2Nw%3D%3D" target="_blank" rel="noopener">Nth Node from end of Linked List</a> · <strong>No transcript</strong>: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print the n-th node from the end of a singly linked list; print nothing if the list has fewer than n nodes. Board examples:</p>
+    <ul>
+      <li>10 → 20 → 30 → 40 → 50, n = 2: 40.</li>
+      <li>10 → 20 → 30, n = 3: 10.</li>
+      <li>A two-node list with n = 3: no output.</li>
+      <li>10 → 20 → 30, n = 1: 30.</li>
+    </ul>
+    <p>Both methods (Description): time O(M), where M is the size of the linked list, and space O(1).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI4MA%3D%3D" target="_blank" rel="noopener">Nth Node from end of Linked List</a></p>
+<ul>
+<li>1→2→3→4 with N = 3 gives 2; 35→15→4→20 with N = 4 gives 35.</li>
+<li><strong>Naive:</strong> compute the length len and print the (len − n + 1)-th node from the beginning. O(M) time, O(1) space.</li>
+<li><strong>Two pointers</strong> <code>main_ptr</code> and <code>ref_ptr</code>: move ref_ptr to the N-th node from the start, then move both until ref_ptr reaches the last node; main_ptr is then at the N-th node from the end. O(M) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 1: using the length</h4>
+<pre><code class="language-cpp">void printNthFromEnd(Node *head, int n)
+{   int len = 0;
+    for(Node *curr = head; curr != NULL; curr = curr-&gt;next)
+        len++;
+    if(len &lt; n)
+        return;
+    Node *curr = head;
+    for(int i = 1; i &lt; len-n+1; i++)
+        curr = curr-&gt;next;
+    cout &lt;&lt; (curr-&gt;data) &lt;&lt; " ";
+}</code></pre>
+      <p>The n-th node from the end is the (len − n + 1)-th node from the beginning (board: len = 5, n = 2 gives the 4th node). Count the length, return if it's less than n, then move from head len − n times. Java is the same with <code>System.out.print(curr.data)</code>.</p>
+    </div>
+    <div class="approach">
+      <h4>Method 2: two pointers/references</h4>
+<pre><code class="language-java">void printNthFromEnd(Node head, int n)
+{   if(head == null) return;
+    Node first = head;
+    for(int i = 0; i &lt; n; i++)
+    {   if(first == null) return;
+        first = first.next;
+    }
+    Node second = head;
+    while(first != null)
+    {   second = second.next;
+        first = first.next;
+    }
+    System.out.print(second.data);
+}</code></pre>
+      <p>Steps on the board:</p>
+      <ol>
+        <li>Move <code>first</code> n positions ahead.</li>
+        <li>Start <code>second</code> from head.</li>
+        <li>Move both at the same speed. When <code>first</code> reaches NULL, <code>second</code> is at the required node.</li>
+      </ol>
+      <p>The check inside the first loop returns when the list has fewer than n nodes. Trace: 10 → … → 70, n = 3. <code>first</code> starts at 40; after moving both until <code>first</code> is NULL, <code>second</code> is at 50, the 3rd from the end. C++ is the same with <code>-&gt;</code>, <code>NULL</code> and <code>cout</code>.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the Java Method 1 signature is written <code>printNthFromEnd(Node head)</code>, without <code>int n</code>, though the body uses n. It's shown here with n, matching the C++ version.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-36">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NjI3" target="_blank" rel="noopener">Reverse a linked list iterative</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Reverse a singly linked list and return the new head: 10 → 20 → 30 → 40 becomes 40 → 30 → 20 → 10 (the last node becomes head). A single node stays as it is; an empty list (NULL/null) stays null.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI4MQ%3D%3D" target="_blank" rel="noopener">Reverse a linked list iterative</a></p>
+<ul>
+<li>Reverse by changing links: 1→2→3→4→NULL becomes 4→3→2→1→NULL.</li>
+<li>Three pointers: prev = NULL, curr = head, next = NULL. In the loop:
+  <ol>
+  <li>Store <code>next = curr-&gt;next</code> before changing curr's next.</li>
+  <li>Set <code>curr-&gt;next = prev</code>.</li>
+  <li>Then <code>prev = curr</code>, <code>curr = next</code>.</li>
+  </ol></li>
+<li>O(N) time, O(1) auxiliary space. A naive approach is also given (code only).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: auxiliary array, Θ(n) time, Θ(n) space</h4>
+<pre><code class="language-cpp">Node *revList(Node *head)
+{
+    vector&lt;int&gt; arr;
+    for(Node *curr = head; curr != NULL; curr = curr-&gt;next)
+    {   arr.push_back(curr-&gt;data); }
+    for(Node *curr = head; curr != NULL; curr = curr-&gt;next)
+    {   curr-&gt;data = arr.back();
+        arr.pop_back();
+    }
+    return head;
+}</code></pre>
+<pre><code class="language-java">Node revList(Node head)
+{   ArrayList&lt;Integer&gt; arr = new ArrayList&lt;Integer&gt;();
+    for(Node curr = head; curr != null; curr = curr.next)
+    {   arr.add(curr.data); }
+    for(Node curr = head; curr != null; curr = curr.next)
+        curr.data = arr.remove(arr.size() - 1);
+    return head;
+}</code></pre>
+      <p>Copy the data into a vector/ArrayList (dynamic size, so no extra pass to find the length), then traverse again copying the last item back and removing it. Downsides: two traversals, O(n) extra space, and copying data can be costly if each node holds a large object.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: change the links, one traversal, O(1) space</h4>
+<pre><code class="language-cpp">Node *reverse(Node *head)
+{
+    Node *curr = head;
+    Node *prev = NULL;
+    while(curr != NULL)
+    {
+        Node *next = curr-&gt;next;
+        curr-&gt;next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;   // prev is new head
+}</code></pre>
+      <p>When processing node x<sub>i</sub>, the links from x<sub>1</sub> to x<sub>i−1</sub> are already reversed and <code>prev</code> points to x<sub>i−1</sub>.</p>
+      <ul>
+        <li>Save <code>next</code> first, otherwise changing <code>curr-&gt;next</code> loses the rest of the list.</li>
+        <li>Point <code>curr-&gt;next</code> back to <code>prev</code>.</li>
+        <li>Advance with <code>prev = curr</code> then <code>curr = next</code>; this order matters too.</li>
+      </ul>
+      <p>When <code>curr</code> becomes NULL, <code>prev</code> is the old last node, so return it as the new head. Trace on 10 → 20 → 30: after the 1st iteration, null ← 10 (prev) and curr = 20; after the 2nd, null ← 10 ← 20; after the 3rd, curr = NULL and prev = 30. Java is the same with <code>.</code> and <code>null</code>. Time O(n), auxiliary space O(1).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-37">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NjI4" target="_blank" rel="noopener">Recursive reverse a linked list (Part 1)</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Same problem as the iterative version: 10 → 20 → 30 → 40 becomes 40 → 30 → 20 → 10. A single node and an empty list stay as they are. This video is method 1; method 2 is in the next video.</p>
+    <p>Idea: reverse the list <em>after</em> head recursively. The call on <code>head-&gt;next</code> reverses x<sub>2</sub> … x<sub>n</sub> and returns its head x<sub>n</sub> (<code>rest_head</code>). x<sub>2</sub> is now the last node of that part (<code>rest_tail</code>) with next NULL, while x<sub>1</sub> (head) still points to x<sub>2</sub>.</p>
+    <p>Two links must change: x<sub>2</sub>'s next becomes x<sub>1</sub>, and x<sub>1</sub>'s next becomes NULL. Get <code>rest_tail</code> through <code>head-&gt;next</code> <em>before</em> setting head's next to NULL, or it is lost. The answer is <code>rest_head</code>.</p>
+    <p>Time O(n); space O(n) for the function call stack (Description).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 1</h4>
+<pre><code class="language-cpp">Node *recRevL(Node *head)
+{
+    if(head == NULL || head-&gt;next == NULL)
+        return head;
+    Node *rest_head = recRevL(head-&gt;next);
+    Node *rest_tail = head-&gt;next;
+    rest_tail-&gt;next = head;
+    head-&gt;next = NULL;
+    return rest_head;
+}</code></pre>
+      <p>Base cases: <code>head == NULL</code> alone is not enough. For a single node the recursive call returns NULL, <code>rest_tail</code> is NULL, and <code>rest_tail-&gt;next</code> causes a segmentation fault in C++ or a NullPointerException in Java. So return head when head or head's next is NULL. Java is the same with <code>.</code> and <code>null</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-38">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ1MQ%3D%3D" target="_blank" rel="noopener">Recursive reverse a linked list (Part 2)</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Method 2 works the other way from method 1. Method 1 reversed the last n−1 nodes and linked the first node at the end; method 2 goes left to right, reversing x<sub>1</sub>…x<sub>i−1</sub> before changing x<sub>i</sub>'s link to x<sub>i−1</sub>.</p>
+    <p>An extra parameter <code>prev</code> carries x<sub>i−1</sub>; the first call passes <code>prev</code> = NULL because head's previous is always null. It mirrors the iterative solution.</p>
+    <p>Time O(n), space O(n) (Description).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 2</h4>
+<pre><code class="language-cpp">Node *recRevL(Node *curr, Node *prev)
+{
+    if(curr == NULL) return prev;
+    Node *next = curr-&gt;next;
+    curr-&gt;next = prev;
+    return recRevL(next, curr);
+}
+// call: head = recRevL(head, NULL);</code></pre>
+      <p>Save <code>next</code>, point <code>curr-&gt;next</code> at <code>prev</code>, then recurse with <code>(next, curr)</code>. When <code>curr</code> is NULL, <code>prev</code> is x<sub>n</sub>, the new head. Every call returns what the next call returned, so x<sub>n</sub> propagates back to the first call.</p>
+      <p>Board trace on 10 → 20 → 30:</p>
+      <ol>
+        <li>prev = NULL, curr = 10.</li>
+        <li>NULL ← 10, curr = 20.</li>
+        <li>NULL ← 10 ← 20, curr = 30, next = NULL.</li>
+        <li>NULL ← 10 ← 20 ← 30, curr = NULL: return prev (30).</li>
+      </ol>
+      <p>Java is the same with <code>.</code> and <code>null</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-39">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ0MA%3D%3D" target="_blank" rel="noopener">Remove duplicates from a sorted Singly Linked List</a> · <strong>Partial transcript</strong>: the transcript stops at 7:00 of 10:00. Notes from the transcript, the board (a frame every 20 seconds, every 5 seconds after 7:00, plus close-ups) and the course Description. The board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Remove duplicates from a <strong>sorted</strong> singly linked list, so equal items sit together: 10 → 20 → 20 → 30 → 30 → 30 becomes 10 → 20 → 30. A list with no duplicates is unchanged; an empty list stays empty.</p>
+    <p>Idea: traverse with <code>curr</code>. If <code>curr</code>'s data equals its next node's data, take the next node out and keep <code>curr</code> where it is. Otherwise move <code>curr</code> ahead. Stop at the last node, since nothing follows it.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzI4Mg%3D%3D" target="_blank" rel="noopener">Remove duplicates from a sorted Singly Linked List</a></p>
+<ul>
+<li>Delete duplicates from a list sorted in non-decreasing order, traversing it only once: 11→11→11→21→43→43→60 becomes 11→21→43→60.</li>
+<li>Compare each node with its next; if the data is the same, delete the next node, storing its next pointer before deleting. O(n) time, O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation: O(n)</h4>
+<pre><code class="language-cpp">void removeDups(Node *head)
+{
+    Node *curr = head;
+    while(curr != NULL &amp;&amp; curr-&gt;next != NULL)
+    {
+        if(curr-&gt;data == curr-&gt;next-&gt;data)
+        {   Node *temp = curr-&gt;next;
+            curr-&gt;next = curr-&gt;next-&gt;next;
+            delete(temp);
+        }
+        else
+            curr = curr-&gt;next;
+    }
+}</code></pre>
+<pre><code class="language-java">void removeDups(Node head)
+{   Node curr = head;
+    while(curr != null &amp;&amp; curr.next != null)
+    {   if(curr.data == curr.next.data)
+            curr.next = curr.next.next;
+        else
+            curr = curr.next;
+    }
+}</code></pre>
+      <ul>
+        <li><code>curr != NULL</code> must come before <code>curr-&gt;next</code>. Reading next of null gives a NullPointerException in Java and a segmentation fault/runtime error in C++. It could instead be an <code>if(curr == NULL) return;</code> before the loop.</li>
+        <li>Java's garbage collection frees the removed node. C++ stores it in <code>temp</code> and deletes it to avoid a memory leak; only those lines differ.</li>
+        <li>After 7:00 the board shows dry runs. On 10 → 20 → 20 → 30 → 30 → 30, curr stays on a node while its duplicates are unlinked. On 10 → 10, curr's next becomes NULL and the list becomes 10.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-40">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ2OA%3D%3D" target="_blank" rel="noopener">Reverse a linked list in groups of size k</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Reverse a singly linked list in groups of k and return the new head. Board examples:</p>
+    <ul>
+      <li>10 → 20 → 30 → 40 → 50 → 60, k = 3: 30 → 20 → 10 → 60 → 50 → 40.</li>
+      <li>10 → 20 → 30 → 40 → 50, k = 3: 30 → 20 → 10 → 50 → 40. Fewer than k nodes are left at the end, so they are simply reversed.</li>
+      <li>10 → 20 → 30, k = 4: 30 → 20 → 10. If k ≥ n, the whole list is reversed.</li>
+    </ul>
+    <p>If k ≤ the length, the k-th node is always the new head.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMwMQ%3D%3D" target="_blank" rel="noopener">Reverse a linked list in groups of size k</a></p>
+<ul>
+<li>1→…→8, K = 3 gives 3→2→1→6→5→4→8→7; K = 5 gives 5→4→3→2→1→8→7→6.</li>
+<li><strong>Recursive:</strong> reverse the first k nodes, tracking next and prev. Then <code>head-&gt;next = reverse(next, k)</code> links the rest, and prev is returned as the new head. O(n) time; auxiliary space O(n/k), since n/k or (n/k)+1 calls are made.</li>
+<li><strong>Space-optimised iterative, O(1):</strong>
+  <ol>
+  <li>Make a dummy node with <code>dummy-&gt;next = head</code> and compute the length, which is O(N).</li>
+  <li>For each group, point curr to <code>prev-&gt;next</code> and next to curr's next.</li>
+  <li>An inner loop reverses the group, running k−1 times (fewer for the last group): <code>curr-&gt;next = next-&gt;next; next-&gt;next = prev-&gt;next; prev-&gt;next = next; next = curr-&gt;next</code>.</li>
+  <li>Then <code>count -= k</code> and <code>prev = curr</code>.</li>
+  </ol>
+  O(N/K) outer iterations × O(K) inner gives O(N).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive: O(n) time, O(n/k) auxiliary space</h4>
+<pre><code class="language-java">Node reverseK(Node head, int k)
+{   Node curr = head, next = null, prev = null;
+    int count = 0;
+    while(curr != null &amp;&amp; count &lt; k)
+    {   next = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = next;
+        count++;
+    }
+    if(next != null)
+    {   Node rest_head = reverseK(next, k);
+        head.next = rest_head;
+    }
+    return prev;   // prev is new head
+}</code></pre>
+      <p>The loop is the iterative reverse with a <code>count</code>, so it reverses at most k nodes, stopping early at null. Then the recursive call reverses the rest in groups of k and returns <code>rest_head</code>.</p>
+      <p>The original head is now the last node of the first group, so <code>head.next = rest_head</code> links them, and <code>prev</code> (the k-th node) is returned. Board example: 1 → 2 → 3 → 4 → 5, k = 3, becomes 3 → 2 → 1 → 5 → 4.</p>
+      <p>The recursion stack holds n/k entries. C++ is the same with <code>-&gt;</code> and <code>NULL</code>.</p>
+    </div>
+    <div class="approach">
+      <h4>Iterative: Θ(n) time, Θ(1) auxiliary space</h4>
+<pre><code class="language-cpp">Node *reverseK(Node *head, int k)
+{
+    Node *curr = head, *prevFirst = NULL;
+    bool isFirstPass = true;
+    while(curr != NULL)
+    {
+        Node *first = curr, *prev = NULL;
+        int count = 0;
+        while(curr != NULL &amp;&amp; count &lt; k)
+        {   Node *next = curr-&gt;next;
+            curr-&gt;next = prev;
+            prev = curr;
+            curr = next;
+            count++;
+        }
+        if(isFirstPass) { head = prev; isFirstPass = false; }
+        else { prevFirst-&gt;next = prev; }
+        prevFirst = first;
+    }
+    return head;
+}</code></pre>
+      <p>Each pass reverses one group; afterwards <code>prev</code> is that group's head and <code>first</code> (the group's original first node) is its last node.</p>
+      <ul>
+        <li>After the first pass, set the overall head to <code>prev</code> and clear <code>isFirstPass</code> so this never happens again.</li>
+        <li>In later passes, link the previous group's first node to this group's head: <code>prevFirst-&gt;next = prev</code>.</li>
+      </ul>
+      <p>Board trace, 1 → … → 8 with k = 3: 3 → 2 → 1, then 6 → 5 → 4 (1's next becomes 6), then 8 → 7 (4's next becomes 8). Java is the same with <code>boolean</code> and <code>null</code>.</p>
+    </div>
+    <div class="added">
+      <p><strong>Source slip:</strong> the course Description's first example gives 10 → 20 → 30 → 40 → 50, k = 3 → "30->10->20->50->40". The board and transcript give 30 → 20 → 10 → 50 → 40.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-41">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NjI5" target="_blank" rel="noopener">Detect loop</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A loop means the last node's next, instead of being null, points to one of the earlier nodes. Example: 10 → 15 → 12 → 20, with 20 pointing back to 15, gives Yes. An empty list doesn't count as a loop (No), a list without a loop gives No, and a list where the whole list is a loop gives Yes.</p>
+    <ul>
+      <li><strong>Method 1 (naive), O(n²):</strong> for every node, store its next's address and traverse from head through the earlier nodes to see whether any has that address.</li>
+      <li><strong>Method 2, O(n):</strong> needs a modification to the linked list structure (allowed only if that is permitted). Add a <code>bool visited</code> field, initialised to false in the constructor. Traverse, return true on reaching a node already visited, else mark it; reaching NULL means no loop.</li>
+      <li><strong>Method 3, O(n) and O(1) space:</strong> change the references/pointers (below). It destroys the list's links, so the list can't be reconstructed afterwards.</li>
+      <li><strong>Method 4, hashing:</strong> O(n) time, O(n) auxiliary space, no changes to the structure or the links (below).</li>
+    </ul>
+    <p>The video ends by asking for a solution with O(n) time, O(1) space and no modifications: that is the next video.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMwMg%3D%3D" target="_blank" rel="noopener">Detect loop</a></p>
+<ul>
+<li><strong>Hashing:</strong> put node addresses in a hash table while traversing. Reaching NULL means false; a next pointing to a previously stored node means true.</li>
+<li><strong>Marking visited nodes without modifying the node structure:</strong> create a temporary node and point the next of every traversed node to it, using next as the "traversed" flag. When the loop's first node is reached a second time, its next is already the temporary node, so a loop exists; a node pointing to null means no loop. O(N) time with one traversal, O(1) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 3: point every visited node to a dummy node</h4>
+<pre><code class="language-cpp">bool isLoop(Node *head)
+{
+    Node *temp = new Node;
+    Node *curr = head;
+    while(curr != NULL)
+    {
+        if(curr-&gt;next == NULL)
+            return false;
+        if(curr-&gt;next == temp)
+            return true;
+        Node *curr_next = curr-&gt;next;
+        curr-&gt;next = temp;
+        curr = curr_next;
+    }
+    return false;
+}</code></pre>
+      <p>While traversing, store the next node and then point the current node at the single dummy node <code>temp</code>. Reaching a node whose next already points to <code>temp</code> means it is being visited again. In the example, 10, 15, 12 and 20 are redirected in turn, and coming back to 15 finds its next is already <code>temp</code>.</p>
+      <p>The middle lines were partly hidden behind the teacher; the code above follows the transcript's description.</p>
+    </div>
+    <div class="approach">
+      <h4>Method 4: hashing</h4>
+<pre><code class="language-cpp">bool isLoop(Node *head)
+{
+    unordered_set&lt;Node *&gt; s;
+    for(Node *curr = head; curr != NULL; curr = curr-&gt;next)
+    {
+        if(s.find(curr) != s.end())
+            return true;
+        s.insert(curr);
+    }
+    return false;
+}</code></pre>
+      <p>Store node addresses (references in Java), not data. Java: <code>HashSet&lt;Node&gt; s = new HashSet&lt;Node&gt;();</code> and <code>s.contains(curr)</code>. In the example, 10, 15, 12 and 20 are added, and returning to 15 finds it already present. Find and insert are O(1) on average, so time is O(n), with O(n) auxiliary space.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-42">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NjMw" target="_blank" rel="noopener">Detect loop using floyd cycle detection</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Floyd's cycle detection doesn't modify the node structure or the list, uses no O(n) auxiliary space, and runs in O(n), which is why it is so popular.</p>
+    <p>Start <code>slow_p</code> and <code>fast_p</code> at head; move slow one node and fast two nodes at a time. If there is a loop they will definitely meet; otherwise fast reaches NULL. Example: 10 → 12 → 15 → 20 → 25 with 25 pointing back to 12.</p>
+    <p>Why it works (points on the board):</p>
+    <ol>
+      <li><code>fast_p</code> enters the loop before (or at the same time as) <code>slow_p</code>.</li>
+      <li>When <code>slow_p</code> enters the loop, <code>fast_p</code> is k distance ahead, k ≥ 0.</li>
+      <li>The distance (number of edges) keeps increasing by one in every movement of both pointers: k, k+1, k+2, …</li>
+      <li>When the distance becomes the length of the cycle n, they meet: seen from the other direction the distance is 0.</li>
+    </ol>
+    <p>Why speed 2 and not 3 or 4: only an increase of exactly 1 per step is sure to hit n. With +2 it could go from n−1 to n+1 and skip n. Dry run: k = 2, then 3, with loop length 4; next step k = 4 = n and they meet.</p>
+    <p>Time: if there are m nodes before the loop and the loop length is n, it's O(m) + O(n) = O(m + n), linear in the list length. No extra space.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMwMw%3D%3D" target="_blank" rel="noopener">Detect loop using floyd cycle detection</a></p>
+<ul>
+<li>Two pointers, one (fast_p) moving twice as fast as the other (slow_p): slow_p moves by one and fast_p by two. If they meet at the same node there is a loop; otherwise there isn't. O(N) time with one traversal, O(1) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation</h4>
+<pre><code class="language-cpp">bool isLoop(Node *head)
+{
+    Node *slow_p = head, *fast_p = head;
+    while(fast_p != NULL &amp;&amp; fast_p-&gt;next != NULL)
+    {
+        slow_p = slow_p-&gt;next;
+        fast_p = fast_p-&gt;next-&gt;next;
+        if(slow_p == fast_p)
+            return true;
+    }
+    return false;
+}</code></pre>
+      <ul>
+        <li>Both loop conditions are needed for lists without a loop. On 10 → 20, without the <code>fast_p-&gt;next</code> check the code would read NULL's next: a NullPointerException in Java, a runtime error in C++.</li>
+        <li>The equality check must come <em>after</em> moving the pointers. At the top it would return true for every non-empty list, since both start at head.</li>
+        <li>Leaving the loop means fast or fast's next became NULL, so there is no loop. In Java the same code uses references.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-43">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NjMx" target="_blank" rel="noopener">Detect and remove loop in linked list</a> · Notes from the full course transcript and the board (a frame every 55 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>If the list has a loop, remove it: the last node of the loop gets next = NULL, as in a normal list. A single node pointing to itself gets next = NULL too; a list without a loop is left unchanged.</p>
+    <p>Algorithm:</p>
+    <ol>
+      <li>Detect the loop with Floyd's algorithm; slow and fast meet at some point inside the loop.</li>
+      <li>Keep fast at the meeting point and move slow to the beginning (head).</li>
+      <li>Move both one node at a time; they meet at the first node of the loop.</li>
+    </ol>
+    <p><strong>Proof.</strong> Let m be the distance from head to the loop's first node, k the distance from there to the first meeting point, and n the loop length. Let x and y be the number of loop iterations made by slow and by fast before the first meeting point.</p>
+    <p>Before the first meeting, fast travels twice as far as slow: (m + k + x·n)·2 = m + k + y·n, so m + k = n(y − 2x), i.e. <strong>m + k is a multiple of n</strong>.</p>
+    <p>Second phase: slow needs m steps to reach the loop's first node. Fast, from the meeting point, returns to the meeting point after m + k steps (a multiple of n), so after m + k − k = m steps it is at the first node too. They meet there.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMwNA%3D%3D" target="_blank" rel="noopener">Detect and remove loop in linked list</a></p>
+<ul>
+<li>A different removal method, also based on Floyd's algorithm:
+  <ol>
+  <li>Detect the loop and get a pointer to a loop node.</li>
+  <li>Count the loop's nodes; call the count k.</li>
+  <li>Fix one pointer at head and another at the k-th node from head.</li>
+  <li>Move both at the same pace; they meet at the loop's starting node.</li>
+  <li>Get a pointer to the last node of the loop and set its next to NULL.</li>
+  </ol></li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation</h4>
+<pre><code class="language-cpp">void detectRemoveLoop(Node *head)
+{
+    Node *slow = head, *fast = head;
+    while(fast != NULL &amp;&amp; fast-&gt;next != NULL)
+    {
+        slow = slow-&gt;next;
+        fast = fast-&gt;next-&gt;next;
+        if(slow == fast)
+            break;
+    }
+    if(slow != fast)
+        return;
+    slow = head;
+    while(slow-&gt;next != fast-&gt;next)
+    {   slow = slow-&gt;next;
+        fast = fast-&gt;next;
+    }
+    fast-&gt;next = NULL;
+}</code></pre>
+      <ul>
+        <li>The first part is loop detection. If it ends because fast or fast's next became NULL, there is no loop, so return.</li>
+        <li>The second loop compares the <em>next</em> pointers, not the nodes. It stops one step early, with <code>fast</code> on the last node of the loop (the previous of the first node), so <code>fast-&gt;next = NULL</code> removes the loop.</li>
+        <li>Alternative mentioned: compare <code>slow != fast</code> and keep an extra pointer to fast's previous node.</li>
+      </ul>
+      <p>Some lines were partly hidden behind the teacher; the code follows the board plus the transcript.</p>
+    </div>
+    <div class="approach">
+      <h4>Interview variations</h4>
+      <ul>
+        <li><strong>Length of the loop:</strong> after detecting with Floyd's, the meeting point is inside the loop. Fix one pointer there and move the other, counting until it comes back.</li>
+        <li><strong>First node of the loop:</strong> a step of the loop-removal algorithm above (where slow and fast meet in the second phase).</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the code doesn't handle a loop that starts at head (m = 0) with more than one node. There the first meeting point is head itself, so the second loop doesn't run and <code>fast-&gt;next = NULL</code> cuts head's next instead of the last node's. E.g. 10 → 20 → 30 → back to 10 becomes just 10.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-44">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NjMy" target="_blank" rel="noopener">Delete node with only pointer given to it</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A tricky interview question. Given only the address/reference of a node in the middle of a singly linked list (no head), delete that node. Example: 10 → 20 → 30 → 40 → 25 with a pointer to 30 becomes 10 → 20 → 40 → 25.</p>
+    <p>The normal way needs head to reach the previous node. Assumption: the node to delete is never the last node (it is one of nodes 1 to n−1).</p>
+    <p>Trick: copy the next node's data into this node (30 becomes 40), then delete the next node, which is easy given its previous. It can't work for the last node: there is no next, and <code>next-&gt;data</code> gives a segmentation fault in C++ or a NullPointerException in Java.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMwNQ%3D%3D" target="_blank" rel="noopener">Delete node with only pointer given to it</a></p>
+<ul>
+<li>Traversing to the node would need the head pointer, which contradicts the problem statement. Instead, copy the data from the next node into the node to be deleted and delete the next node.</li>
+<li>This works only if the given pointer is guaranteed not to be the last node, which has no next node to copy from. O(1) time, O(1) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation: O(1)</h4>
+<pre><code class="language-cpp">void deleteNode(Node *ptr)
+{
+    Node *temp = ptr-&gt;next;
+    ptr-&gt;data = temp-&gt;data;
+    ptr-&gt;next = temp-&gt;next;
+    delete(temp);
+}</code></pre>
+<pre><code class="language-java">// Java: two lines, garbage collection frees the node
+ptr.data = ptr.next.data;
+ptr.next = ptr.next.next;</code></pre>
+      <p>In C++, keep the next node in <code>temp</code> so its memory can be freed, avoiding a memory leak.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-45">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NzAyNg%3D%3D" target="_blank" rel="noopener">Segregate Even and Odd Nodes in C++</a> · <strong>No transcript</strong>: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Rearrange a linked list so that all even-valued nodes come before all odd-valued nodes, keeping the original order within each group. Board examples:</p>
+    <ul>
+      <li>17 → 15 → 8 → 12 → 5 gives 8 → 12 → 17 → 15 → 5.</li>
+      <li>8 → 12 → 10 (all even) and 3 → 5 → 1 (all odd) are unchanged.</li>
+    </ul>
+    <p>Description example: 17 → 15 → 8 → 12 → 10 → 5 → 4 → 1 → 7 → 6 gives 8 → 12 → 10 → 4 → 6 → 17 → 15 → 5 → 1 → 7.</p>
+    <p><strong>Naive (requires two traversals).</strong></p>
+    <ol>
+      <li>Find the last node's reference/pointer with one traversal.</li>
+      <li>Traverse the list again; insert every odd node after the last node and make it the new last node.</li>
+    </ol>
+    <p><strong>One-traversal idea.</strong> Maintain 4 variables, all initialised to null/None:</p>
+    <ul>
+      <li><code>es</code> and <code>ee</code>: start and end of the even sublist.</li>
+      <li><code>os</code> and <code>oe</code>: start and end of the odd sublist.</li>
+    </ul>
+    <p>While traversing:</p>
+    <ol type="a">
+      <li>If the current node is even, insert it after <code>ee</code> and update <code>ee</code>; also update <code>es</code> if it is the first even node.</li>
+      <li>Do the same for odd nodes.</li>
+    </ol>
+    <p>After the loop, connect the two lists (<code>ee-&gt;next = os</code>). Board trace on 5 → 10 → 7 gives 10 → 5 → 7. Time O(n), auxiliary space O(1) (Description).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMwNg%3D%3D" target="_blank" rel="noopener">Segregate Even and Odd Nodes</a></p>
+<ul>
+<li>All even numbers before all odd numbers, keeping the order within each group.</li>
+<li>Split into an even list and an odd list by moving every odd node to a separate odd list while traversing; the original then holds the even nodes. Attach the odd list at the end of the even list, keeping the even list's last pointer so this is constant time. O(n) time, O(1) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>C++ implementation</h4>
+<pre><code class="language-cpp">Node *segregate(Node *head)
+{   Node *es = NULL, *ee = NULL, *os = NULL, *oe = NULL;
+    for(Node *curr = head; curr != NULL; curr = curr-&gt;next)
+    {   int x = curr-&gt;data;
+        if(x % 2 == 0)
+        {   if(es == NULL)
+                es = ee = curr;
+            else
+            {   ee-&gt;next = curr;
+                ee = ee-&gt;next;
+            }
+        }
+        else
+        {   if(os == NULL)
+                os = oe = curr;
+            else
+            {   oe-&gt;next = curr;
+                oe = oe-&gt;next;
+            }
+        }
+    } // End of For Loop
+    if(os == NULL || es == NULL)
+        return head;
+    ee-&gt;next = os;
+    oe-&gt;next = NULL;
+    return es;
+} // End of segregate()</code></pre>
+      <p>If either sublist is empty (all even or all odd), the list is unchanged. Otherwise link the even end to the odd start, terminate the odd list, and return <code>es</code> as the new head.</p>
+      <p>Board trace on 10 → 5 → 4 → 3 → 6: after the loop, es = 10, ee = 6, os = 5, oe = 3. After the remaining code: 10 → 4 → 6 → 5 → 3.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong></p>
+      <ul>
+        <li>The odd branch is written <code>os = oe = NULL;</code>; it must be <code>os = oe = curr;</code>, matching the even branch.</li>
+        <li><code>x = curr-&gt;data;</code> has no declaration; shown above as <code>int x</code>.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-46">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NzAyNw%3D%3D" target="_blank" rel="noopener">Segregate Even and Odd Nodes in Java</a> · <strong>No transcript</strong>: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The Java version of the previous video. The boards are the same up to the implementation: examples, the naive two-traversal solution, and the one-traversal idea with <code>es</code>, <code>ee</code>, <code>os</code>, <code>oe</code>. See the C++ video's notes for those.</p>
+    <p>Time O(n), auxiliary space O(1) (Description).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Java implementation</h4>
+<pre><code class="language-java">Node segregate(Node head)
+{   Node es = null, ee = null, os = null, oe = null;
+    for(Node curr = head; curr != null; curr = curr.next)
+    {   int x = curr.data;
+        if(x % 2 == 0)
+        {   if(es == null)
+                es = ee = curr;
+            else
+            {   ee.next = curr;
+                ee = ee.next;
+            }
+        }
+        else
+        {   if(os == null)
+                os = oe = curr;
+            else
+            {   oe.next = curr;
+                oe = oe.next;
+            }
+        }
+    } // End of For Loop
+    if(os == null || es == null)
+        return head;
+    ee.next = os;
+    oe.next = null;
+    return es;
+} // End of segregate()</code></pre>
+      <p>Board trace on 10 → 5 → 4 → 3 → 6: after the loop, even list 10 → 4 → 6 and odd list 5 → 3. The result is 10 → 4 → 6 → 5 → 3 with head <code>es</code> = 10. This board has the correct <code>os = oe = curr</code> in the odd branch.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> <code>x = curr.data;</code> has no declaration; shown above as <code>int x</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-47">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NjM0" target="_blank" rel="noopener">Intersection Point of two linked list</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Two linked lists meet at one node, and from there on all nodes are common; return that intersection point's data.</p>
+    <p>Board example: h1 = 5 → 8 → 7 → 10 → 12 → 15 → NULL and h2 = 9 → 10 (the same 10 node) give 10. The function takes both heads (pointers in C++, references in Java).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMwNw%3D%3D" target="_blank" rel="noopener">Intersection of two linked list</a></p>
+<ul>
+<li>A programming error links the end of one list into the other, forming an inverted Y; find the merge point (15 in the example).</li>
+<li><strong>Difference in node counts:</strong> d = abs(c1 − c2); traverse d nodes in the bigger list, then both in parallel until a common node, comparing node addresses.</li>
+<li><strong>Hashing:</strong>
+  <ol>
+  <li>Create an empty hash set.</li>
+  <li>Insert the addresses of all nodes of the first list.</li>
+  <li>Traverse the second list and return the first node found in the set.</li>
+  </ol>
+  It needs O(n) additional space, so it isn't very efficient if one list is large.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 1: hash set, O(m + n) time, O(m) auxiliary space</h4>
+      <ol>
+        <li>Create an empty hash set <code>hs</code>: <code>unordered_set</code> in C++, <code>HashSet</code> in Java.</li>
+        <li>Traverse the first list and put all of its nodes (addresses/references) in hs: O(m) time and O(m) auxiliary space. Board: add(5), add(8), add(7), add(10), add(12), add(15).</li>
+        <li>Traverse the second list and look up every node in hs; as soon as one is found, return it. This takes O(n) time with no extra space. Board: 9 is not found; 10 is found, so return 10.</li>
+      </ol>
+    </div>
+    <div class="approach">
+      <h4>Method 2: difference in counts, O(m + n) time, O(1) auxiliary space</h4>
+      <ol>
+        <li>Count the nodes in both lists, giving c1 and c2. Board: c1 = 6, c2 = 4.</li>
+        <li>Traverse the bigger list abs(c1 − c2) times. Board: d = 2, so curr1 moves from 5 to 7.</li>
+        <li>Traverse both lists simultaneously until we see a common node.</li>
+      </ol>
+<pre><code class="language-cpp">// after counting and moving curr1 d steps ahead
+while(curr1 != NULL &amp;&amp; curr2 != NULL)
+{
+    if(curr1 == curr2)
+        return (curr1-&gt;data);
+    curr1 = curr1-&gt;next;
+    curr2 = curr2-&gt;next;
+}
+return -1;   // no intersection</code></pre>
+      <p>Why it works: cutting off the extra part of the bigger list leaves both with the same length to the end. Moving both at the same speed, the first common node they reach is the intersection. Compare the nodes themselves, not their data.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-48">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NzAyOA%3D%3D" target="_blank" rel="noopener">Pairwise Swap Nodes of linked list in C++</a> · Notes from the full course transcript and the board (a frame every 35 seconds plus close-ups). The transcript is auto-generated and very noisy here, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Swap the nodes of a singly linked list pairwise and return the new head. Board examples:</p>
+    <ul>
+      <li>1 → 2 → 3 → 4: 2 → 1 → 4 → 3.</li>
+      <li>1 → 2 → 3 → 4 → 5: 2 → 1 → 4 → 3 → 5. With an odd count, the last node is left as it is.</li>
+      <li>1: 1.</li>
+      <li>An empty list stays empty.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMwOA%3D%3D" target="_blank" rel="noopener">Pairwise Swap Nodes of linked list</a></p>
+<ul>
+<li>1→2→3→4→5→6→NULL gives 2→1→4→3→6→5→NULL; 1→2→3→4→5→NULL gives 2→1→4→3→5→NULL; 1→NULL stays 1→NULL.</li>
+<li>Method 1, swapping data, is O(n); method 2, changing pointers/references, is also O(n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: swap the data, Θ(n) time, Θ(1) space</h4>
+<pre><code class="language-cpp">Node *pairWiseSwap(Node *head)
+{
+    Node *curr = head;
+    while(curr != NULL &amp;&amp; curr-&gt;next != NULL)
+    {
+        swap(curr-&gt;data, curr-&gt;next-&gt;data);
+        curr = curr-&gt;next-&gt;next;
+    }
+    return head;
+}</code></pre>
+      <p>Run a loop while there is at least one node ahead; swap the current node's data with the next node's and move curr two nodes ahead. For an even count the loop ends on <code>curr != NULL</code>, for an odd count on <code>curr-&gt;next != NULL</code>. Head never changes, so it could be a void function.</p>
+      <p>It is called naive because nodes often hold large objects (student, teacher or subject records with many fields), and swapping data is then inefficient. The better general-purpose solution changes the links.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: change the links, Θ(n) time, Θ(1) space</h4>
+<pre><code class="language-cpp">Node *pairwiseSwap(Node *head)
+{
+    if(head == NULL || head-&gt;next == NULL)
+        return head;
+    Node *curr = head-&gt;next-&gt;next;
+    Node *prev = head;
+    head = head-&gt;next;
+    head-&gt;next = prev;
+    while(curr != NULL &amp;&amp; curr-&gt;next != NULL)
+    {
+        prev-&gt;next = curr-&gt;next;
+        prev = curr;
+        Node *next = curr-&gt;next-&gt;next;
+        curr-&gt;next-&gt;next = curr;
+        curr = next;
+    }
+    prev-&gt;next = curr;
+    return head;
+}</code></pre>
+      <ul>
+        <li><strong>First pair, handled explicitly:</strong> only here does head change (10 → 20 → … becomes 20 → 10 → …). curr moves to the third node, prev to the old head, head becomes head's next, and that node's next becomes prev.</li>
+        <li><strong>Loop invariant:</strong> before reaching x<sub>i</sub>, everything up to x<sub>i−1</sub> is processed and prev is the last processed node (old x<sub>i−2</sub>).</li>
+        <li><strong>Processing x<sub>i</sub>:</strong> prev's next becomes x<sub>i+1</sub> and prev moves to x<sub>i</sub>. Save x<sub>i+2</sub> in <code>next</code> before x<sub>i+1</sub>'s next becomes x<sub>i</sub>, or the rest of the list is lost. Then curr = x<sub>i+2</sub>.</li>
+        <li><strong>After the loop:</strong> <code>prev-&gt;next = curr</code> works in both cases. With an even count, curr is NULL and the last node gets next = NULL. With an odd count, curr is the leftover last node and gets linked.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong></p>
+      <ul>
+        <li>The base case is written <code>if(head == NULL and head-&gt;next == NULL)</code>; it must be <em>or</em> (<code>||</code>), as the transcript says: return when the list is empty or has a single node.</li>
+        <li>In the naive dry run, "After Second Iteration" is drawn as 1 → 2 → 4 → 3 → 5. After the first iteration it was 2 → 1 → 3 → 4 → 5, so it should be 2 → 1 → 4 → 3 → 5.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-49">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/NzAyOQ%3D%3D" target="_blank" rel="noopener">Pairwise Swap Nodes of linked list in Java</a> · Notes from the full course transcript and the board (a frame every 35 seconds plus close-ups). The transcript is auto-generated and very noisy, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The Java version of the previous video, with the same explanation: examples, naive data swap, then changing the links with the "before we reach x<sub>i</sub> / after processing x<sub>i</sub>" diagram. See the C++ video's notes for the step-by-step reasoning.</p>
+    <p>Both methods: Θ(n) time and Θ(1) auxiliary space. Swapping data is inefficient when nodes hold large objects.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: swap the data</h4>
+<pre><code class="language-java">Node pairWiseSwap(Node head)
+{   Node curr = head;
+    while(curr != null &amp;&amp; curr.next != null)
+    {   int temp = curr.data;            // swap
+        curr.data = curr.next.data;
+        curr.next.data = temp;
+        curr = curr.next.next;
+    }
+    return head;
+}</code></pre>
+      <p>Java has no <code>swap</code> for the two fields, so the board swaps through <code>temp</code>.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient: change the links</h4>
+<pre><code class="language-java">Node pairwiseSwap(Node head)
+{   if(head == null || head.next == null)
+        return head;
+    Node curr = head.next.next;
+    Node prev = head;
+    head = head.next;
+    head.next = prev;
+    while(curr != null &amp;&amp; curr.next != null)
+    {   prev.next = curr.next;
+        prev = curr;
+        Node next = curr.next.next;
+        curr.next.next = curr;
+        curr = next;
+    }
+    prev.next = curr;   // handles both even and odd nodes
+    return head;
+}</code></pre>
+      <p>Board trace of the first pair: 10 → 20 → 30 … becomes head = 20 → 10 (prev), with curr = 30. The Java board writes the base case correctly with <code>||</code>.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the naive dry run's "After Second Iteration" is again drawn as 1 → 2 → 4 → 3 → 5; it should be 2 → 1 → 4 → 3 → 5.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-50">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTU5MzY%3D" target="_blank" rel="noopener">Clone a linked list with Random Pointer in C++</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated and noisy, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Every node has <code>next</code> (sequential) and <code>random</code>, which can point to any node, even itself, or be NULL. Pointers in C++, references in Java/Python.</p>
+    <p>Board example: 10 → 5 → 20 → 15 → 20 with random links: 10 → 20, 5 → 15, 20 → 10, and so on.</p>
+    <p><strong>Clone</strong> means creating new node objects in different memory locations with the same data, connected the same way (next and random). A change to one list must not show in the other. Return the head of the clone.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMwOQ%3D%3D" target="_blank" rel="noopener">Clone a linked list with Random Pointer</a></p>
+<ul>
+<li>Each of the N nodes has <code>next</code> and a second pointer to any node, called <code>arbit</code> here. Clone the list in O(N).</li>
+<li><strong>Approach 1, using extra space:</strong>
+  <ol>
+  <li>Create a duplicate Y for each node X and map them (mp[X] = Y).</li>
+  <li>Link the duplicates into a single list using only next.</li>
+  <li>Iterate over the old list and set <code>mp[X]-&gt;arbit = mp[X-&gt;arbit]</code>.</li>
+  </ol>
+  O(N) time, O(N) auxiliary space.</li>
+<li><strong>Approach 2, without extra space:</strong>
+  <ol>
+  <li>Insert a copy of node 1 between nodes 1 and 2, a copy of 2 between 2 and 3, and so on; the copy of N goes after the N-th node.</li>
+  <li>Copy the random links: <code>original-&gt;next</code> is the original's copy and <code>original-&gt;random-&gt;next</code> is the copy of the random node.</li>
+  <li>Restore the original list and separate the copy in a single loop, making sure the last original node's next is NULL; return the clone.</li>
+  </ol>
+  O(n) time (three passes, 3n). O(1) auxiliary space, since the n inserted nodes are needed for the clone anyway.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 1: hashing, Θ(n) time, Θ(n) auxiliary space</h4>
+<pre><code class="language-cpp">Node *clone(Node *h1)
+{
+    unordered_map&lt;Node *, Node *&gt; m;
+    for(Node *curr = h1; curr != NULL; curr = curr-&gt;next)
+        m[curr] = new Node(curr-&gt;data);
+    for(Node *curr = h1; curr != NULL; curr = curr-&gt;next)
+    {
+        m[curr]-&gt;next = m[curr-&gt;next];
+        m[curr]-&gt;random = m[curr-&gt;random];
+    }
+    return m[h1];
+}   // Implementation of Method 1</code></pre>
+      <ol>
+        <li>Create an <code>unordered_map</code>.</li>
+        <li>For every node of the given list, create a copy and store the mapping original → clone.</li>
+        <li>Traverse the list again. Each clone's next is the clone of <code>curr-&gt;next</code> and its random is the clone of <code>curr-&gt;random</code>, both looked up in the map.</li>
+        <li>Return <code>m[h1]</code>, the clone of the head.</li>
+      </ol>
+      <p>Two traversals, with map inserts and lookups counted as O(1).</p>
+    </div>
+    <div class="approach">
+      <h4>Method 2: without extra space, Θ(n) time, Θ(1) auxiliary space</h4>
+      <p>Use the original list's next links instead of the hash table: temporarily modify the original list, build the clone from it, then restore the original.</p>
+<pre><code class="language-cpp">Node *clone(Node *h1)
+{
+    // Step 1: insert clone nodes alternately
+    Node *curr = h1;
+    while(curr != NULL)
+    {   Node *next = curr-&gt;next;
+        curr-&gt;next = new Node(curr-&gt;data);
+        curr-&gt;next-&gt;next = next;
+        curr = next;
+    }
+    // Step 2: connect clone nodes with random
+    for(Node *curr = h1; curr != NULL; curr = curr-&gt;next-&gt;next)
+        curr-&gt;next-&gt;random = (curr-&gt;random == NULL) ? NULL
+                                                   : curr-&gt;random-&gt;next;
+    // Step 3: separate original and clone nodes
+    Node *h2 = h1-&gt;next;
+    Node *clone = h2;
+    for(Node *curr = h1; curr != NULL; curr = curr-&gt;next)
+    {   curr-&gt;next = curr-&gt;next-&gt;next;
+        clone-&gt;next = clone-&gt;next ? clone-&gt;next-&gt;next : NULL;
+        clone = clone-&gt;next;
+    }
+    return h2;
+}</code></pre>
+      <ul>
+        <li><strong>Step 1:</strong> 1 → 2 → 3 becomes 1 → 1′ → 2 → 2′ → 3 → 3′, each insertion O(1). Save <code>next</code> first so the rest of the list isn't lost.</li>
+        <li><strong>Step 2:</strong> a clone's random is the clone of the original's random, which is <code>random-&gt;next</code>, or NULL if random is NULL.</li>
+        <li><strong>Step 3:</strong> relink the alternate nodes. <code>curr</code> never needs a null check on its next: every original node is followed by its clone. <code>clone-&gt;next</code> can be NULL at the end, so it is checked.</li>
+      </ul>
+      <p>Three traversals in all.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong></p>
+      <ul>
+        <li>The Method 1 board writes <code>m[curr].next</code> and <code>m[curr].random</code>. The map values are <code>Node *</code>, so in C++ it's <code>-&gt;</code>.</li>
+        <li>Step 1's last line is written <code>curri = next;</code>; it's <code>curr</code>.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-51">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTU5MzU%3D" target="_blank" rel="noopener">Clone a linked list with Random Pointer in Java</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated and noisy, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The Java version of the previous video, with the same explanation: the hashing method, then the three-step method with clone nodes inserted alternately. See the C++ video's notes for the reasoning. Hashing: Θ(n) time and Θ(n) auxiliary space. Without extra space: Θ(n) time and Θ(1) auxiliary space.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Method 1: HashMap</h4>
+<pre><code class="language-java">Node clone(Node h1)
+{   HashMap&lt;Node, Node&gt; m = new HashMap&lt;&gt;();
+    for(Node curr = h1; curr != null; curr = curr.next)
+        m.put(curr, new Node(curr.data));
+    for(Node curr = h1; curr != null; curr = curr.next)
+    {   Node clone = m.get(curr);
+        clone.next = m.get(curr.next);
+        clone.random = m.get(curr.random);
+    }
+    return m.get(h1);
+}   // Implementation of Method 1</code></pre>
+      <p><code>m.get(null)</code> returns null, so a null next or random needs no special case.</p>
+    </div>
+    <div class="approach">
+      <h4>Method 2: without extra space</h4>
+<pre><code class="language-java">Node clone(Node h1)
+{   // Step 1: insert clone nodes alternately
+    Node curr = h1;
+    while(curr != null)
+    {   Node next = curr.next;
+        curr.next = new Node(curr.data);
+        curr.next.next = next;
+        curr = next;
+    }
+    // Step 2: connect clone nodes with random
+    for(curr = h1; curr != null; curr = curr.next.next)
+        curr.next.random = (curr.random == null) ? null : curr.random.next;
+    // Step 3: separate original and clone nodes
+    Node h2 = h1.next;
+    Node clone = h2;
+    for(curr = h1; curr != null; curr = curr.next)
+    {   curr.next = curr.next.next;
+        clone.next = (clone.next != null) ? clone.next.next : null;
+        clone = clone.next;
+    }
+    return h2;
+}</code></pre>
+      <p>Board diagram: 1 → 2 → 3 becomes 1 → 1′ → 2 → 2′ → 3 → 3′. Then the clones' random links are set (1's random is 2, so 1′'s random is 2.next = 2′). Then the list is split back into h1 = 1 → 2 → 3 and h2 = 1′ → 2′ → 3′.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong></p>
+      <ul>
+        <li>Step 3 is written <code>clone.next = clone.next ? clone.next.next : null;</code>. Java doesn't allow a reference as a condition, so it's <code>clone.next != null</code>.</li>
+        <li>Step 2's update is written <code>curr = curr.next, next</code>; it's <code>curr.next.next</code>.</li>
+        <li>Step 1's last line is <code>curri = next;</code>; it's <code>curr</code>.</li>
+        <li>The board redeclares <code>Node curr</code> in the loops after Step 1, which Java rejects because <code>curr</code> is already in scope. Shown above as <code>curr = h1</code>.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-52">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQyMQ%3D%3D" target="_blank" rel="noopener">LRU Cache Design</a> · Notes from the full course transcript and the board (a frame every 40 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A cache is memory very close to the CPU: very fast, but small compared to RAM, so it must be used efficiently. LRU (<strong>least recently used</strong>) is one technique for this. It relies on <strong>temporal locality</strong>: an item accessed now is likely to be accessed again soon. Recently accessed items are kept, and the least recent one is removed when space is needed.</p>
+    <p>Accessing an item already in the cache is a <strong>hit</strong>; otherwise it is a <strong>miss</strong>.</p>
+    <p>Board example: cache size 4, reference sequence 10, 20, 10, 30, 40, 50, 30, 40, 60, 30, kept in order from most to least recently used.</p>
+    <ul>
+      <li>10: miss, [10].</li>
+      <li>20: miss, [20, 10].</li>
+      <li>10: hit, [10, 20].</li>
+      <li>30: miss, [30, 10, 20].</li>
+      <li>40: miss, [40, 30, 10, 20].</li>
+      <li>50: miss, remove 20, [50, 40, 30, 10].</li>
+      <li>30: hit, [30, 50, 40, 10].</li>
+      <li>40: hit, [40, 30, 50, 10].</li>
+      <li>60: miss, remove 10, [60, 40, 30, 50].</li>
+      <li>30: hit, [30, 60, 40, 50].</li>
+    </ul>
+    <p><strong>Design task:</strong> given a capacity, when an item is referred:</p>
+    <ul>
+      <li>If present, mark it most recently used.</li>
+      <li>If absent and there's space, insert it as most recently used.</li>
+      <li>If absent and full, remove the least recently used item, then insert.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMxMA%3D%3D" target="_blank" rel="noopener">LRU Cache Design</a></p>
+<ul>
+<li>Design an LRU cache supporting two operations:
+  <ul>
+  <li><code>get(key)</code>: the value (always positive) if the key exists, else −1.</li>
+  <li><code>set(key, value)</code>: set or insert the value. At capacity, invalidate the least recently used item before inserting a new one.</li>
+  </ul></li>
+<li>Asked at Adobe, Hike and many other companies. Both operations are O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Simple implementation: array</h4>
+      <p>Do the same operations in an array of size 4. A hit needs a search through the array, and a miss also shifts n−1 items back to insert at the front, so both hit and miss are O(n).</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient implementation: hash table + doubly linked list</h4>
+      <ul>
+        <li>The <strong>hash table (HT)</strong> gives fast search and insert. Key: the item; value: the reference (Java) or address (C++) of its node in the DLL.</li>
+        <li>Hashing keeps no order, so a <strong>doubly linked list (DLL)</strong> holds the recency order: most recent at the front (head), least recent at the tail.</li>
+        <li>Keeping both head and tail pointers lets the DLL work like a queue that can also move a middle node to the front in O(1) given its reference. That's why the HT stores references.</li>
+      </ul>
+<pre><code>Refer(x)
+{   Look for x in the HT.
+    (a) If Found (Hit): find the reference of the node in DLL.
+        Move the node to the front of DLL.
+    (b) If Not Found (Miss):
+        (i)  Insert a new node at the front of DLL.
+        (ii) Insert an entry into the HT.
+}</code></pre>
+      <p>On a miss with a full cache, first remove the tail node of the DLL (via the tail pointer) and delete its entry from the HT. In the example, 50 removes 20 and its entry (20, R2), then inserts (50, R5). A hit doesn't change the HT.</p>
+      <p>Time complexity: hit O(1) (HT lookup plus moving the node to the front) and miss O(1) (insert at the DLL front plus HT insert).</p>
+    </div>
+    <div class="added">
+      <p><strong>Source slips:</strong></p>
+      <ul>
+        <li>The course Description expands LRU as "Last Recently Used"; it is <em>Least</em> Recently Used, as the video says.</li>
+        <li>The transcript says 50 removes "20 and R4"; 20's node was created second, so its reference is R2.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-53">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTQ0NA%3D%3D" target="_blank" rel="noopener">Merge two sorted linked lists</a> · Notes from the full course transcript and the board (a frame every 45 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Merge two sorted linked lists into one sorted list <strong>in place</strong>: reuse the existing nodes and change their links, with no new nodes. Examples:</p>
+    <ul>
+      <li>a: 10 → 20 → 30, b: 5 → 25 gives 5 → 10 → 20 → 25 → 30 (5's next becomes 10, 20's next 25, 25's next 30).</li>
+      <li>One list empty: return the other.</li>
+      <li>a: 10, b: 40 → 50 gives 10 → 40 → 50.</li>
+    </ul>
+    <p><strong>Idea:</strong> the smaller of the two first nodes is the head. Keep a <strong>tail</strong> pointer too, so any node can be appended with <code>tail-&gt;next = node</code>. Repeatedly append the smaller of <code>a</code> and <code>b</code> after tail, move tail to it, and advance in the list it came from. When either list becomes NULL, attach the rest of the other after tail.</p>
+    <p>Board walk-through: a = 10 → 20 → 30 and b = 5 → 15 → 18 → 35 → 40 merge to 5 → 10 → 15 → 18 → 20 → 30 → 35 → 40.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMxMQ%3D%3D" target="_blank" rel="noopener">Merge two sorted linked lists</a></p>
+<ul>
+<li>Merge two sorted lists of N and M nodes in place and return the merged head. a: 5→10→15 and b: 2→3→20 give 2→3→5→10→15→20; a: 1→1 and b: 2→4 give 1→1→2→4.</li>
+<li><strong>Dummy node:</strong> a temporary dummy node starts the result list and <code>Tail</code> always points to its last node, so appending is easy. With one pointer in each list, traverse until one is exhausted, adding the smaller node each time and advancing that pointer. O(N + M) time, O(1) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Implementation: O(m + n) time, O(1) auxiliary space</h4>
+<pre><code class="language-cpp">Node *sortedMerge(Node *a, Node *b)
+{
+    if(a == NULL) return b;
+    if(b == NULL) return a;
+    Node *head = NULL, *tail = NULL;
+    if(a-&gt;data &lt;= b-&gt;data)
+    {   head = tail = a; a = a-&gt;next; }
+    else
+    {   head = tail = b; b = b-&gt;next; }
+    while(a != NULL &amp;&amp; b != NULL)
+    {   if(a-&gt;data &lt;= b-&gt;data)
+        {   tail-&gt;next = a; tail = a; a = a-&gt;next; }
+        else
+        {   tail-&gt;next = b; tail = b; b = b-&gt;next; }
+    }
+    if(a == NULL) tail-&gt;next = b;
+    else tail-&gt;next = a;
+    return head;
+}</code></pre>
+      <ul>
+        <li>The corner cases come first. The head/tail set-up is done once before the loop, so the loop always has a valid tail; head is set only once so it can be returned.</li>
+        <li>Board dry run on a = 10 → 20 → 30, b = 5 → 35: head = tail = 5, then 10, 20 and 30 are appended. a becomes NULL, so tail's next = 35.</li>
+        <li>Java is the same with <code>.</code> and <code>null</code>.</li>
+      </ul>
+      <p>Time is O(m + n), not Θ: if one list is empty it is Θ(1). The worst case Θ(m + n) is when the items are well mingled (5, 15, 25 with 10, 20, 30).</p>
+      <p>Auxiliary space is O(1). This is where linked lists beat arrays, which generally need extra space to merge: a linked list can insert or remove in the middle in O(1).</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the C++ declaration is written <code>Node *head = NULL; *tail = NULL;</code> (a semicolon instead of a comma), so <code>tail</code> wouldn't be declared. Shown above with a comma, as in the Java version.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-54">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/video/MTg0MA%3D%3D" target="_blank" rel="noopener">Palindrome Linked List</a> · <strong>No transcript</strong>: notes from the board (a frame every 5 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Check whether a linked list of characters is a palindrome. Board examples:</p>
+    <ul>
+      <li>R → A → D → A → R: Yes.</li>
+      <li>G → F → G: Yes.</li>
+      <li>G → E → E → K: No.</li>
+    </ul>
+    <p>Naive: O(n) time, O(n) space. Efficient: O(n) time, O(1) space (Description).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/NzMxMg%3D%3D" target="_blank" rel="noopener">Palindrome Linked List</a></p>
+<ul>
+<li>R→A→D→A→R→NULL gives Yes; C→O→D→E→NULL gives No.</li>
+<li><strong>Stack:</strong> push every node while traversing from head to tail. Traverse again, popping a node for each visited node and comparing their data; if all match, return true. O(N) time, O(N) auxiliary space.</li>
+<li><strong>Reversing the second half:</strong>
+  <ol>
+  <li>Get the middle.</li>
+  <li>Reverse the second half.</li>
+  <li>Check whether the two halves are identical.</li>
+  <li>Reconstruct the original list by reversing the second half again and attaching it back to the first half.</li>
+  </ol>
+  O(N) time, O(1) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive method: stack</h4>
+<pre><code class="language-java">boolean isPalindrome(Node head)
+{   Deque&lt;Character&gt; stack = new ArrayDeque&lt;Character&gt;();
+    for(Node curr = head; curr != null; curr = curr.next)
+        stack.push(curr.data);
+    for(Node curr = head; curr != null; curr = curr.next)
+    {   if(stack.pop() != curr.data)
+            return false;
+    }
+    return true;
+}</code></pre>
+<pre><code class="language-cpp">bool isPalindrome(Node *head)
+{
+    stack&lt;char&gt; st;
+    for(Node *curr = head; curr != NULL; curr = curr-&gt;next)
+        st.push(curr-&gt;data);
+    for(Node *curr = head; curr != NULL; curr = curr-&gt;next)
+    {   if(st.top() != curr-&gt;data)
+            return false;
+        st.pop();
+    }
+    return true;
+}</code></pre>
+      <p>The first loop pushes every character; the second pops and compares with the list from the start. The stack gives the characters in reverse, so any mismatch means the list isn't a palindrome. Board: g → f → g fills the stack with g, f, g, and after the second loop it is empty.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient approach: reverse the second half</h4>
+      <p>Find the second half and reverse it: x0 → x1 → x2 → x3 → x4 → x5 becomes x0 → x1 → x2 → x5 → x4 → x3. Then compare the first half with the reversed second half one by one: x0 with x5, x1 with x4, x2 with x3.</p>
+<pre><code class="language-java">boolean isPalindrome(Node head)
+{   if(head == null) return true;
+    Node slow = head, fast = head;
+    while(fast.next != null &amp;&amp; fast.next.next != null)
+    {   slow = slow.next;
+        fast = fast.next.next;
+    }
+    Node rev = reverseList(slow.next);
+    Node curr = head;
+    while(rev != null)
+    {   if(rev.data != curr.data)
+            return false;
+        rev = rev.next;
+        curr = curr.next;
+    }
+    return true;
+}</code></pre>
+      <ul>
+        <li>The slow/fast loop stops with <code>slow</code> at the end of the first half: the middle for odd lengths, the first middle for even. Board: R A D A R gives slow = D.</li>
+        <li><code>reverseList(slow.next)</code> reverses the second half and returns its head <code>rev</code>. Board after reversing: R → A → D → R → A.</li>
+        <li>Compare from <code>head</code> and <code>rev</code> until <code>rev</code> becomes null.</li>
+        <li>The C++ version is the same with <code>-&gt;</code> and <code>NULL</code>. <code>reverseList</code> is the iterative reverse from the earlier video.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the C++ efficient version's signature is written <code>isPalindrome(Node *root)</code> while the body uses <code>head</code>. It's <code>head</code>, as in the Java version.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-LinkedList-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (25 problems, in course order), plus the three Articles-tab items that don't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/count-nodes-of-linked-list" target="_blank" rel="noopener">Length of Linked List</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/find-length-of-loop" target="_blank" rel="noopener">Cycle Length in Linked List</a></td><td>Medium</td><td>Video 43</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/insert-a-node-in-doubly-linked-list" target="_blank" rel="noopener">Insertion in a Doubly Linked List</a></td><td>Easy</td><td>Videos 18–19</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/add-two-numbers-represented-by-linked-lists" target="_blank" rel="noopener">Add Number Linked Lists</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/swap-kth-node-from-beginning-and-kth-node-from-end-in-a-singly-linked-list" target="_blank" rel="noopener">Swap Kth Nodes from Ends</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/delete-without-head-pointer" target="_blank" rel="noopener">Delete Node Without Linked List Head</a></td><td>Medium</td><td>Video 44</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/remove-duplicate-element-from-sorted-linked-list" target="_blank" rel="noopener">Remove Duplicates in Sorted Linked List</a></td><td>Easy</td><td>Video 39</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/identical-linked-lists" target="_blank" rel="noopener">Identical Linked Lists</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/nth-node-from-end-of-linked-list" target="_blank" rel="noopener">Kth from End of Linked List</a></td><td>Easy</td><td>Video 35</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/remove-loop-in-linked-list" target="_blank" rel="noopener">Remove Cycle in Linked List</a></td><td>Medium</td><td>Video 43</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/intersection-point-in-y-shapped-linked-lists" target="_blank" rel="noopener">Intersection in Y Shaped Lists</a></td><td>Medium</td><td>Video 47</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/pairwise-swap-of-nodes-in-linkelist" target="_blank" rel="noopener">Pairwise Swap in Linked List</a></td><td>Easy</td><td>Videos 48–49</td></tr>
+        <tr><td>13</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/clone-a-linked-list-with-next-and-random-pointer" target="_blank" rel="noopener">Clone List with Next and Random</a></td><td>Hard</td><td>Videos 50–51</td></tr>
+        <tr><td>14</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/lru-cache" target="_blank" rel="noopener">LRU Cache</a></td><td>Hard</td><td>Video 52</td></tr>
+        <tr><td>15</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/merge-two-sorted-linked-lists" target="_blank" rel="noopener">Merge Two Sorted Linked Lists</a></td><td>Medium</td><td>Video 53</td></tr>
+        <tr><td>16</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/merge-k-sorted-linked-lists" target="_blank" rel="noopener">Merge K Sorted Linked Lists</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>17</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/check-if-linked-list-is-pallindrome" target="_blank" rel="noopener">Palindrome Linked List</a></td><td>Medium</td><td>Video 54</td></tr>
+        <tr><td>18</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/delete-node-in-doubly-linked-list" target="_blank" rel="noopener">Delete in a Doubly Linked List</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>19</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/insert-in-sorted-way-in-a-sorted-dll" target="_blank" rel="noopener">Sorted Insert in DLL</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>20</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/reverse-a-linked-list" target="_blank" rel="noopener">Reverse Linked List</a></td><td>Easy</td><td>Videos 36–38</td></tr>
+        <tr><td>21</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/display-linked-list" target="_blank" rel="noopener">Linked List Traversal</a></td><td>Basic</td><td>Videos 6–7</td></tr>
+        <tr><td>22</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/join-two-linked-lists" target="_blank" rel="noopener">Join Two Linked Lists</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>23</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/is-linked-list-sorted" target="_blank" rel="noopener">Check if Linked List Sorted</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>24</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/find-middle-of-circular-doubly-linked-list" target="_blank" rel="noopener">Middle of Circular Doubly Linked List</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>25</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/problem/is-the-doubly-linked-list-circular" target="_blank" rel="noopener">Check for Doubly or Circular</a></td><td>Easy</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/MjYwMw%3D%3D" target="_blank" rel="noopener">Sample Problems on Linked List</a></p>
+<ul>
+<li><strong>Reverse a linked list</strong> (by changing links):
+  <ul>
+  <li><em>Three pointers</em>: prev, current and next.</li>
+  <li><em>Two pointers</em>: current and next, "a little bit tricky".</li>
+  <li><em>Recursive</em>: traverse to the last node, which becomes the head of the reversed list. Each call makes the previous (current) node the next of the node returned by the recursion, then returns.</li>
+  </ul></li>
+<li><strong>Detect a loop:</strong>
+  <ul>
+  <li><em>Hashing</em>: store node addresses; reaching NULL means false, and a next pointing to a stored node means true.</li>
+  <li><em>Floyd's cycle-finding</em>, the fastest method: one pointer moves one step and the other two; if they meet, there is a loop. Like two runners at different speeds on a circular track, who definitely meet.</li>
+  </ul></li>
+<li><strong>Intersection point of two lists</strong> (an inverted-Y shape caused by a programming error; the example's intersection is 15):
+  <ul>
+  <li><em>Visited flag</em> on each node, O(m+n), but it needs extra information in every node.</li>
+  <li><em>Hash</em> of the first list's addresses, then look up the second list's nodes.</li>
+  <li><em>Node-count difference</em>: d = abs(c1 − c2); advance d nodes in the bigger list, then traverse both in parallel until a common node (compare addresses).</li>
+  </ul></li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/MjMyNQ%3D%3D" target="_blank" rel="noopener">XOR Linked Lists</a></p>
+<ul>
+<li>A memory-efficient doubly linked list with one address field per node instead of two. Each node stores <code>npx</code>, the bitwise XOR of the previous and next nodes' addresses.</li>
+<li>Example A–B–C–D:
+  <ul>
+  <li>Ordinary: A has prev = NULL and next = add(B); …; D has prev = add(C) and next = NULL.</li>
+  <li>XOR: A has npx = 0 XOR add(B); B has add(A) XOR add(C); C has add(B) XOR add(D); D has add(C) XOR 0.</li>
+  </ul></li>
+<li><strong>Traversal</strong> works forward and backward, but you must remember the previously accessed node's address. At C, with add(B), add(B) XOR npx(C) = add(B) XOR add(B) XOR add(D) = add(D), the next node. Backward traversal works the same way.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-LinkedList/article/MjMyNg%3D%3D" target="_blank" rel="noopener">Circular Linked Lists</a></p>
+<ul>
+<li>All nodes form a circle with no NULL at the end; singly or doubly circular.</li>
+<li><strong>Implementation</strong> keeps an external pointer <code>last</code> to the last node, so <code>last-&gt;next</code> is the first node (last = Z, last-&gt;next = P in the picture). With a start pointer, inserting at the beginning or at the end both need a whole traversal; with <code>last</code>, both take constant time whatever the list's length.</li>
+<li><strong>Advantages:</strong>
+  <ul>
+  <li>Any node can be the starting point: stop when the first visited node is visited again.</li>
+  <li>Useful for a queue: no separate front and rear pointers, since front = last's next.</li>
+  <li>Good for repeatedly going around a list, as when an OS cycles through running applications, giving each a slice of time.</li>
+  <li>Circular doubly linked lists implement advanced structures like the Fibonacci heap.</li>
+  </ul></li>
+</ul>
+    </div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -18347,7 +21367,63 @@ const TRACKS = [
       ["Lexicographic Rank of a String", "19:10"],
       ["Longest Substring with Distinct Characters", "17:58"]
     ] },
-  { id: "DSASP-LinkedList", slug: "linked-list", name: "Linked List", counts: [54, 40, 25, 10, 1] },
+  { id: "DSASP-LinkedList", slug: "linked-list", name: "Linked List", counts: [54, 40, 25, 10, 1],
+    videos: [
+      ["Problems With Array Data Structures", "17:30"],
+      ["Introduction to Linked List", "3:23"],
+      ["Simple Linked List Implementation in C++", "8:43"],
+      ["Simple Linked List Implementation in Java", "6:11"],
+      ["Applications of Linked List", "6:39"],
+      ["Traversing a Linked List in C++", "6:49"],
+      ["Traversing a Linked List in Java", "5:08"],
+      ["Recursive Traversal of Singly Linked List", "4:19"],
+      ["Insert at Begin of Singly Linked List", "6:02"],
+      ["Insert at the end of Singly Linked List", "5:14"],
+      ["Insert at given position in Singly Linked List", "7:36"],
+      ["Delete First Node of Singly Linked List", "3:22"],
+      ["Delete Last Node of Singly Linked List", "5:52"],
+      ["Search in a Linked List (Iterative and Recursive)", "11:09"],
+      ["Doubly Linked List in C++", "2:49"],
+      ["Doubly Linked List in Java", "2:57"],
+      ["Singly Vs Doubly Linked List (Advantages + Disadvantages)", "6:01"],
+      ["Insert at Begin of Doubly Linked List", "4:00"],
+      ["Insert at End Doubly Linked List", "5:54"],
+      ["Reverse a Doubly Linked List", "8:00"],
+      ["Delete Head of a Doubly Linked List", "3:51"],
+      ["Delete Last of a Doubly Linked List", "6:13"],
+      ["Circular Linked List in C++", "2:44"],
+      ["Circular Linked List in Java", "2:43"],
+      ["Circular Linked List (Advantages + Disadvantages)", "4:25"],
+      ["Circular Linked List Traversal in C++", "5:59"],
+      ["Circular Linked List Traversal in Java", "7:45"],
+      ["Insert at Begin of Circular Linked List", "10:17"],
+      ["Insert at the end of Circular Linked List", "8:32"],
+      ["Delete Head of Circular Linked List", "5:42"],
+      ["Delete Kth of a Circular Linked List", "7:14"],
+      ["Circular Doubly Linked List", "7:28"],
+      ["Sorted Insert in a Singly Linked List", "10:35"],
+      ["Middle of linked list", "6:55"],
+      ["Nth Node from end of Linked List", "9:01"],
+      ["Reverse a linked list iterative", "10:02"],
+      ["Recursive reverse a linked list (Part 1)", "7:09"],
+      ["Recursive reverse a linked list (Part 2)", "7:02"],
+      ["Remove duplicates from a sorted Singly Linked List", "10:00"],
+      ["Reverse a linked list in groups of size k", "13:03"],
+      ["Detect loop", "14:08"],
+      ["Detect loop using floyd cycle detection", "13:37"],
+      ["Detect and remove loop in linked list", "18:13"],
+      ["Delete node with only pointer given to it", "4:34"],
+      ["Segregate Even and Odd Nodes in C++", "9:10"],
+      ["Segregate Even and Odd Nodes in Java", "9:50"],
+      ["Intersection Point of two linked list", "8:02"],
+      ["Pairwise Swap Nodes of linked list in C++", "11:41"],
+      ["Pairwise Swap Nodes of linked list in Java", "11:51"],
+      ["Clone a linked list with Random Pointer in C++", "13:38"],
+      ["Clone a linked list with Random Pointer in Java", "13:51"],
+      ["LRU Cache Design", "13:24"],
+      ["Merge two sorted linked lists", "15:03"],
+      ["Palindrome Linked List", "10:18"]
+    ] },
   { id: "DSASP-Stack", slug: "stack", name: "Stack", counts: [27, 19, 17, 10, 0] },
   { id: "DSASP-Queue", slug: "queue", name: "Queue", counts: [9, 5, 9, 10, 0] },
   { id: "DSASP-Deque", slug: "deque", name: "Deque", counts: [8, 7, 6, 10, 1] },

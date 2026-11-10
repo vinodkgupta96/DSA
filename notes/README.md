@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 10 of 24 tracks · 204 of 470 videos · 157 of 342 articles · 163 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 11 of 24 tracks · 258 of 470 videos · 197 of 342 articles · 188 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -85,8 +85,8 @@ Report back with:
 | 8 | Matrix | 12 | 11 | 15 | ✅ Done: 12/12 videos, 11/11 articles, 15 problems |
 | 9 | Hashing | 29 | 23 | 22 | ✅ Done: 29/29 videos, 23/23 articles, 22 problems |
 | 10 | Strings | 19 | 12 | 26 | ✅ Done: 19/19 videos, 12/12 articles, 26 problems |
-| 11 | Linked List | 54 | 40 | 25 | ⏭ Next |
-| 12 | Stack | 27 | 19 | 17 | Not started |
+| 11 | Linked List | 54 | 40 | 25 | ✅ Done: 54/54 videos, 40/40 articles, 25 problems |
+| 12 | Stack | 27 | 19 | 17 | ⏭ Next |
 | 13 | Queue | 9 | 5 | 9 | Not started |
 | 14 | Deque | 8 | 7 | 6 | Not started |
 | 15 | Tree | 30 | 24 | 32 | Not started |
@@ -376,6 +376,67 @@ Every Sorting article matches a video, so the Track practice set lists only the 
 
 Every Strings article matches a video, so the Track practice set lists only the 26 problems. V2 has no Transcript button and was done from frames and the description; no transcript was cut off early. Course progress was unchanged (8/19 videos watched, 20%, no article marked as read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 19 Strings videos.
 
+### Track 11: Linked List, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Problems With Array Data Structures | 17:30 | Transcript + board |  |
+| 2 | Introduction to Linked List | 3:23 | Transcript + board | Linked List \| Introduction |
+| 3 | Simple Linked List Implementation in C++ | 8:43 | Transcript + board |  |
+| 4 | Simple Linked List Implementation in Java | 6:11 | Board + description |  |
+| 5 | Applications of Linked List | 6:39 | Board + description |  |
+| 6 | Traversing a Linked List in C++ | 6:49 | Transcript + board |  |
+| 7 | Traversing a Linked List in Java | 5:08 | Board + description |  |
+| 8 | Recursive Traversal of Singly Linked List | 4:19 | Board + description | Recursive Traversal of Singly Linked List |
+| 9 | Insert at Begin of Singly Linked List | 6:02 | Board + description | Insertion in Singly Linked Lists; Insert at Begin of Singly Linked List |
+| 10 | Insert at the end of Singly Linked List | 5:14 | Transcript + board | Insert at the end of Singly Linked List |
+| 11 | Insert at given position in Singly Linked List | 7:36 | Board + description | Insert at given position in Singly Linked List |
+| 12 | Delete First Node of Singly Linked List | 3:22 | Transcript + board | Delete First Node of Singly Linked List |
+| 13 | Delete Last Node of Singly Linked List | 5:52 | Transcript + board | Delete Last Node of Singly Linked List |
+| 14 | Search in a Linked List (Iterative and Recursive) | 11:09 | Board + description | Search in a Linked List (Iterative and Recursive) |
+| 15 | Doubly Linked List in C++ | 2:49 | Board + description | Doubly Linked List |
+| 16 | Doubly Linked List in Java | 2:57 | Board + description |  |
+| 17 | Singly Vs Doubly Linked List (Advantages + Disadvantages) | 6:01 | Transcript + board |  |
+| 18 | Insert at Begin of Doubly Linked List | 4:00 | Transcript + board | Insertion in a Doubly Linked List |
+| 19 | Insert at End Doubly Linked List | 5:54 | Transcript + board |  |
+| 20 | Reverse a Doubly Linked List | 8:00 | Transcript + board | Reverse a Doubly Linked List |
+| 21 | Delete Head of a Doubly Linked List | 3:51 | Transcript + board | Delete Head of a Doubly Linked List |
+| 22 | Delete Last of a Doubly Linked List | 6:13 | Transcript + board |  |
+| 23 | Circular Linked List in C++ | 2:44 | Board + description | Circular Linked in C++ |
+| 24 | Circular Linked List in Java | 2:43 | Board + description |  |
+| 25 | Circular Linked List (Advantages + Disadvantages) | 4:25 | Board + description | Circular Linked List (Advantages & Disadvantages) |
+| 26 | Circular Linked List Traversal in C++ | 5:59 | Transcript + board | Circular Linked List Traversal |
+| 27 | Circular Linked List Traversal in Java | 7:45 | Transcript + board |  |
+| 28 | Insert at Begin of Circular Linked List | 10:17 | Transcript + board | Insert at Begin of Circular Linked List |
+| 29 | Insert at the end of Circular Linked List | 8:32 | Transcript + board | Insert at the end of Circular Linked List |
+| 30 | Delete Head of Circular Linked List | 5:42 | Transcript + board | Delete Head of Circular Linked List |
+| 31 | Delete Kth of a Circular Linked List | 7:14 | Board + description |  |
+| 32 | Circular Doubly Linked List | 7:28 | Transcript + board | Circular Doubly Linked List |
+| 33 | Sorted Insert in a Singly Linked List | 10:35 | Transcript + board | Sorted Insert in a Singly Linked List |
+| 34 | Middle of linked list | 6:55 | Transcript + board | Middle of linked list |
+| 35 | Nth Node from end of Linked List | 9:01 | Board + description | Nth Node from end of Linked List |
+| 36 | Reverse a linked list iterative | 10:02 | Transcript + board | Reverse a linked list iterative |
+| 37 | Recursive reverse a linked list (Part 1) | 7:09 | Transcript + board |  |
+| 38 | Recursive reverse a linked list (Part 2) | 7:02 | Transcript + board |  |
+| 39 | Remove duplicates from a sorted Singly Linked List | 10:00 | Partial transcript + board | Remove duplicates from a sorted Singly Linked List |
+| 40 | Reverse a linked list in groups of size k | 13:03 | Transcript + board | Reverse a linked list in groups of size k |
+| 41 | Detect loop | 14:08 | Transcript + board | Detect loop |
+| 42 | Detect loop using floyd cycle detection | 13:37 | Transcript + board | Detect loop using floyd cycle detection |
+| 43 | Detect and remove loop in linked list | 18:13 | Transcript + board | Detect and remove loop in linked list |
+| 44 | Delete node with only pointer given to it | 4:34 | Transcript + board | Delete node with only pointer given to it |
+| 45 | Segregate Even and Odd Nodes in C++ | 9:10 | Board + description | Segregate Even and Odd Nodes |
+| 46 | Segregate Even and Odd Nodes in Java | 9:50 | Board + description |  |
+| 47 | Intersection Point of two linked list | 8:02 | Transcript + board | Intersection of two linked list |
+| 48 | Pairwise Swap Nodes of linked list in C++ | 11:41 | Transcript + board | Pairwise Swap Nodes of linked list |
+| 49 | Pairwise Swap Nodes of linked list in Java | 11:51 | Transcript + board |  |
+| 50 | Clone a linked list with Random Pointer in C++ | 13:38 | Transcript + board | Clone a linked list with Random Pointer |
+| 51 | Clone a linked list with Random Pointer in Java | 13:51 | Transcript + board |  |
+| 52 | LRU Cache Design | 13:24 | Transcript + board | LRU Cache Design |
+| 53 | Merge two sorted linked lists | 15:03 | Transcript + board | Merge two sorted linked lists |
+| 54 | Palindrome Linked List | 10:18 | Board + description | Palindrome Linked List |
+
+"Sample Problems on Linked List", "XOR Linked Lists" and "Circular Linked Lists" match no video, so they're in the Track practice set with the 25 problems. V4, V5, V7, V8, V9, V11, V14, V15, V16, V23, V24, V25, V31, V35, V45, V46 and V54 have no Transcript button and were done from frames and the description. V39's transcript stops at 7:00 of 10:00; the rest is from frames. Course progress was unchanged (4/54 videos watched, 17%, 0/40 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 54 Linked List videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -397,10 +458,11 @@ Every Strings article matches a video, so the Track practice set lists only the 
 - `c40a4e7`: Add Sorting track notes (39 videos, 29 articles, 20 problems)
 - `671776d`: Add Matrix track notes (12 videos, 11 articles, 15 problems)
 - `4d2a6f6`: Add Hashing track notes (29 videos, 23 articles, 22 problems)
-- (this commit): Add Strings track notes (19 videos, 12 articles, 26 problems)
+- `5a47254`: Add Strings track notes (19 videos, 12 articles, 26 problems)
+- (this commit): Add Linked List track notes (54 videos, 40 articles, 25 problems)
 
 ### What's next
-- **Track 11: Linked List** (54 videos, 40 articles, 25 problems), starting straight away.
+- **Track 12: Stack** (27 videos, 19 articles, 17 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -423,6 +485,7 @@ Every Strings article matches a video, so the Track practice set lists only the 
   - Pushed the branch to origin up to `671776d` (user's OK).
   - Completed track 9 (Hashing): 29 videos, 23 articles, 22 problems.
   - Completed track 10 (Strings): 19 videos, 12 articles, 26 problems.
+  - Completed track 11 (Linked List): 54 videos, 40 articles, 25 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -439,6 +502,21 @@ Every Strings article matches a video, so the Track practice set lists only the 
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Linked List: teacher slips flagged
+- V13 (board): the Java version's second check is `if(head.next = null)`, an assignment; it should be `==`.
+- V3 (board): the short version's third line is written `head -> next => next`.
+- V33 (board): the Java sorted insert writes `curr.next.dat` for `data`. The course Description's second example shows a stray leading 5 (10→20→30, x = 25 → "5->10->20->25->30").
+- V35 (board): the Java Method 1 signature omits `int n`.
+- V40 (Description): the first example's output is "30->10->20->50->40"; the board and transcript give 30→20→10→50→40.
+- V43 (board): the detect-and-remove code breaks when the loop starts at head (m = 0, more than one node): the second phase doesn't run, and `fast->next = NULL` cuts head's next.
+- V45 (board): the C++ segregate's odd branch is `os = oe = NULL;`; it should be `curr`. `x` is undeclared in V45 and V46.
+- V48 (board): the C++ base case uses `and` where `||` is meant; V48 and V49 draw the naive "After Second Iteration" as 1→2→4→3→5 instead of 2→1→4→3→5.
+- V50/V51 (board): C++ Method 1 uses `.` on `Node *` map values; `curri` for `curr`; Java Step 3 uses a reference as a condition, Step 2 has `curr.next, next`, and `Node curr` is redeclared.
+- V52: the Description expands LRU as "Last Recently Used"; the transcript says "20 and R4" where R2 is meant.
+- V53 (board): `Node *head = NULL; *tail = NULL;`, with a semicolon for a comma.
+- V54 (board): the C++ efficient signature takes `root` but the body uses `head`.
+- `&&` is drawn like "$$" (V11). Videos without a transcript (17 of them): spoken slips couldn't be checked.
 
 ### Strings: teacher slips flagged
 - V2 (board, no transcript): in the C++ string comparison, `s1 < s2` prints "Greater" and the else prints "Smaller", the reverse of the strcmp version; strcmp/strcpy are written "strcmb"/"strcby".
