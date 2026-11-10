@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 20 of 24 tracks · 420 of 470 videos · 308 of 342 articles · 323 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 21 of 24 tracks · 451 of 470 videos · 333 of 342 articles · 351 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -95,8 +95,8 @@ Report back with:
 | 18 | Graph | 30 | 20 | 24 | ✅ Done: 30/30 videos, 20/20 articles, 24 problems |
 | 19 | Greedy | 12 | 5 | 6 | ✅ Done: 12/12 videos, 5/5 articles, 6 problems |
 | 20 | Backtracking | 4 | 4 | 7 | ✅ Done: 4/4 videos, 4/4 articles, 7 problems |
-| 21 | Dynamic Programming | 31 | 25 | 28 | ⏭ Next |
-| 22 | Trie | 4 | 3 | 6 | Not started |
+| 21 | Dynamic Programming | 31 | 25 | 28 | ✅ Done: 31/31 videos, 25/25 articles, 28 problems |
+| 22 | Trie | 4 | 3 | 6 | ⏭ Next |
 | 23 | Segment and Binary Indexed Trees | 10 | 3 | 6 | Not started |
 | 24 | Disjoint Set | 5 | 3 | 4 | Not started |
 
@@ -662,6 +662,44 @@ All 5 articles match a video; the Track practice set lists the 6 problems. V4, V
 
 All 4 articles match a video; the Track practice set lists the 7 problems. V4 has no Transcript button and was done from frames and the description. Course progress was unchanged (0%). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 4 Backtracking videos.
 
+### Track 21: Dynamic Programming, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Introduction to DP | 4:46 | Transcript + board | Introduction to Dynamic Programming; Properties of a DP Problem; Optimal Substructure Property |
+| 2 | Dynamic Programming Memoization | 15:30 | Transcript + board | Overlapping Subproblems Property |
+| 3 | Dynamic Programming Tabulation | 8:09 | Transcript + board | Tabulation vs Memoization |
+| 4 | Longest Common Subsequence (Part 1) | 24:24 | Transcript + board | Longest Common Subsequence (Part 1) |
+| 5 | Longest Common Subsequence (Part 2) | 9:07 | Transcript + board | Longest Common Subsequence (Part 2) |
+| 6 | Variation of LCS | 13:45 | Transcript + board |  |
+| 7 | Coin Change (Naive Recursive Solution) | 9:56 | Transcript + board |  |
+| 8 | Coin Change (DP Solution) | 9:26 | Transcript + board | Coin Change |
+| 9 | Edit Distance Problem | 14:59 | Transcript + board |  |
+| 10 | Edit Distance Problem DP solution | 11:15 | Transcript + board | Edit Distance Problem |
+| 11 | Longest Increasing Subsequence Problem | 22:16 | Transcript + board | Longest Increasing Subsequence |
+| 12 | Longest Increasing Subsequence in O(nlogn) | 15:34 | Transcript + board | Longest Increasing Subsequence in O(nlogn) |
+| 13 | Variation of LIS (Part 1) | 13:16 | Transcript + board |  |
+| 14 | Variations of LIS (Part 2) | 11:50 | Transcript + board |  |
+| 15 | Maximum Cuts | 10:22 | Transcript + board | Maximum Cuts |
+| 16 | Minimum coins to make a value | 21:50 | Transcript + board | Minimum coins to make a value |
+| 17 | Minimum Jumps to reach at end | 17:12 | Transcript + board | Minimum Jumps to reach at end |
+| 18 | 0-1 knapsack problem | 14:32 | Transcript + board |  |
+| 19 | 0-1 knapsack problem DP Solution | 13:43 | Transcript + board | 0-1 knapsack problem |
+| 20 | Optimal Strategy for a Game | 27:09 | Transcript + board | Optimal Strategy for a Game |
+| 21 | Egg Dropping Puzzle - Part 1 | 13:09 | Transcript + board |  |
+| 22 | Egg Dropping Puzzle - Part 2 | 9:40 | Transcript + board | Egg Dropping Puzzle |
+| 23 | Count BSTs with n keys | 13:40 | Board + description | Count BSTs with n keys |
+| 24 | Maximum sum with no two consecutive | 13:36 | Board + description | Maximum sum with no two consecutive |
+| 25 | Subset Sum Problem (Recursive Solution) (Medium) | 10:53 | Transcript + board |  |
+| 26 | Subset Sum Problem (DP Solution) (Medium) | 10:55 | Transcript + board | Subset Sum Problem |
+| 27 | Matrix Chain Multiplication | 16:06 | Board + description |  |
+| 28 | Matrix Chain Multiplication (DP Solution) (Hard) | 10:42 | Board + description | Matrix Chain Multiplication |
+| 29 | Palindrome Partitioning | 15:52 | Board + description | Palindrome Partitioning |
+| 30 | Allocate Minimum Pages (Naive Method) | 8:54 | Board + description |  |
+| 31 | Allocate Minimum Pages (DP Solution) (Hard) | 10:18 | Board + description | Allocate Minimum Pages |
+
+"Solving a Dynamic Programming Problem" and "Sample Problems on Dynamic Programming" match no video, so they're in the Track practice set with the 28 problems. V23, V24, V27, V28, V29, V30, V31 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (40%, 21/31 videos watched). All resume positions were restored (V1 was at 0:03 and was put back there). The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 31 DP videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -693,10 +731,11 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
 - `cd1b6ea`: Add Heap track notes (14 videos, 11 articles, 11 problems)
 - `92dabf7`: Add Graph track notes (30 videos, 20 articles, 24 problems)
 - `ef72ced`: Add Greedy track notes (12 videos, 5 articles, 6 problems)
-- (this commit): Add Backtracking track notes (4 videos, 4 articles, 7 problems)
+- `1000f12`: Add Backtracking track notes (4 videos, 4 articles, 7 problems)
+- (this commit): Add Dynamic Programming track notes (31 videos, 25 articles, 28 problems)
 
 ### What's next
-- **Track 21: Dynamic Programming** (31 videos, 25 articles, 28 problems), starting straight away.
+- **Track 22: Trie** (4 videos, 3 articles, 6 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -729,6 +768,7 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
   - Completed track 18 (Graph): 30 videos, 20 articles, 24 problems.
   - Completed track 19 (Greedy): 12 videos, 5 articles, 6 problems.
   - Completed track 20 (Backtracking): 4 videos, 4 articles, 7 problems.
+  - Completed track 21 (Dynamic Programming): 31 videos, 25 articles, 28 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -745,6 +785,17 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Dynamic Programming: teacher slips flagged
+- V6: the board writes "Superequence"; when printing the LCS, the teacher says the "upper and lower" neighbours (they're upper and left).
+- V8: the board's column headers read 0 1 2 2 3; the transcript says the coin is usable when its value is "more than equal to J" (it's coins[i−1] ≤ j).
+- V10: the mismatch case is first written without "1 +" (corrected on screen).
+- V16 (board): the INT_MAX initialisation loop starts at i = 0 and overwrites dp[0] = 0 (it must start at 1).
+- V18: the second example's answer is said as "hundred twenty" (it's 220); "there is a partial marking" is said while explaining that there's none; "theta of M" is said for Θ(n).
+- V20: the dp[0][3] pick-j case uses 3 for arr[3] (it's 6; the max is still 25); "24 and 8" is said for 32 (20 + 4 + 8).
+- V28 (board): `dp[j][k]` should be `dp[k][j]`.
+- V29 (board): `isPal[i+1][j−1] || gap == 1` reads an unset cell when gap is 1 (gap == 1 should be checked first).
+- Videos without a transcript (23, 24, 27, 28, 29, 30, 31): spoken slips couldn't be checked.
 
 ### Backtracking: teacher slips flagged
 - V1 (board): `&&` is drawn like "88"; the naive cost is written "!n × n" for n! × n. The second isSafe condition is a typed overlay.

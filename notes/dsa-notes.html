@@ -30491,6 +30491,2065 @@ bool solve() {
   </section>
 </template>
 
+<template id="DSASP-DP-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTEyNw%3D%3D" target="_blank" rel="noopener">Introduction to DP</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>In simple words, <strong>dynamic programming is an optimisation over plain recursion.</strong></p>
+    <ul>
+      <li><strong>Plain recursion</strong> solves a problem of size n using the solutions of subproblems: sizes n − 1, n − 2, n − a, n − b, n/a, n/b and so on. Examples are factorial and Fibonacci.</li>
+      <li>If the recursion solves the same subproblems again and again, store their solutions and reuse them next time. That is DP: <em>reuse the solutions of subproblems when there are overlapping subproblems</em>.</li>
+    </ul>
+    <p>There are two ways to implement it (one video each next):</p>
+    <ol>
+      <li><strong>Memoization</strong> (top-down).</li>
+      <li><strong>Tabulation</strong> (bottom-up).</li>
+    </ol>
+    <p><strong>Applications</strong> (board):</p>
+    <ol>
+      <li><strong>Bellman–Ford</strong>: shortest paths from a source to all vertices, used in routing.</li>
+      <li><strong>Floyd–Warshall</strong>: shortest paths between every pair of vertices.</li>
+      <li><strong>Diff utility</strong> (LCS): the differences between two files, as in git before a commit.</li>
+      <li><strong>Search close words</strong> (edit distance): the dictionary word closest to a mistyped one.</li>
+      <li><strong>Resource allocation</strong> (0-1 knapsack): with a budget and items that each have a value and a cost, decide which to take.</li>
+    </ol>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/MjM4Nw%3D%3D" target="_blank" rel="noopener">Introduction to Dynamic Programming</a></p>
+<ul>
+<li>DP stores the results of past computations and reuses them instead of recalculating: split the problem into subproblems and keep their results.</li>
+<li>The recursive fib() calls fib(3) twice for fib(5), so it is exponential. Storing the subproblem results makes it linear.</li>
+</ul>
+    </div>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/MjM4OA%3D%3D" target="_blank" rel="noopener">Properties of a Dynamic Programming Problem</a></p>
+<ul>
+<li>Two properties identify a DP problem: <strong>overlapping subproblems</strong> and <strong>optimal substructure</strong>.</li>
+<li>DP doesn't help without common subproblems. For example, binary search has none.</li>
+<li><strong>Optimal substructure:</strong> an optimal solution is built from optimal solutions of subproblems. Shortest path has it: if x is on the shortest u→v path, that path is shortest(u→x) + shortest(x→v). Floyd–Warshall and Bellman–Ford are DP.</li>
+<li>Longest simple path does <em>not</em> have it. In the CLRS graph, the longest q→t path q→r→t isn't longest(q→r) + longest(r→t), because longest q→r is q→s→t→r.</li>
+</ul>
+    </div>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/MjM5MA%3D%3D" target="_blank" rel="noopener">Optimal Substructure Property</a></p>
+<ul>
+<li>If x splits into subproblems A and B, the optimal answer for x comes from the optimal answers of A and B.</li>
+<li>0-1 knapsack: each item is either in the optimal subset or not. The best value is max(the best with n − 1 items and W, val[n−1] + the best with n − 1 items and W − wt[n−1]); only the first case applies if the item is too heavy. Its recursion also repeats subproblems, so knapsack has both properties and is solved with a bottom-up K[][].</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <ol>
+      <li>DP = recursion + storing the solutions of overlapping subproblems.</li>
+      <li>Memoization is top-down; tabulation is bottom-up.</li>
+      <li>Match each problem to its DP idea: routing (Bellman–Ford), all-pairs shortest paths (Floyd–Warshall), diff (LCS), spell suggestion (edit distance), budgeted choice (0-1 knapsack).</li>
+    </ol>
+  </section>
+</template>
+
+<template id="DSASP-DP-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTEyOA%3D%3D" target="_blank" rel="noopener">Dynamic Programming Memoization</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Example: the n-th Fibonacci number.</strong> The sequence is 0, 1, 1, 2, 3, 5, 8, 13, …, with F(0) = 0, F(1) = 1 and F(n) = F(n − 1) + F(n − 2). For n = 3 the answer is 2.</p>
+    <p><strong>Plain recursion:</strong> if n is 0 or 1 return n, else return fib(n − 1) + fib(n − 2).</p>
+    <ul>
+      <li>Its recursion tree for fib(5) repeats work: fib(3) is computed twice and fib(2) three times.</li>
+      <li>For n = 100, the fib(98) subtree alone is computed twice.</li>
+      <li>The time is exponential: bounded by 2<sup>n</sup>, and exactly about φ<sup>n</sup> (φ = golden ratio).</li>
+    </ul>
+    <p><strong>Memoization (top-down):</strong> keep a global <code>memo[n + 1]</code> filled with −1 before the call. Any value that can't be an answer works; Fibonacci numbers are never negative.</p>
+    <ol>
+      <li>On each call, if memo[n] is −1, compute the result with the same recursion and store it in memo[n].</li>
+      <li>Return memo[n].</li>
+    </ol>
+    <p>Each subproblem is solved exactly once.</p>
+    <p><strong>Trace for fib(5)</strong> (memo indices 0–5, all −1):</p>
+    <ol>
+      <li>The calls go down the left side: 5 → 4 → 3 → 2 → 1. fib(1) stores memo[1] = 1, and fib(0) stores memo[0] = 0.</li>
+      <li>Back in fib(2), memo[2] = 1. fib(3) then needs fib(1): this is the first input already computed, so it is returned straight away. memo[3] = 2.</li>
+      <li>fib(4) reuses memo[2] and stores memo[4] = 3. fib(5) reuses memo[3] and stores memo[5] = 5.</li>
+    </ol>
+    <p><strong>Cost:</strong> n calls down the left side plus n − 1 more, so 2n − 1 calls, each doing Θ(1) work: <strong>Θ(n)</strong>, down from exponential.</p>
+    <p><strong>Recap: how to memoize any recursion.</strong></p>
+    <ul>
+      <li>The memo array has one dimension per parameter that changes between recursive calls. One parameter means a 1-D array; two (as in LCS and edit distance) mean 2-D.</li>
+      <li>Each dimension's size comes from that parameter's minimum and maximum values. Here n goes from 0 to n, hence n + 1.</li>
+      <li>Initialise the array with a value that can't be an answer, e.g. a negative value when computing a length.</li>
+      <li>Add the "already computed?" check at the start, store the result instead of returning immediately, and return the memo entry.</li>
+    </ul>
+    <p>The hard part of DP is finding a recursive solution with overlapping subproblems. After that, memoization is easy.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/MjM4OQ%3D%3D" target="_blank" rel="noopener">Overlapping Subproblems Property</a></p>
+<ul>
+<li>fib(1), fib(0) and fib(2) are computed more than once in fib(5)'s tree. Their values can be stored in two ways:</li>
+<li><strong>Memoization (top down):</strong> a lookup table, initialised to NIL, is checked before computing; results are stored after.</li>
+<li><strong>Tabulation (bottom up):</strong> fill fib(0), fib(1), fib(2), … in order and return the last entry.</li>
+<li>A memoized table is filled on demand, so not every entry need be filled. A tabulated one is filled entry by entry from the first.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Plain recursion</h4>
+<pre><code class="language-cpp">int fib(int n) {
+    if (n == 0 || n == 1)
+        return n;
+    else
+        return fib(n - 1) + fib(n - 2);
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Memoization (board)</h4>
+<pre><code class="language-cpp">int memo[n + 1] = {-1, -1, ..., -1};   // global, all -1
+
+int fib(int n) {
+    if (memo[n] == -1) {
+        int res;
+        if (n == 0 || n == 1)
+            res = n;
+        else
+            res = fib(n - 1) + fib(n - 2);
+        memo[n] = res;
+    }
+    return memo[n];
+}</code></pre>
+      <p>After fib(5) the memo array is 0, 1, 1, 2, 3, 5.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTEyOQ%3D%3D" target="_blank" rel="noopener">Dynamic Programming Tabulation</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Memoization is top-down:</strong> start from the main problem, call the subproblems, and check each time whether a value is already computed.</p>
+    <p><strong>Tabulation is bottom-up:</strong> leave recursion behind and fill a table. If the answer for n depends on n − 1 and n − 2, compute 0, 1, 2, 3, 4, … first, so the dependencies are ready when n is reached.</p>
+    <ul>
+      <li>The table's dimensions and size follow the memoization rule: the number of parameters that change gives the dimensions, and their ranges give the sizes.</li>
+      <li>For Fibonacci, n runs from 0 to n: one dimension, size n + 1.</li>
+      <li>Fill the base cases f[0] = 0 and f[1] = 1, then for i = 2 … n set f[i] = f[i − 1] + f[i − 2], and return f[n]. For n = 5 the table is 0, 1, 1, 2, 3, 5.</li>
+    </ul>
+    <p><strong>Mind the dependencies.</strong> The fill order must guarantee that every cell a value needs is already filled. For an arbitrary recurrence like fun(n) = fun(n − 1) + fun(n + 1), both neighbours must be ready. In 2-D tables some problems, e.g. Optimal Strategy for a Game, must be filled diagonally rather than row by row.</p>
+    <p><strong>Complexity:</strong> Θ(n) time and Θ(n) auxiliary space.</p>
+    <p><strong>Side note:</strong> Fibonacci has a better, non-DP solution in O(log n): a divide-and-conquer method using matrix multiplication (see GfG). Fibonacci is used here only because it is a simple, well-known example. "Dynamic programming", usually just "DP", is just a name, unrelated to dynamic memory allocation.</p>
+    <p><strong>Memoization vs tabulation:</strong></p>
+    <ul>
+      <li>Memoization is easy to write once you have a recursive solution, and you usually do: you write the recursion first, spot overlapping subproblems, and then realise it's DP.</li>
+      <li>Tabulation can be harder to write (e.g. Optimal Strategy for a Game). It has no recursive-call overhead, though: memoized Fibonacci made 2n − 1 calls, each saving function-call state.</li>
+      <li>So tabulation is typically faster.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUxNA%3D%3D" target="_blank" rel="noopener">Tabulation vs Memoization</a></p>
+<ul>
+<li>Analogy: "study the theory, then practise problems, then master DP" is bottom-up. "To master DP I must practise problems, and first I must study theory" is top-down.</li>
+<li><strong>Tabulation:</strong> start from the base state dp[0] and follow the transition to dp[n]. Example: factorial with dp[x + 1] = dp[x] × (x + 1). The table is filled sequentially.</li>
+<li><strong>Memoization:</strong> ask dp[n] from the states that reach it, down to the base, caching each value. With a 2-D layout (e.g. Min Cost Path) the memory isn't filled sequentially.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Tabulation (board)</h4>
+<pre><code class="language-cpp">int fib(int n) {
+    int f[n + 1];
+    f[0] = 0, f[1] = 1;
+    for (int i = 2; i &lt;= n; i++)
+        f[i] = f[i - 1] + f[i - 2];
+    return f[n];
+}</code></pre>
+      <p>Θ(n) time, Θ(n) auxiliary space.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTE0NQ%3D%3D" target="_blank" rel="noopener">Longest Common Subsequence (Part 1)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Subsequence:</strong> pick zero or more characters, in the same order as they appear in the original string, but not necessarily contiguous. A substring must be contiguous.</p>
+    <ul>
+      <li>Subsequences of "CDA": "", C, D, A, CD, CA, DA, CDA. DC is not one.</li>
+      <li>A string of length n has 2<sup>n</sup> subsequences: 8 for length 3, 16 for length 4.</li>
+    </ul>
+    <p><strong>LCS problem:</strong> find the length of the longest subsequence common to both strings. For "CDA" and "DBA" it is DA, length 2. "" (length 0), D and A are also common, but shorter.</p>
+    <table>
+      <tr><th>s1</th><th>s2</th><th>LCS</th><th>Length</th></tr>
+      <tr><td>ABCDGH</td><td>AEDFHR</td><td>ADH</td><td>3</td></tr>
+      <tr><td>AGGTAB</td><td>GXTXAYB</td><td>GTAB (two ways to pick it in s1)</td><td>4</td></tr>
+      <tr><td>XYZ</td><td>XYZ</td><td>the whole string</td><td>3</td></tr>
+      <tr><td>ABC</td><td>XY</td><td>none (no common character)</td><td>0</td></tr>
+    </table>
+    <p>Naive: generate all 2<sup>m</sup> subsequences of one string and check them against the other, keeping the longest.</p>
+    <p><strong>Recursive idea:</strong> lcs(s1, s2, m, n), where m and n are the lengths. Compare the last characters.</p>
+    <ul>
+      <li>If s1[m − 1] == s2[n − 1], the LCS is 1 + lcs(s1, s2, m − 1, n − 1).</li>
+      <li>Otherwise the answer is max(lcs(s1, s2, m − 1, n), lcs(s1, s2, m, n − 1)). Drop the last character of one string or of the other, and take the better result.</li>
+      <li>Base case: if m == 0 or n == 0, return 0. An empty string has no non-empty common subsequence.</li>
+    </ul>
+    <p>Dry run on "AXYZ", "BAZ":</p>
+    <ol>
+      <li>Z matches Z, giving 1 + lcs("AXY", "BA").</li>
+      <li>Y ≠ A, so take max(lcs("AX", "BA"), lcs("AXY", "B")).</li>
+      <li>Further down, A matches A, giving 1.</li>
+      <li>The answer is <strong>2</strong> (AZ).</li>
+    </ol>
+    <p>Subproblems such as lcs("AX", "B") appear twice, so there are overlapping subproblems and DP applies.</p>
+    <p><strong>Worst case of the naive recursion</strong> (lengths n, n, no matches): each call branches twice, and the counts grow 1, 2, 4, …, an upper bound of O(2<sup>n</sup>).</p>
+    <p><strong>Memoization:</strong> two parameters change (m and n), so the memo table is 2-D, at least (m + 1) × (n + 1). Initialise it to −1, since an LCS is never negative.</p>
+    <ul>
+      <li>Each entry is filled exactly once, with constant work, so the time is <strong>Θ(mn)</strong>.</li>
+      <li>The teacher writes the table declaration as pseudocode, not valid syntax.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUxNQ%3D%3D" target="_blank" rel="noopener">Longest Common Subsequence (Part 1)</a></p>
+<ul>
+<li>A string of length n has 2<sup>n</sup> − 1 non-empty subsequences (nC1 + … + nCn), so brute force is O(n·2<sup>n</sup>). E.g. "abc", "abg", "bdf", "aeg" and "acefg" are subsequences of "abcdefg".</li>
+<li>LCS("AGGTAB", "GXTXAYB") = "GTAB" (4).</li>
+<li>The naive recursion's worst case is O(2<sup>n</sup>), when all characters mismatch (LCS = 0). In the tree for "AXYT" and "AYZX", lcs("AXY", "AYZ") is solved twice.</li>
+<li>Memoization takes O(mn), ignoring the recursion stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive recursion</h4>
+<pre><code class="language-cpp">int lcs(string s1, string s2, int m, int n) {
+    if (m == 0 || n == 0)
+        return 0;
+    if (s1[m - 1] == s2[n - 1])
+        return 1 + lcs(s1, s2, m - 1, n - 1);
+    else
+        return max(lcs(s1, s2, m - 1, n), lcs(s1, s2, m, n - 1));
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Memoization (board)</h4>
+<pre><code class="language-cpp">int memo[m + 1][n + 1] = {-1, ...};   // pseudocode: global, all -1
+
+int lcs(string s1, string s2, int m, int n) {
+    if (memo[m][n] != -1)
+        return memo[m][n];
+    if (m == 0 || n == 0) { memo[m][n] = 0; }
+    else {
+        if (s1[m - 1] == s2[n - 1])
+            memo[m][n] = 1 + lcs(s1, s2, m - 1, n - 1);
+        else
+            memo[m][n] = max(lcs(s1, s2, m - 1, n),
+                             lcs(s1, s2, m, n - 1));
+    }
+    return memo[m][n];
+}</code></pre>
+      <p>Θ(mn) time, compared with O(2<sup>n</sup>) for the naive recursion.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTE0Ng%3D%3D" target="_blank" rel="noopener">Longest Common Subsequence (Part 2)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Tabulation for LCS.</strong> Make dp[m + 1][n + 1], where m and n are the string lengths.</p>
+    <ul>
+      <li>The extra row and column hold the empty-prefix cases (length 0), just as the recursion bottomed out at length 0.</li>
+      <li><strong>dp[i][j] is the length of the LCS of s1[0 … i − 1] and s2[0 … j − 1].</strong> Here i and j are prefix lengths, not indices.</li>
+    </ul>
+    <ol>
+      <li>Row 0 and column 0 are all 0: an empty string has an LCS of 0 with anything.</li>
+      <li>Fill the rest row by row, left to right, using the recursion:
+        <ul>
+          <li>if s1[i − 1] == s2[j − 1], dp[i][j] = 1 + dp[i − 1][j − 1] (the diagonal);</li>
+          <li>otherwise dp[i][j] = max(dp[i − 1][j], dp[i][j − 1]) (up and left).</li>
+        </ul>
+      </li>
+      <li>The answer is dp[m][n].</li>
+    </ol>
+    <p>Arrows can be drawn from each cell to the cell it came from. Following the diagonal arrows back from dp[m][n] recovers the actual subsequence.</p>
+    <p><strong>Time:</strong> Θ(m) + Θ(n) for the borders plus Θ(mn) for the fill, so <strong>Θ(mn)</strong>.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUxNg%3D%3D" target="_blank" rel="noopener">Longest Common Subsequence (Part 2)</a></p>
+<ul>
+<li>Same introduction as Part 1, plus the tabulated version: O(mn) time, much better than the naive worst case, and O(m × n) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Tabulation (board)</h4>
+<pre><code class="language-cpp">int lcs(string s1, string s2) {
+    int m = s1.length(), n = s2.length();
+    int dp[m + 1][n + 1];
+    for (int i = 0; i &lt;= m; i++)
+        dp[i][0] = 0;
+    for (int j = 0; j &lt;= n; j++)
+        dp[0][j] = 0;
+    for (int i = 1; i &lt;= m; i++)
+        for (int j = 1; j &lt;= n; j++)
+            if (s1[i - 1] == s2[j - 1])
+                dp[i][j] = 1 + dp[i - 1][j - 1];
+            else
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+    return dp[m][n];
+}</code></pre>
+      <p>Board table for s1 = "AXYZ" (rows) and s2 = "BAZ" (columns), dp[5][4]:</p>
+      <table>
+        <tr><th></th><th>""</th><th>B</th><th>A</th><th>Z</th></tr>
+        <tr><th>""</th><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><th>A</th><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+        <tr><th>X</th><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+        <tr><th>Y</th><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+        <tr><th>Z</th><td>0</td><td>0</td><td>1</td><td>2</td></tr>
+      </table>
+      <p>A–A and Z–Z are the diagonal (match) moves, so the LCS is AZ, length 2.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTE0Mg%3D%3D" target="_blank" rel="noopener">Variation of LCS</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The board lists the most important problems based on LCS:</p>
+    <ol>
+      <li><strong>Diff utility.</strong> It shows what is common to two files and what was added or removed, as git does since the last commit. The LCS of the two contents is the common part. Whatever is left over in the first file was removed, and whatever is left over in the second was added.</li>
+      <li><strong>Minimum insertions and deletions to convert s1 into s2.</strong> With L = LCS length, it takes m − L deletions and n − L insertions. For "GEEK" → "GFEK", the LCS is "GEK": delete one E and insert F, 2 operations.</li>
+      <li><strong>Shortest common supersequence:</strong> the shortest string that has both s1 and s2 as subsequences. Simply joining the strings works but is long. Instead, take the LCS and insert the extra characters of each string around it, in order.
+        <ul>
+          <li>Its length is m + n − L. For s1 = "GEEK" and s2 = "GEFK", the LCS is "GEK" (3), giving 4 + 4 − 3 = 5.</li>
+        </ul>
+      </li>
+      <li><strong>Longest palindromic subsequence.</strong> For "geeksforgeeks" the answer is 5: e e ? e e, with any single middle character such as r, o, g or f. Solve it as LCS(s, reverse(s)).</li>
+      <li><strong>Longest repeating subsequence:</strong> the longest subsequence that appears twice, never matching a character with itself at the same index. "AABB" gives 2 (AB), and "AAA" gives 2 (AA).
+        <ul>
+          <li>Run LCS(s, s), but count a match only when the characters are equal <em>and their indices differ</em>. Otherwise take the max branch.</li>
+          <li>Θ(mn) time and space.</li>
+        </ul>
+      </li>
+      <li><strong>Space-optimised DP for LCS.</strong> Each row of the table needs only the previous row, so a 2 × n (or 2 × m) array is enough: linear rather than quadratic extra space. Try it yourself first; there is a GfG article.</li>
+      <li><strong>Printing the LCS.</strong> Start at the bottom-right cell of the filled dp table.
+        <ul>
+          <li>On matching characters, output the character and move diagonally.</li>
+          <li>Otherwise move towards the larger neighbour, printing nothing.</li>
+          <li>Characters come out last-first, so fill the output from index L − 1 downwards (or prepend). There is a GfG article.</li>
+        </ul>
+      </li>
+    </ol>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <ol>
+      <li>"GEEK" → "GFEK": L = 3, so 4 − 3 = 1 deletion and 4 − 3 = 1 insertion.</li>
+      <li>SCS length of "GEEK" and "GEFK": 4 + 4 − 3 = 5.</li>
+      <li>Longest palindromic subsequence of "geeksforgeeks" = LCS with its reverse = 5.</li>
+      <li>Longest repeating subsequence: "AABB" gives 2 and "AAA" gives 2. Add <code>i != j</code> to the match condition.</li>
+    </ol>
+    <div class="added">
+      <p><strong>Slips:</strong> the board writes "Shortest Common Superequence" for supersequence. When printing the LCS, the teacher says to take "the maximum of the upper and lower" on a mismatch. The two neighbours compared are the upper and left cells (dp[i − 1][j] and dp[i][j − 1]).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/NzU4NA%3D%3D" target="_blank" rel="noopener">Coin Change (Naive Recursive Solution)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> Given an array of coin types, each with an infinite supply, and a sum, count the different ways to pick coins that add up to the sum.</p>
+    <ul>
+      <li>coins = {1, 2, 3}, sum = 4 gives <strong>4</strong>: 1+1+1+1, 1+1+2, 2+2, 1+3.</li>
+      <li>coins = {2, 5, 3, 6}, sum = 10 gives <strong>5</strong>: 2×5, 2+2+3+3, 2+3+5, 2+2+6, 5+5.</li>
+    </ul>
+    <p><strong>Recursive idea</strong> (similar to 0-1 knapsack): for the last coin, consider two choices.</p>
+    <ul>
+      <li><strong>Include it:</strong> the sum drops by coins[n − 1], but n stays the same, because the same coin can be used again. This is the one difference from 0-1 knapsack, where each item is used once.</li>
+      <li><strong>Exclude it:</strong> the sum stays, and n drops by 1.</li>
+    </ul>
+    <p>For {1, 2, 3} and sum 4: including 3 gives ({1, 2, 3}, 1), and excluding it gives ({1, 2}, 4).</p>
+    <p><strong>Base cases:</strong></p>
+    <ul>
+      <li>sum == 0 returns 1. A combination was found; even a sum of 0 from the user has one way, taking no coins.</li>
+      <li>sum &lt; 0 returns 0. Alternatively, make the include call only when sum ≥ coins[n − 1], which saves calls.</li>
+      <li>n == 0 (with sum &gt; 0) returns 0.</li>
+    </ul>
+    <p><strong>Recursion tree</strong> for coins = {2, 5, 3}, n = 3, s = 5 (CW(n, s)):</p>
+    <ul>
+      <li>Two leaves reach a sum of 0. One is (1, 0): coin 3, then 2. The other is (2, 0): coin 5.</li>
+      <li>The answer is <strong>2</strong>. Each call returns the sum of its two children.</li>
+    </ul>
+    <p><strong>Time:</strong> take s = n and all coins of value 1 for an idea of the bound. The tree is nearly full (1, 2, 4, 8, 16, … nodes per level), so the cost is about 2<sup>n</sup>: exponential.</p>
+    <p>Two parameters change (n and s), so a DP solution takes O(n × s) time; it comes in the next video.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive recursive solution (board)</h4>
+<pre><code class="language-cpp">int countWays(int coins[], int n, int s) {
+    if (s == 0)
+        return 1;
+    if (s &lt; 0)
+        return 0;
+    if (n == 0)
+        return 0;
+    return countWays(coins, n, s - coins[n - 1]) +
+           countWays(coins, n - 1, s);
+}</code></pre>
+      <p>On coins = {2, 5, 3}, s = 5 it returns 2 (5, and 3 + 2).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/NzU4NQ%3D%3D" target="_blank" rel="noopener">Coin Change (DP Solution)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Two parameters change in the recursion: n (coins considered, 0 … n) and s (the sum, 0 … s). So use a 2-D table <code>dp[n + 1][s + 1]</code>, where <strong>dp[i][j] is the number of ways to make sum j with the first i coins.</strong></p>
+    <ul>
+      <li>dp[i][0] = 1 for every i: sum 0 has one way, picking nothing. That includes dp[0][0].</li>
+      <li>dp[0][j] = 0 for j &gt; 0: no coins, positive sum.</li>
+      <li>Otherwise, start with dp[i][j] = dp[i − 1][j] (ignore the last coin). If coins[i − 1] ≤ j, add dp[i][j − coins[i − 1]] (use one more of the last coin; i stays the same).</li>
+    </ul>
+    <p>The recursion handled negative sums in a base case. Here they would be negative indices, so the condition coins[i − 1] ≤ j is required.</p>
+    <p>dp[i][j] needs the cell above and cells to its left in the same row, so fill row by row. Column by column also works; row by row is generally more efficient.</p>
+    <p><strong>Java notes:</strong></p>
+    <ul>
+      <li>Write <code>int dp[][] = new int[n + 1][s + 1];</code>.</li>
+      <li>Java initialises the array to 0, so the row-0 loop can be dropped; C++ needs it.</li>
+      <li>n need not be passed, since <code>coins.length</code> gives it.</li>
+    </ul>
+    <p><strong>Complexity:</strong> O(n × s) time and O(n × s) auxiliary space.</p>
+    <p>The teacher adds that coin change belongs to the NP-complete / NP-hard category, with no known polynomial-time solution. O(n × s) only looks polynomial: it is <em>pseudo-polynomial</em>, because it depends on the value of s, which can be very large.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUxNw%3D%3D" target="_blank" rel="noopener">Coin Change</a></p>
+<ul>
+<li>Order doesn't matter. sum = 4 with {1, 2, 3} gives 4, and sum = 10 with {2, 5, 3, 6} gives 5.</li>
+<li>count(coins, n, sum) = count(coins, n − 1, sum) + count(coins, n, sum − coins[n−1]). This is the <strong>unbounded knapsack</strong> pattern: a coin can be included any number of times, and once we move past coins[n−1] we never return to it.</li>
+<li>Naive: O(2<sup>sum</sup>) time and O(target) stack. C({1}, 3) repeats in the tree.</li>
+<li>Bottom-up table: O(n × sum). A simplified version needs only O(sum) space (a 1-D table). Top-down memoization is O(M × sum) time and space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Tabulation (board)</h4>
+<pre><code class="language-cpp">int countWays(int coins[], int n, int s) {
+    int dp[n + 1][s + 1];   // Java: int dp[][] = new int[n + 1][s + 1];
+    for (int i = 0; i &lt;= n; i++)
+        dp[i][0] = 1;
+    for (int j = 1; j &lt;= s; j++)
+        dp[0][j] = 0;
+    for (int i = 1; i &lt;= n; i++) {
+        for (int j = 1; j &lt;= s; j++) {
+            dp[i][j] = dp[i - 1][j];
+            if (coins[i - 1] &lt;= j)
+                dp[i][j] += dp[i][j - coins[i - 1]];
+        }
+    }
+    return dp[n][s];
+}</code></pre>
+      <p>Board table for coins = {1, 2, 3}, s = 4 (rows i = 0 … 3, columns j = 0 … 4):</p>
+      <table>
+        <tr><th>i \ j</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+        <tr><th>0</th><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><th>1</th><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        <tr><th>2</th><td>1</td><td>1</td><td>2</td><td>2</td><td>3</td></tr>
+        <tr><th>3</th><td>1</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+      </table>
+      <p>For example, dp[1][1] = dp[0][1] + dp[1][0] = 0 + 1 = 1. The answer is dp[3][4] = <strong>4</strong>.</p>
+    </div>
+    <div class="added">
+      <p><strong>Slips:</strong></p>
+      <ul>
+        <li>The board's column headers read 0 1 2 2 3; they are j = 0 … 4.</li>
+        <li>The teacher says the last coin can be used when its value is "more than equal to J" / "greater than the sum". The condition is coins[i − 1] ≤ j, as in the code.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTEzMQ%3D%3D" target="_blank" rel="noopener">Edit Distance Problem</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> Convert s1 into s2 with the minimum number of operations. Each insert, delete or replace of a character counts as one operation, so one replace beats one delete plus one insert.</p>
+    <ul>
+      <li>"cat" → "cut": replace a with u, so <strong>1</strong> (delete-then-insert would be 2).</li>
+      <li>"geek" → "geeks": insert s, so <strong>1</strong>.</li>
+      <li>"saturday" → "sunday": delete a and t, keep the matching u, and replace r with n. That is <strong>3</strong>.</li>
+    </ul>
+    <p><strong>Recursive idea</strong> (like LCS, starting from the last characters; starting from the front also works but needs extra index parameters). Call it eD(s1, s2, m, n).</p>
+    <ul>
+      <li><strong>Last characters match:</strong> no operation is needed, so return eD(m − 1, n − 1). Unlike LCS, nothing is added.</li>
+      <li><strong>No match:</strong> try all three operations on the last character, and return 1 + the minimum:
+        <ul>
+          <li><strong>insert</strong> s2's last character: eD(m, n − 1);</li>
+          <li><strong>delete</strong> s1's last character: eD(m − 1, n);</li>
+          <li><strong>replace</strong> it with s2's last character: eD(m − 1, n − 1).</li>
+        </ul>
+        The 1 counts the operation just done.
+      </li>
+      <li><strong>Base cases:</strong> if m == 0, return n (insert everything). If n == 0, return m (delete everything).</li>
+    </ul>
+    <p>For saturday → sunday, y, a and d match. At "satur" vs "sun", r ≠ n, and the three options are tried.</p>
+    <p><strong>Dry run "cat" → "cut":</strong></p>
+    <ol>
+      <li>t = t, so eD("ca", "cu").</li>
+      <li>a ≠ u, so 1 + min(eD("ca", "c"), eD("c", "cu"), eD("c", "c")).</li>
+      <li>eD("c", "c") = eD("", "") = 0.</li>
+      <li>The result is <strong>1</strong>.</li>
+    </ol>
+    <p>Even here the subproblem ("c", "c") appears twice: overlapping subproblems, so DP applies (next video).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive solution (board)</h4>
+<pre><code class="language-cpp">int eD(string s1, string s2, int m, int n) {
+    if (m == 0) return n;
+    if (n == 0) return m;
+    if (s1[m - 1] == s2[n - 1])
+        return eD(s1, s2, m - 1, n - 1);
+    else
+        return 1 + min({eD(s1, s2, m, n - 1),       // insert
+                        eD(s1, s2, m - 1, n),       // delete
+                        eD(s1, s2, m - 1, n - 1)}); // replace
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Added:</strong> the board writes a three-argument <code>min(…)</code>. In C++ that needs the initializer-list form <code>min({a, b, c})</code> (or two nested <code>min</code> calls), as used above.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTEzMg%3D%3D" target="_blank" rel="noopener">Edit Distance Problem DP solution</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Tabulation.</strong> Make dp[m + 1][n + 1]. <strong>dp[i][j] is the edit distance between s1[0 … i − 1] and s2[0 … j − 1]</strong>; i and j are lengths. For example, dp[1][1] compares "C" with "C".</p>
+    <ul>
+      <li><strong>Base cases</strong> from the recursion: dp[i][0] = i and dp[0][j] = j. The first row and column are 0, 1, 2, 3.</li>
+      <li><strong>Matching characters</strong> (s1[i − 1] == s2[j − 1]): dp[i][j] = dp[i − 1][j − 1], the diagonal value.</li>
+      <li><strong>Otherwise:</strong> dp[i][j] = 1 + min(dp[i][j − 1], dp[i − 1][j], dp[i − 1][j − 1]). The 1 is the operation performed.</li>
+      <li>Return dp[m][n].</li>
+    </ul>
+    <p>A three-way min: in C++ use <code>min({…})</code>; in Java, call <code>Math.min</code> twice.</p>
+    <p><strong>Complexity:</strong> the border loops are Θ(m) + Θ(n), and the nested loops Θ(mn). Overall <strong>Θ(mn)</strong> time and Θ(mn) auxiliary space.</p>
+    <p><strong>Applications:</strong></p>
+    <ul>
+      <li>Spelling suggestions ("did you mean"). Precompute the misspellings within edit distance 1 or 2 (or some threshold) of each dictionary word, and suggest the word when a user types one of them.</li>
+      <li>Bioinformatics.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUxOA%3D%3D" target="_blank" rel="noopener">Edit Distance Problem</a></p>
+<ul>
+<li>Insert (recur on m, n − 1), Remove (m − 1, n) and Replace (m − 1, n − 1) all cost the same.</li>
+<li>Naive worst case is O(3<sup>m</sup>), when no characters match. eD(2, 2) is called three times.</li>
+<li>DP: O(m × n) time and space.</li>
+<li><strong>Space-optimised:</strong> a row needs only the row above, so a 2 × (length of str1) array is enough: O(m) space. A full 2-D array is impractical beyond about 2000 × 2000.</li>
+<li>Memoized: O(m × n) time, plus O(m × n) array space and O(m + n) stack.</li>
+<li>Applications include the Lucene API and listing dictionary words close to a misspelled word.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Tabulation (board)</h4>
+<pre><code class="language-cpp">int eD(string s1, string s2, int m, int n) {
+    int dp[m + 1][n + 1];
+    for (int i = 0; i &lt;= m; i++)
+        dp[i][0] = i;
+    for (int j = 0; j &lt;= n; j++)
+        dp[0][j] = j;
+    for (int i = 1; i &lt;= m; i++)
+        for (int j = 1; j &lt;= n; j++)
+            if (s1[i - 1] == s2[j - 1])
+                dp[i][j] = dp[i - 1][j - 1];
+            else
+                dp[i][j] = 1 + min({dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]});
+    return dp[m][n];
+}</code></pre>
+      <p>Board table, "CUT" (rows) against "CAT" (columns):</p>
+      <table>
+        <tr><th></th><th>""</th><th>C</th><th>A</th><th>T</th></tr>
+        <tr><th>""</th><td>0</td><td>1</td><td>2</td><td>3</td></tr>
+        <tr><th>C</th><td>1</td><td>0</td><td>1</td><td>2</td></tr>
+        <tr><th>U</th><td>2</td><td>1</td><td>1</td><td>2</td></tr>
+        <tr><th>T</th><td>3</td><td>2</td><td>2</td><td>1</td></tr>
+      </table>
+      <p>The answer is dp[3][3] = <strong>1</strong>. For example, dp[1][3] = 2: "C" → "CAT" needs two inserts.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the teacher first writes the mismatch case without the "1 +" and then adds it ("I forgot to add one here"). It is included above.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTEzMw%3D%3D" target="_blank" rel="noopener">Longest Increasing Subsequence Problem</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A subsequence picks zero or more elements, keeping their original order, so a sequence of length n has 2<sup>n</sup> of them (each element is picked or not). For {3, 4, 2, 8, 10}, 3 2 is a subsequence but 2 3 is not.</p>
+    <p><strong>LIS problem:</strong> the length of the longest strictly increasing subsequence.</p>
+    <ul>
+      <li>{3, 4, 2, 8, 10} gives 4 (3 4 8 10).</li>
+      <li>{4, 10, 6, 5, 8, 11, 2, 20} gives 5 (4 5 8 11 20 or 4 6 8 11 20).</li>
+      <li>An array sorted increasingly gives n; one sorted decreasingly (e.g. 30, 20, 10) gives 1.</li>
+    </ul>
+    <p>Naive: generate all subsequences and keep the longest increasing one, at least 2<sup>n</sup>. That has no overlapping subproblems, so a different formulation is needed for DP.</p>
+    <p><strong>DP idea: lis[i] is the length of the LIS that <em>ends with</em> arr[i].</strong></p>
+    <ul>
+      <li>lis[0] = 1.</li>
+      <li>For each i, look at every j &lt; i with arr[j] &lt; arr[i]: arr[i] can be appended to the LIS ending at arr[j]. So lis[i] = 1 + max of those lis[j], or 1 if there is no smaller element on the left.</li>
+      <li>The answer is the <em>maximum</em> over the whole lis array, not its last entry. The LIS may end in the middle.</li>
+    </ul>
+    <p>For {3, 4, 2, 8, 10, 5, 1}, lis = 1, 2, 1, 3, 4, 3, 1, so the answer is 4.</p>
+    <p>Overlapping subproblems: computing lis for 8 and for 10 both use the lis values of 3, 4 and 2.</p>
+    <p><strong>Complexity:</strong> Θ(n²) time and Θ(n) auxiliary space. This is not the best solution: an O(n log n) method based on binary search (not DP) comes in the next video.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUxOQ%3D%3D" target="_blank" rel="noopener">Longest Increasing Subsequence</a></p>
+<ul>
+<li>{10, 22, 9, 33, 21, 50, 41, 60, 80} gives 6.</li>
+<li><strong>Method 1 (recursion):</strong> L(i) = 1 + max L(j) for j &lt; i with arr[j] &lt; arr[i]. Exponential time, O(1) extra space apart from the stack.</li>
+<li><strong>Method 2 (tabulation):</strong> O(n²) time and O(n) space.</li>
+<li><strong>Method 3 (memoization):</strong> O(n²) time and O(n²) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>DP solution (board)</h4>
+<pre><code class="language-cpp">int LIS(int arr[], int n) {
+    int lis[n];
+    lis[0] = 1;
+    for (int i = 1; i &lt; n; i++) {
+        lis[i] = 1;
+        for (int j = 0; j &lt; i; j++)
+            if (arr[j] &lt; arr[i])
+                lis[i] = max(lis[i], lis[j] + 1);
+    }
+    int res = lis[0];
+    for (int i = 1; i &lt; n; i++)
+        res = max(res, lis[i]);
+    return res;
+}</code></pre>
+      <p>Board dry run on arr = {10, 5, 18, 7, 2, 9}:</p>
+      <ul>
+        <li>lis = {1, 1, 2, 2, 1, 3}.</li>
+        <li>For 9, the smaller elements are 5, 7 and 2, and the best is lis(7) + 1 = 3.</li>
+        <li>The answer is <strong>3</strong> (5 7 9).</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/Njg2MA%3D%3D" target="_blank" rel="noopener">Longest Increasing Subsequence in O(nlogn)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The DP solution is O(n²). Binary search on an auxiliary array gives <strong>O(n log n)</strong>.</p>
+    <p><strong>tail[i] holds the minimum possible tail (last) value of an increasing subsequence of length i + 1.</strong> tail stays sorted, because elements are appended only when larger than the last.</p>
+    <ul>
+      <li>Start with tail = {arr[0]}.</li>
+      <li>If arr[i] &gt; the last tail, append it: the LIS grows by 1.</li>
+      <li>Otherwise it can't lengthen the LIS. Binary-search the <em>ceiling</em> of arr[i] in tail (the smallest element ≥ it) and replace it: arr[i] is a smaller possible tail for that length.</li>
+      <li>The final length of tail is the LIS length.</li>
+    </ul>
+    <p>Board example {8, 100, 150, 10, 12, 14, 110}:</p>
+    <ol>
+      <li>8, 100 and 150 are appended.</li>
+      <li>10 replaces 100, and 12 replaces 150.</li>
+      <li>14 and 110 are appended.</li>
+      <li>tail = {8, 10, 12, 14, 110}, so the answer is <strong>5</strong>.</li>
+    </ol>
+    <p>{8, 2, 3, 1, 4}: 2 replaces 8, 3 is appended, 1 replaces 2, 4 is appended. The tail length is 3.</p>
+    <p>A decreasing array (10, 5, 3) keeps a tail of length 1. An increasing one (10, 20, 30) keeps appending, giving length 3.</p>
+    <p><strong>ceilIdx</strong> is a simple binary search on tail[l … r]. A ceiling always exists, since it's only called when arr[i] ≤ the last tail.</p>
+    <ul>
+      <li>Use m = l + (r − l)/2.</li>
+      <li>If tail[m] ≥ x, set r = m; else set l = m + 1.</li>
+      <li>Stop when l == r and return r.</li>
+    </ul>
+    <p><strong>Complexity:</strong> n − 1 iterations, each with at most one O(log n) search: <strong>O(n log n)</strong>. Auxiliary space is Θ(n) for this n-sized tail array. With a vector/ArrayList it is O(n): a decreasing array uses only one cell.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUyMA%3D%3D" target="_blank" rel="noopener">Longest Increasing Subsequence in O(nlogn)</a></p>
+<ul>
+<li>The article builds the idea from {2, 5, 3}, extending it with 7, 11, 8, …. Keep <em>active lists</em> of increasing sequences, with the invariant that a smaller list ends in a smaller element than a larger list.</li>
+<li>Only the end elements matter, so keep them in an auxiliary array (at most the input's length).</li>
+<li>A new smallest element can start a new list. Otherwise find the ceiling of A[i] by binary search and replace it; an element larger than every end extends the longest list.</li>
+<li>This is partly the <em>patience sorting</em> technique. Time Θ(n log n), via T(n) &lt; O(log n!); the space is O(n).</li>
+<li>Exercises: construct the actual LIS (model it with DAGs), list all longest ones, decide whether the algorithm is online, and find the longest decreasing list.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board code</h4>
+<pre><code class="language-cpp">int ceilIdx(int tail[], int l, int r, int x) {
+    while (r &gt; l) {
+        int m = l + (r - l) / 2;
+        if (tail[m] &gt;= x)
+            r = m;
+        else
+            l = m + 1;
+    }
+    return r;
+}
+
+int LIS(int arr[], int n) {
+    int tail[n], len = 1;
+    tail[0] = arr[0];
+    for (int i = 1; i &lt; n; i++) {
+        if (arr[i] &gt; tail[len - 1]) {
+            tail[len] = arr[i];
+            len++;
+        } else {
+            int c = ceilIdx(tail, 0, len - 1, arr[i]);
+            tail[c] = arr[i];
+        }
+    }
+    return len;
+}</code></pre>
+      <p>Dry run on arr = {3, 10, 20, 4, 6, 7}:</p>
+      <ol>
+        <li>tail starts as 3; 10 and 20 are appended.</li>
+        <li>4 replaces 10: tail = 3, 4, 20.</li>
+        <li>6 replaces 20. ceilIdx on {3, 4, 20} with l = 0, r = 2: m = 1, 4 &lt; 6 so l = 2, return 2.</li>
+        <li>7 is appended. tail = {3, 4, 6, 7}, len = <strong>4</strong>.</li>
+      </ol>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTE0Mw%3D%3D" target="_blank" rel="noopener">Variation of LIS (Part 1)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>These variations build directly on the two LIS solutions (O(n²) DP and O(n log n) binary search).</p>
+    <h4>1. Minimum deletions to make an array sorted</h4>
+    <p>Keep an LIS and delete everything else, so the answer is <strong>n − LIS</strong>.</p>
+    <ul>
+      <li>{5, 10, 3, 6, 7, 8}: LIS = 4 (3 6 7 8 or 5 6 7 8), so delete 2 (e.g. 5 and 10, or 10 and 3).</li>
+      <li>A sorted array such as {10, 20, 30} needs 0.</li>
+      <li>A reverse-sorted array needs n − 1, e.g. {30, 20, 10} needs 2.</li>
+    </ul>
+    <h4>2. Maximum sum increasing subsequence</h4>
+    <p>Among the increasing subsequences, take the one with the largest sum.</p>
+    <ul>
+      <li>{3, 20, 4, 6, 7, 30} gives 3 + 20 + 30 = <strong>53</strong>, even though the LIS is 3 4 6 7.</li>
+      <li>A sorted, non-negative array gives the sum of all its elements, e.g. {5, 10, 20} gives 35.</li>
+      <li>A reverse-sorted one gives its largest (first) element, e.g. {20, 10, 5} gives 20.</li>
+    </ul>
+    <p>The code is the LIS DP with two changes:</p>
+    <ul>
+      <li>msis[i] starts at arr[i], not 1;</li>
+      <li>the update is msis[i] = max(msis[i], arr[i] + msis[j]) for each j &lt; i with arr[j] &lt; arr[i].</li>
+    </ul>
+    <p>The answer is the maximum of msis.</p>
+    <h4>3. Longest bitonic subsequence</h4>
+    <p>A bitonic subsequence first increases, then decreases. Either part may be empty, so fully increasing or fully decreasing arrays count, giving n.</p>
+    <ul>
+      <li>{1, 11, 2, 10, 4, 5, 2, 1} gives 6 (1 2 10 5 2 1, or 1 2 10 4 2 1).</li>
+      <li>{12, 11, 40, 5, 3, 1} gives 5 (11 or 12, then 40 5 3 1).</li>
+      <li>{30, 20, 10} gives 3.</li>
+    </ul>
+    <p>Treat each element as the pivot:</p>
+    <ul>
+      <li>lis[i] is the LIS ending at i;</li>
+      <li>lds[i] is the longest decreasing subsequence starting at i. This is the LIS logic run from the right.</li>
+    </ul>
+    <p>The answer is max over i of (lis[i] + lds[i] − 1); the pivot is counted twice, hence the − 1. O(n²) time and Θ(n) extra space. Using the binary-search LIS it can be done in O(n log n); try that yourself.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Maximum sum increasing subsequence (board)</h4>
+<pre><code class="language-cpp">int msis[n];
+for (int i = 0; i &lt; n; i++) {
+    msis[i] = arr[i];
+    for (int j = 0; j &lt; i; j++)
+        if (arr[j] &lt; arr[i])
+            msis[i] = max(msis[i], arr[i] + msis[j]);
+}
+int res = msis[0];
+for (int i = 1; i &lt; n; i++)
+    res = max(res, msis[i]);
+return res;</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Bitonic trace (board)</h4>
+      <p>arr = {1, 11, 2, 10, 4, 5, 2, 1}:</p>
+      <ul>
+        <li>lis = {1, 2, 2, 3, 3, 4, 2, 1};</li>
+        <li>lds = {1, 5, 2, 4, 3, 3, 2, 1}.</li>
+      </ul>
+      <p>With 10 as the pivot: 3 + 4 − 1 = 6. With 11 as the pivot: 2 + 5 − 1 = 6. The answer is <strong>6</strong>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTE0NA%3D%3D" target="_blank" rel="noopener">Variations of LIS (Part 2)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h4>4. Building bridges</h4>
+    <p>Each pair (a, b) asks for a bridge from city a on one bank of a river to city b on the other. <strong>No two bridges may cross.</strong> Maximise the number of bridges.</p>
+    <ul>
+      <li>{(6, 2), (4, 3), (2, 6), (1, 5)} gives 2: take (2, 6) and (1, 5). Choosing (6, 2) would block every other bridge.</li>
+      <li>The second board example allows 5 bridges: 1–2, 3–4, 5–5, 6–7, 7–8.</li>
+    </ul>
+    <p><strong>Solution:</strong></p>
+    <ol>
+      <li>Sort the pairs by first value. On a tie, sort by second value, so (2, 3) comes before (2, 6).</li>
+      <li>Find the LIS of the second values.</li>
+    </ol>
+    <p>The example sorts to (1, 5), (2, 6), (4, 3), (6, 2). The second values are 5 6 3 2, whose LIS is 5 6, length <strong>2</strong>.</p>
+    <p>The tie rule matters. Two bridges from the same city don't cross, so with an extra pair (1, 3), placing (1, 3) before (1, 5) gives an LIS of 3 instead of 2.</p>
+    <p>Sorting is O(n log n) and the binary-search LIS is O(n log n), so the total is <strong>O(n log n)</strong>.</p>
+    <h4>5. Longest chain of pairs</h4>
+    <p>In every pair (a, b), a &lt; b. Pair (a, b) may come before (c, d) in a chain only if b &lt; c. Find the longest chain.</p>
+    <ul>
+      <li>{(5, 24), (39, 60), (15, 28), (27, 40), (50, 90)} gives 3: (5, 24), (27, 40), (50, 90).</li>
+      <li>{(6, 8), (3, 4)} gives 2: (3, 4) then (6, 8).</li>
+    </ul>
+    <p><strong>DP solution:</strong></p>
+    <ul>
+      <li>Sort by first value, then run the LIS DP with the condition <code>arr[i].first &gt; arr[j].second</code> in place of arr[j] &lt; arr[i].</li>
+      <li>Sorting is needed: unsorted, {(6, 8), (3, 4)} would give 1.</li>
+      <li>This is O(n²), or O(n log n) with the binary-search LIS.</li>
+    </ul>
+    <p><strong>Greedy alternative:</strong> this is the <strong>activity selection</strong> problem: one machine or conference room and the most non-overlapping meetings. Sort by finish (second) value, then scan in O(n). That is O(n log n) overall, with only an O(n) post-processing step, which makes it the better solution.</p>
+    <p>Compared with building bridges, this is the more specific version. Here a &lt; b always holds, while a bridge may go from 90 to 50.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <ol>
+      <li>Building bridges on {(6, 2), (4, 3), (2, 6), (1, 5)}: sorted, the second values are 5 6 3 2, so the LIS is 2.</li>
+      <li>Chain of pairs: after sorting by first value, the LIS condition becomes <code>arr[j].second &lt; arr[i].first</code>.</li>
+      <li>The chain problem is activity selection, so the greedy solution (sort by second value) also works.</li>
+    </ol>
+  </section>
+</template>
+
+<template id="DSASP-DP-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTEzNQ%3D%3D" target="_blank" rel="noopener">Maximum Cuts</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> Cut a rod of length n into the maximum number of pieces, where every piece has length a, b or c. Return −1 if that's impossible.</p>
+    <ul>
+      <li>n = 5, a = 1, b = 2, c = 3 gives <strong>5</strong>: five pieces of 1 beat, say, 2 + 3.</li>
+      <li>n = 23, a = 12, b = 11, c = 13 gives <strong>2</strong> (11 + 12). Cutting 13 would leave 10, which is not allowed.</li>
+      <li>n = 3, a = 2, b = 4, c = 2 gives <strong>−1</strong>.</li>
+    </ul>
+    <p><strong>Recursion</strong> (covered in detail in the Recursion track):</p>
+    <ul>
+      <li>n == 0 returns 0, and n &lt; 0 returns −1.</li>
+      <li>Otherwise take the max of the three calls on n − a, n − b and n − c. Return −1 if that max is −1, else max + 1.</li>
+      <li>The worst case is O(3<sup>n</sup>): with pieces of length 1 there are 3 calls on n − 1, then 9 on n − 2, and so on.</li>
+    </ul>
+    <p><strong>DP (tabulation):</strong> dp[i] is the answer for a rod of length i, and dp[0] = 0.</p>
+    <ol>
+      <li>For i = 1 … n, start dp[i] at −1.</li>
+      <li>For each of a, b and c with i − x ≥ 0 (no negative index), take dp[i] = max(dp[i], dp[i − x]).</li>
+      <li>If dp[i] is not −1, increment it (one more piece).</li>
+    </ol>
+    <p>The −1 check is essential. Without it, impossible cases would be incremented to 0, 1, …, giving wrong results; for example, n = 5 with a = b = c = 2 must stay −1.</p>
+    <p><strong>Complexity:</strong> Θ(n) time and Θ(n) auxiliary space, down from O(3<sup>n</sup>).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUyMQ%3D%3D" target="_blank" rel="noopener">Maximum Cuts</a></p>
+<ul>
+<li>Cut a rod of length l into the most segments of length p, q or r. l = 11, (2, 3, 5) gives 5 (2, 2, 2, 2, 3); l = 7, (2, 5, 5) gives 2.</li>
+<li><strong>Approach 1:</strong> recursion over the three cuts, made only when the remaining length allows it, plus memoization (l = 4 repeats l = 2, 3, 1). O(n) time and space.</li>
+<li><strong>Approach 2 (DP):</strong> initialise DP[] = −1 and DP[0] = 0. For each i with DP[i] ≠ −1, set DP[i + p] = max(DP[i + p], DP[i] + 1), and likewise for q and r. The article's trace for l = 11 ends at 5.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Tabulation (board)</h4>
+<pre><code class="language-cpp">int maxCuts(int n, int a, int b, int c) {
+    int dp[n + 1];
+    dp[0] = 0;
+    for (int i = 1; i &lt;= n; i++) {
+        dp[i] = -1;
+        if (i - a &gt;= 0) dp[i] = max(dp[i], dp[i - a]);
+        if (i - b &gt;= 0) dp[i] = max(dp[i], dp[i - b]);
+        if (i - c &gt;= 0) dp[i] = max(dp[i], dp[i - c]);
+        if (dp[i] != -1)
+            dp[i]++;
+    }
+    return dp[n];
+}</code></pre>
+      <p>Board run: for n = 5, a = 1, b = 2, c = 3 the table is dp = 0, 1, 2, 3, 4, 5, so the answer is 5.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-16">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTEzNw%3D%3D" target="_blank" rel="noopener">Minimum coins to make a value</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> Given a value and coin types, each with an infinite supply, find the minimum number of coins that make the value.</p>
+    <ul>
+      <li>coins = {25, 10, 5}, val = 30 gives <strong>2</strong> (25 + 5), compared with six 5s or three 10s.</li>
+    </ul>
+    <p><strong>Greedy doesn't always work.</strong> "Take the largest coin that fits" gives 3 coins (9 + 1 + 1) for coins {9, 6, 5, 1} and value 11, but 6 + 5 needs only 2. Greedy does work for denominations like the Indian coins 1, 2, 5, 10.</p>
+    <p><strong>Recursion:</strong> for every coin ≤ val, use it (count 1), recurse on val − coin, and keep the minimum.</p>
+    <ul>
+      <li>val == 0 returns 0.</li>
+      <li>"No solution" is INT_MAX (C++) or Integer.MAX_VALUE (Java), standing for infinity. For example, an odd value can't be made from even coins.</li>
+      <li>Never add 1 to an infinite sub-result.</li>
+      <li>For getMin(30) with {25, 10, 5}, the three branches give 1, 2 and 1, so the answer is 1 + 1 = 2. Subproblems such as getMin(5) and getMin(10) repeat, so DP applies.</li>
+    </ul>
+    <p><strong>DP:</strong> only val changes, so use dp[val + 1], where <strong>dp[i] is the minimum number of coins for value i</strong>.</p>
+    <ol>
+      <li>dp[0] = 0, and everything else starts at infinity.</li>
+      <li>For i = 1 … val and every coin ≤ i: if dp[i − coin] isn't infinite, set dp[i] = min(dp[i], dp[i − coin] + 1).</li>
+      <li>Return dp[val].</li>
+    </ol>
+    <p>Bottom-up, all values 0 … i − 1 are ready when i is reached.</p>
+    <p><strong>Complexity:</strong> Θ(n × val) time and Θ(val) auxiliary space.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUyMg%3D%3D" target="_blank" rel="noopener">Minimum coins to make a value</a></p>
+<ul>
+<li>Print −1 if no change is possible. {25, 10, 5} with V = 30 gives 2, and {9, 6, 5, 1} with V = 11 gives 2 (6 + 5).</li>
+<li>This is a variation of Coin Change: the minimum count rather than the number of ways.</li>
+<li>The recursion is exponential; e.g. from V = 11, subproblem 6 is reached twice. The bottom-up table is O(mV).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive (board)</h4>
+<pre><code class="language-cpp">int getMin(int coins[], int n, int val) {
+    if (val == 0) return 0;
+    int res = INT_MAX;   // Integer.MAX_VALUE in Java
+    for (int i = 0; i &lt; n; i++) {
+        if (coins[i] &lt;= val) {
+            int sub_res = getMin(coins, n, val - coins[i]);
+            if (sub_res != INT_MAX)
+                res = min(res, sub_res + 1);
+        }
+    }
+    return res;
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Tabulation (board, with fix)</h4>
+<pre><code class="language-cpp">int getMin(int arr[], int n, int val) {
+    int dp[val + 1];
+    dp[0] = 0;
+    for (int i = 1; i &lt;= val; i++)
+        dp[i] = INT_MAX;
+    for (int i = 1; i &lt;= val; i++) {
+        for (int j = 0; j &lt; n; j++) {
+            if (arr[j] &lt;= i) {
+                int sub_res = dp[i - arr[j]];
+                if (sub_res != INT_MAX)
+                    dp[i] = min(dp[i], sub_res + 1);
+            }
+        }
+    }
+    return dp[val];
+}</code></pre>
+      <p>Board run on coins = {3, 4, 1}, val = 5:</p>
+      <ul>
+        <li>dp = 0, 1, 2, 1, 1, 2.</li>
+        <li>dp[5]'s candidates are 3, 2 and 2, so the answer is <strong>2</strong>.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board slip, fixed above:</strong> the board sets <code>dp[0] = 0</code> and then runs its INT_MAX loop from <code>i = 0</code>, which overwrites dp[0]. Every value would then stay infinite. The initialisation loop must start at 1, as the teacher describes ("initialize the first cell as zero and remaining cells as infinite").</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-17">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTEzOA%3D%3D" target="_blank" rel="noopener">Minimum Jumps to reach at end</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> arr[i] is the maximum jump length from cell i: from a 3 you can move 1, 2 or 3 cells ahead. Find the minimum number of jumps from the first cell to the last.</p>
+    <ul>
+      <li>{3, 4, 2, 1, 2, 1} gives <strong>2</strong> (3 → 4 → last). Paths like 3 → 2 → 2 → 1 take 3.</li>
+      <li>The second board example (ending in 8) gives <strong>3</strong>, e.g. 4 → 5 → 3 → 8 or 4 → 5 → 1 → 8.</li>
+      <li>If the last cell can't be reached (e.g. all zeros), the result is infinite: INT_MAX in C++, Integer.MAX_VALUE in Java.</li>
+    </ul>
+    <p><strong>Recursion</strong>, working back from the last cell. For every i ≤ n − 2 with i + arr[i] ≥ n − 1 (cell n − 1 is reachable from i):</p>
+    <ul>
+      <li>recursively find the jumps to reach i, as minJumps(arr, i + 1);</li>
+      <li>if that isn't infinite, keep min(res, sub + 1), the + 1 being the final jump.</li>
+    </ul>
+    <p>Base case: n == 1 needs 0 jumps. In the example, the cells that reach the last index are 4 (index 1, since 1 + 4 = 5) and 2 (index 4).</p>
+    <p><strong>Tabulation</strong>, like LIS: dp[i] is the minimum number of jumps to reach i from 0.</p>
+    <ol>
+      <li>dp[0] = 0, and everything else starts at infinity.</li>
+      <li>For each i, look at every j &lt; i with arr[j] + j ≥ i and dp[j] finite, and take dp[i] = min(dp[i], dp[j] + 1).</li>
+      <li>Return dp[n − 1].</li>
+    </ol>
+    <p>For {3, 4, 2, 1, 2, 1}, dp = 0, 1, 1, 1, 2, 2, so the answer is <strong>2</strong>.</p>
+    <p><strong>Complexity:</strong> Θ(n²) time and Θ(n) extra space.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUyNg%3D%3D" target="_blank" rel="noopener">Minimum Jumps to reach at end</a></p>
+<ul>
+<li>Return −1 if the end isn't reachable.</li>
+<li>{1, 3, 5, 8, 9, 2, 6, 7, 6, 8, 9} gives 3 (1 → 3 → 9 → 9). {1, 1, …, 1} (11 ones) gives 10.</li>
+<li>minJumps(3, 9) is called twice, so it's DP.</li>
+<li>Left-to-right jumps[] (initialised to INT_MAX), updating jumps[i] from every j with i ≤ j + arr[j]: O(n²) time, O(n) space.</li>
+<li>A right-to-left version (jumps[i] = jumps from i to n − 1, returning jumps[0]) has the same complexity.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive (board)</h4>
+<pre><code class="language-cpp">int minJumps(int arr[], int n) {
+    if (n == 1) return 0;
+    int res = INT_MAX;   // Integer.MAX_VALUE in Java
+    for (int i = 0; i &lt;= n - 2; i++) {
+        if (i + arr[i] &gt;= n - 1) {
+            int sub_res = minJumps(arr, i + 1);
+            if (sub_res != INT_MAX)
+                res = min(res, sub_res + 1);
+        }
+    }
+    return res;
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Tabulation (board)</h4>
+<pre><code class="language-cpp">int minJumps(int arr[], int n) {
+    int dp[n];
+    dp[0] = 0;
+    for (int i = 1; i &lt; n; i++)
+        dp[i] = INT_MAX;   // Integer.MAX_VALUE in Java
+    for (int i = 1; i &lt; n; i++)
+        for (int j = 0; j &lt; i; j++)
+            if (arr[j] + j &gt;= i)
+                if (dp[j] != INT_MAX)
+                    dp[i] = min(dp[i], dp[j] + 1);
+    return dp[n - 1];
+}</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-18">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTEzOQ%3D%3D" target="_blank" rel="noopener">0-1 knapsack problem</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> Given a knapsack of capacity W and items with values and weights, pick zero or more items whose total weight doesn't exceed W, maximising the total value.</p>
+    <ul>
+      <li>Each item is taken whole or not at all: "0-1", with no partial credit.</li>
+      <li>There is one instance of each item. Variations allow several or infinite copies.</li>
+    </ul>
+    <p>Real-world forms:</p>
+    <ul>
+      <li>A company budget of $10,000, with tasks that each have a cost and a value.</li>
+      <li>An exam with 10 hours, where questions take some hours and give some marks, and a half-solved question scores nothing.</li>
+    </ul>
+    <p>Examples:</p>
+    <ul>
+      <li>val = {10, 40, 30, 50}, wt = {5, 4, 6, 3}, W = 10 gives <strong>90</strong> (weights 4 and 3, leaving 3 kg unused).
+        <ul>
+          <li>Weights 4 + 6 give 70, and 5 + 4 give 50.</li>
+        </ul>
+      </li>
+      <li>wt = {10, 20, 30}, val = {60, 100, 120}, W = 50 gives <strong>220</strong> (100 + 120; weight exactly 50).</li>
+    </ul>
+    <p><strong>Recursion.</strong> Considering all 2<sup>n</sup> subsets is the same idea as subset generation in the Recursion track. Starting from the last item avoids passing an index.</p>
+    <ul>
+      <li>If wt[n − 1] &gt; W, the item can't fit: ignore it and recurse on n − 1.</li>
+      <li>Otherwise take the max of two cases:
+        <ul>
+          <li>exclude it: knapSack(W, n − 1);</li>
+          <li>include it: val[n − 1] + knapSack(W − wt[n − 1], n − 1).</li>
+        </ul>
+      </li>
+      <li><strong>Base case:</strong> n == 0 or W == 0 returns 0. W never goes negative, because an item is subtracted only when it fits.</li>
+    </ul>
+    <p><strong>Time:</strong></p>
+    <ul>
+      <li>The worst case has two calls each time: T(n) = 2T(n − 1) + Θ(1), so O(2<sup>n</sup>).</li>
+      <li>If every item is heavier than the knapsack, there is one call per item: Θ(n).</li>
+    </ul>
+    <p>DP gives <strong>O(W × n)</strong>. That is better only when W × n &lt; 2<sup>n</sup>; for 5 items and capacity 5,000 it isn't. Two parameters change (n: 0 … n, W: 0 … W), so the table is (n + 1) × (W + 1). That comes in the next video.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive solution (board, with fix)</h4>
+<pre><code class="language-cpp">int knapSack(int W, int wt[], int val[], int n) {
+    if (n == 0 || W == 0)
+        return 0;
+    if (wt[n - 1] &gt; W)
+        return knapSack(W, wt, val, n - 1);
+    else
+        return max(knapSack(W, wt, val, n - 1),
+                   val[n - 1] + knapSack(W - wt[n - 1], wt, val, n - 1));
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Slips:</strong></p>
+      <ul>
+        <li>The board's <code>else</code> branch is <code>max(…)</code> with no <code>return</code>, so <code>return</code> is added above.</li>
+        <li>For the second example, the transcript says the maximum is "hundred twenty". Taking the 100 and 120 items gives <strong>220</strong>.</li>
+        <li>The teacher says "there is a partial marking" while explaining that there is <em>no</em> partial marking.</li>
+        <li>The single-call best case is said as "theta of M"; it is Θ(n).</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-19">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTE0MA%3D%3D" target="_blank" rel="noopener">0-1 knapsack problem DP Solution</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Two parameters change in the recursion: n (0 … n) and W (0 … W). So make dp[n + 1][W + 1], where <strong>dp[i][j] is the maximum value from the first i items with knapsack capacity j</strong>. The answer sits in the corner cell dp[n][W].</p>
+    <ul>
+      <li>Row 0 is all 0 (no items), and column 0 is all 0 (no capacity). These are the recursion's base cases.</li>
+      <li>Fill row by row from (1, 1). The i-th item is at index i − 1:
+        <ul>
+          <li>if wt[i − 1] &gt; j, it can't fit: dp[i][j] = dp[i − 1][j];</li>
+          <li>otherwise dp[i][j] = max(val[i − 1] + dp[i − 1][j − wt[i − 1]], dp[i − 1][j]), the include and exclude cases.</li>
+        </ul>
+      </li>
+    </ul>
+    <p>Example: dp[2][5] = max(40 + dp[1][1], dp[1][5]) = max(40, 10) = 40.</p>
+    <p>Row 1 shows there is only one instance of each item: with item 1 (5 kg, value 10), the value stays 10 even at capacity 10.</p>
+    <p><strong>Complexity:</strong> Θ(n × W) time and Θ(n × W) auxiliary space.</p>
+    <p>Because of the factor W, this isn't polynomial but <em>pseudo-polynomial</em>, and with a huge W it can be worse than 2<sup>n</sup>. The teacher calls knapsack one of the hard ("NP-hard") problems of computer science.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUyNw%3D%3D" target="_blank" rel="noopener">0-1 knapsack problem</a></p>
+<ul>
+<li><strong>Method 1, brute force:</strong> all subsets. O(2<sup>n</sup>) time and O(N) stack space; K(1, 1) is evaluated twice.</li>
+<li><strong>Method 2, tabulation:</strong> DP[i][j] is the best value for weight j using items 1 … i. Either don't fill w<sub>i</sub> (DP[i − 1][j]) or fill it (its value + DP[i − 1][j − w<sub>i</sub>]). O(N × W) time and space.</li>
+<li>A space-optimised version keeps only 2 rows: O(2 × W).</li>
+<li><strong>Method 3, memoization:</strong> O(N × W) time, and O(N × W) + O(N) stack space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Tabulation (board)</h4>
+<pre><code class="language-cpp">int knapSack(int W, int wt[], int val[], int n) {
+    int dp[n + 1][W + 1];
+    for (int i = 0; i &lt;= W; i++) dp[0][i] = 0;
+    for (int i = 0; i &lt;= n; i++) dp[i][0] = 0;
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 1; j &lt;= W; j++)
+            if (wt[i - 1] &gt; j)
+                dp[i][j] = dp[i - 1][j];
+            else
+                dp[i][j] = max(val[i - 1] + dp[i - 1][j - wt[i - 1]],
+                               dp[i - 1][j]);
+    return dp[n][W];
+}</code></pre>
+      <p>Board table for val = {10, 40, 30, 50}, wt = {5, 4, 6, 3}, W = 10 (rows i, columns j):</p>
+      <div class="scroll"><table>
+        <tr><th>i \ j</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+        <tr><th>0</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><th>1</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td><td>10</td></tr>
+        <tr><th>2</th><td>0</td><td>0</td><td>0</td><td>0</td><td>40</td><td>40</td><td>40</td><td>40</td><td>40</td><td>50</td><td>50</td></tr>
+        <tr><th>3</th><td>0</td><td>0</td><td>0</td><td>0</td><td>40</td><td>40</td><td>40</td><td>40</td><td>40</td><td>50</td><td>70</td></tr>
+        <tr><th>4</th><td>0</td><td>0</td><td>0</td><td>50</td><td>50</td><td>50</td><td>50</td><td>90</td><td>90</td><td>90</td><td>90</td></tr>
+      </table></div>
+      <p>The answer is dp[4][10] = <strong>90</strong>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-20">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTE0MQ%3D%3D" target="_blank" rel="noopener">Optimal Strategy for a Game</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> An even number of coins lie in a row, and two players take turns; you move first. On each turn a player takes one of the two <em>corner</em> coins. The opponent plays as smartly as you. Find the maximum value you can collect.</p>
+    <ul>
+      <li>{20, 5, 4, 6} gives <strong>25</strong>: take 20, the opponent takes 6, you take 5.</li>
+      <li>{2, 3, 15, 7} gives <strong>17</strong>. Taking 7 first would open 15 to the opponent, so take 2. The opponent takes 7 (either way you get 15), you take 15, the opponent takes 3.</li>
+    </ul>
+    <p><strong>Easier variant: never lose.</strong> You can always force the opponent to take only odd-placed or only even-placed coins. Take coin n (even); the opponent can then only take n − 1 or 1 (both odd), and so on.</p>
+    <ul>
+      <li>So compare the sums of the odd-placed and even-placed coins and stick to the bigger side. That is a greedy solution, and it at worst ties. For 2, 3, 8, 7 both sums are 10.</li>
+      <li>It doesn't maximise the value, though: on {20, 5, 4, 6} the odd strategy gives 24, but 25 is possible.</li>
+    </ul>
+    <p><strong>Recursive solution 1 (with the sum).</strong></p>
+    <ul>
+      <li>A non-recursive wrapper computes the total sum (35 for {20, 5, 4, 6, 10}).</li>
+      <li>Then sol(arr, i, j, sum): if j == i + 1, return max(arr[i], arr[j]).</li>
+      <li>Otherwise return max(sum − sol(i + 1, j, sum − arr[i]), sum − sol(i, j − 1, sum − arr[j])).</li>
+      <li>After your pick, the recursive call returns the <em>opponent's</em> best on the rest, and subtracting it from the sum gives your value.</li>
+      <li>Drawback: as a DP it needs a dimension indexed by sum, which can be huge.</li>
+    </ul>
+    <p><strong>Recursive solution 2 (no sum).</strong> If you pick arr[i], the opponent picks i + 1 or j and leaves you the <em>minimum</em> of what remains. So:</p>
+    <ul>
+      <li>pick i: arr[i] + min(sol(i + 2, j), sol(i + 1, j − 1));</li>
+      <li>pick j: arr[j] + min(sol(i + 1, j − 1), sol(i, j − 2));</li>
+      <li>return the max of the two. Base case: i + 1 == j returns max(arr[i], arr[j]). Ranges shrink by 2, so they stay even.</li>
+    </ul>
+    <p>Only i and j change (0 … n − 1), so the DP table is n × n.</p>
+    <p><strong>DP fill order is the tricky part.</strong></p>
+    <ul>
+      <li>The answer is dp[0][n − 1], and dp[i][j] needs cells from the second diagonal below it. Only j &gt; i is used.</li>
+      <li>So row-by-row filling fails. First fill the base diagonal dp[i][i + 1] = max(arr[i], arr[i + 1]).</li>
+      <li>Then fill diagonals with gap = j − i = 3, 5, … (gap += 2), for i from 0 while i + gap &lt; n.</li>
+    </ul>
+    <p><strong>Complexity:</strong> Θ(n²) time and Θ(n²) auxiliary space.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUyOA%3D%3D" target="_blank" rel="noopener">Optimal Strategy for a Game</a></p>
+<ul>
+<li>{5, 3, 7, 10} gives 15 (10 + 5); {8, 15, 3, 7} gives 22 (7 + 15).</li>
+<li>Picking the best coin at each move is <em>not</em> optimal. On {8, 15, 3, 7}, taking 8 first gives 15, while taking 7 first gives 22.</li>
+<li>F(i, j) = max(V<sub>i</sub> + min(F(i + 2, j), F(i + 1, j − 1)), V<sub>j</sub> + min(F(i + 1, j − 1), F(i, j − 2))). The opponent leaves the user the minimum.</li>
+<li>Recursive top-down and bottom-up versions; the bottom-up one is O(n²) time and O(n²) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive solutions (from the transcript)</h4>
+<pre><code class="language-cpp">// Solution 1: wrapper passes sum = total of arr, i = 0, j = n - 1
+int sol1(int arr[], int i, int j, int sum) {
+    if (j == i + 1)
+        return max(arr[i], arr[j]);
+    return max(sum - sol1(arr, i + 1, j, sum - arr[i]),
+               sum - sol1(arr, i, j - 1, sum - arr[j]));
+}
+
+// Solution 2
+int sol2(int arr[], int i, int j) {
+    if (i + 1 == j)
+        return max(arr[i], arr[j]);
+    return max(arr[i] + min(sol2(arr, i + 2, j), sol2(arr, i + 1, j - 1)),
+               arr[j] + min(sol2(arr, i + 1, j - 1), sol2(arr, i, j - 2)));
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>DP (board)</h4>
+<pre><code class="language-cpp">int sol(int arr[], int n) {
+    int dp[n][n];
+    for (int i = 0; i &lt; n - 1; i++)
+        dp[i][i + 1] = max(arr[i], arr[i + 1]);
+    for (int gap = 3; gap &lt; n; gap = gap + 2) {
+        for (int i = 0; i + gap &lt; n; i++) {
+            int j = i + gap;
+            dp[i][j] = max(arr[i] + min(dp[i + 2][j], dp[i + 1][j - 1]),
+                           arr[j] + min(dp[i + 1][j - 1], dp[i][j - 2]));
+        }
+    }
+    return dp[0][n - 1];
+}</code></pre>
+      <p>Board dry run for {20, 5, 4, 6, 8, 3}:</p>
+      <ul>
+        <li>Base diagonal: dp[0][1] = 20, dp[1][2] = 5, dp[2][3] = 6, dp[3][4] = 8, dp[4][5] = 8.</li>
+        <li>Gap 3: dp[0][3] = max(20 + min(6, 5), 6 + min(5, 20)) = <strong>25</strong>. The table also shows dp[1][4] = 13 and dp[2][5] = 12.</li>
+        <li>Gap 5: dp[0][5] = <strong>32</strong> (20 + 4 + 8; the transcript says "24 and 8").</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Notes:</strong></p>
+      <ul>
+        <li>The recursive code above is written from the transcript; the board showed it only partly in the frames checked.</li>
+        <li>In the dp[0][3] dry run, the board and transcript use "3 + min(5, 20) = 8" for the pick-j case. arr[3] is 6, so it is 6 + 5 = 11. The max is still 25.</li>
+        <li>The first term of the board's DP formula is hard to read. The transcript gives min(dp[i + 2][j], dp[i + 1][j − 1]), as above.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-21">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTU5NQ%3D%3D" target="_blank" rel="noopener">Egg Dropping Puzzle - Part 1</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> There are f floors and e eggs. The <strong>threshold floor</strong> is the lowest floor from which a dropped egg breaks; from every floor below it, the egg survives.</p>
+    <ul>
+      <li>An egg may break from the 1st floor, or may not break even from the top floor (no threshold at all).</li>
+      <li>If it breaks from floor i, it breaks from every higher floor.</li>
+    </ul>
+    <p>The task is <em>not</em> to find the threshold floor. It is to find the <strong>minimum number of trials (drops) needed in the worst case</strong> to find it, whichever floor it turns out to be.</p>
+    <ul>
+      <li><strong>1 egg, 10 floors gives 10.</strong> You must go up one floor at a time (1, 2, 3, …). Dropping higher first risks breaking the only egg without knowing the answer.</li>
+      <li><strong>2 eggs, 10 floors gives 4.</strong>
+        <ol>
+          <li>Drop from 4. If it breaks, test 1, 2, 3 one by one: 1 + 3 trials.</li>
+          <li>Otherwise drop from 7. If it breaks, test 5 and 6.</li>
+          <li>Otherwise drop from 9. If it breaks, test 8; if not, test 10.</li>
+          <li>Every case needs at most 4 trials, and 4 is optimal. (How 4, 7, 9 are chosen comes later.)</li>
+        </ol>
+      </li>
+    </ul>
+    <p><strong>Simple recursion.</strong> Let res(f, e) be the minimum worst-case trials. Try the first drop from every floor x = 1 … f:</p>
+    <ul>
+      <li><strong>It breaks:</strong> e − 1 eggs are left, and only the x − 1 floors below need checking. That gives res(x − 1, e − 1).</li>
+      <li><strong>It survives:</strong> the same e eggs (it can be reused), and the f − x floors above. That gives res(f − x, e).</li>
+      <li>Take the <em>max</em> of the two (worst case) plus 1 for this drop. The answer is the <em>min</em> over all x:</li>
+    </ul>
+    <p class="formula">res(f, e) = min over x = 1 … f of { max(res(x − 1, e − 1), res(f − x, e)) } + 1</p>
+    <p><strong>Base cases:</strong></p>
+    <ul>
+      <li>1 egg: res(f, 1) = f.</li>
+      <li>1 floor: res(1, e) = 1.</li>
+      <li>0 floors: res(0, e) = 0 (ground level, nothing to try).</li>
+    </ul>
+    <p>The DP implementation comes in the next video.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <ol>
+      <li>1 egg, 10 floors: 10 trials, one floor at a time.</li>
+      <li>2 eggs, 10 floors: drop at 4, then 7, then 9, so 4 trials in the worst case.</li>
+      <li>Write the recursion: a loop over x, the max of the break and no-break calls, plus 1, then the min over x, with the three base cases.</li>
+    </ol>
+  </section>
+</template>
+
+<template id="DSASP-DP-22">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTU5Ng%3D%3D" target="_blank" rel="noopener">Egg Dropping Puzzle - Part 2</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A plain recursive implementation of res(f, e) = min over x of {max(res(x − 1, e − 1), res(f − x, e))} + 1 has overlapping subproblems.</p>
+    <ul>
+      <li>With f = 10, e = 2 the loop makes 20 calls at the top level.</li>
+      <li>Some of them, such as res(8, 2), appear more than once.</li>
+    </ul>
+    <p><strong>DP table.</strong> Floors go 0 … f, and eggs go 1 … e.</p>
+    <ul>
+      <li>Use dp[f + 1][e + 1] with a dummy column 0, so the egg count can be used directly as an index, without "− 1".</li>
+      <li>In Java: <code>int[][] dp = new int[f + 1][e + 1];</code>.</li>
+    </ul>
+    <p><strong>dp[i][j] is the minimum worst-case trials for i floors and j eggs.</strong></p>
+    <ul>
+      <li>Pre-fill row 0 with 0 (no floors), row 1 with 1 (one floor), and column 1 with i (one egg, so floor by floor).</li>
+      <li>For i = 2 … f and j = 2 … e, start at infinity: INT_MAX in C++, Integer.MAX_VALUE in Java.</li>
+      <li>Then take dp[i][j] = min(dp[i][j], 1 + max(dp[x − 1][j − 1], dp[i − x][j])) for x = 1 … i. Use Math.min and Math.max in Java.</li>
+    </ul>
+    <p>Each cell needs cells from upper rows (i − x, x − 1 &lt; i) and from the previous column, so filling row by row works. The answer is dp[f][e].</p>
+    <p>Example: dp[2][2] is computed with x = 1 and x = 2.</p>
+    <ul>
+      <li>x = 1 gives max(dp[0][1], dp[1][2]) = max(0, 1) = 1.</li>
+      <li>x = 2 gives max(dp[1][1], dp[0][2]) = max(1, 0) = 1.</li>
+      <li>So dp[2][2] = 1 + min(1, 1) = 2.</li>
+    </ul>
+    <p><strong>Complexity:</strong> O(f² e) time and O(f e) auxiliary space.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUyOQ%3D%3D" target="_blank" rel="noopener">Egg Dropping Puzzle</a></p>
+<ul>
+<li>The classic instance is 2 eggs and a 36-floor building. A surviving egg can be reused, a broken one is discarded, and every egg behaves the same.</li>
+<li>With 1 egg you go floor by floor (up to 36 drops). The task is to choose the floors to drop from so that the worst-case number of trials is minimised, not to find the critical floor.</li>
+<li>eggDrop(n, k) = 1 + min over x = 1 … k of max(eggDrop(n − 1, x − 1), eggDrop(n, k − x)). With 2 eggs and 2 floors the answer is 2 either way.</li>
+<li>The recursion is exponential; E(2, 2) repeats.</li>
+<li>DP table for 2 eggs and 4 floors: the row for egg 2 is 1, 2, 2, 3. O(n·k²) time and O(n·k) space. A memoized version is also given.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Tabulation (board)</h4>
+<pre><code class="language-cpp">int res(int e, int f) {
+    int dp[f + 1][e + 1];   // Java: int[][] dp = new int[f + 1][e + 1];
+    for (int i = 1; i &lt;= e; i++) { dp[1][i] = 1; dp[0][i] = 0; }
+    for (int j = 1; j &lt;= f; j++) { dp[j][1] = j; }
+    for (int i = 2; i &lt;= f; i++) {
+        for (int j = 2; j &lt;= e; j++) {
+            dp[i][j] = INT_MAX;   // Integer.MAX_VALUE
+            for (int x = 1; x &lt;= i; x++)
+                dp[i][j] = min(dp[i][j],
+                               1 + max(dp[x - 1][j - 1], dp[i - x][j]));
+        }
+    }
+    return dp[f][e];
+}</code></pre>
+      <p>Time O(f² e), auxiliary space O(f e).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-23">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/NzQyNw%3D%3D" target="_blank" rel="noopener">Count BSTs with n keys</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 10 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The description says the video discusses a recursive structure, then a DP solution, and finally the relation with Catalan numbers.</p>
+    <p><strong>Problem</strong> (board): count the distinct BSTs that can be built with n distinct keys.</p>
+    <ul>
+      <li>n = 0 gives 1, and n = 1 gives 1.</li>
+      <li>n = 2 gives 2, and n = 3 gives 5 (all trees drawn).</li>
+      <li>n = 4 gives 14, and n = 5 gives 42.</li>
+    </ul>
+    <p><strong>Recursive structure.</strong> Make each key the root in turn. With keys 1 … n and root i, the keys below i form the left subtree and the keys above form the right one. Their counts multiply.</p>
+    <p>For n = 5:</p>
+    <ul>
+      <li>root 1: 14 (right {2, 3, 4, 5});</li>
+      <li>root 2: 5 (left {1}, right {3, 4, 5});</li>
+      <li>root 3: 2 × 2 = 4;</li>
+      <li>root 4: 5;</li>
+      <li>root 5: 14.</li>
+    </ul>
+    <p>The total is 42, using the "Results" box 0→1, 1→1, 2→2, 3→5, 4→14.</p>
+    <p class="formula">res(n) = res(0)·res(n − 1) + res(1)·res(n − 2) + … + res(n − 1)·res(0) = Σ<sub>i = 0 … n − 1</sub> res(i) · res(n − i − 1), with res(0) = 1</p>
+    <p><strong>DP:</strong> dp[i] is the result for i keys. dp[0] = 1, and dp[i] = Σ<sub>j &lt; i</sub> dp[j] · dp[i − j − 1].</p>
+    <ul>
+      <li>i = 2: 1×1 + 1×1 = 2.</li>
+      <li>i = 3: 1×2 + 1×1 + 2×1 = 5.</li>
+      <li>i = 4: 1×5 + 1×2 + 2×1 + 5×1 = 14.</li>
+    </ul>
+    <p><strong>Catalan numbers:</strong> res(n) is the n-th Catalan number, res(n) = (1/(n + 1)) · C(2n, n).</p>
+    <ul>
+      <li>res(1) = ½ · C(2, 1) = 1.</li>
+      <li>res(2) = ⅓ · C(4, 2) = ⅓ · 4!/(2!·2!) = 2.</li>
+      <li>res(3) = ¼ · C(6, 3) = ¼ · 6!/(3!·3!) = 5.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUzMQ%3D%3D" target="_blank" rel="noopener">Count BSTs with n keys</a></p>
+<ul>
+<li>Take each i as the root: keys 1 … i − 1 go left and i + 1 … n go right.</li>
+<li>count(n) = Σ count(i − 1) × count(n − i). O(n²) time, O(n) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>DP (board)</h4>
+<pre><code class="language-cpp">int countBSTs(int n) {
+    int dp[n + 1];
+    dp[0] = 1;
+    for (int i = 1; i &lt;= n; i++) {
+        dp[i] = 0;
+        for (int j = 0; j &lt; i; j++)
+            dp[i] += dp[j] * dp[i - j - 1];
+    }
+    return dp[n];
+}</code></pre>
+      <p>The board fills dp = 1, 1, 2, 5, 14 for n = 4.</p>
+    </div>
+    <div class="added">
+      <p><strong>Added:</strong> the board shows no complexity. The two nested loops make this Θ(n²) time with Θ(n) extra space.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-24">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/NzQyNg%3D%3D" target="_blank" rel="noopener">Maximum sum with no two consecutive</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 10 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The description says the video covers recursive, DP and space-optimised DP solutions.</p>
+    <p><strong>Problem</strong> (board): find the maximum sum of array elements with no two consecutive elements picked.</p>
+    <ul>
+      <li>{1, 10, 2} gives 10.</li>
+      <li>{8, 7, 6, 10} gives 18 (8 + 10).</li>
+      <li>{10, 5, 15, 20, 2, 30} gives 60 (10 + 20 + 30).</li>
+    </ul>
+    <p><strong>Recursion</strong> on the first n elements:</p>
+    <ul>
+      <li>either skip the last element, maxSum(arr, n − 1);</li>
+      <li>or take it, maxSum(arr, n − 2) + arr[n − 1];</li>
+      <li>return the max. Base cases: n == 1 returns arr[0], and n == 2 returns max(arr[0], arr[1]).</li>
+    </ul>
+    <p>The board traces {10, 5, 15, 20} to 30. Its recursion-tree analysis repeats maxSum(2) and maxSum(1), and gives T(n) = T(n − 1) + T(n − 2) + O(1), which is exponential, O(2<sup>n</sup>).</p>
+    <p><strong>DP:</strong> dp[i] stores the result for an array of length i.</p>
+    <ul>
+      <li>dp[1] = arr[0], and dp[2] = max(arr[0], arr[1]).</li>
+      <li>For i ≥ 3, dp[i] = max(dp[i − 1], dp[i − 2] + arr[i − 1]).</li>
+      <li>Return dp[n].</li>
+    </ul>
+    <p><strong>Space optimised:</strong> only the last two values are needed. Keep prev_prev and prev, and slide them forward: O(1) extra space (the description's "DP-Code in O(1) space").</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUzMg%3D%3D" target="_blank" rel="noopener">Maximum sum with no two consecutive</a></p>
+<ul>
+<li>{5, 5, 10, 100, 10, 5} gives 110 (5 + 100 + 5); {3, 2, 7, 10} gives 13; {3, 2, 5, 10, 7} gives 15.</li>
+<li>Naive: all subsequences, O(2<sup>N</sup>) time and O(N) space.</li>
+<li>DP: dp[i][1] = dp[i − 1][0] + arr[i] (include) and dp[i][0] = max(dp[i − 1][0], dp[i − 1][1]) (exclude). O(N) time and space.</li>
+<li>Space-optimised with two variables, incl and excl: excl_new = max(excl, incl), then incl = excl + arr[i]. The trace on the first example ends at 110.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive (board)</h4>
+<pre><code class="language-cpp">int maxSum(int arr[], int n) {
+    if (n == 1) return arr[0];
+    else if (n == 2) return max(arr[0], arr[1]);
+    else
+        return max(maxSum(arr, n - 1),
+                   maxSum(arr, n - 2) + arr[n - 1]);
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>DP (board)</h4>
+<pre><code class="language-cpp">int maxSum(int arr[], int n) {
+    if (n == 1) return arr[0];
+    int dp[n + 1];
+    dp[1] = arr[0];
+    dp[2] = max(arr[0], arr[1]);
+    for (int i = 3; i &lt;= n; i++)
+        dp[i] = max(dp[i - 1], dp[i - 2] + arr[i - 1]);
+    return dp[n];
+}</code></pre>
+      <p>For arr = {10, 20, 30, 40, 50}, dp[1 … 5] = 10, 20, 40, 60, 90, so the answer is <strong>90</strong>.</p>
+    </div>
+    <div class="approach">
+      <h4>Space optimised (board)</h4>
+<pre><code class="language-cpp">int maxSum(int arr[], int n) {
+    if (n == 1) return arr[0];
+    int prev_prev = arr[0];
+    int prev = max(arr[0], arr[1]);
+    int res = prev;
+    for (int i = 3; i &lt;= n; i++) {
+        res = max(prev, prev_prev + arr[i - 1]);
+        prev_prev = prev;
+        prev = res;
+    }
+    return res;
+}</code></pre>
+      <p>Trace for {10, 5, 15, 20}:</p>
+      <ul>
+        <li>Initially prev_prev = 10, prev = 10, res = 10.</li>
+        <li>After i = 3: res = max(10, 10 + 15) = 25, prev_prev = 10, prev = 25.</li>
+        <li>After i = 4: res = max(25, 10 + 20) = <strong>30</strong>.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Added:</strong> the DP version is Θ(n) time with Θ(n) space; the space-optimised one is Θ(n) time with O(1) space. These follow from the loops; the board was not checked for them.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-25">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTQ2OQ%3D%3D" target="_blank" rel="noopener">Subset Sum Problem (Recursive Solution)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> Given a set (array) and a sum, count the subsets whose elements add up to the sum.</p>
+    <p>An n-element set has 2<sup>n</sup> subsets, counting the empty set and the whole set. For {1, 2, 3} they are {}, {1}, {2}, {3}, {1, 2}, {1, 3}, {2, 3} and {1, 2, 3}.</p>
+    <ul>
+      <li>{10, 5, 2, 3, 6}, sum 8 gives <strong>2</strong> ({5, 3} and {2, 6}).</li>
+      <li>{1, 2, 3}, sum 4 gives <strong>1</strong> ({1, 3}).</li>
+      <li>{10, 20, 15}, sum 37 gives <strong>0</strong>.</li>
+      <li>{10, 20, 15}, sum 0 gives <strong>1</strong> (the empty set).</li>
+    </ul>
+    <p><strong>Recursive idea.</strong> Every element is either excluded or included; this is how all subsets are generated. Go from the right, using n as the index of arr[n − 1].</p>
+    <ul>
+      <li>The tree for {10, 20, 15} has 2<sup>3</sup> = 8 leaves, one per subset. A size-4 set would have 5 levels and 16 leaves.</li>
+      <li>Instead of keeping the current subset in a vector or ArrayList, pass a remaining <code>sum</code>. Excluding an element leaves sum unchanged; including it subtracts the element.</li>
+      <li>When n reaches 0, every element has been decided. Return 1 if sum == 0 (this subset hits the target), else 0.</li>
+      <li>The two calls' counts add up the way back.</li>
+    </ul>
+    <p>For {10, 20, 15} and sum 25, the leaf {15, 10} has sum 0, so the answer is 1.</p>
+    <p><strong>Time:</strong> Θ(2<sup>n</sup>), as the description says: the tree always has 2<sup>n</sup> leaves.</p>
+    <p>This basic version can be optimised with backtracking, or with a pseudo-polynomial DP in Θ(n × sum) (next video).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive (board)</h4>
+<pre><code class="language-cpp">int countSubsets(int arr[], int n, int sum) {
+    if (n == 0)
+        return (sum == 0) ? 1 : 0;
+    return countSubsets(arr, n - 1, sum) +
+           countSubsets(arr, n - 1, sum - arr[n - 1]);
+}</code></pre>
+      <p>Board tree for {10, 20, 15}, sum 25:</p>
+      <ul>
+        <li>Excluding 15 keeps sum 25, and including it gives sum 10.</li>
+        <li>On the next level, the branches give sums 25, 5, 10 and −10.</li>
+        <li>The leaf {15, 10} reaches sum 0 and returns 1.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-26">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTQ3Mg%3D%3D" target="_blank" rel="noopener">Subset Sum Problem (DP Solution)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The recursion changes two parameters: n (0 … n) and sum (0 … sum). So use dp[n + 1][sum + 1], where <strong>dp[i][j] is the count of subsets of the first i elements with sum j</strong>. The answer is dp[n][sum].</p>
+    <ul>
+      <li><strong>Known entries:</strong>
+        <ul>
+          <li>column 0 is all 1, since sum 0 always has the empty subset;</li>
+          <li>row 0 (from j = 1) is all 0, since no elements can't make a positive sum.</li>
+        </ul>
+      </li>
+      <li><strong>Fill:</strong>
+        <ul>
+          <li>if j &lt; arr[i − 1], the element is too big to include: dp[i][j] = dp[i − 1][j];</li>
+          <li>otherwise dp[i][j] = dp[i − 1][j] + dp[i − 1][j − arr[i − 1]] (exclude + include).</li>
+        </ul>
+        That check is mandatory here, because sum is used as an index. It would also be a small optimisation in the recursion.
+      </li>
+    </ul>
+    <p>Fill row by row; column by column also works, but row-wise is more cache friendly.</p>
+    <p><strong>Java:</strong> <code>int dp[][] = new int[n + 1][sum + 1];</code>. No n parameter is needed (use arr.length).</p>
+    <p><strong>Complexity:</strong> the border loops are lower order, so <strong>Θ(n × sum)</strong> time and Θ(n × sum) auxiliary space (pseudo-polynomial).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUzMw%3D%3D" target="_blank" rel="noopener">Subset Sum Problem</a></p>
+<ul>
+<li>The decision version: is there a subset of non-negative integers with the given sum?</li>
+<li>Recursion: include the last element (sum − last, n − 1) or leave it (sum, n − 1). In the worst case it tries all subsets, so exponential.</li>
+<li>The problem is NP-complete: no polynomial-time solution is known.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Tabulation (board)</h4>
+<pre><code class="language-cpp">int countSubsets(int arr[], int n, int sum) {
+    int dp[n + 1][sum + 1];   // Java: int dp[][] = new int[n + 1][sum + 1];
+    for (int i = 0; i &lt;= n; i++) dp[i][0] = 1;
+    for (int j = 1; j &lt;= sum; j++) dp[0][j] = 0;
+    for (int i = 1; i &lt;= n; i++) {
+        for (int j = 1; j &lt;= sum; j++) {
+            if (j &lt; arr[i - 1])
+                dp[i][j] = dp[i - 1][j];
+            else
+                dp[i][j] = dp[i - 1][j] + dp[i - 1][j - arr[i - 1]];
+        }
+    }
+    return dp[n][sum];
+}</code></pre>
+      <p>Board table for arr = {2, 5, 3}, sum = 5:</p>
+      <table>
+        <tr><th>i \ j</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+        <tr><th>0</th><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><th>1</th><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><th>2</th><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+        <tr><th>3</th><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>2</td></tr>
+      </table>
+      <p>dp[3][5] = <strong>2</strong>: the subsets {2, 3} and {5}.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-27">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTgyNw%3D%3D" target="_blank" rel="noopener">Matrix Chain Multiplication</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 10 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Background</strong> (board): multiplying A (3 × 4) by B (4 × 5) gives C (3 × 5). It costs 3 × 4 × 5 integer multiplications.</p>
+    <p><strong>Problem.</strong> arr[] holds the dimensions of a matrix chain: matrix M<sub>i</sub> is arr[i − 1] × arr[i], giving n − 1 matrices. Find the minimum number of multiplications needed to multiply the chain, by choosing where the brackets go.</p>
+    <ul>
+      <li>{2, 1, 3, 4} gives <strong>20</strong>. M<sub>1</sub> × (M<sub>2</sub> × M<sub>3</sub>) costs 0 + 1×3×4 + 2×1×4 = 20; the other order costs 2×1×3 + 2×3×4 = 30.</li>
+      <li>{2, 1, 3} gives <strong>6</strong> (2 × 1 × 3).</li>
+      <li>{3, 4} gives <strong>0</strong> (one matrix).</li>
+    </ul>
+    <p><strong>Ways to make the first partition</strong> of [a<sub>0</sub>, a<sub>1</sub>, …, a<sub>n−1</sub>]:</p>
+    <ul>
+      <li>(M<sub>1</sub>) × (M<sub>2</sub> … M<sub>n−1</sub>) splits into (a<sub>0</sub> a<sub>1</sub>) and (a<sub>1</sub> … a<sub>n−1</sub>);</li>
+      <li>(M<sub>1</sub> M<sub>2</sub>) × (M<sub>3</sub> … M<sub>n−1</sub>) splits into (a<sub>0</sub> a<sub>1</sub> a<sub>2</sub>) and (a<sub>2</sub> … a<sub>n−1</sub>);</li>
+      <li>and so on. Each side is a recursive call.</li>
+    </ul>
+    <p><strong>Recursion</strong>, mChain(arr, i, j) for the sub-array arr[i … j]:</p>
+    <ul>
+      <li>If i + 1 == j (one matrix), return 0.</li>
+      <li>Otherwise try every split k = i + 1 … j − 1. The cost is mChain(i, k) + mChain(k, j) + arr[i]·arr[k]·arr[j], and the answer is the minimum.</li>
+      <li>The initial call is i = 0, j = n − 1.</li>
+    </ul>
+    <p>Board example {20, 10, 30, 40}:</p>
+    <ul>
+      <li>k = 1: 0 + 10×30×40 + 20×10×40 = 20000.</li>
+      <li>k = 2: 20×10×30 + 0 + 20×30×40 = 30000.</li>
+      <li>The answer is 20000.</li>
+    </ul>
+    <p>The board writes this as "pseudo code for the naive recursive solution". The recursion tree repeats subproblems, such as {20, 10} and {10, 30}, which leads to the DP in the next video.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive recursive solution (board pseudocode)</h4>
+<pre><code class="language-cpp">int mChain(int arr[], int i, int j) {
+    if (i + 1 == j)
+        return 0;
+    int res = INFINITE;   // INT_MAX
+    for (int k = i + 1; k &lt; j; k++) {
+        res = min(res, mChain(arr, i, k) +
+                       mChain(arr, k, j) +
+                       arr[i] * arr[k] * arr[j]);
+    }
+    return res;
+}</code></pre>
+      <p>Call: mChain(arr, 0, n − 1).</p>
+    </div>
+    <div class="added">
+      <p><strong>Added:</strong> the board shows no complexity for this naive recursion. It is exponential (it tries every bracketing), which the DP in the next video avoids.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-28">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTgyOA%3D%3D" target="_blank" rel="noopener">Matrix Chain Multiplication (DP Solution)</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 10 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Overlapping subproblems.</strong> The board's recursion tree for mChain has repeated calls, e.g. the same (i, j) pair under different splits k. So memoise or tabulate over (i, j).</p>
+    <p><strong>DP table:</strong> dp[n][n], where <strong>dp[i][j] stores the result for the sub-array from i to j</strong>, and dp[0][n − 1] is the final result.</p>
+    <ul>
+      <li>For arr = {10, 20, 40, 30, 50} (n = 5), dp[0][4] needs dp[0][1] + dp[1][4], dp[0][2] + dp[2][4] and dp[0][3] + dp[3][4]. These are entries on shorter diagonals.</li>
+      <li>So fill by <em>gap</em> (diagonal by diagonal), not row by row.</li>
+      <li>Only j &gt; i is used; the lower part of the table is crossed out.</li>
+    </ul>
+    <p><strong>Fill order:</strong></p>
+    <ol>
+      <li>dp[i][i + 1] = 0 (one matrix).</li>
+      <li>For gap = 2 … n − 1 and i from 0 with i + gap &lt; n, let j = i + gap.</li>
+      <li>dp[i][j] = min over k = i + 1 … j − 1 of dp[i][k] + dp[k][j] + arr[i]·arr[k]·arr[j].</li>
+    </ol>
+    <p><strong>Complexity</strong> (board): <strong>O(n³)</strong> time and <strong>Θ(n²)</strong> space.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUzNA%3D%3D" target="_blank" rel="noopener">Matrix Chain Multiplication</a></p>
+<ul>
+<li>{40, 20, 30, 10, 30} gives 26000, from (A(BC))D. {1, 2, 3, 4, 3} gives 30, from ((AB)C)D. {10, 20, 30} gives 6000.</li>
+<li>Multiplying m×n by n×p costs m·n·p. A chain of N matrices has N − 1 ways to make the first partition, e.g. (A)(BCD), (AB)(CD), (ABC)(D).</li>
+<li>Recursion: exponential time.</li>
+<li>Memoization over dp[i][j]: O(N³) time and O(N²) space.</li>
+<li>Tabulation: fill by range length l = 2 … N − 1, partitioning at every k.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Tabulation (board, with fix)</h4>
+<pre><code class="language-cpp">int mChain(int arr[], int n) {
+    int dp[n][n];   // Java: int dp[][] = new int[n][n];
+    for (int i = 0; i &lt; n - 1; i++)
+        dp[i][i + 1] = 0;
+    for (int gap = 2; gap &lt; n; gap++) {
+        for (int i = 0; i + gap &lt; n; i++) {
+            int j = i + gap;
+            dp[i][j] = INT_MAX;   // "INFINITE"
+            for (int k = i + 1; k &lt; j; k++)
+                dp[i][j] = min(dp[i][j],          // Math.min in Java
+                               dp[i][k] + dp[k][j] + arr[i] * arr[k] * arr[j]);
+        }
+    }
+    return dp[0][n - 1];
+}</code></pre>
+      <p>Board run for arr = {2, 1, 3, 4}:</p>
+      <ul>
+        <li>dp[0][1] = dp[1][2] = dp[2][3] = 0.</li>
+        <li>dp[0][2] = 0 + 0 + 2×1×3 = 6, and dp[1][3] = 0 + 0 + 1×3×4 = 12.</li>
+        <li>dp[0][3] = min(0 + 12 + 2×1×4, 6 + 0 + 2×3×4) = min(20, 30) = <strong>20</strong>.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board slip, fixed above:</strong> the board's inner formula writes <code>dp[j][k]</code> for the second part. The right sub-chain is <code>dp[k][j]</code>, as its own worked examples show (dp[0][1] + dp[1][3], dp[0][2] + dp[2][3]).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-29">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MTgzNA%3D%3D" target="_blank" rel="noopener">Palindrome Partitioning</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 10 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem</strong> (board): find the minimum number of cuts so that every part of the string is a palindrome.</p>
+    <ul>
+      <li>"geek" gives 2 (g | ee | k).</li>
+      <li>"abbac" gives 1 (abba | c).</li>
+      <li>"abcde" gives 4.</li>
+      <li>"aaaa" gives 0.</li>
+      <li>"abbabbc" gives 2 (abba | bb | c).</li>
+    </ul>
+    <p><strong>Recursion.</strong> Try every first partition: s[0] | s[1 … n − 1], then s[0 … 1] | s[2 … n − 1], …, up to s[0 … n − 2] | s[n − 1]. Each side is a recursive call; "geek" splits like g | eek, ge | ek, gee | k.</p>
+    <ul>
+      <li><strong>Base case:</strong> if the whole string s[i … j] is a palindrome, return 0.</li>
+      <li>Otherwise palPart(s, i, j) = min over k = i … j − 1 of 1 + palPart(s, i, k) + palPart(s, k + 1, j).</li>
+      <li>The board's recursion tree for "geek" (0, 3) branches on k = 0, 1, 2. Subproblems such as (2, 3) and (1, 1) repeat.</li>
+    </ul>
+    <p><strong>DP:</strong> dp[i][j] is the minimum cuts needed for the substring s[i … j]. Fill by gap, as in matrix chain multiplication.</p>
+    <ol>
+      <li>dp[i][i] = 0.</li>
+      <li>For gap = 1 … n − 1 and j = i + gap: if s[i … j] is a palindrome, dp[i][j] = 0.</li>
+      <li>Otherwise dp[i][j] = min over k = i … j − 1 of 1 + dp[i][k] + dp[k + 1][j].</li>
+      <li>Return dp[0][n − 1].</li>
+    </ol>
+    <p><strong>Complexity:</strong> O(n³) when the palindrome check is O(1).</p>
+    <p><strong>Palindrome check in O(1):</strong> keep a table isPal[n][n] (bool in C++, boolean[][] in Java).</p>
+    <ul>
+      <li>isPal[i][i] = true.</li>
+      <li>s[i … j] is a palindrome when str[i] == str[j] &amp;&amp; (isPal[i + 1][j − 1] || gap == 1). In that case dp[i][j] = 0 and isPal[i][j] = true.</li>
+      <li>Otherwise isPal[i][j] = false.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzUzNQ%3D%3D" target="_blank" rel="noopener">Palindrome Partitioning</a></p>
+<ul>
+<li>"ababbbabbababa" needs 3 cuts: a | babbbab | b | ababa. A palindrome needs 0 cuts; a string of n distinct characters needs n − 1.</li>
+<li>It's a variation of Matrix Chain Multiplication.</li>
+<li>Recursion: O(2<sup>n</sup>).</li>
+<li>DP with tables P[][] (palindrome) and C[][] (cuts): O(n³) time, O(n²) space.</li>
+<li>Computing C[i] directly from P gives O(n²); so does computing the cuts while finding all palindromic substrings.</li>
+<li>Memoization with a hashmap keyed by "start" + "end": O(n³).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive recursion (board pseudocode)</h4>
+<pre><code class="language-cpp">int palPart(string s, int i, int j) {
+    if (isPalindrome(s, i, j))
+        return 0;
+    int res = INFINITE;   // INT_MAX
+    for (int k = i; k &lt; j; k++)
+        res = min(res, 1 + palPart(s, i, k) + palPart(s, k + 1, j));
+    return res;
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>DP with the isPal table (board)</h4>
+<pre><code class="language-cpp">int palPart(string str) {
+    int n = str.length();
+    int dp[n][n];          // Java: int dp[][] = new int[n][n];
+    bool isPal[n][n];      // Java: boolean isPal[][] = new boolean[n][n];
+    for (int i = 0; i &lt; n; i++) { dp[i][i] = 0; isPal[i][i] = true; }
+    for (int gap = 1; gap &lt; n; gap++) {
+        for (int i = 0; i + gap &lt; n; i++) {
+            int j = i + gap;
+            if (str[i] == str[j] &amp;&amp; (gap == 1 || isPal[i + 1][j - 1])) {
+                dp[i][j] = 0;
+                isPal[i][j] = true;
+            } else {
+                isPal[i][j] = false;
+                dp[i][j] = INT_MAX;
+                for (int k = i; k &lt; j; k++)
+                    dp[i][j] = min(dp[i][j], 1 + dp[i][k] + dp[k + 1][j]);
+            }
+        }
+    }
+    return dp[0][n - 1];
+}</code></pre>
+      <p>Board table for "geek":</p>
+      <ul>
+        <li>Row 0: dp[0][0 … 3] = 0, 1, 1, 2.</li>
+        <li>Row 1: dp[1][1 … 3] = 0, 0, 1.</li>
+        <li>Row 2: dp[2][2 … 3] = 0, 1.</li>
+        <li>Row 3: dp[3][3] = 0.</li>
+      </ul>
+      <p>The answer is dp[0][3] = <strong>2</strong>.</p>
+    </div>
+    <div class="added">
+      <p><strong>Note:</strong> the board writes the gap condition as <code>(isPal[i + 1][j − 1] || gap == 1)</code>. The order is swapped above so that gap == 1 is checked first. With gap 1, i + 1 &gt; j − 1 and that isPal cell is never set.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-30">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MjEyMA%3D%3D" target="_blank" rel="noopener">Allocate Minimum Pages (Naive Method)</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 10 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem</strong> (description and board): arr[] holds the pages of each book, and k is the number of students.</p>
+    <ul>
+      <li>Each student reads a <em>contiguous</em> run of books.</li>
+      <li>Allocate them so as to <strong>minimise the maximum</strong> pages any one student gets.</li>
+    </ul>
+    <p>Examples:</p>
+    <ul>
+      <li>{10, 20, 30, 40} with k = 2 gives 60 (10 + 20 + 30 | 40).</li>
+      <li>{10, 20, 30} with k = 1 gives 60.</li>
+      <li>{10, 5, 30, 1, 2, 5, 10, 10} with k = 3 gives 30 (10 + 5 | 30 | 1 + 2 + 5 + 10 + 10).</li>
+    </ul>
+    <p><strong>Naive idea.</strong> There are n − 1 gaps between the books x<sub>0</sub> | x<sub>1</sub> | … | x<sub>n−1</sub>, and we choose k − 1 of them as cuts. That is C(n − 1, k − 1) ways; for {10, 20, 30, 40} with k = 2, choose 1 cut out of 3.</p>
+    <p>Recursively, fix the <em>last</em> cut at position i. The last student takes arr[i … n − 1], and the first i books go to k − 1 students:</p>
+    <p class="formula">mP(n, k) = min over i = 1 … n − 1 of max(mP(i, k − 1), sum(arr, i, n − 1))</p>
+    <p>Base cases:</p>
+    <ul>
+      <li>mP(n, 1) = sum(arr, 0, n − 1): one student reads everything.</li>
+      <li>mP(1, k) = arr[0]: only one book.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive recursive solution (board)</h4>
+<pre><code class="language-cpp">int sum(int arr[], int b, int e) {
+    int s = 0;
+    for (int i = b; i &lt;= e; i++)
+        s += arr[i];
+    return s;
+}
+
+int minPages(int arr[], int n, int k) {
+    if (k == 1)
+        return sum(arr, 0, n - 1);
+    if (n == 1)
+        return arr[0];
+    int res = INT_MAX;   // INF
+    for (int i = 1; i &lt; n; i++)
+        res = min(res, max(minPages(arr, i, k - 1), sum(arr, i, n - 1)));
+    return res;
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Added:</strong> the board doesn't give this recursion's complexity. It is exponential, since it explores all C(n − 1, k − 1) ways to cut and repeats subproblems. The next video is the DP solution.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-31">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/video/MjEyNA%3D%3D" target="_blank" rel="noopener">Allocate Minimum Pages (DP Solution)</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 10 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The naive recursion's tree has overlapping subproblems: the same mP(i, k − 1) calls repeat. So tabulate.</p>
+    <p><strong>dp[i][j] is the minimum pages for i people and j books.</strong> The table is (k + 1) × (n + 1), with row 0 and column 0 unused.</p>
+    <ul>
+      <li>If i = 1: sum(arr, 0, j − 1).</li>
+      <li>Else if j = 1: arr[0].</li>
+      <li>Else: min over p = 1 … j − 1 of max(dp[i − 1][p], sum(p, j − 1)).</li>
+    </ul>
+    <p>Board example {10, 20, 30, 40} with k = 2:</p>
+    <ul>
+      <li>Row 1 is 10, 30, 60, 100.</li>
+      <li>dp[2][2] = max(dp[1][1], sum(1, 1)) = max(10, 20) = 20.</li>
+      <li>dp[2][3] = min(max(dp[1][1], sum(1, 2)), max(dp[1][2], sum(2, 2))) = min(max(10, 50), max(30, 30)) = 30.</li>
+      <li>Row 2 is 10, 20, 30, 60, so the answer is dp[2][4] = <strong>60</strong>.</li>
+    </ul>
+    <p><strong>Complexity</strong> (board):</p>
+    <ul>
+      <li>The first row is O(n²), since each sum is O(n).</li>
+      <li>The first column is O(k).</li>
+      <li>The main triple loop, with an O(n) sum inside, is <strong>O(n³ k)</strong>.</li>
+      <li>Auxiliary space is Θ(n k).</li>
+    </ul>
+    <p>The board also notes a faster binary-search approach in O(n log(sum)).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/NzIyMw%3D%3D" target="_blank" rel="noopener">Allocate Minimum Pages</a></p>
+<ul>
+<li>The books are in ascending page order. pages = {12, 34, 67, 90} with m = 2 gives 113, from [12, 34, 67] | [90]; the splits [12] | … and [12, 34] | … give 191 and 157.</li>
+<li><strong>Naive recursive partitioning:</strong> the last student takes i … n − 1. O(N² × K) time, O(K) stack.</li>
+<li><strong>Expected approach, binary search on the answer:</strong> if M &gt; N there is no valid allocation.</li>
+<li>Otherwise search in [max(pages), sum(pages)]. For each mid, allocate greedily, moving to the next student when the running sum would exceed mid. If more than M students are needed, mid is too small.</li>
+<li>This takes O(N log(sum of pages)) time and O(1) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Tabulation (board)</h4>
+<pre><code class="language-cpp">int minPages(int arr[], int n, int k) {
+    int dp[k + 1][n + 1];   // Java: int[][] dp = new int[k + 1][n + 1];
+    for (int i = 1; i &lt;= n; i++)
+        dp[1][i] = sum(arr, 0, i - 1);
+    for (int i = 1; i &lt;= k; i++)
+        dp[i][1] = arr[0];
+    for (int i = 2; i &lt;= k; i++) {
+        for (int j = 2; j &lt;= n; j++) {
+            int res = INT_MAX;   // INF
+            for (int p = 1; p &lt; j; p++)
+                res = min(res, max(dp[i - 1][p], sum(arr, p, j - 1)));
+            dp[i][j] = res;
+        }
+    }
+    return dp[k][n];
+}</code></pre>
+      <p>sum(arr, b, e) is the same helper as in the naive video.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DP-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (28 problems, in course order), plus the two Articles-tab items that don't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/fibonacci-numbers-bottom-up-dp" target="_blank" rel="noopener">Fibonacci Numbers - Bottom Up DP</a></td><td>Easy</td><td>Video 3</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/ways-to-write-n-as-sum-1587115621" target="_blank" rel="noopener">Ways to Write n as Sum</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/kadanes-algorithm-i" target="_blank" rel="noopener">Kadane's Algorithm - I</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/kadanes-algorithm-ii" target="_blank" rel="noopener">Kadane's Algorithm - II</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/fibonacci-numbers-top-down-dp" target="_blank" rel="noopener">Fibonacci Numbers - Top Down DP</a></td><td>Easy</td><td>Video 2</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/count-ways-to-reach-the-nth-stair-1587115620" target="_blank" rel="noopener">Ways to Reach the n'th Stair</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/count-ways-to-nth-stairorder-does-not-matter1322" target="_blank" rel="noopener">Ways to Reach the n'th Stair (order does not matter)</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/print-first-n-fibonacci-numbers1002" target="_blank" rel="noopener">First n Fibonacci using Recursion</a></td><td>Basic</td><td>Video 2</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/nth-catalan-number0817" target="_blank" rel="noopener">Nth Catalan Number</a></td><td>Medium</td><td>Video 23</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/longest-common-subsequence-1587115620" target="_blank" rel="noopener">Longest Common Subsequence</a></td><td>Medium</td><td>Videos 4–5</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/coin-change-minimum-number-of-coins" target="_blank" rel="noopener">Coin Change (Minimum Coins)</a></td><td>Medium</td><td>Video 16</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/coin-change-number-of-ways" target="_blank" rel="noopener">Coin Change - Number of ways</a></td><td>Easy</td><td>Videos 7–8</td></tr>
+        <tr><td>13</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/minimum-number-of-jumps4102" target="_blank" rel="noopener">Minimum Jumps</a></td><td>Medium</td><td>Video 17</td></tr>
+        <tr><td>14</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/count-number-of-hops-1587115620" target="_blank" rel="noopener">Count Ways with 3 Moves</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>15</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/longest-increasing-subsequence-1587115620" target="_blank" rel="noopener">Longest Increasing Subsequence</a></td><td>Medium</td><td>Videos 11–12</td></tr>
+        <tr><td>16</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/shortest-common-supersequence0322" target="_blank" rel="noopener">Shortest Common Supersequence</a></td><td>Medium</td><td>Video 6</td></tr>
+        <tr><td>17</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/number-of-unique-paths5339" target="_blank" rel="noopener">Number of Unique Paths</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>18</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/cutted-segments1642" target="_blank" rel="noopener">Maximize The Cut Segments</a></td><td>Medium</td><td>Video 15</td></tr>
+        <tr><td>19</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/sum-of-all-substrings-of-a-number-1587115621" target="_blank" rel="noopener">Sum All Substrings of Number</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>20</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/0-1-knapsack-problem0945" target="_blank" rel="noopener">0 - 1 Knapsack Problem</a></td><td>Medium</td><td>Videos 18–19</td></tr>
+        <tr><td>21</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/ncr-1587115620" target="_blank" rel="noopener">nCr</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>22</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/optimal-strategy-for-a-game-1587115620" target="_blank" rel="noopener">Optimal Strategy for Game</a></td><td>Medium</td><td>Video 20</td></tr>
+        <tr><td>23</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/reach-a-given-score1418" target="_blank" rel="noopener">Reach a given score</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>24</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/egg-dropping-puzzle-1587115620" target="_blank" rel="noopener">Egg Dropping Puzzle</a></td><td>Medium</td><td>Videos 21–22</td></tr>
+        <tr><td>25</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/unique-bsts-1587115621" target="_blank" rel="noopener">Unique BSTs</a></td><td>Medium</td><td>Video 23</td></tr>
+        <tr><td>26</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/stickler-theif-1587115621" target="_blank" rel="noopener">Stickler Thief</a></td><td>Easy</td><td>Video 24</td></tr>
+        <tr><td>27</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/max-sum-subarray-by-removing-at-most-one-element" target="_blank" rel="noopener">Max Subarray Sum by Removing At Most One</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>28</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/problem/subset-sum-problem2643" target="_blank" rel="noopener">Partition Equal Subset Sum</a></td><td>Medium</td><td>Videos 25–26</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/MjM5MQ%3D%3D" target="_blank" rel="noopener">Solving a Dynamic Programming Problem</a></p>
+<ul>
+<li><strong>Step 1, classify:</strong> problems that maximise or minimise a quantity, count arrangements under a condition, or compute certain probabilities are usually DP. They have overlapping subproblems, and the classic ones also have optimal substructure.</li>
+<li><strong>Step 2, decide the state:</strong> the smallest set of parameters that uniquely identifies a subproblem. For knapsack it is dp[index][weight].</li>
+<li><strong>Step 3, relate the states</strong> (the hardest part). Example: count the ways to form n as an ordered sum of {1, 3, 5}. state(7) = state(6) + state(4) + state(2), and in general state(n) = state(n − 1) + state(n − 3) + state(n − 5).</li>
+<li><strong>Step 4:</strong> add memoization (store each state's answer) or tabulation (iterate) to remove the exponential recomputation.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DP/article/MjYxMg%3D%3D" target="_blank" rel="noopener">Sample Problems on Dynamic Programming</a></p>
+<ul>
+<li><strong>Binomial coefficient C(n, k):</strong> C(4, 2) = 6 and C(5, 2) = 10. It has optimal substructure (the standard recurrence), and C(3, 1) is computed twice in the n = 5, k = 2 tree.</li>
+<li><strong>Minimum jumps to reach the end:</strong> build jumps[] left to right, where jumps[i] is the minimum jumps to reach arr[i] from arr[0]. A 0 can't be moved through.</li>
+<li><strong>LIS:</strong> {10, 22, 9, 33, 21, 50, 41, 60, 80} gives 6 (10 22 33 50 60 80). L(i) = 1 + max L(j) over j &lt; i with arr[j] &lt; arr[i]; the answer is max L(i).</li>
+<li><strong>0-1 knapsack:</strong> include or exclude each item. It has both properties.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -30941,7 +33000,40 @@ const TRACKS = [
       ["N Queen Problem", "20:06"],
       ["Sudoku Problem", "14:06"]
     ] },
-  { id: "DSASP-DP", slug: "dynamic-programming", name: "Dynamic Programming", counts: [31, 25, 28, 10, 1] },
+  { id: "DSASP-DP", slug: "dynamic-programming", name: "Dynamic Programming", counts: [31, 25, 28, 10, 1],
+    videos: [
+      ["Introduction to DP", "4:46"],
+      ["Dynamic Programming Memoization", "15:30"],
+      ["Dynamic Programming Tabulation", "8:09"],
+      ["Longest Common Subsequence (Part 1)", "24:24"],
+      ["Longest Common Subsequence (Part 2)", "9:07"],
+      ["Variation of LCS", "13:45"],
+      ["Coin Change (Naive Recursive Solution)", "9:56"],
+      ["Coin Change (DP Solution)", "9:26"],
+      ["Edit Distance Problem", "14:59"],
+      ["Edit Distance Problem DP solution", "11:15"],
+      ["Longest Increasing Subsequence Problem", "22:16"],
+      ["Longest Increasing Subsequence in O(nlogn)", "15:34"],
+      ["Variation of LIS (Part 1)", "13:16"],
+      ["Variations of LIS (Part 2)", "11:50"],
+      ["Maximum Cuts", "10:22"],
+      ["Minimum coins to make a value", "21:50"],
+      ["Minimum Jumps to reach at end", "17:12"],
+      ["0-1 knapsack problem", "14:32"],
+      ["0-1 knapsack problem DP Solution", "13:43"],
+      ["Optimal Strategy for a Game", "27:09"],
+      ["Egg Dropping Puzzle - Part 1", "13:09"],
+      ["Egg Dropping Puzzle - Part 2", "9:40"],
+      ["Count BSTs with n keys", "13:40"],
+      ["Maximum sum with no two consecutive", "13:36"],
+      ["Subset Sum Problem (Recursive Solution) (Medium)", "10:53"],
+      ["Subset Sum Problem (DP Solution) (Medium)", "10:55"],
+      ["Matrix Chain Multiplication", "16:06"],
+      ["Matrix Chain Multiplication (DP Solution) (Hard)", "10:42"],
+      ["Palindrome Partitioning", "15:52"],
+      ["Allocate Minimum Pages (Naive Method)", "8:54"],
+      ["Allocate Minimum Pages (DP Solution) (Hard)", "10:18"]
+    ] },
   { id: "DSASP-Trie", slug: "trie", name: "Trie", counts: [4, 3, 6, 5, 0] },
   { id: "DSASP-Segment-Tree", slug: "segment-and-bit", name: "Segment and Binary Indexed Trees", counts: [10, 3, 6, 5, 0] },
   { id: "DSASP-DisjointSet", slug: "disjoint-set", name: "Disjoint Set", counts: [5, 3, 4, 5, 1] }
