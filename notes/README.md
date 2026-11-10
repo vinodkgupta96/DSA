@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-09)
 
-**Notes written: 6 of 24 tracks · 105 of 470 videos · 82 of 342 articles · 80 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 7 of 24 tracks · 144 of 470 videos · 111 of 342 articles · 100 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -81,8 +81,8 @@ Report back with:
 | 4 | Recursion | 17 | 12 | 12 | ✅ Done: 17/17 videos, 12/12 articles, 12 problems |
 | 5 | Arrays | 31 | 27 | 27 | ✅ Done: 31/31 videos, 27/27 articles, 27 problems |
 | 6 | Searching | 18 | 13 | 18 | ✅ Done: 18/18 videos, 13/13 articles, 18 problems |
-| 7 | Sorting | 39 | 29 | 20 | ⏭ Next |
-| 8 | Matrix | 12 | 11 | 15 | Not started |
+| 7 | Sorting | 39 | 29 | 20 | ✅ Done: 39/39 videos, 29/29 articles, 20 problems |
+| 8 | Matrix | 12 | 11 | 15 | ⏭ Next |
 | 9 | Hashing | 29 | 23 | 22 | Not started |
 | 10 | Strings | 19 | 12 | 26 | Not started |
 | 11 | Linked List | 54 | 40 | 25 | Not started |
@@ -249,6 +249,52 @@ The "Sample Problems on Array" article matches no single video, so it's in the T
 
 "Ternary Search" and "Sample Problems on Searching" match no video, so they're in the Track practice set with the 18 problems. The first/last occurrence article covers both V4 and V5 and sits under V4. V10, V15, V16 and V17 have no Transcript button and were done from 5 s frames and the description. Course progress was unchanged (4/18 videos watched, 42%, no article marked as read). All resume positions were 0:00 and were restored. The built-in browser could no longer open the local page (about 600 KB), so the render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 18 Searching videos.
 
+### Track 7: Sorting, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Overview of sorting algorithm | 15:18 | Transcript + board | Introduction to Sorting |
+| 2 | Sort in C++ STL | 9:16 | Transcript + board | Sort in C++ STL |
+| 3 | Sorting in Java | 5:09 | Transcript + board | Sorting using Built-in methods in Java |
+| 4 | Arrays.sort in Java | 9:58 | Transcript + board | Arrays.sort() in Java |
+| 5 | Collections.Sort in Java | 6:26 | Transcript + board | Collections.sort() in Java |
+| 6 | Stability in Sorting Algorithm | 8:28 | Transcript + board | Stability in Sorting Algorithm |
+| 7 | Bubble Sort | 12:13 | Transcript + board | Bubble Sort |
+| 8 | Selection Sort | 10:14 | Transcript + board | Selection Sort |
+| 9 | Insertion Sort | 12:35 | Transcript + board | Insertion Sort |
+| 10 | Merge sort introduction | 2:25 | Transcript + board |  |
+| 11 | Merge two sorted arrays | 11:25 | Transcript + board | Merge two Sorted Arrays |
+| 12 | Merge function of Merge sort | 6:27 | Board + description | Merge function of Merge sort |
+| 13 | Merge Sorting Algorithm | 15:01 | Transcript + board | Merge Sort |
+| 14 | Merge Sort Analysis | 7:39 | Transcript + board | Merge Sort Analysis |
+| 15 | Intersection of two sorted arrays | 8:27 | Board + description |  |
+| 16 | Union of two sorted arrays | 10:41 | Transcript + board |  |
+| 17 | Count inversions in Array | 14:56 | Transcript + board |  |
+| 18 | Naive partition | 5:25 | Transcript + board | Naive Partition |
+| 19 | Lomuto Partition | 17:45 | Transcript + board | Lomuto Partition |
+| 20 | Hoare partition | 16:39 | Transcript + board | Hoare Partition |
+| 21 | Quick Sort Introduction | 6:12 | Board + description |  |
+| 22 | QuickSort using Lomuto Partition | 13:31 | Transcript + board | Quick Sort |
+| 23 | QuickSort using Hoare Partition | 10:49 | Transcript + board |  |
+| 24 | QuickSort analysis | 17:48 | Transcript + board | QuickSort analysis |
+| 25 | Space Analysis of QuickSort | 8:11 | Transcript + board |  |
+| 26 | Choice of pivot and worst case of quick sort | 5:27 | Transcript + board |  |
+| 27 | Tail call elimination in QuickSort | 2:47 | Transcript + board | Tail call elimination in Quick Sort |
+| 28 | Kth Smallest Element | 9:07 | Transcript + board | Kth Smallest Element |
+| 29 | Minimum Difference in an Array | 6:41 | Transcript + board | Minimum Difference in an Array |
+| 30 | Chocolate Distribution Problem | 8:30 | Board + description |  |
+| 31 | Sort an Array with two types of elements | 8:54 | Transcript + board | Sort an Array with two types of elements |
+| 32 | Sort an array with three types of elements | 11:35 | Transcript + board | Sort an array with three types of elements |
+| 33 | Merge overlapping intervals | 25:16 | Transcript + board |  |
+| 34 | Meeting the maximum guests | 10:40 | Transcript + board | Meeting the maximum guests |
+| 35 | Cycle Sort | 18:05 | Transcript + board | Cycle Sort |
+| 36 | Heap Sort | 12:53 | Transcript + board | Heap Sort |
+| 37 | Counting Sort | 19:31 | Transcript + board | Counting Sort |
+| 38 | Radix Sort | 15:25 | Transcript + board | Radix Sort |
+| 39 | Bucket Sort | 17:12 | Transcript + board | Bucket Sort |
+
+Every Sorting article matches a video, so the Track practice set lists only the 20 problems. V12, V15, V21 and V30 have no Transcript button and were done from frames and the description; no transcript was cut off early. V28's auto-generated transcript is badly garbled, so its notes follow the board. Course progress was unchanged (14/39 videos watched, 33%, no article marked as read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 39 Sorting videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -266,10 +312,11 @@ The "Sample Problems on Array" article matches no single video, so it's in the T
 - `002a7e3`: Add DSA revision notes: Bit Magic track (12 videos, 11 articles, 12 problems)
 - `e864134`: Add Recursion track notes (17 videos, 12 articles, 12 problems)
 - `f9e9cf3`: Add Arrays track notes (31 videos, 27 articles, 27 problems)
-- (this commit): Add Searching track notes (18 videos, 13 articles, 18 problems)
+- `10fb46a`: Add Searching track notes (18 videos, 13 articles, 18 problems)
+- (this commit): Add Sorting track notes (39 videos, 29 articles, 20 problems)
 
 ### What's next
-- **Track 7: Sorting** (39 videos, 29 articles, 20 problems), starting straight away.
+- **Track 8: Matrix** (12 videos, 11 articles, 15 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -287,6 +334,7 @@ The "Sample Problems on Array" article matches no single video, so it's in the T
 - **2026-11-10:**
   - Completed track 5 (Arrays): 31 videos, 27 articles, 27 problems.
   - Completed track 6 (Searching): 18 videos, 13 articles, 18 problems.
+  - Completed track 7 (Sorting): 39 videos, 29 articles, 20 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -303,6 +351,30 @@ The "Sample Problems on Array" article matches no single video, so it's in the T
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Sorting: teacher slips flagged
+- V10: "one more bad thing about quicksort, mergesort", meaning merge sort.
+- V11: the efficient-idea walkthrough uses a = 10, 20, 35 ("compare 35 and 50"); the board dry run uses {10, 20, 50}. The idea board writes `a[i] < b[j]`; the final code uses `<=`.
+- V13: the call for the single element 5 is spoken as "L equal to 0 and R equal to one" (it is l = 1, r = 1); `l + (r-l)/2` is read as "R plus L by 2".
+- V16 (board): the final while loops put `i++`/`j++` inside the `if`, so the index only moves when an element is printed.
+- V17: "smaller than all the elements from i to n1 − i" means i to n1 − 1. Board: `counInv` and `countandMerge` for countInv/countAndMerge.
+- V18: "an array of size temp"; the board code has a typed overlay (`&& i!=p`, `temp[index++] = arr[p]`) over the handwriting.
+- V19: "your i becomes 1" after the 40 swap (board: i = 2); "i is 5" for 50 (j = 5).
+- V20: the board first writes `j = h-1`, later `h+1`; "I begins with i − 1" means l − 1; j is said to keep "incrementing".
+- V23 (board): the left child of qS(2, 3) is labelled qS(3, 2); the teacher says 2 to 2.
+- V24: the worst case is "n − 1 elements on one side and n on the other" (1 on the other); "better than … mergesort and quicksort".
+- V28 (board): the final code passes `l, r` for lo, hi, returns `p` instead of `arr[p]`, sets `high` for hi, has missing semicolons, and the last dry-run row shows 20 for 26. Its transcript is badly garbled.
+- V29: the pair count is called "n*(n+1)/2 sort of expression".
+- V32 (board): declares `lo` but uses `low` in the 0 case.
+- V33: merging takes "min as minimum of 2 end values" (the starts); overlap is described as "start is more than end" (the code checks `end >= st`); "process them in nlogn time", then corrected to linear.
+- V34: "if current arrival is more than current departure, then this arrival event is first" (the code checks `arr[i] <= dep[j]`).
+- V35: "40 has to go to index zero" (10 goes there).
+- V36: the board's heapSort calls `heapify` while the function is `maxHeapify`; quicksort's recursion depth "can become O(log n)".
+- V37: the cumulative step is narrated "next index, index 1" (index 2); the naive function is written `counSort`.
+- V38 (board): the cumulative loop starts at `i=0`, reading count[i−1]. Spoken: "because the EXP is 10" for exp = 1, and the count is "incremented" after placing (it is decremented).
+- V39: "22 to 39" for the 20–39 range; the board's C++ `int max_val = arr[0]` has no semicolon.
+- V12, V15, V21, V30 (no transcript): spoken slips couldn't be checked.
+- Board notation: `&&` is handwritten like "$$" (V12, V15, V16, V17, V34, V36).
 
 ### Searching: teacher slips flagged
 - V3: "high is 15" and "an array of size 16"; the board array is a0 … a14 (15 elements). The board's edge label "x > a15" means x > a13.
