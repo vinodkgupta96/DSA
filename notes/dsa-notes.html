@@ -1,0 +1,1779 @@
+<title>DSA Revision Notes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: sticky header with a scrolling strip of track tabs; one centred reading column of collapsible video cards (Theory, then Practice). */
+:root {
+  --bg: #f7f9f8;
+  --surface: #ffffff;
+  --ink: #16201e;
+  --muted: #5a6865;
+  --line: #dde4e2;
+  --accent: #0e7468;
+  --accent-ink: #ffffff;
+  --accent-soft: #e2f1ee;
+  --theory: #2f5fa8;
+  --theory-soft: #e6eefa;
+  --practice: #9a5b12;
+  --practice-soft: #fbf0e1;
+  --code-bg: #f0f4f3;
+  --c-kw: #a3264f;
+  --c-type: #2f5fa8;
+  --c-num: #0e7468;
+  --c-str: #7a5a00;
+  --c-com: #7b8a86;
+  --f-display: "Sora", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1413; --surface: #151d1b; --ink: #e4ebe9; --muted: #95a4a0; --line: #26322f;
+    --accent: #4cc9b0; --accent-ink: #062520; --accent-soft: #143029;
+    --theory: #8db4f0; --theory-soft: #172338; --practice: #f0b366; --practice-soft: #2e2213;
+    --code-bg: #0a0f0e; --c-kw: #f28bb0; --c-type: #8db4f0; --c-num: #4cc9b0; --c-str: #e8c66a; --c-com: #6f807b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1413; --surface: #151d1b; --ink: #e4ebe9; --muted: #95a4a0; --line: #26322f;
+  --accent: #4cc9b0; --accent-ink: #062520; --accent-soft: #143029;
+  --theory: #8db4f0; --theory-soft: #172338; --practice: #f0b366; --practice-soft: #2e2213;
+  --code-bg: #0a0f0e; --c-kw: #f28bb0; --c-type: #8db4f0; --c-num: #4cc9b0; --c-str: #e8c66a; --c-com: #6f807b;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 17px; line-height: 1.6;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+a { color: var(--accent); text-underline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+.wrap { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+header.top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 14px 8px; }
+.brand h1 { font-family: var(--f-display); font-size: 1.15rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+.brand .sub { color: var(--muted); font-size: 0.85rem; }
+
+nav.tabs { overflow-x: auto; scrollbar-width: thin; }
+nav.tabs ol { list-style: none; display: flex; gap: 4px; margin: 0; padding: 0 0 10px; width: max-content; }
+nav.tabs button {
+  font: 600 0.88rem/1 var(--f-body); color: var(--muted);
+  background: transparent; border: 1px solid transparent; border-radius: 999px;
+  padding: 8px 12px; cursor: pointer; white-space: nowrap;
+  display: inline-flex; gap: 6px; align-items: center;
+}
+nav.tabs button .n { font-family: var(--f-mono); font-size: 0.72rem; opacity: 0.75; font-variant-numeric: tabular-nums; }
+nav.tabs button:hover { color: var(--ink); border-color: var(--line); }
+nav.tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
+
+main { padding-block: 24px 64px; }
+.track-head h2 { font-family: var(--f-display); font-size: 1.7rem; font-weight: 700; margin: 0 0 6px; letter-spacing: -0.02em; text-wrap: balance; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 14px; color: var(--muted); font-size: 0.9rem; margin-bottom: 8px; }
+.meta b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.progress { color: var(--muted); font-size: 0.85rem; margin: 0 0 20px; }
+.progress b { color: var(--accent); }
+
+.list { display: flex; flex-direction: column; gap: 10px; }
+
+details.video { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+details.video[open] { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+details.video > summary {
+  list-style: none; cursor: pointer; display: grid;
+  grid-template-columns: 2.2rem 1fr auto auto; gap: 10px; align-items: center;
+  padding: 12px 14px;
+}
+details.video > summary::-webkit-details-marker { display: none; }
+.idx { font-family: var(--f-mono); font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.vt { font-weight: 600; min-width: 0; }
+.vt .pending { display: block; font-weight: 400; font-size: 0.82rem; color: var(--muted); }
+.dur { font-family: var(--f-mono); font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.done { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--muted); cursor: pointer; }
+.done input { width: 18px; height: 18px; accent-color: var(--accent); margin: 0; cursor: pointer; }
+details.video.is-done .vt { color: var(--muted); }
+
+.body { padding: 4px 18px 20px; border-top: 1px solid var(--line); min-width: 0; }
+.src { font-size: 0.85rem; color: var(--muted); margin: 12px 0 4px; }
+
+.part { margin-top: 18px; }
+.part-label {
+  display: inline-block; font: 700 0.72rem/1 var(--f-display); text-transform: uppercase; letter-spacing: 0.12em;
+  padding: 6px 10px; border-radius: 6px;
+}
+.part.theory .part-label { color: var(--theory); background: var(--theory-soft); }
+.part.practice .part-label { color: var(--practice); background: var(--practice-soft); }
+.part h3 { font-family: var(--f-display); font-size: 1.05rem; font-weight: 600; margin: 18px 0 6px; }
+.part h4 { font-size: 1rem; font-weight: 700; margin: 18px 0 4px; }
+.part p, .part li { max-width: 68ch; }
+.part ul, .part ol { padding-left: 1.25rem; margin: 6px 0; }
+.part li { margin: 3px 0; }
+.key { border-left: 3px solid var(--theory); background: var(--theory-soft); padding: 10px 14px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+
+.problem { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin: 12px 0; }
+.problem .io { font-family: var(--f-mono); font-size: 0.88rem; display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin-top: 8px; }
+.problem .io span:nth-child(odd) { color: var(--muted); }
+
+.approach { margin-top: 18px; }
+.approach h4 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+.cx { font: 600 0.78rem/1 var(--f-mono); padding: 4px 8px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); }
+
+.scroll { overflow-x: auto; margin: 8px 0; }
+table { border-collapse: collapse; font-size: 0.92rem; min-width: 100%; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+td.num, th.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+
+pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; margin: 8px 0; }
+code { font-family: var(--f-mono); font-size: 0.85rem; }
+:not(pre) > code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+.hljs-keyword, .hljs-built_in { color: var(--c-kw); }
+.hljs-type, .hljs-title { color: var(--c-type); }
+.hljs-number, .hljs-literal { color: var(--c-num); }
+.hljs-string { color: var(--c-str); }
+.hljs-comment { color: var(--c-com); font-style: italic; }
+
+.added { border: 1px dashed color-mix(in srgb, var(--practice) 55%, var(--line)); border-radius: 8px; padding: 8px 12px 10px; margin: 12px 0; }
+.added::before { content: "Added · not in the video"; display: block; font: 700 0.68rem/1.4 var(--f-display); text-transform: uppercase; letter-spacing: 0.1em; color: var(--practice); margin-bottom: 2px; }
+.added p { margin: 4px 0; }
+.article { border: 1px solid color-mix(in srgb, var(--theory) 45%, var(--line)); background: color-mix(in srgb, var(--theory-soft) 55%, transparent); border-radius: 8px; padding: 10px 14px 12px; margin: 16px 0 4px; }
+.article-h { margin: 0 0 6px; font: 700 0.72rem/1.4 var(--f-display); text-transform: uppercase; letter-spacing: 0.1em; color: var(--theory); }
+.article-h a { text-transform: none; letter-spacing: 0; font-family: var(--f-body); font-size: 0.85rem; }
+.article ul, .article ol { margin: 4px 0; }
+.empty { color: var(--muted); padding: 18px; border: 1px dashed var(--line); border-radius: 10px; }
+footer { color: var(--muted); font-size: 0.82rem; padding-block: 0 32px; }
+
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  details.video > summary { grid-template-columns: 1.8rem 1fr auto; }
+  .done span { display: none; }
+  .dur { grid-column: 2; grid-row: 2; }
+  .body { padding: 4px 14px 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <h1>DSA Revision Notes</h1>
+      <span class="sub">GfG DSA Self Paced · batch dsa-5 · Java</span>
+    </div>
+    <nav class="tabs" aria-label="Course tracks"><ol id="tabs" role="tablist"></ol></nav>
+  </div>
+</header>
+
+<main class="wrap" id="main"></main>
+<footer class="wrap">Notes follow the course's own order. Everything comes from the video's transcript and board, except blue "From the article" boxes (from the track's Articles tab) and dashed "Added" boxes (not from the course). "Done" ticks are saved in this browser only.</footer>
+
+<!-- ============ Video content. One template per written video: id = trackId + "-" + video number ============ -->
+
+<template id="DSASP-intro-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MjY3Mw%3D%3D" target="_blank" rel="noopener">Analysis of Algorithms (Background)</a> · Notes from the full transcript and the board. Code is copied as written on the board. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Why analyse algorithms?</h3>
+    <p>A single problem usually has many correct solutions. They may use different algorithmic techniques or different data structures. As a programmer you need a way to decide <strong>which one is better</strong>, meaning more efficient, before you pick it. Analysis of algorithms gives you that way, so it comes before learning any data structure.</p>
+
+    <h3>What does the time taken by a program depend on?</h3>
+    <p>The time taken by a program depends on many factors:</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Factor</th><th>What goes wrong</th></tr></thead>
+      <tbody>
+        <tr><td>Machine</td><td>An inefficient program on a fast machine can beat an efficient one on a slow machine.</td></tr>
+        <tr><td>Language</td><td>C/C++ compile to a native binary for your machine. Java/Python run intermediate code through an interpreter, so they typically run slower.</td></tr>
+        <tr><td>System load</td><td>Same language, same machine, and the efficient code can still look slow if a background update was running at that moment.</td></tr>
+        <tr><td>Input</td><td>You and your friend write different solutions. For certain inputs your friend's is more efficient, for others yours is. So how do you figure out which one is more efficient?</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="key">To overcome all these problems we have <strong>asymptotic analysis</strong>, a <em>theoretical and mathematical</em> analysis. With it we don't even have to implement all the solutions. By looking at the algorithms, we can tell which one is more efficient, theoretically.</div>
+  
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/article/NjcwNw%3D%3D" target="_blank" rel="noopener">Analysis of Algorithms (Background)</a></p>
+<ul>
+<li>Analysis of algorithms determines the amount of <strong>time and space</strong> resources an algorithm needs.</li>
+<li>Why it matters: to predict an algorithm's behaviour <em>without implementing it</em> on a specific computer, and to compare algorithms to pick the best one. Simple efficiency measures beat re-implementing and re-testing every time the underlying system changes.</li>
+<li>The exact behaviour can't be predicted (too many influencing factors), so analysis is an approximation.</li>
+<li>Types of analysis: best case, worst case, average case.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Example Problem: Sum of n natural numbers</strong>
+      <p style="margin:6px 0 0">Given a number <code>n</code>, return the sum of the first n natural numbers.</p>
+      <div class="io">
+        <span>Input</span><span>n = 3</span>
+        <span>Output</span><span>6 &nbsp;// 1 + 2 + 3</span>
+        <span>Input</span><span>n = 5</span>
+        <span>Output</span><span>15 // 1 + 2 + 3 + 4 + 5</span>
+      </div>
+      <p style="margin:8px 0 0;font-size:0.9rem;color:var(--muted)">From the next videos on, the teacher writes these as <strong>I/P</strong> and <strong>O/P</strong>.</p>
+    </div>
+    <p>The teacher puts three solutions on the board, written by three different programmers, and says yours is likely to match one of them. All three give the correct output. The question is: <strong>which one takes the least time, i.e. which is most efficient?</strong></p>
+
+    <div class="approach">
+      <h4>fun1: Formula</h4>
+      <p>Simply uses the formula n(n+1)/2.</p>
+<pre><code class="language-java">int fun1(int n)
+{
+    return n * (n + 1) / 2;
+}</code></pre>
+      <p><strong>On n = 3:</strong> 3 × 4 / 2 = <strong>6</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>fun2: Single loop</h4>
+      <p>Initialise <code>sum</code> to 0, then add the natural numbers one by one: 1, then 2, then 3, and so on up to n.</p>
+<pre><code class="language-java">int fun2(int n)
+{
+    int sum = 0;
+    for (int i = 1; i &lt;= n; i++)
+        sum = sum + i;
+    return sum;
+}</code></pre>
+      <p><strong>On n = 3</strong> (as written on the board): first adds i = 1, then 2, then 3.</p>
+<pre><code class="language-plaintext">1 + 2 + 3</code></pre>
+      <p>If n is 4, the loop runs till 4 and adds 1, 2, 3, 4.</p>
+    </div>
+
+    <div class="approach">
+      <h4>fun3: Nested loop</h4>
+      <p>One loop inside the other. The outer loop runs <code>i</code> from 1 to n. For each <code>i</code>, the inner loop runs <code>j</code> from 1 to <code>i</code> and does <code>sum++</code>, which adds 1 to sum.</p>
+<pre><code class="language-java">int fun3(int n)
+{
+    int sum = 0;
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 1; j &lt;= i; j++)
+            sum++;
+    return sum;
+}</code></pre>
+      <p><strong>On n = 3</strong> (as written on the board): for i = 1 the inner loop runs once, so 1 is added once. For i = 2 it runs for j = 1 and j = 2, so 1 is added two times. For i = 3, 1 is added three times.</p>
+<pre><code class="language-plaintext">sum += 1 + (1+1) + (1+1+1)
+     = 1 + 2 + 3
+     = 6</code></pre>
+      <p>So this programmer adds 1 to sum <strong>n(n+1)/2</strong> times, and that's how the sum comes out.</p>
+    </div>
+
+    <p>All three functions give the correct output. Now the question is: which of these three takes the least time, i.e. which is most efficient? The Theory above explains why running them and timing them can't answer that reliably.</p>
+
+    <div class="added">
+      <p><strong>Preview of where this track goes:</strong> fun1 does a constant amount of work, Θ(1). fun2's loop runs n times, Θ(n). fun3's <code>sum++</code> runs n(n+1)/2 times, Θ(n²). All three use constant extra space, Θ(1). The notation is taught in videos 2 to 8.</p>
+      <p><strong>Java gotcha:</strong> with <code>int</code>, <code>n * (n + 1)</code> overflows once n passes about 46,340. Use <code>(long) n * (n + 1) / 2</code> and a <code>long</code> return type for large n.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/NjY3MA%3D%3D" target="_blank" rel="noopener">Asymptotic Analysis</a> · Notes from the full transcript and the board (a frame every 5 seconds). Board text and code are copied as written. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Asymptotic Analysis (as written on the board)</h3>
+    <ul>
+      <li>The idea is to measure <strong>order of growth</strong>.</li>
+      <li>Does not depend upon machine, programming language, etc.</li>
+      <li>No need to implement, we can analyze algorithms.</li>
+    </ul>
+
+    <h3>What it measures</h3>
+    <p>Most of the time, when we talk about analysis of algorithms, we mean asymptotic analysis. Terms you hear a lot, like Theta notation and Big O notation, are called <strong>asymptotic notations</strong>.</p>
+    <p>We measure the <strong>order of growth of the time taken</strong> by a function or program <strong>in terms of input size</strong>. If the input size (or input value) is n, does the time grow quadratically, linearly, stay constant, or follow some other polynomial function? That's the only thing we check.</p>
+
+    <h3>Why it's useful</h3>
+    <ul>
+      <li>It doesn't depend on the programming language or the machine.</li>
+      <li>It doesn't depend on the test cases either. Most of the time we do <strong>worst-case analysis</strong>, which is algorithm-specific, not test-case-specific.</li>
+      <li>You don't have to implement the algorithms. Write the idea or the steps, then analyse whether it's worth implementing. We could have analysed the three sum approaches from the previous video this way, without implementing them and measuring the time.</li>
+    </ul>
+
+    <h3>How it's done</h3>
+    <ol>
+      <li><strong>First, get an expression for the time taken</strong> by your code in terms of input size.</li>
+      <li><strong>Then, find the order of growth from it.</strong> Quick rule for now: take the leading term and ignore the lower-order terms. The formal definition of order of growth comes later.</li>
+    </ol>
+    <div class="key"><strong>Assumption:</strong> any mathematical operation, comparison, or other basic operation takes <strong>constant time</strong>, whatever the input values. Adding 1 million to 1 million takes the same time as adding 10 to 1 or 5 to 1.</div>
+
+    <h3>Why the graph uses only one quadrant</h3>
+    <p>When we draw these graphs, we only use the first quadrant of the 2D coordinate system. Time taken by an algorithm can't be negative: it's 0 or grows with n. And n, typically the input size, is always 0 or more.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Same example: sum of n natural numbers.</strong>
+      <p style="margin:6px 0 0">Find the time-taken expression for each of the three functions from the previous video, then compare their order of growth.</p>
+    </div>
+
+    <div class="approach">
+      <h4>fun1 <span class="cx">Time Taken: C₁</span></h4>
+<pre><code class="language-java">int fun1(int n)
+{
+    return n * (n + 1) / 2;
+}</code></pre>
+      <p>It does an addition, a multiplication and a division: three operations. Each takes constant time whatever the input value, so the time taken is a constant, <strong>C₁</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>fun2 <span class="cx">Time Taken: C₂n + C₃</span></h4>
+<pre><code class="language-java">int fun2(int n)
+{
+    int sum = 0;
+    for (int i = 1; i &lt;= n; i++)
+        sum = sum + i;
+    return sum;
+}</code></pre>
+      <ul>
+        <li><code>sum = sum + i</code> runs <strong>n</strong> times.</li>
+        <li><code>sum = 0</code>, the initialisation <code>i = 1</code>, and <code>return sum</code> each run <strong>once</strong>.</li>
+      </ul>
+      <p>Some things run a constant number of times and some run n times, so the time taken is <strong>C₂n + C₃</strong>.</p>
+      <p><strong>Even if the loop doesn't run exactly n times</strong> (say <code>i &lt; n</code>, <code>i &lt; n − 5</code>, n/2 or n/3 times), the time is still of the form C₂n + C₃. As written on the board:</p>
+<pre><code class="language-plaintext">C1(n - 5) + C2
+= C6 n + C7</code></pre>
+      <p>Here C₆ = C₁ and C₇ = C₂ − 5C₁. For n/2 times, C₆ becomes C₁/2. As long as the count is an expression in n like this, you can use C₂n + C₃ for such loops.</p>
+    </div>
+
+    <div class="approach">
+      <h4>fun3 <span class="cx">Time Taken: C₄n² + C₅n + C₆</span></h4>
+<pre><code class="language-java">int fun3(int n)
+{
+    int sum = 0;
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 1; j &lt;= i; j++)
+            sum++;
+    return sum;
+}</code></pre>
+      <ul>
+        <li><code>sum++</code> runs n(n+1)/2 times, which is <strong>n²/2 + n/2</strong> (both written on the board).</li>
+        <li><code>sum = 0</code> and <code>return sum</code> run <strong>once</strong>.</li>
+        <li>The inner loop's initialisation <code>j = 1</code> runs for every value of i, so <strong>n</strong> times.</li>
+      </ul>
+      <p>Some things take constant time, some happen a linear number of times, and some a quadratic number of times. So the time taken is <strong>C₄n² + C₅n + C₆</strong>.</p>
+    </div>
+
+    <h4>Order of growth (leading term, lower-order terms ignored)</h4>
+    <div class="scroll"><table>
+      <thead><tr><th>Function</th><th>Time taken</th><th>Order of growth</th></tr></thead>
+      <tbody>
+        <tr><td>fun1</td><td class="num">C₁</td><td>constant (doesn't depend on n)</td></tr>
+        <tr><td>fun2</td><td class="num">C₂n + C₃</td><td>linear</td></tr>
+        <tr><td>fun3</td><td class="num">C₄n² + C₅n + C₆</td><td>quadratic</td></tr>
+      </tbody>
+    </table></div>
+    <p>The teacher points out that these codes work in C, C++ and Java, but you don't have to implement them. You can write the algorithm and analyse it.</p>
+
+    <div class="problem">
+      <strong>Example 1: your fast code on a slow machine vs. your friend's slower code on a fast machine</strong>
+      <p style="margin:6px 0 0">You wrote fun1 and ran it on a slow machine. Your friend wrote fun2 and ran it on a slightly faster one. The machine load doesn't change between runs. Board, "Example Values":</p>
+<pre><code class="language-plaintext">C1 = 13, C2 = 2, C3 = 5
+fun1() = 13
+fun2() = 2n + 5
+
+13 = 2n + 5
+n = 4</code></pre>
+    </div>
+    <svg viewBox="0 0 360 230" role="img" aria-label="Graph of time taken: fun1 is flat at 13, fun2 = 2n + 5 starts at 5 and crosses fun1 at n = 4" style="width:100%;max-width:420px;display:block;margin:8px 0">
+      <line x1="40" y1="190" x2="345" y2="190" stroke="var(--muted)" stroke-width="1.5"/>
+      <line x1="40" y1="190" x2="40" y2="15" stroke="var(--muted)" stroke-width="1.5"/>
+      <text x="340" y="208" fill="var(--muted)" font-size="12" text-anchor="end">n →</text>
+      <text x="8" y="20" fill="var(--muted)" font-size="11">time</text>
+      <line x1="40" y1="101.6" x2="340" y2="101.6" stroke="var(--theory)" stroke-width="2.5"/>
+      <text x="300" y="95" fill="var(--theory)" font-size="12" text-anchor="end">fun1() = 13</text>
+      <line x1="40" y1="156" x2="340" y2="47.2" stroke="var(--practice)" stroke-width="2.5"/>
+      <text x="252" y="58" fill="var(--practice)" font-size="12" text-anchor="end">fun2() = 2n + 5</text>
+      <line x1="190" y1="101.6" x2="190" y2="190" stroke="var(--muted)" stroke-dasharray="3 3"/>
+      <circle cx="190" cy="101.6" r="4" fill="var(--accent)"/>
+      <text x="190" y="206" fill="var(--ink)" font-size="12" text-anchor="middle">4</text>
+      <text x="34" y="105" fill="var(--theory)" font-size="11" text-anchor="end">13</text>
+      <text x="34" y="160" fill="var(--practice)" font-size="11" text-anchor="end">5</text>
+      <text x="40" y="206" fill="var(--muted)" font-size="11" text-anchor="middle">0</text>
+    </svg>
+    <ul>
+      <li>Your fun1 always takes 13 units of time on your machine.</li>
+      <li>Your friend's time depends on n: 5 for n = 0, 7 for n = 1, and so on.</li>
+      <li>The two lines meet at <strong>n = 4</strong>. After that, your friend's function <strong>always takes more time</strong>, even though their machine is faster.</li>
+    </ul>
+    <p>That's the beauty of order of growth. fun1's order of growth (constant) is lower than fun2's (linear), so the machine-specific things go away after n = 4.</p>
+
+    <div class="problem">
+      <strong>Example 2: an even slower machine for you</strong>
+      <p style="margin:6px 0 0">This time you run fun1 on a mobile phone, so your constant is 1000. Your friend gets an even faster machine, with constants 1 and 1. Board:</p>
+<pre><code class="language-plaintext">fun1() = 1000
+fun2() = n + 1
+
+n + 1 >= 1000
+n >= 999</code></pre>
+    </div>
+    <p>There is still a value of n after which your friend's program always takes more time. It's just higher this time (999), because your machine is slower and theirs is faster. After that point fun2's values go 1000, 1001, 1002 and so on, while fun1 stays at 1000.</p>
+    <p>Whatever the constants, a function with a higher order of growth always has a higher value after a certain value of n. The teacher says we'll see later why this is true mathematically.</p>
+
+    <h4>Where fun3 fits</h4>
+    <p>fun3 is quadratic, and quadratic functions grow even faster (the teacher draws a steeper curve on the same graph). After a certain point, fun3 takes more time than fun1. With the constants chosen for the drawing, it's above fun2 all the time.</p>
+
+    <div class="added">
+      <p><strong>Note on the video:</strong> at 10:56 the teacher says "the fun 1 is always going to take more time than fun 2". From the board (n + 1 ≥ 1000, n ≥ 999), the graph, and the values the teacher reads out (1000, 1001, 1002…), it's fun2 that takes more time after n = 999. That looks like a slip of the tongue, so the notes above follow the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MjY3Ng%3D%3D" target="_blank" rel="noopener">Order of Growth</a> · Notes from the full transcript and the board (a frame every 5 seconds). Board text is copied as written. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Our main task</h3>
+    <p>We're given a programming problem and multiple solutions, and we need to figure out which one is more efficient. To do that, we find the time taken by every solution (as a polynomial), look at the order of growth of each, and say the one with the <strong>least order of growth</strong> is the efficient algorithm.</p>
+
+    <h3>Order of Growth (definition, as on the board)</h3>
+    <p>A function f(n) is said to be growing faster than g(n) if</p>
+<pre><code class="language-plaintext">  lim    g(n) / f(n) = 0
+ n → ∞
+
+OR
+
+  lim    f(n) / g(n) = ∞
+ n → ∞</code></pre>
+    <p>Both mean the same thing. Also on the board: <em>f(n) and g(n) represent time taken</em>, <em>n ≥ 0</em>, and <em>f(n), g(n) ≥ 0</em>.</p>
+    <ul>
+      <li>f(n) and g(n) are the time taken by two different algorithms for the same problem. If f(n) grows faster, the algorithm whose time is f(n) is the <strong>bad</strong> one. g(n) is better because it grows slower in terms of input size.</li>
+      <li>n is the input size, so n ≥ 0. f(n) and g(n) are times, so they're ≥ 0 too. That's why we only use one quadrant.</li>
+    </ul>
+
+    <h3>Why n → ∞?</h3>
+    <p>When we analyse algorithms we always talk about large values of n, and to be mathematically precise, n tends to infinity. When n tends to infinity, the order of growth is the thing that matters and other things just go away. That's why asymptotic analysis works.</p>
+    <p>It may not be perfect in practice. The board example: <code>f(n) = n + 1</code>, <code>g(n) = 1000</code> (large constants in the algorithm, not just machine reasons). f(n) has the higher order of growth, so its algorithm is the bad one. But if a user never gives an input above 999, the f(n) algorithm actually takes less time. Still, asymptotic analysis doesn't care about large constants. It always looks at n → ∞.</p>
+
+    <h3>Direct Way to Find and Compare Growths (board)</h3>
+    <ol>
+      <li>Ignore lower order terms.</li>
+      <li>Ignore leading term constant.</li>
+    </ol>
+    <p>What remains is the order of growth.</p>
+
+    <h3>How do we compare terms? (board)</h3>
+<pre><code class="language-plaintext">c &lt; log log n &lt; log n &lt; n^(1/3) &lt; n^(1/2) &lt; n
+  &lt; n² &lt; n³ &lt; n⁴ &lt; 2ⁿ &lt; nⁿ</code></pre>
+    <p>A constant grows slowest: it doesn't grow at all. log log n grows, but very slowly. Remember this sequence. Use it to decide which term is leading, and to compare final orders of growth. A final order of growth is a single term, or a combination like n log n.</p>
+    <p><strong>Comparing n log n with n</strong> (written at the side of the board): cancel the common n. What's left is log n vs. a constant, and log n is higher. So n log n has the higher order of growth.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Prove with the limit that f(n) grows faster than g(n)</strong>
+<pre><code class="language-plaintext">f(n) = n² + n + 6
+g(n) = 2n + 5</code></pre>
+    </div>
+    <p>Divide numerator and denominator by n², the highest-growing term. Every term with n in the denominator becomes 0 as n → ∞. As written on the board:</p>
+<pre><code class="language-plaintext">  lim     2n + 5
+ n → ∞  ---------
+        n² + n + 6
+
+=  lim    2/n + 5/n²
+  n → ∞  ---------------
+         1 + 1/n + 6/n²
+
+=  lim    0 + 0
+  n → ∞  ---------
+         1 + 0 + 0
+
+= 0</code></pre>
+    <p>g(n)/f(n) → 0, so f(n) grows faster (quadratic vs. linear).</p>
+
+    <div class="problem">
+      <strong>Direct way: examples from the board</strong>
+<pre><code class="language-plaintext">f(n) = 2n² + n + 6,   Order of Growth: n²  (Quadratic)
+g(n) = 100n + 3,      Order of Growth: n   (Linear)</code></pre>
+      <p style="margin:6px 0 0">For f(n): drop the lower-order terms 6 and n, then drop the leading constant 2. For g(n): drop the constant 3, then drop the leading constant 100.</p>
+    </div>
+
+    <h4>Exercise questions (from the video)</h4>
+    <p>Find the order of growth of both functions and say which one is higher. C₁ … C₆ are constants.</p>
+
+    <div class="approach">
+      <h4>Question 1</h4>
+<pre><code class="language-plaintext">f(n) = C1 log n + C2
+g(n) = C3 n + C4 log log n + C5
+
+f(n) : log n
+g(n) : n</code></pre>
+      <p>For f(n), ignore the lower-order term C₂ and the constant C₁. For g(n), log log n grows way slower than n, so ignore it with C₅, then ignore C₃. n comes after log n in the sequence, so <strong>g(n) has the higher order of growth</strong>. The algorithm whose time taken is g(n) is the bad algorithm.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Question 2</h4>
+<pre><code class="language-plaintext">f(n) = C1 n² + C2 n + C3
+g(n) = C4 n log n + C5 n + C6
+
+f(n) : n²
+g(n) : n log n</code></pre>
+      <p>Compare n² with n log n: cancel one power of n, leaving n vs. log n, and n is higher. So <strong>f(n) has the higher order of growth</strong>. The algorithm whose time is f(n) is bad compared to the one whose time is n log n.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MjY3OA%3D%3D" target="_blank" rel="noopener">Best, Average and Worst cases</a> · Notes from the full transcript and the board (a frame every 5 seconds). Code is copied as written on the board. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Why we need cases</h3>
+    <p>Some functions have the same order of growth for every input. Others behave differently depending on the type of input, so you can't make one general statement about their order of growth. For those, we divide all inputs into three cases: <strong>best case</strong>, <strong>average case</strong> and <strong>worst case</strong>.</p>
+
+    <div class="scroll"><table>
+      <thead><tr><th>Case</th><th>What it is</th><th>Used?</th></tr></thead>
+      <tbody>
+        <tr><td>Best</td><td>The minimum order of growth of the algorithm.</td><td>Not used. If you tell a buyer "in the best case my software responds in 0.001 microsecond", but you don't know the worst or average case (it might take hours), nobody will buy it. Saying "its minimum time is this" is of no use.</td></tr>
+        <tr><td>Average</td><td>The time taken for every input, summed and divided by the number of inputs. For example, if users will provide 1000 different inputs, compute the time for each and divide the sum by 1000.</td><td>Not typically done. Many times we don't know what inputs users will give or their distribution, so we have to make assumptions. Something we'd like to know, but impractical many times.</td></tr>
+        <tr><td>Worst</td><td>The input case for which the algorithm takes the maximum time, i.e. has the maximum order of growth.</td><td><strong>Used most of the time.</strong> We use that order of growth to indicate the time complexity of the algorithm.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>When there are no separate cases</h3>
+    <p>If your program has no condition that leads to different orders of growth, you just state one order of growth. Examples from the video: the simple array sum, finding the maximum in an array, finding the minimum in an array. You have to traverse the array every time, so it's always linear.</p>
+    <p>But many algorithms, including standard ones, do have different cases. <strong>Insertion sort</strong> takes linear time if you give it sorted input and quadratic time if you give it reverse-sorted input.</p>
+  
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/article/NjA4Ng%3D%3D" target="_blank" rel="noopener">Worst, Average and Best Case Time Complexities</a></p>
+<p>The article uses <strong>linear search</strong> as its example:</p>
+<ul>
+<li><strong>Worst case (usually done):</strong> an upper bound on running time. For linear search it's when x isn't present, so every element is compared: O(n).</li>
+<li><strong>Average case (sometimes done):</strong> sum the time for all possible inputs and divide by the number of inputs. You must know or predict the distribution. Assuming all n + 1 cases (including "not present") are equally likely, sum them and divide by n + 1.</li>
+<li><strong>Best case (bogus):</strong> a lower bound. For linear search, x is at the first location, so constant time: Ω(1). A lower bound gives no useful guarantee, since in the worst case the algorithm may take years.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Example 1: Simple function with same order of growth for every input</h4>
+      <p>Takes an array and its size, initialises the sum as 0, traverses the elements to compute the sum, and returns it.</p>
+<pre><code class="language-java">int getSum(int arr[], int n)
+{
+    int sum = 0;
+    for (int i = 0; i &lt; n; i++)
+        sum = sum + arr[i];
+    return sum;
+}</code></pre>
+      <p>Some things run a constant number of times: the two initialisations and <code>return sum</code>. Others run a linear number of times: the loop body, the condition check and the increment. As written on the board:</p>
+<pre><code class="language-plaintext">Time Taken      : C1 n + C2
+Order of Growth : n  (Linear)</code></pre>
+    </div>
+
+    <div class="approach">
+      <h4>Example 2: Multiple orders of growth</h4>
+      <p>Say, due to some business reason, if the user provides an even-sized array we return 0. Otherwise (odd-sized array) we compute the actual sum.</p>
+<pre><code class="language-java">int getSum(int arr[], int n)
+{
+    if (n % 2 == 0)
+        return 0;
+    int sum = 0;
+    for (int i = 0; i &lt; n; i++)
+        sum = sum + arr[i];
+    return sum;
+}</code></pre>
+      <p>Even-sized input takes constant time, and odd-sized input takes linear time. The board:</p>
+<pre><code class="language-plaintext">Best Case    : Constant
+Average Case : Linear
+   (Under the assumption that even and odd
+    cases are equally likely)
+Worst Case   : Linear</code></pre>
+      <ul>
+        <li><strong>Best case:</strong> the user provides an even-sized array, so it's constant.</li>
+        <li><strong>Average case:</strong> assume half the inputs are even and half are odd. Add the linear time and the constant time and divide by 2. As written on the board:
+<pre><code class="language-plaintext">(C1 n + C2) + (C3)       C1 n     C2     C3
+------------------   =   ----  +  --  +  --
+        2                 2       2      2</code></pre>
+          Ignore the lower-order terms and the leading constant, and you get n again: linear.</li>
+        <li><strong>Worst case:</strong> the user provides an odd-sized array, giving the maximum order of growth, which is linear.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MjY3Nw%3D%3D" target="_blank" rel="noopener">Asymptotic Notation</a> · Notes from the full transcript and the board (a frame every 5 seconds). Code is copied as written on the board. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Asymptotic Notations (board)</h3>
+    <p>Asymptotic notations are mathematical notations to represent the order of growth of any mathematical function. There are mainly three popular ones:</p>
+<pre><code class="language-plaintext">Big O : Exact or Upper
+Theta : Exact
+Omega : Exact or Lower</code></pre>
+    <p>Each one gets its own video later. This video introduces the three.</p>
+
+    <h3>Why do we need "exact or upper" and "exact or lower"?</h3>
+    <p>For a single expression we can always give the exact order of growth (Theta). Ignore lower-order terms and the constant: C₁n + C₂ → n, and C₁n² + C₂ log n + C₃ → n². The need for Big O and Omega comes from algorithms that take different time for different inputs, like the linear search below.</p>
+
+    <h3>What each notation means here</h3>
+    <ul>
+      <li><strong>Big O(n)</strong> means it takes linear time or less than linear time. C₁n + C₂ can be written as O(n), and mathematically also as O(n²). You can write n or anything higher (n log n, n³, n⁴…), but not anything less than n.</li>
+      <li><strong>Theta</strong> is exact. For linear search you can't state the time in one line with Theta. You have to say "Θ(n) in the worst case".</li>
+      <li><strong>Omega</strong> is the opposite of Big O: lower bound or exact. C₁n + C₂ can be written as Ω(n) (exact) or Ω(1) (lower), both mathematically fine.</li>
+    </ul>
+    <p>On the board: <code>Θ(1)</code> and <code>O(1)</code> both mean <strong>constant</strong>. With any notation, 1 means a constant value. <code>Ω(1)</code> means a constant or any value higher than constant.</p>
+
+    <h3>Which one is preferred?</h3>
+    <p>As discussed in best, average and worst cases, we're most of the time interested in an upper bound. That's why Omega is not used much: you'd rarely see it in analysis of algorithms. Most of the time you'll see <strong>Big O</strong> (upper bound) and <strong>Theta</strong> (exact bound).</p>
+  
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/article/MjIyMw%3D%3D" target="_blank" rel="noopener">Asymptotic Notations</a></p>
+<ul>
+<li><strong>Θ</strong> bounds a function from above and below (exact behaviour). Drop lower-order terms and constants: n³ + 6n² + 6000 = Θ(n³).</li>
+<li><strong>Big O</strong> is an upper bound only. Insertion sort is linear in the best case and quadratic in the worst, so its time complexity is O(n²), which also covers the best case. Big O is useful when only an upper bound is needed, which can often be found by inspecting the algorithm.</li>
+<li><strong>Ω</strong> is an asymptotic lower bound. Useful when a lower bound is known, but less commonly used.</li>
+</ul>
+<pre><code class="language-plaintext">Θ(g(n)) = {f(n): ∃ positive c1, c2, n0 such that 0 ≤ c1·g(n) ≤ f(n) ≤ c2·g(n) for all n ≥ n0}
+O(g(n)) = {f(n): ∃ positive c, n0 such that 0 ≤ f(n) ≤ c·g(n) for all n ≥ n0}
+Ω(g(n)) = {f(n): ∃ positive c, n0 such that 0 ≤ c·g(n) ≤ f(n) for all n ≥ n0}</code></pre>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="problem">
+      <strong>Linear search: describe its time in one line</strong>
+<pre><code class="language-java">int search(int arr[], int n,
+           int x)
+{
+    for (int i = 0; i &lt; n; i++)
+        if (arr[i] == x)
+            return i;
+    return -1;
+}</code></pre>
+<pre><code class="language-plaintext">arr[] = {10, 5, 30, 40, 80}</code></pre>
+      <p style="margin:6px 0 0">It takes an array, its size, and the element x to search. It traverses the array and returns the index as soon as it finds a match. If there's no match after traversing the whole array, it returns −1.</p>
+    </div>
+    <ul>
+      <li><strong>Searching 10:</strong> found at the first place, returns immediately. Constant time.</li>
+      <li><strong>Searching 75 (not present):</strong> traverses the whole array, comes out of the loop, returns −1. Linear time.</li>
+    </ul>
+    <p>Without notations you'd have to say "constant in the best case, linear in the worst case". With the notations, as written next to the code on the board:</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Notation</th><th>Statement</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Big O</td><td class="num">O(n)</td><td>Linear or less than linear. One line, covers all cases.</td></tr>
+        <tr><td>Theta</td><td class="num">Θ(n) in the worst case</td><td>Needs the words "worst case": when the element isn't present it has to traverse to the end.</td></tr>
+        <tr><td>Omega</td><td class="num">Ω(1)</td><td>Constant or higher than constant. Also covers all cases.</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="approach">
+      <h4>Writing C₁n + C₂ in each notation (from the board)</h4>
+<pre><code class="language-plaintext">C1 n + C2 → O(n), O(n²)      (exact, or any upper)
+C1 n + C2 → Ω(n) → Ω(1)      (exact, or any lower)</code></pre>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MjY4MQ%3D%3D" target="_blank" rel="noopener">Big O Notation</a> · Notes from the full transcript and the board (a frame every 5 seconds). Board text and code are copied as written. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>What Big O represents</h3>
+    <p>Big O represents an <strong>exact or upper bound</strong> on order of growth. If you know the exact bound, prefer Theta notation, because it gives more information. The main use of Big O is when you have an <strong>upper bound</strong>.</p>
+
+    <h3>Direct way (board)</h3>
+    <ul>
+      <li>Ignore lower order terms.</li>
+      <li>Ignore leading term constant.</li>
+    </ul>
+    <p>That gives the order of growth. Since Big O includes "exact", write that order of growth inside O(). Mathematically you could also write O(n³), O(n⁴) or anything higher for an n² expression, because O(g(n)) means "order-of-growth-wise less than or equal to g(n)". But when you know it's equal, why write a higher value?</p>
+
+    <h3>Mathematical definition (board)</h3>
+<pre><code class="language-plaintext">We say f(n) = O(g(n)) iff
+there exist constants c and n₀
+such that f(n) ≤ c·g(n)
+for all n ≥ n₀</code></pre>
+    <p>Asymptotic notations are always about large values of n (n → ∞). That's why the condition only has to hold for all n ≥ some constant n₀.</p>
+    <p><strong>How to pick c:</strong> take the constant of the highest-growing term and add 1 to it. As n increases, the highest-growing term dominates the others, so with a higher multiplier, c·g(n) is definitely bigger after a certain value.</p>
+
+    <h3>Sets of functions (board)</h3>
+<pre><code class="language-plaintext">  {100, log 2000, 10⁴, ...}                          ∈ O(1)
+U {n/4, 2n+3, n/100 + log n, n + 10000, log n + 10, ...}  ∈ O(n)
+U {n²+n, 2n², n² + 1000n, n² + n log n + n, n²/10000, ...}  ∈ O(n²)</code></pre>
+    <ul>
+      <li>Any constant value (not dependent on n, no n in the term) is O(1).</li>
+      <li>"U" means union. Big O means exact or higher order of growth, so the O(1) terms also come under O(n), and both of those come under O(n²).</li>
+      <li>Ideally you wouldn't write a constant as O(n), or log n + 10 as O(n). You'd write O(1) and O(log n), or even better Θ(1) and Θ(log n) when you know the exact order of growth.</li>
+    </ul>
+
+    <h3>Big O notation works for multiple variables also (board)</h3>
+<pre><code class="language-plaintext">100n² + 1000m + n             : O(n² + m)
+1000m² + 200mn + 30m + 20n    : O(m² + mn)</code></pre>
+    <p>Take the highest-growing term for each variable. In the second one, n appears in n and mn, and mn is higher because it's multiplied by an input variable (m → ∞ and n → ∞).</p>
+
+    <h3>Applications (board: "Used when we have an upper bound")</h3>
+    <ul>
+      <li>If you know the exact bound, use Theta. Finding the maximum or minimum in an array always traverses the whole array, so say Θ(n), not O(n).</li>
+      <li>With complex logic (many if-else and termination conditions), find the innermost statement that runs the maximum number of times, and get its order of growth in the worst case. Put that in Big O and call it the time complexity. An upper bound is often much easier to get than the exact bound.</li>
+      <li>Even when you can't find the exact upper bound, you can approximate one by ignoring certain things. The teacher says there will be examples in recursion analysis.</li>
+      <li>In general: find the worst case, find its order of growth, write it in Big O, and say that's the time complexity.</li>
+    </ul>
+  
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/article/NzM2NQ%3D%3D" target="_blank" rel="noopener">Big O Notation</a></p>
+<p><strong>Step-wise procedure for Big-O runtime analysis:</strong></p>
+<ol>
+<li>Figure out what the input is and what n represents.</li>
+<li>Express the maximum number of operations the algorithm performs in terms of n.</li>
+<li>Eliminate all except the highest-order terms.</li>
+<li>Remove all the constant factors.</li>
+</ol>
+<p><strong>Useful properties:</strong></p>
+<ul>
+<li>Constant multiplication: if f(n) = c·g(n), then O(f(n)) = O(g(n)), where c is a nonzero constant.</li>
+<li>Polynomial: if f(n) = a₀ + a₁n + … + aₘnᵐ, then O(f(n)) = O(nᵐ).</li>
+<li>Summation: O(f₁ + f₂ + … + fₘ) = O(max of them).</li>
+<li>Logarithms: log_a n and log_b n are the same in Big O. All log functions grow the same way.</li>
+</ul>
+<p><strong>Common classes, with the article's worst-case examples:</strong></p>
+<div class="scroll"><table><thead><tr><th>Class</th><th>Example</th></tr></thead><tbody>
+<tr><td class="num">O(log n)</td><td>Binary search</td></tr>
+<tr><td class="num">O(n)</td><td>Linear search</td></tr>
+<tr><td class="num">O(n log n)</td><td>Heap sort, Merge sort</td></tr>
+<tr><td class="num">O(n^c)</td><td>Bubble, Selection, Insertion sort, Strassen's matrix multiplication, Bucket sort</td></tr>
+<tr><td class="num">O(cⁿ)</td><td>Tower of Hanoi</td></tr>
+<tr><td class="num">O(n!)</td><td>Determinant expansion by minors, brute-force Travelling Salesman</td></tr>
+</tbody></table></div>
+<pre><code class="language-plaintext">            n = 10        n = 20
+log n       1             2.996
+n           10            20
+n log n     10            59.9
+n²          100           400
+2ⁿ          1024          1048576
+n!          3628800       2.432902e+18</code></pre>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Direct way: examples from the board</h4>
+<pre><code class="language-plaintext">3n² + 5n + 6            O(n²)
+3n + 10n log n + 3      O(n log n)
+10n³ + 4n + 10          O(n³)</code></pre>
+      <p>In the second one, 3n is the lower-order term because n log n is higher.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Proving f(n) = 2n + 3 is O(n) with the definition</h4>
+      <p>Here g(n) = n. We need constants c and n₀ such that 2n + 3 ≤ c·n for all n ≥ n₀. As written on the board:</p>
+<pre><code class="language-plaintext">f(n) = 2n + 3
+can be written as O(n)   [g(n) = n]
+  Let us take c = 3
+  2n + 3 ≤ 3n
+       3 ≤ n
+  We get n₀ = 3</code></pre>
+      <p>c = 3 because the constant of the highest-growing term (2) plus 1 is 3. Check: at n = 3, 2·3 + 3 = 9 and 3·3 = 9 (same). At n = 4, 8 + 3 = 11 and 3·4 = 12. For all higher values, 3n stays greater.</p>
+      <p>The board graph shows <code>g(n) = 3n</code> as a steeper line than <code>f(n) = 2n + 3</code>, staying above it from n₀ onwards.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Application: isPrime (board)</h4>
+<pre><code class="language-java">bool isPrime(int n)
+{   if (n == 1) return false;
+    if (n == 2 || n == 3) return true;
+    if (n % 2 == 0 || n % 3 == 0) return false;
+    for (int i = 5; i * i &lt;= n; i = i + 6)
+        if (n % i == 0 || n % (i + 2) == 0)
+            return false;
+    return true;
+}</code></pre>
+      <p>The teacher notes this syntax is close to C, C++ and Java. The only difference in Java is that you use <code>boolean</code> instead of <code>bool</code>. How this function works is covered in detail in the prime number video in the Mathematics track.</p>
+      <ul>
+        <li>n = 1, 2, 3 are corner cases: 1 isn't prime, 2 and 3 are.</li>
+        <li>Multiples of 2 or 3 (like 100, 200, 500) return immediately and never enter the loop.</li>
+        <li>Otherwise the loop runs while i·i ≤ n, i.e. till √n, in steps of 6.</li>
+        <li><strong>65:</strong> √65 is a bit above 8 (8·8 = 64), but 65 is a multiple of 5, so it returns false in the first iteration. Constant time.</li>
+        <li><strong>Worst case:</strong> the input is the square of a prime, e.g. 49 = 7². Then it really runs till √n, about (√n − 5)/6 times. Ignore the constants and you get √n.</li>
+      </ul>
+      <p>Many cases stop well before √n, so we say the time complexity is <strong>O(√n)</strong> (written on the board). That means √n or less, which covers the constant cases, the divisible-by-2 and divisible-by-3 cases, and inputs like 65.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Notes on the video:</strong> at 3:52 the teacher says "show that 2n + 3 is more than equal to 3n", but the board (and the definition) has 2n + 3 ≤ 3n. At 10:26 the teacher says "i is more than equal to square root of n", but the loop condition i·i ≤ n means i ≤ √n. The notes follow the board in both places.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MjY4NQ%3D%3D" target="_blank" rel="noopener">Omega Notation</a> · Notes from the full transcript and the board (a frame every 5 seconds). Board text is copied as written. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>What Omega represents</h3>
+    <p>Omega (big Omega) is the <strong>opposite of Big O</strong>. Big O is mainly used when you have an <strong>upper bound</strong>. Big Omega is mainly used when you have a <strong>lower bound</strong>: it indicates a lower bound on the time taken.</p>
+
+    <h3>Mathematical definition (board)</h3>
+<pre><code class="language-plaintext">f(n) = Ω(g(n)) iff there
+exist constants c (where c > 0)
+and n₀ (where n₀ ≥ 0) such
+that c·g(n) ≤ f(n) for all
+n ≥ n₀</code></pre>
+    <ul>
+      <li>c &gt; 0 is also there in Big O. n₀ ≥ 0, and n, f(n), g(n) ≥ 0, because we always work in the first quadrant. This applies to all asymptotic notations.</li>
+      <li>The only difference from Big O: here c·g(n) ≤ f(n). In Big O it was c·g(n) ≥ f(n).</li>
+      <li>"For all n ≥ n₀" is the same everywhere: we always talk about large values of n (n → ∞).</li>
+    </ul>
+
+    <h3>Direct method</h3>
+    <p>Same as Big O: ignore lower-order terms and the constant of the highest-growing term, and write the result in Ω. Big Omega means <strong>equal or lower</strong>. So 2n + 3 is Ω(n), but mathematically also Ω(1) or Ω(log n), because lower-growing terms are fine with Omega. When you know the exact bound, why use smaller ones?</p>
+    <p><strong>In Big O you can write higher-growing terms. In Omega you can write lower-growing terms.</strong></p>
+
+    <h3>Facts (board)</h3>
+<pre><code class="language-plaintext">*   {n², 2n² + 5, 1000n², 2n³ + n, ...}  ∈ Ω(n²)
+  U {2n + 3, 100n + log n, ...}          ∈ Ω(n)
+  U {5000, 10⁵, log 2000, ...}           ∈ Ω(1)
+
+*   If f(n) = O(g(n))
+       g(n) = Ω(f(n))</code></pre>
+    <ul>
+      <li>The first three terms (n², 2n² + 5, 1000n²) have exact order n², so they're O(n²), Θ(n²) and Ω(n²). Exact order is covered by all three notations.</li>
+      <li>Big O also covers smaller orders, and Omega covers greater orders. So 2n³ + n (order n³) is also Ω(n²). In fact it can be written as Ω(n) and Ω(1) too.</li>
+      <li>"U" is union. Every set here can be written as Ω(1). In fact, <strong>any time complexity can be written as Ω(1)</strong>: every algorithm takes constant time or more than constant time.</li>
+      <li>Big O and Omega are opposites: if f(n) = O(g(n)), then g(n) = Ω(f(n)).</li>
+    </ul>
+  
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/article/NzM2Ng%3D%3D" target="_blank" rel="noopener">Omega Notation</a></p>
+<ul>
+<li>Big Omega gives an asymptotic lower bound: the minimum growth rate of the running time for large inputs. It's useful for showing an algorithm <em>can't be faster</em> than a certain bound.</li>
+<li><strong>Calculating Ω:</strong> break the program into segments. Count each segment's operations assuming the input that makes the program take the <em>least</em> time. Add and simplify to f(n). Remove constants and pick the lowest-order term (or any function always below f(n) as n → ∞).</li>
+<li>Ω is the least used notation. It can make correct but imprecise statements. If a task takes 100 minutes, saying it takes Ω(10) minutes is true but not precise. The worst case of binary search is Ω(1): true, but not informative.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Application 1: an online game</h4>
+      <p>An algorithm runs an online game with n players. The game keeps running forever unless a player quits. You can't say anything about an upper bound on the time, because it keeps running. But if the algorithm initialises the scores of n players (a loop), it takes at least linear time. So the time complexity is <strong>Ω(n)</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Application 2: printing permutations of a string</h4>
+      <p>A string with 3 characters has 6 permutations. In general there are n! permutations. Whatever algorithm you write has to generate and print all of them on the screen, so it needs at least that much time: <strong>Ω(n!)</strong> (written on the board).</p>
+    </div>
+
+    <div class="approach">
+      <h4>Proving 2n + 3 = Ω(n) with the definition (board)</h4>
+<pre><code class="language-plaintext">f(n) = 2n + 3 = Ω(n)
+  c = 1              |  n₀ = 0
+  n ≤ 2n + 3         |
+ -3 ≤ n              |</code></pre>
+      <p>In Big O we took the leading constant plus 1. Here we take <strong>one smaller value</strong>: c = 1. The leading term is the most dominant term as n → ∞, even in a larger expression like n³ + n² + n + …</p>
+      <p>We get −3 ≤ n. We only use the first quadrant, so we don't take negative values. If it's true for all values ≥ −3, it's true for all values ≥ 0 too, so <strong>n₀ = 0</strong>.</p>
+      <p>On the board graph, f(n) = 2n + 3 stays above g(n) = n from 0 itself. In Big O it was the opposite: 3n went above 2n + 3 only after n₀ = 3.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Direct method example (board)</h4>
+<pre><code class="language-plaintext">5n² + 4n + 6
+  Ω(n²)       exact
+  Ω(n)        also valid (lower)
+  O(n³)       in Big O you'd write higher instead</code></pre>
+      <p>The order of growth is n². You can use Big O, Omega, or Theta when you know the exact order of growth.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Notes on the video:</strong> at 3:45 the teacher says "Big O of log n" while listing lower bounds; from context and the board it's Ω(log n). At 4:48 "we take C equal to n" is c = 1 on the board. At 5:21 "−3 greater than equal to n" is −3 ≤ n on the board. The notes follow the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MTU0MjU%3D" target="_blank" rel="noopener">Theta Notation</a> · Notes from the full transcript and the board (a frame every 5 seconds). Board text is copied as written. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>What Theta represents</h3>
+    <p>Theta represents the <strong>exact bound</strong> of a function, algorithm or program. Whenever you know the exact bound, prefer Theta: it gives the best information, because it tells you exactly what the order of growth is. Use Big O only when you have an upper bound, and Omega when you have a lower bound.</p>
+
+    <h3>Mathematical definition (board)</h3>
+<pre><code class="language-plaintext">f(n) = Θ(g(n)) iff there
+exist constants c₁, c₂ (where
+c₁ > 0 and c₂ > 0) and n₀
+(where n₀ ≥ 0) such that
+
+   c₁·g(n) ≤ f(n) ≤ c₂·g(n)
+
+for all n ≥ n₀</code></pre>
+    <ul>
+      <li>It's a combination of the Big O and Omega definitions. Big O bounds the function from one side and Omega from the other, each with one constant. Combining them gives two constants, c₁ and c₂.</li>
+      <li>As always, only the first quadrant: n₀ ≥ 0, and function values ≥ 0 because they represent time taken.</li>
+      <li>Bounding from both sides is <strong>only possible when f(n) and g(n) have the same order of growth</strong>, i.e. the highest-growing term has the same order in both. If the orders differ, then as n → ∞ you can bound from one side only.</li>
+    </ul>
+
+    <h3>Facts (board)</h3>
+<pre><code class="language-plaintext">*  If f(n) = Θ(g(n))
+   then f(n) = O(g(n)) and f(n) = Ω(g(n))
+   and  g(n) = O(f(n)) and g(n) = Ω(f(n))
+
+*  Represents Exact Bound
+
+*  {100, 10⁵, log 2000, ...}         ∈ Θ(1)
+   {100n, 2n + log n, 5n + 3, ...}   ∈ Θ(n)
+   {2n², n²/4 + 5n log n, ...}       ∈ Θ(n²)</code></pre>
+    <ul>
+      <li>Since Theta is the exact bound and f(n), g(n) have the same order, all four statements are true.</li>
+      <li>Unlike Big O and Omega, there are no unions here. Theta is the exact order of growth, so these are exact sets. Θ(n²) means the highest-growing term has to be n², not more, not less.</li>
+    </ul>
+
+    <h3>When to use Theta</h3>
+    <ul>
+      <li><strong>Always use Theta when you know the exact bound.</strong> Maximum in an array always traverses the whole array, so it's Θ(n). Saying O(n) doesn't give complete information (it could be n or less). Same for minimum in an array and sum of an array.</li>
+      <li>Even when an algorithm has different complexities in different cases, Theta is better per case. <strong>Insertion sort</strong>: Θ(n) in the best case (array sorted, exactly linear), and Θ(n²) in the worst case (reverse sorted). That's better than saying "O(n²) in the worst case".</li>
+      <li>To describe insertion sort in <strong>one line</strong>, say O(n²). It covers the best case and the worst case: n² or less.</li>
+    </ul>
+  
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/article/NzM2Nw%3D%3D" target="_blank" rel="noopener">Theta Notation</a></p>
+<ul>
+<li>Θ(g) is a set: f is Θ(g) if constants c₁, c₂ &gt; 0 and n₀ exist such that c₁·g(n) ≤ f(n) ≤ c₂·g(n) for all n ≥ n₀. f(n) must also be non-negative for n &gt; n₀.</li>
+<li>So for large n, f(n) always lies between c₁·g(n) and c₂·g(n): an upper and a lower bound together.</li>
+<li>The article's example is linear search for a key, which traverses the array checking each element.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Proving 2n + 3 = Θ(n) with the definition (board)</h4>
+<pre><code class="language-plaintext">Example: f(n) = 2n + 3  :  Θ(n)
+         c₁ = 1,  c₂ = 3
+
+  1×n ≤ 2n + 3 ≤ 3n          n₀ = 3
+  \_______/ \_______/
+    n ≥ 0      n ≥ 3</code></pre>
+      <ul>
+        <li>c₁ is the Omega-side constant: one smaller than the leading constant (2 − 1 = 1), like in the Omega video.</li>
+        <li>c₂ is the Big O-side constant: one larger (2 + 1 = 3), like in the Big O video.</li>
+        <li>Left part n ≤ 2n + 3 actually gives n ≥ −3, but we only consider n ≥ 0. Right part 2n + 3 ≤ 3n gives n ≥ 3.</li>
+        <li>Both are true for n ≥ 3, so <strong>n₀ = 3</strong>.</li>
+      </ul>
+      <p>The board graph shows f(n) = 2n + 3 between c₁g(n) = n below and c₂g(n) = 3n above.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Direct method (board)</h4>
+      <p>You don't need c₁, c₂ and n₀ for complex expressions. The order-of-growth method gives the exact order of growth, which is exactly what Theta represents. Ignore lower-order terms and the leading constant:</p>
+<pre><code class="language-plaintext">1000n² + 100n log n + 2n :  Θ(n²)
+200n³ + 3n + 5           :  Θ(n³)
+2000n + 2 log n          :  Θ(n)</code></pre>
+      <p>The same method works for Big O and Omega too.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Complex expressions inside a notation (board)</h4>
+<pre><code class="language-plaintext">f(n) = 2n² + n  :  Θ(n²)
+
+O(2n² + n)
+    ⇓
+O(n²)</code></pre>
+      <p>2n² + n can be written as Θ(n²), O(n²) and Ω(n²). Also, n² = O(2n² + n). A complex expression inside Big O or Omega simplifies by the same rules (ignore lower-order terms and the leading constant), so O(2n² + n) is just O(n²).</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Note on the video:</strong> at 2:50 the teacher says "c₂ belongs to the Theta notation constant and c₁ belongs to the Omega notation constant". From the rest of the video and the definition, c₂ = 3 is the Big O (upper) side. That reads as a slip, so the notes say Big O.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MTY1MDg%3D" target="_blank" rel="noopener">Analysis of Common loops</a> · Notes from the full transcript and the board (a frame every 5 seconds). Code and working are copied as written on the board. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <h3>Setup for all five examples</h3>
+    <ul>
+      <li><strong>n</strong>: user input (any value). <strong>c</strong>: a constant (some business constant like 2 or 3).</li>
+      <li>The loop body does <code>// Some Θ(1) Work</code>: constant work. No other loop or function call depending on n. Printing something 10 or 5 times is still constant work, as long as it doesn't depend on the input.</li>
+      <li>Floor and ceiling only change the count by ±1, so we ignore them in asymptotic notation, along with constants.</li>
+    </ul>
+
+    <h3>Summary</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Loop update</th><th>Runs</th><th>Time complexity</th></tr></thead>
+      <tbody>
+        <tr><td><code>i = i + c</code> (from 0 to n)</td><td>⌈n/c⌉ times</td><td class="num">Θ(n)</td></tr>
+        <tr><td><code>i = i - c</code> (from n to 0)</td><td>⌈n/c⌉ times</td><td class="num">Θ(n)</td></tr>
+        <tr><td><code>i = i * c</code> (from 1 to n)</td><td>⌈log_c n⌉ times</td><td class="num">Θ(log n)</td></tr>
+        <tr><td><code>i = i / c</code> (from n to 1)</td><td>⌊log_c n⌋ times</td><td class="num">Θ(log n)</td></tr>
+        <tr><td><code>i = pow(i, c)</code> (from 2 to n)</td><td>about log_c log₂ n times</td><td class="num">Θ(log log n)</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="key"><strong>The base of a log doesn't matter</strong> in asymptotic time complexity, as long as it's a constant. You can change the base by multiplying by a constant (the log base-change formula), and constants don't matter. So write Θ(log n) and Θ(log log n) without bases.</div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Example 1 <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-java">for (int i = 0; i &lt; n; i = i + c)
+{
+    // Some Θ(1) Work
+}</code></pre>
+<pre><code class="language-plaintext">n = 10, c = 2 :  i = 0, 2, 4, 6, 8      (5 times)
+n = 20, c = 6 :  i = 0, 6, 12, 18       (4 times)
+
+Loop Runs ⌈n/c⌉ times
+Time Complexity : Θ(n)</code></pre>
+      <p>20/6 is 3.something, and the ceiling is 4.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Example 2 <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-java">for (int i = n; i &gt; 0; i = i - c)
+{
+    // Some Θ(1) Work
+}</code></pre>
+<pre><code class="language-plaintext">n = 10, c = 2 :  i = 10, 8, 6, 4, 2     (i becomes 0, stop)
+n = 20, c = 6 :  i = 20, 14, 8, 2       (i becomes -4, stop)
+
+⌈n/c⌉   →   Θ(n)</code></pre>
+    </div>
+
+    <div class="approach">
+      <h4>Example 3 <span class="cx">Θ(log n)</span></h4>
+<pre><code class="language-java">for (int i = 1; i &lt; n; i = i * c)
+{
+    // Some Θ(1) Work
+}</code></pre>
+<pre><code class="language-plaintext">n = 33, c = 2 :  i = 1, 2, 4, 8, 16, 32     (6 times; i = 64 stops)
+n = 81, c = 3 :  i = 1, 3, 9, 27            (4 times; i = 81 stops)
+
+Loop runs ⌈log_c n⌉ times</code></pre>
+      <p>log₂ 33 is 5.something, so it runs 6 times. log₃ 81 is exactly 4, so 4 times.</p>
+      <p><strong>Mathematically (board):</strong> i starts at 1 = c⁰. If the loop runs k times, i goes c⁰, c¹, c², …, c^(k−1). The last value must be smaller than n:</p>
+<pre><code class="language-plaintext">c⁰, c¹, c², ... c^(k-1)
+c^(k-1) &lt; n
+k &lt; log_c n + 1
+Time Complexity : Θ(log_c n)</code></pre>
+    </div>
+
+    <div class="approach">
+      <h4>Example 4 <span class="cx">Θ(log n)</span></h4>
+<pre><code class="language-java">for (int i = n; i &gt; 1; i = i / c)
+{
+    // Some Θ(1) Work
+}</code></pre>
+<pre><code class="language-plaintext">n = 33, c = 2 :  i = 33, 16, 8, 4, 2     (5 times)
+n = 81, c = 3 :  i = 81, 27, 9, 3        (4 times)
+
+Loop runs ⌊log_c n⌋ times</code></pre>
+      <p><strong>Mathematically (board):</strong> i goes n/c⁰, n/c¹, n/c², …, n/c^(k−1) for k iterations, and the last value must be greater than 1:</p>
+<pre><code class="language-plaintext">n/c⁰, n/c, n/c², ... n/c^(k-1)
+n / c^(k-1) > 1
+c^(k-1) &lt; n
+k - 1 &lt; log_c n
+k &lt; log_c n + 1
+Θ(log_c n)</code></pre>
+    </div>
+
+    <div class="approach">
+      <h4>Example 5 (the most complex) <span class="cx">Θ(log log n)</span></h4>
+<pre><code class="language-java">for (int i = 2; i &lt; n; i = pow(i, c))
+{
+    // Some Θ(1) Work
+}</code></pre>
+      <p>The teacher notes that <code>pow</code> is available in C/C++. In Java, use <code>Math.pow</code>.</p>
+<pre><code class="language-plaintext">n = 33,  c = 2 :  i = 2, 4, 16           (next 256 > 33, stop)
+n = 514, c = 3 :  i = 2, 8, 512          (2³ = 8, 8³ = 512; next 512³ is huge)</code></pre>
+      <p>A large number like 512 is reached in only 3 iterations, so the order of growth is very slow, even slower than log n.</p>
+      <p><strong>Mathematically (board):</strong> i goes 2, 2^c, (2^c)^c, … which is 2^(c⁰), 2^(c¹), 2^(c²), …, 2^(c^(k−1)) for k iterations:</p>
+<pre><code class="language-plaintext">2^(c^(k-1)) &lt; n
+c^(k-1)     &lt; log₂ n
+k - 1       &lt; log_c log₂ n
+k           &lt; log_c log₂ n + 1
+Θ(log log n)</code></pre>
+      <p>It grows very, very slowly, almost like a constant. Take a log on both sides twice to get k.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MjY4MA%3D%3D" target="_blank" rel="noopener">Analysis of multiple loops</a> · Notes from the full transcript and the board (a frame every 5 seconds). Code is copied as written on the board. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <div class="key">
+      <strong>Subsequent loops</strong> (one after the other): <strong>add</strong> the time complexities, then ignore the lower-order terms.<br>
+      <strong>Nested loops</strong> (one inside the other): <strong>multiply</strong>. The inner loop runs fully for every iteration of the outer loop.
+    </div>
+    <ul>
+      <li>A loop whose count doesn't depend on n (like 1 to 99) is Θ(1).</li>
+      <li>With <strong>different inputs</strong> (n and m), you can't drop either term. m might be very small and n very large, or the other way round. Keep both inside the Θ.</li>
+      <li>Real-world examples of multiple inputs: <strong>graph algorithms</strong> are often analysed in terms of vertices and edges. <strong>Merging two sorted arrays</strong> of sizes n and m (a popular question) has time complexity in terms of both n and m.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Example 1: Subsequent loops <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-java">void fun(int n)
+{
+    for (int i = 0; i &lt; n; i++)
+    {  // Some Θ(1) Work  }          Θ(n)
+                                     +
+    for (int i = 1; i &lt; n; i = i * 2)
+    {  // Some Θ(1) Work  }          Θ(log n)
+                                     +
+    for (int i = 1; i &lt; 100; i++)
+    {  // Some Θ(1) Work  }          Θ(1)
+}                                    = Θ(n)</code></pre>
+      <p>Θ(n) + Θ(log n) + Θ(1). Ignore the lower orders (log n and 1 are crossed out on the board), so overall <strong>Θ(n)</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Example 2: Nested loops <span class="cx">Θ(n log n)</span></h4>
+<pre><code class="language-java">void fun(int n)
+{
+    for (int i = 0; i &lt; n; i++)            // → Θ(n)
+    {
+        for (int j = 1; j &lt; n; j = j * 2)  // → Θ(log n)
+        {
+            // Some Θ(1) work
+        }
+    }
+}</code></pre>
+      <p>The outer loop runs n times, and for every iteration the inner loop runs log n times. A <code>printf</code> inside would print about n × log n times. So <strong>Θ(n) × Θ(log n) = Θ(n log n)</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Example 3: Mixed loops <span class="cx">Θ(n²)</span></h4>
+<pre><code class="language-java">void fun(int n)
+{
+    for (int i = 0; i &lt; n; i++)
+    {
+        for (int j = 1; j &lt; n; j = j * 2)
+        {   // Some Θ(1) Work   }
+    }                                      // Θ(n log n)
+                                           //   +
+    for (int i = 0; i &lt; n; i++)
+    {
+        for (int j = 1; j &lt; n; j++)
+        {   // Some Θ(1) Work   }
+    }                                      // Θ(n²)
+}</code></pre>
+      <p>Each nested pair is multiplied: Θ(n log n) and Θ(n²). The two parts come one after the other, so add them: Θ(n log n) + Θ(n²). n² is the higher-order term, so overall <strong>Θ(n²)</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Example 4: Different input <span class="cx">Θ(n log n + m²)</span></h4>
+<pre><code class="language-java">void fun(int n, int m)
+{
+    for (int i = 0; i &lt; n; i++)
+    {
+        for (int j = 1; j &lt; n; j = j * 2)
+        {   // Some Θ(1) Work   }
+    }                                      // Θ(n log n)
+
+    for (int i = 0; i &lt; m; i++)
+    {
+        for (int j = 1; j &lt; m; j++)
+        {   // Some Θ(1) Work   }
+    }                                      // Θ(m²)
+}</code></pre>
+      <p>Θ(n log n) + Θ(m²). n and m are different inputs, so neither can be ignored: overall <strong>Θ(n log n + m²)</strong>, with both terms taken inside the Θ.</p>
+    </div>
+
+    <div class="added">
+      <p><strong>Notes on the video:</strong> at 3:48 the teacher says "running this Θ(n) times" for the second part of Example 4, but the board loops go to m, and the result is Θ(m²). At 0:30 "runs 1 to 99" refers to the loop <code>i = 1; i &lt; 100</code>. The notes follow the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MjYyNQ%3D%3D" target="_blank" rel="noopener">Analysis of Recursion (Introduction)</a> · Notes from the full transcript and the board (a frame every 5 seconds). Code is copied as written on the board. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>So far we've analysed <strong>iterative</strong> code. In <strong>recursive</strong> code a function calls itself. There's no loop to count, and no direct way to count the operations in terms of input size.</p>
+    <p>So for recursive code we first <strong>write a recurrence relation</strong> (this video), and then <strong>solve</strong> it (next videos).</p>
+    <h3>How to write the recurrence</h3>
+    <ol>
+      <li>Assume the function takes <strong>T(n)</strong> time for input n.</li>
+      <li>Each recursive call on a smaller input adds its own term, e.g. T(n/2).</li>
+      <li>Add the work done apart from the recursive calls. No loop or function call means constant work, Θ(1). A loop to n means Θ(n).</li>
+      <li>Write the <strong>base case</strong> separately: the input where the function just returns, which is Θ(1).</li>
+    </ol>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Example 1</h4>
+<pre><code class="language-java">void fun(int n)
+{
+    if (n &lt;= 0)
+        return;
+    print("GfG");
+    fun(n/2);
+    fun(n/2);
+}</code></pre>
+<pre><code class="language-plaintext">n > 0 :  T(n) = T(n/2) + T(n/2) + Θ(1)
+         T(n) = 2T(n/2) + Θ(1)
+
+         T(0) = Θ(1)</code></pre>
+      <p>Two recursive calls on n/2, plus constant work (the check and the print). When n ≤ 0 it just returns, which is constant. For positive n, it ultimately reaches 0, so the base case is written as T(0).</p>
+    </div>
+
+    <div class="approach">
+      <h4>Example 2 (exercise)</h4>
+<pre><code class="language-java">void fun(int n)
+{
+    if (n &lt;= 0)
+        return;
+    for (int i = 0; i &lt; n; i++)
+        print("GfG");
+    fun(n/2);
+    fun(n/3);
+}</code></pre>
+<pre><code class="language-plaintext">n > 0 :  T(n) = T(n/2) + T(n/3) + Θ(n)
+         T(0) = Θ(1)</code></pre>
+      <p>The loop prints n times, so the non-recursive work is Θ(n).</p>
+    </div>
+
+    <div class="approach">
+      <h4>Example 3 (exercise)</h4>
+<pre><code class="language-java">void fun(int n)
+{
+    if (n &lt;= 1)
+        return;
+    print("GfG")
+    fun(n - 1);
+}</code></pre>
+<pre><code class="language-plaintext">T(n) = T(n-1) + Θ(1)
+T(1) = Θ(1)</code></pre>
+      <p>One recursive call on n − 1, plus constant work for the check and the print. When n is 1 it takes constant time.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MjYzNQ%3D%3D" target="_blank" rel="noopener">Recursion Tree Method for Solving Recurrences</a> · Notes from the full transcript and the board (a frame every 5 seconds). Board text is copied as written. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>There are multiple methods to solve recurrences. The <strong>Master method</strong> requires remembering a formula and works only for a particular form. The <strong>recursion tree method</strong> is general-purpose and needs no formula. In some cases it gives an <strong>upper bound</strong> rather than the exact bound. It's close to how programmers think, since we're used to drawing recursion trees.</p>
+
+    <h3>Recursion Tree Method for Solving Recurrences (board)</h3>
+    <ul>
+      <li>We consider the recursion tree and compute the total work done.</li>
+      <li>We write the non-recursive part as the root of the tree and write the recursive part as children.</li>
+      <li>We keep expanding until we see a pattern.</li>
+    </ul>
+    <p>In the nodes, write the work done in each function call. Then add up the work level by level, find the pattern, and sum the whole series. The number of children equals the number of recursive calls: two calls give two children, three calls give three, one call gives one. Once you see the pattern, you can stop drawing.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Solve T(n) = 2T(n/2) + cn <span class="cx">Θ(n log n)</span></h4>
+<pre><code class="language-plaintext">T(n) = 2T(n/2) + cn        (2T(n/2) is the Rec part, cn is the Non-recursive part)
+T(1) = c</code></pre>
+      <p><strong>Step 1:</strong> root = cn (non-recursive part), children = T(n/2), T(n/2).</p>
+      <p><strong>Step 2:</strong> expand T(n/2). Put n/2 into the recurrence: 2T(n/4) + cn/2. So each child node is cn/2 with two children T(n/4).</p>
+      <p><strong>Step 3:</strong> keep expanding:</p>
+<pre><code class="language-plaintext">                cn                    ........  cn
+          /           \
+       cn/2           cn/2            ........  cn
+      /    \         /    \
+   cn/4   cn/4    cn/4   cn/4         ........  cn
+    :       :       :      :
+   c  ...  c  ............  c         ........  cn</code></pre>
+      <p>Every level does cn work. So the total is <code>cn + cn + cn + … + cn</code>, and we need the number of terms, i.e. the <strong>height</strong> of the tree.</p>
+      <ul>
+        <li>n = 14: 14 → 7 → 3 → 1, so 4 levels. n = 15: also 4. n = 16: 16 → 8 → 4 → 2 → 1, so 5 levels.</li>
+        <li>That's ⌊log₂ n⌋ + 1 levels. Ignoring floor, ceiling and ±1, it's <strong>Θ(log n)</strong> terms.</li>
+      </ul>
+<pre><code class="language-plaintext">cn + cn + cn ... cn
+\________________/
+     Θ(log n)
+
+Θ(n log n)</code></pre>
+      <p>This is the asymptotic value of the recurrence, not the exact value. The teacher notes this recurrence kind of belongs to <strong>merge sort</strong>: two recursive calls, then a merge procedure that takes Θ(n).</p>
+    </div>
+
+    <div class="approach">
+      <h4>With different constants (board)</h4>
+<pre><code class="language-plaintext">T(n) = 2T(n/2) + c1·n
+T(1) = c2</code></pre>
+      <p>In practice the constants differ: the base case does different constant work from the other levels. The upper levels each do c₁n, and there are ⌊log n⌋ of them (not counting the last level). The last level has n leaves of c₂ each, so c₂n.</p>
+<pre><code class="language-plaintext">c1·n × Θ(log n) + c2·n      →   Θ(n log n)</code></pre>
+      <p>c₂n is a lower-order term, so it's still <strong>Θ(n log n)</strong>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MjYzNA%3D%3D" target="_blank" rel="noopener">More Example Recurrences</a> · Notes from the full transcript and the board (a frame every 5 seconds). Board working is copied as written. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Three more recurrences solved with the recursion tree method. Each time: write the non-recursive part as the root and the recursive calls as children, expand until you see the per-level pattern, count the levels, then sum the series.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Recurrence</th><th>Per-level work</th><th>Levels</th><th>Result</th><th>Seen in</th></tr></thead>
+      <tbody>
+        <tr><td class="num">T(n) = 2T(n−1) + c</td><td>c, 2c, 4c, …</td><td>n</td><td class="num">Θ(2ⁿ)</td><td>Tower of Hanoi</td></tr>
+        <tr><td class="num">T(n) = T(n/2) + c</td><td>c, c, c, …</td><td>⌊log₂ n⌋ + 1</td><td class="num">Θ(log n)</td><td>Binary search</td></tr>
+        <tr><td class="num">T(n) = 2T(n/2) + c</td><td>c, 2c, 4c, …</td><td>⌊log₂ n⌋ + 1</td><td class="num">Θ(n)</td><td></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Example 1 <span class="cx">Θ(2ⁿ)</span></h4>
+<pre><code class="language-plaintext">T(n) = 2T(n-1) + c
+T(1) = c
+
+            c                      ......  c
+       /          \
+      c            c               ......  2c
+    /   \        /   \
+   c     c      c     c            ......  4c
+   :     :      :     :
+   c ............................. c</code></pre>
+      <p>Work per level: c, 2c, 4c, then 8c at the next level. Number of levels: for n = 3, calls go 3 → 2 → 1, so 3 levels. For n = 4, 4 levels. So <strong>n levels</strong>, and the series has n terms.</p>
+      <p>It's a geometric progression with common ratio 2. Take c out, then apply a(rⁿ − 1)/(r − 1). As written on the board:</p>
+<pre><code class="language-plaintext">c + 2c + 4c ...
+\_____________/
+       n
+
+c (1 + 2 + 4 ...)
+
+c [ 1 × (2ⁿ − 1) ]
+  [ ------------ ]
+  [    2 − 1     ]
+
+Θ(2ⁿ)</code></pre>
+      <p>This recurrence appears in the <strong>Tower of Hanoi</strong> problem (covered in the Recursion track): recursively call for n − 1, then again for n − 1, plus constant extra work. In real code the constants would be c₁ and c₂, but you get the same result.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Example 2 <span class="cx">Θ(log n)</span></h4>
+<pre><code class="language-plaintext">T(n) = T(n/2) + c
+T(1) = c
+
+c    ......  c
+|
+c    ......  c
+:
+c    ......  c</code></pre>
+      <p>Only one recursive call, so one child per node. Every level does c work. Dividing n by 2 each time gives ⌊log₂ n⌋ + 1 levels (discussed before).</p>
+<pre><code class="language-plaintext">c + c + ... c
+\___________/
+(log₂ n) + 1
+
+Θ(log₂ n)</code></pre>
+      <p>This recurrence appears in <strong>binary search</strong>: recursively call for either the left half or the right half, plus constant work.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Example 3 <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-plaintext">T(n) = 2T(n/2) + c
+T(1) = c
+
+            c                  ......  c
+         /     \
+        c       c              ......  2c
+       / \     / \
+      c   c   c   c            ......  4c       ⌊log₂ n⌋ + 1
+      :   :   :   :
+     c ...c.........c</code></pre>
+      <p>Same as Example 2 but with two calls (2T(n/2) instead of T(n/2)). Work per level: c, 2c, 4c, 8c… The number of terms is ⌊log₂ n⌋ + 1, which we can treat as log₂ n terms (±1, floor and ceiling don't matter). Sum the GP with r = 2 and log₂ n terms:</p>
+<pre><code class="language-plaintext">c + 2c + 4c ....
+\______________/
+   Θ(log₂ n)
+
+Θ( (2^(log₂ n) − 1) / (2 − 1) )
+
+Θ(n)</code></pre>
+      <p>2^(log₂ n) = n, because the 2s are common. So it's (n − 1)/(2 − 1), which is <strong>Θ(n)</strong>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MjYzNg%3D%3D" target="_blank" rel="noopener">Upper Bounds Using Recursion Tree Method</a> · Notes from the full transcript and the board (a frame every 5 seconds). Board working is copied as written. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>In all the earlier examples we could find the exact bound (Θ). Sometimes that isn't possible.</p>
+    <p>When one recursive term shrinks at a different speed from another (e.g. n/4 and n/2, or n−1 and n−2), <strong>the leaves are not all at the same level</strong>. One side of the tree reaches a leaf very early and the other very late. The per-level work follows a geometric progression only up to a certain point, then varies. Finding the exact bound would take a lot more mathematics.</p>
+    <div class="key">
+      <strong>What we do:</strong> assume the tree is <strong>full</strong> and compute the value with that assumption. The real tree does less work than a full tree, so the result is an <strong>upper bound</strong>, written with Big O. "Big O, our friend": whenever you don't know the exact bound, use Big O.
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Example 1 <span class="cx">O(n)</span></h4>
+<pre><code class="language-plaintext">T(n) = T(n/4) + T(n/2) + cn
+T(1) = c
+
+             cn                      ......  cn
+          /       \
+       cn/4        cn/2              ......  3cn/4
+      /    \      /    \
+  cn/16   cn/8  cn/8   cn/4          ......  9cn/16
+    :       :     :      :</code></pre>
+      <ul>
+        <li>Level 2: cn/4 + cn/2 = 3cn/4.</li>
+        <li>Level 3: cn/16 + cn/8 + cn/8 + cn/4. cn/8 + cn/8 = cn/4, then cn/4 + cn/4 = cn/2, then cn/16 + cn/2 = 9cn/16.</li>
+        <li>So it's a GP with <strong>common ratio 3/4</strong>: cn, 3cn/4, 9cn/16, …</li>
+      </ul>
+      <p>The leftmost branch shrinks by 4 (4, 16, 64…) and finishes early. The rightmost shrinks by 2 (2, 4, 8, 16…) and finishes last. Assume the tree is full: the number of terms is the depth of the rightmost leaf, which halves each time, so <strong>Θ(log n)</strong> terms.</p>
+<pre><code class="language-plaintext">cn + 3cn/4 + 9cn/16 ...
+       Θ(log n)
+
+O( cn / (1 − 3/4) )
+
+O(n)</code></pre>
+      <p>You could use the finite GP formula, a(1 − rⁿ)/(1 − r), but it gets complicated. Since we're finding an upper bound anyway, use the <strong>infinite GP sum</strong>: with r &lt; 1 it's simply a/(1 − r). That's cn/(1 − 3/4), and the rest are constants, so <strong>O(n)</strong>.</p>
+      <p>A good upper bound: linear, not something bad like n² or n³.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Example 2 <span class="cx">O(2ⁿ)</span></h4>
+<pre><code class="language-plaintext">T(n) = T(n-1) + T(n-2) + c
+T(1) = c
+T(0) = c
+
+               c                      ......  c
+          /         \
+         c           c                ......  2c
+       /   \       /   \
+   T(n-2) T(n-3) T(n-3) T(n-4)
+     c      c      c      c           ......  4c
+     :      :      :      :</code></pre>
+      <p>One side reduces by 1 at a time and the other by 2, so the n−2 side finishes much faster. Leaves aren't at the same level, and after some terms it isn't exactly doubling any more.</p>
+      <p>Consider it a full (perfect) tree with all n terms, and put Big O on the GP:</p>
+<pre><code class="language-plaintext">O( c + 2c + 4c ... )
+   \_____________/
+       n terms
+
+O(2ⁿ)</code></pre>
+      <p>The sum of this GP for n terms was found earlier as 2ⁿ. There we used Θ because the tree was full. Here it's an upper bound, so it's Big O.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-intro-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-intro/video/MTEyNg%3D%3D" target="_blank" rel="noopener">Space Complexity</a> · Notes from the full transcript and the board (a frame every 5 seconds). Code is copied as written on the board. Anything not in the video is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+
+    <h3>Space Complexity (board)</h3>
+    <p><strong>Order of growth of memory (or RAM) space in terms of input size.</strong> It's like time complexity, but with memory taken instead of time taken. It's written with the same asymptotic notations. Θ(1) and O(1) both mean constant. Ω(1) isn't used here: it means at least constant, maybe higher, so it doesn't give proper information.</p>
+    <p>As long as the number of variables is constant (not an array of variables), the space is constant.</p>
+
+    <h3>Auxiliary Space (board)</h3>
+    <p><strong>Order of growth of extra space or temporary space in terms of input size</strong>: the space you create to solve the problem, other than the input/output.</p>
+    <ul>
+      <li>Auxiliary space is the term used <strong>more</strong>, because it gives more information.</li>
+      <li>For problems on arrays, lists, or any input container, the space complexity is already at least Θ(n) for the input. Even with an extra array of size n it stays Θ(n). So space complexity can't tell such algorithms apart, but auxiliary space can.</li>
+    </ul>
+
+    <h3>Sorting algorithms compared by auxiliary space</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Algorithm</th><th>Auxiliary space</th></tr></thead>
+      <tbody>
+        <tr><td>Insertion sort, Selection sort, Bubble sort, Heap sort</td><td class="num">Θ(1)</td></tr>
+        <tr><td>Merge sort (uses an extra array of size n)</td><td class="num">Θ(n)</td></tr>
+        <tr><td>Quick sort (has recursion)</td><td class="num">Θ(log n) in the best case</td></tr>
+      </tbody>
+    </table></div>
+    <p>All sorting algorithms have Θ(n) space complexity, because they all need the array to sort.</p>
+
+    <h3>Recursion uses space too</h3>
+    <p>A recursive function without any array still needs extra space: each pending call's state (activation record) is stored in the <strong>function call stack</strong> until the calls below it finish.</p>
+    <div class="key"><strong>Simple formula from the video:</strong> auxiliary space for a recursion = the <strong>height of the recursion tree</strong>, i.e. the maximum length of a root-to-leaf path. At any moment, the calls on the stack form a path from the root to a leaf.</div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+
+    <div class="approach">
+      <h4>Sum of first n natural numbers: two iterative ways <span class="cx">Θ(1) or O(1)</span></h4>
+<pre><code class="language-java">int getSum1(int n)
+{
+    return n * (n + 1) / 2;
+}
+
+int getSum2(int n)
+{
+    int sum = 0;
+    for (int i = 1; i &lt;= n; i++)
+        sum = sum + i;
+    return sum;
+}</code></pre>
+      <p>getSum1 only has n. getSum2 needs sum, i and n: three variables whether n is 1000 or 10,000. Both are Θ(1) or O(1).</p>
+    </div>
+
+    <div class="approach">
+      <h4>Array sum <span class="cx">Space Θ(n) · Auxiliary Θ(1)</span></h4>
+<pre><code class="language-java">int arrSum(int arr[], int n)
+{
+    int sum = 0;
+    for (int i = 0; i &lt; n; i++)
+        sum = sum + arr[i];
+    return sum;
+}</code></pre>
+      <p>If n is 1000, the array is size 1000. If n is 10,000, it's 10,000. The space grows linearly, so <strong>space complexity Θ(n)</strong> (exact, so Theta). But it uses no extra array for computation, only the input, so <strong>auxiliary space Θ(1)</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>Recursive sum of first n natural numbers <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-java">int fun(int n)
+{
+    if (n &lt;= 0)
+        return 0;
+    return n + fun(n - 1);
+}</code></pre>
+      <p>fun(5) → fun(4) → fun(3) → fun(2) → fun(1) → fun(0). fun(0) returns 0, then the values come back up: 1 + 0 = 1, 2 + 1 = 3, 3 + 3 = 6, 4 + 6 = 10, 5 + 10 = 15.</p>
+      <p>No array is used, but it isn't Θ(1). While fun(0) runs, fun(5), fun(4), fun(3), fun(2), fun(1) and fun(0) are all on the call stack: <strong>n + 1</strong> activation records at once. So space complexity and auxiliary space are both <strong>Θ(n)</strong>.</p>
+    </div>
+
+    <h4>Exercise: three Fibonacci solutions</h4>
+    <p>Fibonacci numbers: 0, 1, 1, 2, 3, 5, … (n = 0 gives 0, n = 1 gives 1, n = 2 gives 1). Each is the sum of the previous two.</p>
+
+    <div class="approach">
+      <h4>1. Simple recursive <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-java">int fib(int n)
+{
+    if (n == 0 || n == 1)
+        return n;
+    return fib(n-1) + fib(n-2);
+}</code></pre>
+      <p>Recursion tree for fib(4): fib(4) calls fib(3) and fib(2), and so on. The longest root-to-leaf path is fib(4) → fib(3) → fib(2) → fib(1): length 4.</p>
+      <p>The teacher walks through the call stack (drawn on the board). fib(4), fib(3), fib(2), fib(1) are pushed. fib(1) returns 1 and is popped. fib(0) is pushed, returns 0 and is popped. fib(2) returns 1 and is popped. Then fib(4)'s right side, fib(2), with fib(1) and fib(0), and so on. Final result: 3. The stack never holds more than the height of the tree. For n = 4 that's of order 4, which grows linearly, so space complexity and auxiliary space are <strong>Θ(n)</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>2. Array (bottom-up) <span class="cx">Θ(n)</span></h4>
+<pre><code class="language-java">int fib(int n)
+{
+    int f[n+1];
+    f[0] = 0;
+    f[1] = 1;
+    for (int i = 2; i &lt;= n; i++)
+        f[i] = f[i-1] + f[i-2];
+    return f[n];
+}</code></pre>
+<pre><code class="language-plaintext">n = 4
+index:  0   1   2   3   4
+f[]  :  0   1   1   2   3</code></pre>
+      <p>The array has n + 1 elements and grows with n (1000 → 1001, 1 lakh → 1 lakh + 1). Ignoring constant extras, auxiliary space and space complexity are both <strong>Θ(n)</strong>.</p>
+    </div>
+
+    <div class="approach">
+      <h4>3. Space-optimised (two variables) <span class="cx">Θ(1)</span></h4>
+<pre><code class="language-java">int fib(int n)
+{
+    if (n == 0 || n == 1)
+        return n;
+    int a = 0, b = 1;
+    for (int i = 2; i &lt;= n; i++)
+    {
+        c = a + b;
+        a = b;
+        b = c;
+    }
+    return c;
+}</code></pre>
+      <p>To compute f[i] you only need f[i−1] and f[i−2], so store just the previous two numbers in a and b, and the current one in c. Dry run from the board:</p>
+<pre><code class="language-plaintext">n = 4
+a = 0, b = 1
+
+i = 2 :  c = 1,  a = 1,  b = 1
+i = 3 :  c = 2,  a = 1,  b = 2
+i = 4 :  c = 3,  a = 2,  b = 3</code></pre>
+      <p>Only a constant number of variables (a, b, c, i), not dependent on n. Space complexity and auxiliary space are both <strong>Θ(1)</strong>. Time is still Θ(n), same as the previous solution.</p>
+    </div>
+
+    <p><strong>Summary from the teacher:</strong> auxiliary space is a better criterion to compare two algorithms, especially ones that take an input array, list or set of size n.</p>
+
+    <div class="added">
+      <p><strong>Note on the board code:</strong> in solution 3, <code>c</code> is used but never declared, so in Java you'd need <code>int c = 0;</code> (e.g. next to <code>a</code> and <code>b</code>). Also, <code>int f[n+1];</code> is C/C++ syntax; in Java it's <code>int[] f = new int[n + 1];</code>.</p>
+    </div>
+  </section>
+</template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+<script>
+const COURSE = "https://www.geeksforgeeks.org/batch/dsa-5/track/";
+const TRACKS = [
+  { id: "DSASP-intro", slug: "analysis-of-algorithms", name: "Analysis of Algorithms", counts: [15, 6, 0, 10, 0],
+    videos: [
+      ["Analysis of Algorithms (Background)", "6:20"], ["Asymptotic Analysis", "13:10"], ["Order of Growth", "9:41"],
+      ["Best, Average and Worst cases", "6:54"], ["Asymptotic Notation", "7:05"], ["Big O Notation", "13:10"],
+      ["Omega Notation", "8:56"], ["Theta Notation", "8:33"], ["Analysis of Common loops", "9:16"],
+      ["Analysis of multiple loops", "5:03"], ["Analysis of Recursion (Introduction)", "4:06"],
+      ["Recursion Tree Method for Solving Recurrences", "6:34"], ["More Example Recurrences", "5:23"],
+      ["Upper Bounds Using Recursion Tree Method", "7:06"], ["Space Complexity", "22:37"]
+    ] },
+  { id: "DSASP-Mathematics", slug: "mathematics", name: "Mathematics", counts: [12, 13, 11, 10, 0] },
+  { id: "DSASP-BitMagic", slug: "bit-magic", name: "Bit Magic", counts: [12, 11, 12, 10, 0] },
+  { id: "DSASP-Recursion", slug: "recursion", name: "Recursion", counts: [17, 12, 12, 10, 0] },
+  { id: "DSASP-Arrays", slug: "arrays", name: "Arrays", counts: [31, 27, 27, 5, 1] },
+  { id: "DSASP-Searching", slug: "searching", name: "Searching", counts: [18, 13, 18, 10, 1] },
+  { id: "DSASP-Sorting", slug: "sorting", name: "Sorting", counts: [39, 29, 20, 10, 0] },
+  { id: "DSASP-Matrix", slug: "matrix", name: "Matrix", counts: [12, 11, 15, 5, 0] },
+  { id: "DSASP-Hashing", slug: "hashing", name: "Hashing", counts: [29, 23, 22, 10, 1] },
+  { id: "DSASP-Strings", slug: "strings", name: "Strings", counts: [19, 12, 26, 10, 0] },
+  { id: "DSASP-LinkedList", slug: "linked-list", name: "Linked List", counts: [54, 40, 25, 10, 1] },
+  { id: "DSASP-Stack", slug: "stack", name: "Stack", counts: [27, 19, 17, 10, 0] },
+  { id: "DSASP-Queue", slug: "queue", name: "Queue", counts: [9, 5, 9, 10, 0] },
+  { id: "DSASP-Deque", slug: "deque", name: "Deque", counts: [8, 7, 6, 10, 1] },
+  { id: "DSASP-Tree", slug: "tree", name: "Tree", counts: [30, 24, 32, 10, 0] },
+  { id: "DSASP-BST", slug: "binary-search-tree", name: "Binary Search Tree", counts: [28, 16, 23, 10, 1] },
+  { id: "DSASP-Heap", slug: "heap", name: "Heap", counts: [14, 11, 11, 10, 0] },
+  { id: "DSASP-Graph", slug: "graph", name: "Graph", counts: [30, 20, 24, 10, 1] },
+  { id: "DSASP-Greedy", slug: "greedy", name: "Greedy", counts: [12, 5, 6, 10, 1] },
+  { id: "DSASP-Backtracking", slug: "backtracking", name: "Backtracking", counts: [4, 4, 7, 10, 0] },
+  { id: "DSASP-DP", slug: "dynamic-programming", name: "Dynamic Programming", counts: [31, 25, 28, 10, 1] },
+  { id: "DSASP-Trie", slug: "trie", name: "Trie", counts: [4, 3, 6, 5, 0] },
+  { id: "DSASP-Segment-Tree", slug: "segment-and-bit", name: "Segment and Binary Indexed Trees", counts: [10, 3, 6, 5, 0] },
+  { id: "DSASP-DisjointSet", slug: "disjoint-set", name: "Disjoint Set", counts: [5, 3, 4, 5, 1] }
+];
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+let doneSet = new Set(store.get("dsa-done", []));
+
+const tabsEl = document.getElementById("tabs");
+const mainEl = document.getElementById("main");
+
+TRACKS.forEach((t, i) => {
+  const li = document.createElement("li");
+  const b = document.createElement("button");
+  b.type = "button"; b.role = "tab"; b.id = "tab-" + t.slug;
+  b.innerHTML = `<span class="n">${String(i + 1).padStart(2, "0")}</span>${t.name}`;
+  b.addEventListener("click", () => { location.hash = t.slug; });
+  li.appendChild(b); tabsEl.appendChild(li);
+});
+
+function el(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+
+function render(slug) {
+  const idx = Math.max(0, TRACKS.findIndex(t => t.slug === slug));
+  const t = TRACKS[idx];
+  tabsEl.querySelectorAll("button").forEach((b, i) => {
+    b.setAttribute("aria-selected", i === idx ? "true" : "false");
+    if (i === idx) b.scrollIntoView({ block: "nearest", inline: "nearest" });
+  });
+  store.set("dsa-tab", t.slug);
+  document.title = "DSA Revision Notes";
+
+  mainEl.innerHTML = "";
+  const head = el("div", "track-head");
+  head.appendChild(el("h2", null, `${idx + 1}. ${t.name}`));
+  const [v, a, p, q, c] = t.counts;
+  const meta = el("div", "meta",
+    `<span><b>${v}</b> videos</span><span><b>${a}</b> articles</span>` +
+    (p ? `<span><b>${p}</b> problems</span>` : `<span>no coding problems</span>`) +
+    `<span><b>${q}</b> MCQs</span>` + (c ? `<span><b>${c}</b> contest</span>` : "") +
+    `<a href="${COURSE + t.id}" target="_blank" rel="noopener">Open track on GfG</a>`);
+  head.appendChild(meta);
+  mainEl.appendChild(head);
+
+  if (!t.videos) {
+    mainEl.appendChild(el("p", "empty", "Not written yet. This track's videos get added when the notes reach it."));
+    return;
+  }
+
+  const prog = el("p", "progress");
+  mainEl.appendChild(prog);
+  const list = el("div", "list");
+  let written = 0;
+
+  t.videos.forEach(([title, dur], i) => {
+    const key = `${t.id}-${i + 1}`;
+    const tpl = document.getElementById(key);
+    if (tpl) written++;
+    const d = el("details", "video");
+    if (doneSet.has(key)) d.classList.add("is-done");
+    const s = el("summary");
+    s.appendChild(el("span", "idx", String(i + 1).padStart(2, "0")));
+    s.appendChild(el("span", "vt", title + (tpl ? "" : `<span class="pending">Notes not written yet</span>`)));
+    s.appendChild(el("span", "dur", dur));
+    const lab = el("label", "done");
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.id = "done-" + key; cb.checked = doneSet.has(key);
+    cb.setAttribute("aria-label", `Mark "${title}" as revised`);
+    lab.appendChild(cb); lab.appendChild(el("span", null, "Done"));
+    lab.addEventListener("click", e => e.stopPropagation());
+    cb.addEventListener("change", () => {
+      cb.checked ? doneSet.add(key) : doneSet.delete(key);
+      d.classList.toggle("is-done", cb.checked);
+      store.set("dsa-done", [...doneSet]); updateProg();
+    });
+    s.appendChild(lab);
+    d.appendChild(s);
+    const body = el("div", "body");
+    if (tpl) body.appendChild(tpl.content.cloneNode(true));
+    else body.appendChild(el("p", "src", "Not written yet."));
+    d.appendChild(body);
+    list.appendChild(d);
+  });
+  mainEl.appendChild(list);
+
+  function updateProg() {
+    const done = t.videos.filter((_, i) => doneSet.has(`${t.id}-${i + 1}`)).length;
+    prog.innerHTML = `Notes written for <b>${written}</b> of ${t.videos.length} videos · revised <b>${done}</b>`;
+  }
+  updateProg();
+
+  if (window.hljs) mainEl.querySelectorAll("pre code").forEach(c => hljs.highlightElement(c));
+  const first = list.querySelector("details");
+  if (first && written === 1) first.open = true;
+}
+
+function route() { render(location.hash.slice(1) || store.get("dsa-tab", TRACKS[0].slug)); }
+window.addEventListener("hashchange", route);
+route();
+</script>
