@@ -33433,6 +33433,284 @@ for (int i = 0; i &lt; n; i++)
   </section>
 </template>
 
+<template id="DSASP-DisjointSet-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/video/OTQ2" target="_blank" rel="noopener">Disjoint Set Introduction</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Example problem:</strong> a social network of n people, numbered 0 … n − 1. Initially nobody is friends with anyone. Once x and y become friends, they are also friends with each other's friends.</p>
+    <ul>
+      <li>n = 4: makeFriends(0, 1) and makeFriends(1, 3). Then areFriends(0, 2) is No, areFriends(0, 1) is Yes, and areFriends(0, 3) is Yes. 0 and 3 were never added directly; they are friends through 1.</li>
+      <li>n = 5: makeFriends(2, 3), (0, 2), (3, 4). Then areFriends(0, 4) is Yes, since 0, 2, 3 and 4 form one group.</li>
+    </ul>
+    <p><strong>Simple solution:</strong> treat it as an undirected graph.</p>
+    <ul>
+      <li>With an adjacency list, makeFriends isn't just adding one edge, because friends of friends must also connect, so it is O(n). areFriends must scan a list, which is also O(n).</li>
+      <li>With an adjacency matrix, the space is O(n²) and areFriends is O(1), but makeFriends is still linear.</li>
+    </ul>
+    <p><strong>Disjoint sets:</strong> each element belongs to exactly one subset of a partition. A person can't be in two groups, because those groups would then be the same.</p>
+    <p>The data structure supports two operations:</p>
+    <ul>
+      <li><strong>union(x, y)</strong> merges the sets of x and y. Here it is makeFriends.</li>
+      <li><strong>find(x)</strong> returns the set's <em>representative</em>, the same value for every element of the set. For example find(0) = find(1) = find(2) = find(4) = 0.</li>
+      <li>areFriends(x, y) is find(x) == find(y).</li>
+    </ul>
+    <p><strong>Time complexity depends on the implementation:</strong></p>
+    <ul>
+      <li>simple: O(n) for find and union;</li>
+      <li>union by rank: O(log n);</li>
+      <li>union by rank + path compression: <strong>O(1) amortized</strong>.</li>
+    </ul>
+    <p>Amortized means the total time of n operations divided by n is constant, even if a single operation costs more. Both optimisations come in the next videos.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <ol>
+      <li>n = 4 with makeFriends(0, 1) and (1, 3): areFriends(0, 3) is Yes, through 1.</li>
+      <li>Write areFriends with disjoint sets: <code>return find(x) == find(y);</code>.</li>
+    </ol>
+  </section>
+</template>
+
+<template id="DSASP-DisjointSet-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/video/MTM5OQ%3D%3D" target="_blank" rel="noopener">Find and Union Operations on Disjoint Sets</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Initially every element is its own set. After union(0, 2), find(0) and find(2) must return the same value, 0 or 2, whichever is the representative. After union(2, 4), find(0), find(2) and find(4) all agree.</p>
+    <p><strong>Simple implementation:</strong> a <code>parent[]</code> array of size n.</p>
+    <ul>
+      <li>The structure is a <em>forest</em> of trees. Each tree's root is the representative, and a root is its own parent.</li>
+      <li>initialize: parent[i] = i, so every tree has one node.</li>
+      <li><strong>find(x):</strong> follow parents up to the root, where parent[x] == x.</li>
+      <li><strong>union(x, y):</strong> find both roots. If they differ, make y's root a child of x's root: parent[y_rep] = x_rep. The whole tree of y goes under x's tree.</li>
+    </ul>
+    <p>Board trace (n = 5):</p>
+    <ul>
+      <li>union(0, 2) gives parent = 0, 1, 0, 3, 4.</li>
+      <li>union(2, 4) gives parent = 0, 1, 0, 3, 0.</li>
+    </ul>
+    <p><strong>Worst case:</strong> union(3, 4), union(2, 3), union(1, 2), union(0, 1) build a chain 0 → 1 → 2 → 3 → 4. find(4) then has to traverse all the nodes, so both find and union are <strong>O(n)</strong> in the simple implementation.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/article/MjYyOQ%3D%3D" target="_blank" rel="noopener">Disjoint Set Data Structure | Introduction</a></p>
+<ul>
+<li>It keeps track of elements partitioned into disjoint (non-overlapping) subsets. Five students {A}, {B}, {C}, {D}, {E} become {A, B}, {C, D}, {E} after A–B and C–D become friends.</li>
+<li><strong>Union(A, B)</strong> merges the two sets. <strong>Find(A)</strong> gives A's subset.</li>
+<li>Parent-array implementation: element i holds i's parent. Find recurses until it reaches a node that is its own parent; Union puts one root under the other.</li>
+<li><strong>Application, cycle detection</strong> in an undirected graph without self-loops. The parent array starts at −1. For each edge, if both ends are already in the same subset there's a cycle; otherwise union them. For example, edges 0–1 and 1–2 are unions, and 0–2 forms a cycle.</li>
+<li>The naive find and union are O(n) worst case. With union by rank (or height) they become O(log n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Simple implementation (board)</h4>
+<pre><code class="language-cpp">int parent[n];
+
+void initialize() {
+    for (int i = 0; i &lt; n; i++)
+        parent[i] = i;
+}
+
+int find(int x) {
+    if (parent[x] == x)
+        return x;
+    else
+        return find(parent[x]);
+}
+
+void union(int x, int y) {
+    int x_rep = find(x), y_rep = find(y);
+    if (x_rep == y_rep)
+        return;
+    parent[y_rep] = x_rep;
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Note:</strong> <code>union</code> is a keyword in C++, so a real program needs another name, e.g. <code>unionSets</code>. The board uses <code>union</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DisjointSet-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/video/MTQwMA%3D%3D" target="_blank" rel="noopener">Union by Rank</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The simple union blindly hangs y's root under x's root, which can form a chain. <strong>Union by rank</strong> compares ranks instead. The rank is the tree's height; the aim is that the overall height doesn't grow.</p>
+    <ul>
+      <li>Keep <code>rank[]</code> alongside parent[], initially all 0, since every tree starts as a single node.</li>
+      <li>Make the root with the <em>smaller</em> rank a child of the root with the larger rank. Ranks don't change.</li>
+      <li>If the ranks are equal, choose either (by convention, x_rep becomes the parent) and increment rank[x_rep]. The height grows by one, because the new child has the same height.</li>
+    </ul>
+    <p>Dry run of the previous worst case, union(3, 4), (2, 3), (1, 2), (0, 1):</p>
+    <ol>
+      <li>3 becomes the parent of 4, and rank[3] = 1.</li>
+      <li>2, 1 and 0 each go under 3, with no rank change.</li>
+      <li>The result is a tree of height 1: very well optimised.</li>
+    </ol>
+    <p><strong>Time:</strong> M operations (union or find) on n items take O(M log n), so <strong>O(log n)</strong> per operation on average.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/article/NjA4OA%3D%3D" target="_blank" rel="noopener">Union by Rank and Path Compression</a></p>
+<ul>
+<li>Naive trees can become skewed, like a linked list, giving linear worst-case time.</li>
+<li><strong>Union by rank:</strong> attach the shallower tree under the deeper tree's root, for O(log n) worst case. It's called "rank" rather than height because path compression can make the two differ. Size can be used as the rank instead, also giving O(log n).</li>
+<li><strong>Path compression:</strong> flatten the tree on find() by making the found root the parent of x. When x is the root of a subtree, every node beneath it also gets a shorter path.</li>
+<li>Together the two techniques complement each other, and the amortized cost becomes effectively a small constant. The article applies them to cycle detection.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board code</h4>
+<pre><code class="language-cpp">int parent[n], rank[n];
+
+void initialize() {
+    for (int i = 0; i &lt; n; i++) {
+        parent[i] = i;
+        rank[i] = 0;
+    }
+}
+
+void union(int x, int y) {
+    int x_rep = find(x), y_rep = find(y);
+    if (x_rep == y_rep) return;
+    if (rank[x_rep] &lt; rank[y_rep]) parent[x_rep] = y_rep;
+    else if (rank[y_rep] &lt; rank[x_rep]) parent[y_rep] = x_rep;
+    else { parent[y_rep] = x_rep; rank[x_rep]++; }
+}</code></pre>
+      <p>Board arrays:</p>
+      <ul>
+        <li>After union(3, 4): parent = 0 1 2 3 3 and rank = 0 0 0 1 0.</li>
+        <li>After union(2, 3): parent = 0 1 3 3 3.</li>
+        <li>After union(1, 2): parent = 0 3 3 3 3, then 0 also goes under 3.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DisjointSet-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/video/MTQwMQ%3D%3D" target="_blank" rel="noopener">Path Compression</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Path compression</strong> optimises <code>find</code>. Besides returning the representative, it also changes the tree to speed up later finds.</p>
+    <p>The simple find(3) recurses 3 → 1 → 0 and returns 0. With path compression, each node on the path is re-pointed to the result: <code>parent[x] = find(parent[x])</code>, then parent[x] is returned.</p>
+    <ul>
+      <li>After find(3), parent[3] = 0. Finds on 3, 6 or 7 now skip node 1.</li>
+      <li>In the board's tree (0 → 1 → 3 → {6, 7}, 1 → 4, 0 → 2 → 5), find(7) makes every node on 7's path a direct child of the root 0. That reduces the tree's height.</li>
+    </ul>
+    <p><strong>Time with union by rank + path compression:</strong> M operations on n elements take O(M · α(n)).</p>
+    <ul>
+      <li>α is the inverse Ackermann function, and α(n) ≤ 4 even for the largest values representable "in this universe". So it is effectively constant per operation.</li>
+      <li>This is <em>amortized</em>: a single operation may be costly, but the average over M operations is constant.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Find with path compression (board)</h4>
+<pre><code class="language-cpp">int find(int x) {
+    if (x == parent[x])
+        return x;
+    parent[x] = find(parent[x]);
+    return parent[x];
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the second line is written <code>paren[x] = …</code>; it is <code>parent[x]</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DisjointSet-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/video/MTQxMQ%3D%3D" target="_blank" rel="noopener">Kruskal's Algorithm</a> · <strong>Same video as Graph track V30</strong> (the course lists it in both tracks), so these notes are repeated from there. Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>MST recap:</strong> for a weighted, undirected, connected graph, find a spanning tree (V − 1 edges, connecting all vertices, no cycle) of minimum total weight. Here only the weight is returned.</p>
+    <p><strong>Kruskal's algorithm</strong> (greedy):</p>
+    <ol>
+      <li>Sort all edges in increasing order of weight.</li>
+      <li>Initialize MST = { } and res = 0.</li>
+      <li>For every edge e, while the MST has fewer than V − 1 edges: if adding e to the MST doesn't cause a cycle, set MST = MST ∪ {e} and res += e.weight.</li>
+      <li>Return res.</li>
+    </ol>
+    <p><strong>Naive cycle check:</strong> add the edge to a separate MST graph, run cycle detection, and remove the edge if a cycle appears. That's a separate graph and a full cycle detection for every edge.</p>
+    <p><strong>Efficient: disjoint set (union–find).</strong> The input graph is an array of edges, since the only access pattern is sorting by weight, so no adjacency list or matrix is needed. Each <code>Edge</code> has src, dest and wt, plus a comparator: <code>compareTo</code> via <code>Comparable</code> in Java, a <code>myCmp</code> for STL <code>sort</code> in C++.</p>
+    <p>For edge (u, v): if <code>find(u) == find(v)</code>, u and v are already connected, so adding the edge would make a cycle and it is skipped. Otherwise <code>union(x, y)</code> adds it. <code>parent[i] = i</code> and <code>rank[i] = 0</code> initially; rank is a tree's height, used for union by rank.</p>
+    <p>To print the chosen edges too, store each accepted edge in an output array at index s.</p>
+    <p><strong>Time:</strong> O(E log E) to sort, plus O(V) to initialise, plus a loop over at most E edges (the last edge may be the one that completes the MST). With union by rank and path compression, find and union are effectively constant, α(V), so the loop is O(E · α(V)). Overall O(E log E), which equals O(E log V) for a connected graph. Auxiliary space O(V) for the parent and rank arrays.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/article/MjM4NA%3D%3D" target="_blank" rel="noopener">Kruskal’s Minimum Spanning Tree Algorithm</a></p>
+<ul>
+<li>A spanning tree of a connected, undirected graph is a subgraph that is a tree connecting all vertices. The MST is the one with the minimum total edge weight, and it has V − 1 edges.</li>
+<li>Greedy: sort the edges by weight, then pick the smallest. If it forms a cycle with the tree so far, discard it; otherwise include it. Repeat until there are V − 1 edges. Union-Find does the cycle check.</li>
+<li>Illustration with 9 vertices and 14 edges (so 8 MST edges): 7-6, 8-2, 6-5, 0-1, 2-5 are included; 8-6 forms a cycle; 2-3 is included; 7-8 forms a cycle; 0-7 is included; 1-2 forms a cycle; 3-4 is included.</li>
+<li>O(E log E) to sort plus O(E log V) for the finds and unions. Since E ≤ V², log E = O(log V), so the total is O(E log E), equivalently O(E log V).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Kruskal with union–find (board, close to C++/Java)</h4>
+<pre><code class="language-cpp">int parent[V], rank[V];
+int kruskal(Edge arr[])
+{
+    sort(arr);                       // C++: sort(arr, arr + E, myCmp);
+    for(int i = 0; i &lt; V; i++)       // Initialization
+    {
+        parent[i] = i;
+        rank[i] = 0;
+    }
+    int res = 0;
+    for(int i = 0, s = 0; s &lt; V - 1; i++)
+    {
+        Edge e = arr[i];
+        int x = find(e.src);
+        int y = find(e.dst);
+        if(x != y)
+        {
+            res += e.wt;
+            Union(x, y);
+            s++;
+        }
+    }
+    return res;
+}</code></pre>
+      <p>Here i is the index of the next edge, s the current size of the MST, V the number of vertices and E the number of edges. find() and union() have their standard implementations (union by rank, path compression).</p>
+    </div>
+    <div class="approach">
+      <h4>Board traces</h4>
+      <ul>
+        <li>Sorted edges BC 3, AC 5, AB 6, CD 7, BD 8, DE 10, CE 12. Take BC and AC (res 8); skip AB (cycle); take CD (15); skip BD; take DE. That makes 4 edges, so res = 3 + 5 + 7 + 10 = 25.</li>
+        <li>Edges 1–3 3, 2–3 4, 1–2 5, 0–2 8, 0–1 10, 2–4 12, 3–4 15: take 1–3 (3) and 2–3 (7); skip 1–2 (same set); take 0–2 (15); skip 0–1; take 2–4. That's V − 1 = 4 edges, so stop: res = 15 + 12 = 27.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-DisjointSet-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (4 problems, in course order). The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here. All 3 articles match a video, so their boxes sit with those videos.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/problem/union-find" target="_blank" rel="noopener">Design Disjoint Set</a></td><td>Medium</td><td>Videos 2–4</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/problem/detect-cycle-using-dsu" target="_blank" rel="noopener">Detect Cycle using DSU</a></td><td>Medium</td><td>Video 2 (article)</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/problem/number-of-connected-components" target="_blank" rel="noopener">Number of Connected Components</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-DisjointSet/problem/minimum-spanning-tree3233" target="_blank" rel="noopener">Kruskal's Algorithm</a></td><td>Medium</td><td>Video 5</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -33937,7 +34215,14 @@ const TRACKS = [
       ["Binary Indexed Tree (Update Operation)", "10:41"],
       ["Binary Indexed Tree (Construction)", "6:11"]
     ] },
-  { id: "DSASP-DisjointSet", slug: "disjoint-set", name: "Disjoint Set", counts: [5, 3, 4, 5, 1] }
+  { id: "DSASP-DisjointSet", slug: "disjoint-set", name: "Disjoint Set", counts: [5, 3, 4, 5, 1],
+    videos: [
+      ["Disjoint Set Introduction", "10:17"],
+      ["Find and Union Operations on Disjoint Sets", "8:11"],
+      ["Union by Rank", "7:40"],
+      ["Path Compression", "5:09"],
+      ["Kruskal's Algorithm", "24:04"]
+    ] }
 ];
 
 const store = {

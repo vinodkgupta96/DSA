@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 23 of 24 tracks · 465 of 470 videos · 339 of 342 articles · 363 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 24 of 24 tracks · 470 of 470 videos · 342 of 342 articles · 367 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -98,7 +98,7 @@ Report back with:
 | 21 | Dynamic Programming | 31 | 25 | 28 | ✅ Done: 31/31 videos, 25/25 articles, 28 problems |
 | 22 | Trie | 4 | 3 | 6 | ✅ Done: 4/4 videos, 3/3 articles, 6 problems |
 | 23 | Segment and Binary Indexed Trees | 10 | 3 | 6 | ✅ Done: 10/10 videos, 3/3 articles, 6 problems |
-| 24 | Disjoint Set | 5 | 3 | 4 | ⏭ Next |
+| 24 | Disjoint Set | 5 | 3 | 4 | ✅ Done: 5/5 videos, 3/3 articles, 4 problems |
 
 ### Track 1: Analysis of Algorithms, per video
 
@@ -728,6 +728,18 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
 
 "Segment Tree | Range Minimum Query" matches no video, so it's in the Track practice set with the 6 problems. V3, V5, V8 and V9 have no Transcript button and were done from frames and the description. V10's transcript is auto-generated and garbled, so the notes lean on the board. Course progress was unchanged (0%). All resume positions were restored (V1 was at 0:02 and was put back there). The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 10 videos.
 
+### Track 24: Disjoint Set, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Disjoint Set Introduction | 10:17 | Transcript + board |  |
+| 2 | Find and Union Operations on Disjoint Sets | 8:11 | Transcript + board | Disjoint Set Data Structure \| Introduction |
+| 3 | Union by Rank | 7:40 | Transcript + board | Union by Rank and Path Compression |
+| 4 | Path Compression | 5:09 | Transcript + board |  |
+| 5 | Kruskal's Algorithm | 24:04 | Same video as Graph V30 (notes repeated) | Kruskal's Minimum Spanning Tree Algorithm |
+
+All 3 articles match a video; the Track practice set lists the 4 problems. V5 has the same video ID as Graph V30, so its notes are copied from there and re-linked to this track. Course progress was unchanged (6%, 1/5 videos watched). All resume positions were restored (V1 was at 0:07 and was put back there). The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists all 470 videos across the 24 tracks.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -762,10 +774,11 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
 - `1000f12`: Add Backtracking track notes (4 videos, 4 articles, 7 problems)
 - `dc87f65`: Add Dynamic Programming track notes (31 videos, 25 articles, 28 problems)
 - `4198a96`: Add Trie track notes (4 videos, 3 articles, 6 problems)
-- (this commit): Add Segment and Binary Indexed Trees track notes (10 videos, 3 articles, 6 problems)
+- `a5d69c2`: Add Segment and Binary Indexed Trees track notes (10 videos, 3 articles, 6 problems)
+- (this commit): Add Disjoint Set track notes (5 videos, 3 articles, 4 problems)
 
 ### What's next
-- **Track 24: Disjoint Set** (5 videos, 3 articles, 4 problems), starting straight away.
+- All 24 tracks are written. The commits after the last push (`671776d`) are local only; push when the user says so.
 
 ### History
 - **2026-11-10:**
@@ -801,6 +814,7 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
   - Completed track 21 (Dynamic Programming): 31 videos, 25 articles, 28 problems.
   - Completed track 22 (Trie): 4 videos, 3 articles, 6 problems.
   - Completed track 23 (Segment and Binary Indexed Trees): 10 videos, 3 articles, 6 problems.
+  - Completed track 24 (Disjoint Set): 5 videos, 3 articles, 4 problems. All 24 tracks done.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -817,6 +831,10 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Disjoint Set: teacher slips flagged
+- V2/V3 (board): the functions are named `union`, a C++ keyword (a real program needs another name).
+- V4 (board): `paren[x] = find(parent[x])` (it's `parent[x]`).
 
 ### Segment and Binary Indexed Trees: teacher slips flagged
 - V2: the board labels the root's range [3, 3] (it's [0, 3]); the transcript says the 30 is written "at index 0" (it's tree[1]).
