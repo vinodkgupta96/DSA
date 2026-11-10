@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 9 of 24 tracks · 185 of 470 videos · 145 of 342 articles · 137 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 10 of 24 tracks · 204 of 470 videos · 157 of 342 articles · 163 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -84,8 +84,8 @@ Report back with:
 | 7 | Sorting | 39 | 29 | 20 | ✅ Done: 39/39 videos, 29/29 articles, 20 problems |
 | 8 | Matrix | 12 | 11 | 15 | ✅ Done: 12/12 videos, 11/11 articles, 15 problems |
 | 9 | Hashing | 29 | 23 | 22 | ✅ Done: 29/29 videos, 23/23 articles, 22 problems |
-| 10 | Strings | 19 | 12 | 26 | ⏭ Next |
-| 11 | Linked List | 54 | 40 | 25 | Not started |
+| 10 | Strings | 19 | 12 | 26 | ✅ Done: 19/19 videos, 12/12 articles, 26 problems |
+| 11 | Linked List | 54 | 40 | 25 | ⏭ Next |
 | 12 | Stack | 27 | 19 | 17 | Not started |
 | 13 | Queue | 9 | 5 | 9 | Not started |
 | 14 | Deque | 8 | 7 | 6 | Not started |
@@ -350,6 +350,32 @@ Every Sorting article matches a video, so the Track practice set lists only the 
 
 "Hashing in C++ using STL" and "Implementing Hashing in Java" match no video, so they're in the Track practice set with the 22 problems. V7, V12, V13, V16, V21, V28 and V29 have no Transcript button and were done from frames and the description (V29's description is only the title and code links); no transcript was cut off early. Course progress was unchanged (6/29 videos watched, 15%, 0/23 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 29 Hashing videos.
 
+### Track 10: Strings, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Introduction to String | 14:18 | Transcript + board | Introduction to Strings |
+| 2 | Strings in C++ | 18:08 | Board + description | Strings in C++ |
+| 3 | String in Java | 15:16 | Transcript + board | Strings in Java |
+| 4 | Palindrome Check | 9:17 | Transcript + board | Check for Palindrome in Cpp; Check for Palindrome in Java |
+| 5 | Check if a String is Subsequence of Other | 13:25 | Transcript + board |  |
+| 6 | Check for Anagram | 7:25 | Transcript + board | Check for Anagram |
+| 7 | Leftmost Repeating Character | 12:46 | Transcript + board |  |
+| 8 | Leftmost Non-repeating Element | 9:56 | Transcript + board |  |
+| 9 | Reverse words in a string | 14:45 | Transcript + board | Reverse words in a given string |
+| 10 | Overview of Pattern Searching | 7:13 | Transcript + board |  |
+| 11 | Naive Pattern Searching | 7:56 | Transcript + board | Naive Pattern Searching Algorithm |
+| 12 | Improved Naive Pattern Searching for Distinct | 11:40 | Transcript + board |  |
+| 13 | Rabin Karp Algorithm | 22:28 | Transcript + board | Rabin-Karp Algorithm for Pattern Searching |
+| 14 | KMP Algorithm (Part 1 : Constructing LPS Array) | 25:00 | Transcript + board |  |
+| 15 | KMP Algorithm (Part 2 : Complete Algorithm) | 21:30 | Transcript + board | KMP Algorithm for Pattern Searching |
+| 16 | Check if Strings are Rotations | 7:17 | Transcript + board | Check if Strings are Rotations |
+| 17 | Anagram Search | 11:17 | Transcript + board |  |
+| 18 | Lexicographic Rank of a String | 19:10 | Transcript + board |  |
+| 19 | Longest Substring with Distinct Characters | 17:58 | Transcript + board | Longest Substring with Distinct Characters |
+
+Every Strings article matches a video, so the Track practice set lists only the 26 problems. V2 has no Transcript button and was done from frames and the description; no transcript was cut off early. Course progress was unchanged (8/19 videos watched, 20%, no article marked as read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 19 Strings videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -370,10 +396,11 @@ Every Sorting article matches a video, so the Track practice set lists only the 
 - `10fb46a`: Add Searching track notes (18 videos, 13 articles, 18 problems)
 - `c40a4e7`: Add Sorting track notes (39 videos, 29 articles, 20 problems)
 - `671776d`: Add Matrix track notes (12 videos, 11 articles, 15 problems)
-- (this commit): Add Hashing track notes (29 videos, 23 articles, 22 problems)
+- `4d2a6f6`: Add Hashing track notes (29 videos, 23 articles, 22 problems)
+- (this commit): Add Strings track notes (19 videos, 12 articles, 26 problems)
 
 ### What's next
-- **Track 10: Strings** (19 videos, 12 articles, 26 problems), starting straight away.
+- **Track 11: Linked List** (54 videos, 40 articles, 25 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -395,6 +422,7 @@ Every Sorting article matches a video, so the Track practice set lists only the 
   - Completed track 8 (Matrix): 12 videos, 11 articles, 15 problems.
   - Pushed the branch to origin up to `671776d` (user's OK).
   - Completed track 9 (Hashing): 29 videos, 23 articles, 22 problems.
+  - Completed track 10 (Strings): 19 videos, 12 articles, 26 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -411,6 +439,14 @@ Every Sorting article matches a video, so the Track practice set lists only the 
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Strings: teacher slips flagged
+- V2 (board, no transcript): in the C++ string comparison, `s1 < s2` prints "Greater" and the else prints "Smaller", the reverse of the strcmp version; strcmp/strcpy are written "strcmb"/"strcby".
+- V4 (board): the naive Java palindrome is headed `bool` instead of `boolean`.
+- V17 (board): the naive `areAnagram` loops `j < txt.length()`, where the pattern's length is meant; as written and described, the efficient version checks `areSame` before each slide, so the last window is never compared.
+- V19 (board): the naive inner loop starts at `j = 0` instead of `j = i`; the Java efficient version fills `visited` though the array is `prev`.
+- Board notation: `&` and `&&` are drawn like "$" and "$$" (V4–V8, V11, V15).
+- V2 (no transcript): spoken slips couldn't be checked.
 
 ### Hashing: teacher slips flagged
 - V7 (board, no transcript): the Java `remove` casts the slot index, `remove((Integer)i)`; to remove the key it would be `(Integer)key`.

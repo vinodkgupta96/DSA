@@ -16488,6 +16488,1661 @@ In the rejected set, an element rejects (k-1) distinct others</code></pre>
   </section>
 </template>
 
+<template id="DSASP-Strings-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYxNQ%3D%3D" target="_blank" rel="noopener">Introduction to String</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">String Introduction
+⇒ Sequence of characters
+⇒ Small Set
+⇒ Contiguous integer values for 'a' to 'z'          'a' → 97, 'b' → 98
+  and 'A' to 'Z' in both ASCII and UTF-16           'A' → 65
+       C/C++                    Java
+Char : ASCII                    UTF-16
+       8 Bit                    16 Bit
+Also supports wchar_t           Also supports byte</code></pre>
+    <ul>
+      <li>Why a separate data structure rather than a character array? Strings typically use a <strong>small set of characters</strong>: 26 lowercase English letters, or 128 standard ASCII values covering most characters (the first 32 are control characters, then lowercase, uppercase and special characters like &lt; &gt; # $ ,). This limited set is behind many standard algorithms and tricky string questions.</li>
+      <li><strong>ASCII</strong> is one of the oldest formats: 128 standard values. Characters are 8-bit on most platforms, and the old parity bit is no longer needed, so <strong>extended ASCII</strong> adds 128 more; the first 128 always match standard ASCII.</li>
+      <li><strong>UTF-16</strong> is a Unicode implementation (16 bits), created because other languages need a larger character set. Its first 128 encodings are the same as ASCII, so in Java a character assigned to an integer still gives its ASCII value.</li>
+      <li>C/C++ <code>char</code> is 8-bit ASCII (also <code>wchar_t</code> for wide Unicode characters) and the C++ string class uses 8-bit chars. Java <code>char</code> is 16-bit UTF-16 (also <code>byte</code> for small values), and so is its String class. Implementations of the course's algorithms are similar in both.</li>
+      <li>'a' = 97, 'b' = 98, 'c' = 99, 'd' = 100; 'A' = 65, 'B' = 66, 'C' = 67, 'D' = 68: contiguous in both encodings.</li>
+    </ul>
+<pre><code class="language-cpp">char x = 'a';               // C++
+cout &lt;&lt; (int)x;             // 97 (98 for 'b', 99 for 'c')</code></pre>
+<pre><code class="language-java">char x = 'a';               // Java
+System.out.println((int)x); // 97</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/MjMxMA%3D%3D" target="_blank" rel="noopener">Introduction to Strings</a></p>
+<ul>
+<li>A string is a stream of characters, generally written within quotes.</li>
+<li><strong>C/C++:</strong> a string is a character array terminated by the null character '\0'. Declare it like a 1-D array; the size must leave room for the '\0'. Initialisation: <code>char str[] = "GeeksforGeeks";</code>, <code>char str[50] = "GeeksforGeeks";</code>, or character by character ending with '\0' (with or without the size 14). Print it whole with <code>%s</code>; pass it to functions like an array.</li>
+<li><strong>std::string vs character array:</strong> a character array's size is allocated statically (unused memory is wasted, no more at run time); a string's memory is allocated dynamically on demand. Character arrays are faster, but string offers many built-in functions.</li>
+<li><strong>Java:</strong> String objects are immutable, created with a literal or <code>new</code>. Methods: <code>length()</code>, <code>charAt(i)</code>, <code>substring(i)</code>, <code>substring(i, j)</code> (i to j − 1), <code>concat(str)</code>, <code>indexOf(s)</code>, <code>indexOf(s, i)</code>, <code>lastIndexOf(s)</code>, <code>equals</code>, <code>equalsIgnoreCase</code>, <code>compareTo</code>, <code>compareToIgnoreCase</code>, <code>toLowerCase()</code>, <code>toUpperCase()</code>, <code>trim()</code> (removes whitespace at both ends only), <code>replace(oldChar, newChar)</code> (returns a new string).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Example Problem: Print Frequencies of Characters (in sorted order) in a string of lowercase alphabets</h4>
+<pre><code class="language-cpp">string str = "geeksforgeeks";
+int count[26] = {0};
+for(int i=0; i&lt; str.length(); i++)
+    count[str[i] - 'a']++;
+for(int i=0; i&lt;26; i++)
+    if(count[i] &gt; 0)
+        cout &lt;&lt; (char)(i + 'a') &lt;&lt; " "
+             &lt;&lt; count[i] &lt;&lt; endl;
+O/P: e 4
+     f 1
+     g 2
+     k 2
+     o 1
+     r 1
+     s 2</code></pre>
+<pre><code class="language-java">String str = "geeksforgeeks";
+int[] count = new int[26];
+for(int i=0; i&lt; str.length(); i++)
+    count[str.charAt(i) - 'a']++;
+for(int i=0; i&lt;26; i++)
+    if(count[i] &gt; 0)
+        System.out.println((char)(i + 'a') + " " + count[i]);</code></pre>
+      <ul>
+        <li>For an integer array, a hash table doesn't give sorted order: you'd sort the hash entries or use a self-balancing BST, both O(n log n). With a small, contiguous alphabet this is O(n).</li>
+        <li>A count array of size 26, all 0: index 0 is 'a', 1 is 'b', …, 25 is 'z'. The trick in many string questions is using characters as indexes: 'g' − 'a' = 6 (g's ASCII value is 97 + 6), so increment count[6].</li>
+        <li>Then traverse the count array (not the string), turning index i back into a character with i + 'a', and print only counts greater than 0: e 4, f 1, g 2, …</li>
+        <li>Java gets a character with <code>charAt</code>; C++ uses the array index operator. Used where an integer is expected, a character is automatically converted to its ASCII value, in Java too, since UTF-16's first 128 encodings match ASCII.</li>
+        <li>The same idea sorts a string in O(n) (like counting sort): print each character as many times as its count (e 4 times, f once, g twice). The 26-iteration loop is constant work.</li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the Java version is mostly behind the teacher; the lines shown are rebuilt from the visible parts (<code>new int[26]</code>, <code>length()</code>, <code>- 'a'] ++</code>, <code>(char)(i + 'a') + " " + count[i]</code>) and the transcript's <code>charAt</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTQzNTU%3D" target="_blank" rel="noopener">Strings in C++</a> · <strong>No transcript</strong> for this video: notes from the board (frames every 5 and 10 seconds plus close-ups) and the course Description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>From the Description: the two ways to create strings in C++, C-style strings and the string class, with the methods available for each.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/NjkyNw%3D%3D" target="_blank" rel="noopener">Strings in C++</a></p>
+<ul>
+<li>Strings differ from other arrays: a small character set (A–Z, a–z, special and control characters; ASCII's 128, later extended to 256); no separators between characters ("GFG" is 'G', 'F', 'G'); characters stored as integers ('A' = 65, 'a' = 97), allowing easy comparisons.</li>
+<li>Modern C++ also supports Unicode (UTF-8, UTF-16, UTF-32) and wide characters (<code>wchar_t</code>) for multilingual text.</li>
+<li>Two types: <strong>C-style strings</strong>, character arrays ending with '\0' (<code>char str[] = "hello";</code>), and the STL <strong>std::string</strong> class, more intuitive and powerful.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>① C-Style Strings</h4>
+<pre><code class="language-cpp">int main()
+{
+    char str[] = "gfg";
+    cout &lt;&lt; str;
+    return 0;
+}
+ ┌───┬───┬───┬────┐
+ │ g │ f │ g │ \0 │
+ └───┴───┴───┴────┘</code></pre>
+      <ul>
+        <li>A string literal stores its characters followed by '\0'. The board also shows <code>char str[6] = "gfg";</code>, with the extra cells filled by \0.</li>
+        <li><code>char str[] = {'g', 'f', 'g'};</code> has no '\0', so <code>cout &lt;&lt; str</code> prints gfg followed by garbage (the board shows "gfg#$"); <code>{'g', 'f', 'g', '\0'}</code> prints gfg.</li>
+        <li><code>char str[5]; str = "gfg";</code>: the board's second program, where a C-style string is assigned after declaration (the board crosses this out).</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>Functions</h4>
+<pre><code class="language-cpp">strlen(str)
+strcmp(s1, s2)
+strcpy(s1, s2)
+
+int main()
+{
+    char s1[] = "abc";
+    char s2[] = "bcd";
+    int res = strcmp(s1, s2);
+    if(res &gt; 0)
+        cout &lt;&lt; "Greater";
+    else if(res == 0)
+        cout &lt;&lt; "Same";
+    else
+        cout &lt;&lt; "Smaller";
+}</code></pre>
+      <p>Beside it, the board orders strings lexicographically: a, aa, a…, ab, ab…, ac.</p>
+    </div>
+    <div class="approach">
+      <h4>② C++ String</h4>
+<pre><code class="language-plaintext">↳ Richer library
+↳ Supports operators like +, &lt;, &gt;
+          ==, &lt;=, &gt;= are possible
+↳ Can assign a string later       string str;
+↳ Do not have to worry about size.  str = "gfg";
+↳ Can be converted to C-Style if needed.</code></pre>
+<pre><code class="language-cpp">int main()
+{
+    string str = "geeksforgeeks";
+    cout &lt;&lt; str.length() &lt;&lt; " ";
+    str = str + "xyz";
+    cout &lt;&lt; str &lt;&lt; " ";
+    cout &lt;&lt; str.substr(1, 3) &lt;&lt; " ";
+    cout &lt;&lt; str.find("eek") &lt;&lt; " ";
+    …
+}</code></pre>
+<pre><code class="language-cpp">int main()
+{
+    string s1 = "abc";
+    string s2 = "bcd";
+    if(s1 == s2)
+        cout &lt;&lt; "Same";
+    else if(s1 &lt; s2)
+        cout &lt;&lt; "Greater";
+    else
+        cout &lt;&lt; "Smaller";
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Reading Strings from Console</h4>
+<pre><code class="language-cpp">int main()
+{
+    string str;
+    cout &lt;&lt; "Enter your name";
+    cin &gt;&gt; str;               // later: getline(cin, str);
+    cout &lt;&lt; "\n Your name is " &lt;&lt; str;
+    return 0;
+}</code></pre>
+      <p>The board's example input is "Sandeep Jain"; the teacher then replaces <code>cin &gt;&gt; str</code> with <code>getline(cin, str)</code>.</p>
+    </div>
+    <div class="approach">
+      <h4>Iterating through a string</h4>
+<pre><code class="language-cpp">int main()
+{
+    string str = "geeksforgeeks";
+    for(int i=0; i &lt; str.length(); i++)
+        cout &lt;&lt; str[i];
+    cout &lt;&lt; endl;
+    for(char x : str)
+        cout &lt;&lt; x;
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong> with no transcript, the outputs aren't stated beyond what the board shows, and the reason for crossing out <code>str = "gfg";</code> isn't given. <strong>Board slip:</strong> in the C++ string comparison, <code>s1 &lt; s2</code> prints "Greater" and the else prints "Smaller"; the strcmp version has them the other way round. The functions are written strcmb / strcby on the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYwNw%3D%3D" target="_blank" rel="noopener">String in Java</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Strings in Java
+① Character Array/ArrayList
+     char []arr = {'g', 'e', 'e', 'k', 's'};
+② String Class                                  ┐
+     String str = "geeks";                      │ Immutable
+       OR                                       ┘
+     String str = new String("geeks");
+③ StringBuffer Class
+     StringBuffer str = new StringBuffer("geeks");
+④ StringBuilder Class
+     StringBuilder str = new StringBuilder("geeks");</code></pre>
+    <ul>
+      <li>Java stores every character in 16 bits (UTF-16). A character array (with an initialiser, or with <code>new</code> and element-by-element assignment) or an ArrayList of characters works, but the three classes add many string functions: search a substring, find its first or last occurrence, concatenate quickly, and more.</li>
+      <li><strong>String</strong> objects are <strong>immutable</strong>: the content can't change once created. Functions like <code>concat</code>, <code>toUpperCase</code>, <code>toLowerCase</code> return a new object. Being immutable, String is automatically thread-safe.</li>
+      <li><strong>StringBuffer</strong> and <strong>StringBuilder</strong> are mutable. StringBuffer is thread-safe (for a shared object in a multi-threaded program); StringBuilder isn't, so it avoids that overhead. Use StringBuilder for mutable strings in single-threaded code, StringBuffer in multi-threaded code, and String for immutable strings. The video focuses on String.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/MjQyNQ%3D%3D" target="_blank" rel="noopener">Strings in Java</a></p>
+<ul>
+<li>A Java String stores a sequence of characters in double quotes, each in 16 bits (UTF-16), and acts like a character array.</li>
+<li><strong>Creating:</strong> a literal (<code>String str = "GeeksforGeeks";</code>) goes in the <strong>string constant pool</strong>, so no new object is created if the value already exists. <code>new String("Welcome")</code> creates an object in normal (non-pool) heap memory and also places the literal in the pool if absent; the variable refers to the heap object. <code>intern()</code> adds a string to the pool. Literals are preferred, as they let the JVM optimise memory.</li>
+<li><strong>CharSequence</strong> represents character sequences, with <code>length()</code>, <code>charAt()</code>, <code>subSequence()</code>, <code>toString()</code>. Implementing classes: <strong>String</strong> (immutable: modifying creates a new object), <strong>StringBuffer</strong> (mutable, thread safe, extra overhead; for multi-threaded programs), <strong>StringBuilder</strong> (mutable, not thread safe, no overhead; for single-threaded programs, e.g. <code>append("GFG")</code>), and <strong>StringTokenizer</strong> (breaks a string into tokens, keeping a current position).</li>
+<li><strong>Immutability:</strong> concatenating "Sachin" with " Tendulkar" creates a new object; s still refers to "Sachin" unless the result is explicitly assigned to it.</li>
+<li>The string pool moved from PermGen (default only 64 MB) to the larger normal heap. All objects are in the heap; reference variables are on the stack or inside other objects.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>length(), charAt(), substring()</h4>
+<pre><code class="language-java">class Test
+{   public static void main(String []args)
+    {   String str = "geeks";
+        System.out.println(str.length());
+        System.out.println(str.charAt(3));
+        System.out.println(str.substring(2));
+        System.out.println(str.substring(2, 5));   // [start, end)
+    }
+}
+O/P: 5
+     k
+     eks
+     eks</code></pre>
+      <ul>
+        <li>Unlike C/C++, Java gets the character at an index only with <code>charAt</code>, not square brackets. It can't be used on the left side (<code>str.charAt(3) = 'a'</code> isn't allowed): the string is immutable, and charAt returns a value, not something assignable.</li>
+        <li><code>substring(i)</code> returns the characters from index i to the end. <code>substring(start, end)</code> includes start but not end; <code>substring(2, 4)</code> gives "ek".</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>String literal pool and ==</h4>
+<pre><code class="language-java">String s1 = "geeks";
+String s2 = "geeks";
+if(s1 == s2)
+    System.out.println("Yes");
+else
+    System.out.println("No");
+String s3 = new String("geeks");
+if(s1 == s3)
+    System.out.println("Yes");
+else
+    System.out.println("No");
+Output: Yes
+        No</code></pre>
+      <p>Literals with the same content share memory (the <strong>string literal pool</strong>), so s1 and s2 refer to the same object. <code>==</code> compares references, not content. <code>new</code> always creates a new object, so s1 == s3 is false.</p>
+    </div>
+    <div class="approach">
+      <h4>contains(), equals(), compareTo()</h4>
+<pre><code class="language-java">String s1 = "geeksforgeeks";
+String s2 = "geeks";
+System.out.println(s1.contains(s2));   // true; "geeky" → false; "for" → true
+String s1 = "geeksforgeeks";
+String s2 = "geeksforgeeks";
+System.out.println(s1.equals(s2));     // true: character-by-character
+String s1 = "geeksforgeeks";
+String s2 = "her";
+int res = s1.compareTo(s2);
+if(res == 0)
+    System.out.println("Same");
+if(res &gt; 0)
+    System.out.println("S1 Greater");
+if(res &lt; 0)
+    System.out.println("S1 Smaller");</code></pre>
+      <ul>
+        <li><code>contains</code> returns true if s2 occurs anywhere in s1 as a substring.</li>
+        <li><code>compareTo</code> compares lexicographically: 0 if the same, positive if s1 is greater, negative if smaller. With s2 = "for", 'g' comes after 'f', so the output is S1 Greater; with "her", 'h' comes after 'g', so S1 Smaller. <code>compareTo</code> can replace <code>equals</code> and also says which is greater.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>indexOf(), lastIndexOf()</h4>
+      <p><code>indexOf</code> extends <code>contains</code> (as compareTo extends equals): it returns the index of the first occurrence, or a negative value if absent. With s1 = "geeksforgeeks": "geeks" → 0, "for" → 5, "gor" → negative. An extra parameter starts the search from a given index: <code>s1.indexOf("geeks", 1)</code> → 8. <code>lastIndexOf</code> returns the last occurrence.</p>
+    </div>
+    <div class="approach">
+      <h4>Concatenation and immutability</h4>
+<pre><code class="language-java">String s1 = "geeks";
+String s2 = s1;
+s1 = s1 + "forgeeks";     // OR s1 = s1.concat("forgeeks");
+System.out.println(s1);
+System.out.println(s1 == s2);
+O/P: geeksforgeeks
+     false</code></pre>
+      <p>Concatenation creates a new object "geeksforgeeks" and s1 now refers to it; s2 still refers to "geeks", so <code>s1 == s2</code> is false.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> on the compareTo board the O/P column shows "S1 Greater" (for s2 = "for") while s2 has already been changed to "her" in blue; the transcript gives S1 Smaller for "her".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYzMA%3D%3D" target="_blank" rel="noopener">Palindrome Check</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A string is a palindrome if it reads the same from left to right and from right to left.</p>
+<pre><code class="language-plaintext">Palindrome Check
+I/P: str = "ABCDCBA"     O/P: Yes
+I/P: str = "ABBA"        O/P: Yes
+I/P: str = "geeks"       O/P: No    (reversed: "skeeg")</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/NzY1Mw%3D%3D" target="_blank" rel="noopener">Check for Palindrome in Cpp</a></p>
+<ul>
+<li>A palindrome reads the same backward as forward.</li>
+<li>Approach: two pointers, one at the beginning and one at the end. Compare their characters: if they differ, it isn't a palindrome; if equal, move the first forward and the second backward. Continue until the pointers cross; if all characters matched, it's a palindrome.</li>
+<li>The program reads the string from the user and prints the result, exiting as soon as a mismatch is found.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/MTAxNDI%3D" target="_blank" rel="noopener">Check for Palindrome in Java</a></p>
+<ul>
+<li><strong>Naive:</strong> build the reversed string and compare it with the original. Time O(n) (one loop to build the reverse), space O(n) for the reverse string.</li>
+<li><strong>Case:</strong> "ABba" should also count as a palindrome, so convert the string to lowercase (or uppercase) first: characters are compared by their ASCII values, and 'A' differs from 'a'.</li>
+<li><strong>Two pointers:</strong> after converting to lowercase, i at the start and j at the end; while i &lt; j, compare and move both. Time O(n) (about n/2 iterations), space O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Method</h4>
+<pre><code class="language-cpp">bool isPal(string &amp;str)
+{
+    string rev = str;
+    reverse(rev.begin(), rev.end());
+    return (rev == str);
+}</code></pre>
+<pre><code class="language-java">boolean isPal(String str)
+{
+    StringBuilder rev =
+        new StringBuilder(str);
+    rev.reverse();
+    return str.equals(rev.toString());
+}</code></pre>
+      <ul>
+        <li>Reverse a copy and compare it with the input. In C++ strings are mutable: copy the string, then <code>reverse</code> takes begin and end iterators. <code>==</code> compares contents (it's overloaded for string).</li>
+        <li>Java strings are immutable, so build a mutable StringBuilder from the string, call its <code>reverse</code>, and compare with <code>equals</code> on its <code>toString()</code>.</li>
+      </ul>
+      <p><strong>Θ(n) Time</strong> (it always reverses the whole string) · <strong>Θ(n) Aux Space</strong> (the copy). Board example: str = "ABCBA", rev = "ABCBA".</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Method</h4>
+<pre><code class="language-cpp">bool isPal(string &amp;str)
+{
+    int begin = 0;
+    int end = str.length() - 1;
+    while(begin &lt; end)
+    {
+        if(str[begin] != str[end])
+            return false;
+        begin++;
+        end--;
+    }
+    return true;
+}</code></pre>
+<pre><code class="language-java">boolean isPal(String str)
+{
+    int begin = 0;
+    int end = str.length() - 1;
+    while(begin &lt; end)
+    {
+        if(str.charAt(begin) != str.charAt(end))
+            return false;
+        begin++;
+        end--;
+    }
+    return true;
+}</code></pre>
+      <ul>
+        <li>Compare the first and last characters; if they differ it can't be a palindrome. Otherwise move begin forward and end back, and compare again.</li>
+        <li>For an odd length ("ABCBA") begin and end meet at the middle character; for an even length ("ABCCBA") they cross. Either way the loop ends and returns true.</li>
+        <li>In C++ the string is passed by reference (<code>&amp;</code>) to avoid copying it; in Java it's a reference by default.</li>
+      </ul>
+      <p><strong>Time:</strong> O(n): each character is compared at most once; Θ(1) in the best case (the corner characters don't match), Θ(n) in the worst case (a palindrome) · <strong>Aux Space:</strong> Θ(1).</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the naive Java version is headed <code>bool isPal(String str)</code>; Java needs <code>boolean</code>, as the efficient version has. <code>&amp;str</code> is drawn like "$str".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MjMyNw%3D%3D" target="_blank" rel="noopener">Check if a String is Subsequence of Other</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Return true if s2 is a subsequence of s1. A subsequence is obtained by removing zero or more characters and keeping the rest in their original order.</p>
+<pre><code class="language-plaintext">Check if a String is Subsequence of Other
+I/P: s1 = "ABCD"            All Subsequences of "ABC" are:
+     s2 = "AD"              "", "A", "B", "C", "AB", "AC", "BC", "ABC"
+O/P: True                   2ⁿ
+I/P: s1 = "ABCDE"
+     s2 = "AED"             O(2ⁿ × n)
+O/P: False</code></pre>
+    <ul>
+      <li>"BA" is not a subsequence of "ABC", but "AB" is. Unlike a substring, a subsequence needn't be contiguous: "AC" removes the middle B.</li>
+      <li>A string of length n has 2<sup>n</sup> subsequences: each character is kept or not.</li>
+      <li>"AED" isn't a subsequence of "ABCDE": removing B and C leaves "ADE", in a different order.</li>
+      <li><strong>Naive:</strong> generate all 2<sup>n</sup> subsequences of s1 and compare each with s2: O(2<sup>n</sup> × n), exponential (n the larger length; the smaller one would be more precise).</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Idea for Solution</h4>
+<pre><code class="language-plaintext">s1 = GEEKSFORGEEKS
+s2 = GRGES
+if(s1[i] == s2[j]) { i++; j++; }
+else { i++; }</code></pre>
+      <p>Two indexes. When the characters match, move ahead in both; otherwise move only in s1, since we're waiting for s2's next character in order (after matching G, only R matters, even if E is needed later). If s2 is finished, return true; if only s1 is finished, false.</p>
+    </div>
+    <div class="approach">
+      <h4>Iterative Solution</h4>
+<pre><code class="language-cpp">bool isSubSeq(string s1, string s2,
+              int n, int m)
+{   if(n &lt; m) return false;
+    int j = 0;
+    for(int i=0; i&lt;n &amp;&amp; j&lt;m; i++)
+    {
+        if(s1[i] == s2[j])
+            j++;
+    }
+    return (j == m);
+}</code></pre>
+      <ul>
+        <li>i always increments, so a for loop over s1 is used, while s2 hasn't ended. <code>return (j == m)</code> replaces an if-else.</li>
+        <li>Board walkthrough for s1 = "ABCDEF", s2 = "ADE": initially j = 0; i = 0: j = 1; i = 1, 2: no match; i = 3: j = 2; i = 4: j = 3 = m, so return true.</li>
+        <li>The blue line <code>if(n &lt; m) return false;</code> is an optimisation: a shorter s1 can't contain s2.</li>
+        <li>This is close to C++. In Java, use <code>boolean</code>, <code>String</code> and <code>charAt</code>. In C++, passing as <code>const string &amp;</code> avoids copying, and const shows the strings won't be modified.</li>
+      </ul>
+      <p><strong>Time:</strong> O(n + m) · <strong>Aux Space:</strong> O(1)</p>
+    </div>
+    <div class="approach">
+      <h4>Recursive Solution</h4>
+<pre><code class="language-cpp">bool isSubSeqRec(string s1, string s2,
+                 int n, int m)
+{
+    if(m == 0)
+        return true;
+    if(n == 0)
+        return false;
+    if(s1[n-1] == s2[m-1])
+        return isSubSeqRec(s1, s2, n-1, m-1);
+    else
+        return isSubSeqRec(s1, s2, n-1, m);
+}</code></pre>
+      <ul>
+        <li>Just a recursion exercise; the iterative one is better. It matches the <strong>last</strong> characters, so the lengths double as indexes and shrink each call (the recommended practice for recursive string or array solutions). Matching first characters would need the lengths or two extra index parameters.</li>
+        <li>The order of the base cases matters: with <code>n == 0</code> first, the case where both reach 0 together would wrongly return false.</li>
+      </ul>
+<pre><code class="language-plaintext">isSSR("ABC", "AC", 3, 2)     → True
+ └ isSSR("ABC", "AC", 2, 1)     (C = C)
+    └ isSSR("ABC", "AC", 1, 1)  (B ≠ A)
+       └ isSSR("ABC", "AC", 0, 0)  (A = A) → m == 0: True</code></pre>
+      <p><strong>Time:</strong> O(m + n) · <strong>Aux Space:</strong> O(m + n) for the function call stack.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the two recursive calls' last arguments are behind the teacher's hand; they're filled in from the transcript (n − 1, m − 1 and n − 1, m). <code>&amp;&amp;</code> is drawn as "$$".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYyMg%3D%3D" target="_blank" rel="noopener">Check for Anagram</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Two strings are anagrams if they're permutations of each other: every character appears in both with the same frequency, though the order may differ.</p>
+<pre><code class="language-plaintext">Check for Anagram
+I/P: s1 = "listen", s2 = "silent"     O/P: Yes
+I/P: s1 = "aaacb",  s2 = "cabaa"      O/P: Yes
+I/P: s1 = "aab",    s2 = "bab"        O/P: No</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/Nzc2OQ%3D%3D" target="_blank" rel="noopener">Check for Anagram</a></p>
+<ul>
+<li>Two strings are anagrams if they're permutations of each other: the same set of characters, possibly in a different order.</li>
+<li><strong>Method 1, sorting:</strong> sort both; anagrams become identical, so compare them (e.g. with <code>equals()</code>). Time O(N log N), auxiliary space O(1).</li>
+<li><strong>Method 2, count characters:</strong> assuming 8-bit characters (256 possible), create a count array of size 256 for each string, initialised to 0, count every character of both, then compare the arrays. Time O(n), space O(NO_OF_CHAR) = O(256) = O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-cpp">bool areAnagram(string &amp;s1, string &amp;s2)
+{
+    if(s1.length() != s2.length())
+        return false;
+    sort(s1.begin(), s1.end());
+    sort(s2.begin(), s2.end());
+    return (s1 == s2);
+}</code></pre>
+<pre><code class="language-java">boolean areAnagram(String s1, String s2)
+{
+    if(s1.length() != s2.length())
+        return false;
+    char a1[] = s1.toCharArray();      // Sort First String
+    Arrays.sort(a1);
+    s1 = new String(a1);
+    char a2[] = s2.toCharArray();      // Sort Second String
+    Arrays.sort(a2);
+    s2 = new String(a2);
+    return s1.equals(s2);
+}</code></pre>
+      <ul>
+        <li>After sorting, anagrams become the same string: abaac and aacba both become aaabc. The length check returns false straight away without sorting.</li>
+        <li>C++ compares contents with <code>==</code>; in Java <code>==</code> compares references, so use <code>equals</code>. Java's String class has no sort function: convert to a char array, use <code>Arrays.sort</code>, and build a new String.</li>
+        <li>O(n log n) for the sort; a counting sort for the small alphabet would make sorting O(n), but there's a better method needing only one traversal.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution</h4>
+<pre><code class="language-cpp">const int CHAR = 256;
+bool areAnagram(string &amp;s1, string &amp;s2)
+{
+    if(s1.length() != s2.length())
+        return false;
+    int count[CHAR] = {0};
+    for(int i=0; i&lt;s1.length(); i++)
+    {
+        count[s1[i]]++;
+        count[s2[i]]--;
+    }
+    for(int i=0; i&lt;CHAR; i++)
+        if(count[i] != 0)
+            return false;
+    return true;
+}</code></pre>
+<pre><code class="language-java">static final int CHAR = 256;
+boolean areAnagram(String s1, String s2)
+{
+    if(s1.length() != s2.length())
+        return false;
+    int count[] = new int[CHAR];
+    for(int i=0; i&lt;s1.length(); i++)
+    {
+        count[s1.charAt(i)]++;
+        count[s2.charAt(i)]--;
+    }
+    for(int i=0; i&lt;CHAR; i++)
+        if(count[i] != 0)
+            return false;
+    return true;
+}</code></pre>
+      <ul>
+        <li>The standard character-counting technique: characters as indexes into a count array of size 256 (or 26 for lowercase only, indexing with character − 'a').</li>
+        <li>One count array instead of two: increment for each character of s1, decrement for each of s2. Anagrams leave every count at 0; any mismatch leaves a positive or negative value. Board example: s1 = "aabca", s2 = "acaba".</li>
+      </ul>
+      <p><strong>Time:</strong> O(n) (the CHAR loop is constant for a constant alphabet; O(n + CHAR) counting it) · <strong>Aux Space:</strong> O(CHAR)</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;s1</code> is drawn like "$s1", and the function name is written "areAnggram".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYxMg%3D%3D" target="_blank" rel="noopener">Leftmost Repeating Character</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Return the index of the leftmost character that repeats (the repeating character whose first occurrence is leftmost), or −1 if all are distinct.</p>
+<pre><code class="language-plaintext">Leftmost Repeating Character
+I/P: str = "geeksforgeeks"     O/P: 0
+I/P: str = "abbcc"             O/P: 1      (indexes 0 1 2 3 4)
+I/P: str = "abcd"              O/P: -1
+                               "abccb" → 1</code></pre>
+    <p>In "geeksforgeeks", e's two occurrences both come before g's second, but g's first occurrence is leftmost, so the answer is 0. In "abccb", b has the leftmost first occurrence among the repeating characters.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Approach</h4>
+<pre><code class="language-cpp">int leftMost(string &amp;str)
+{
+    for(int i=0; i&lt; str.length(); i++)
+    {   for(int j=i+1; j&lt; str.length(); j++)
+        {   if(str[i] == str[j])
+                return i;
+        }
+    }
+    return -1;
+}</code></pre>
+      <p>For every character, check whether it appears again after it (Java uses <code>str.charAt</code>). For "cabbad": c has no match, then a matches, so return 1. <strong>O(n²)</strong>: constant if the first character repeats, Θ(n²) when all are distinct.</p>
+    </div>
+    <div class="approach">
+      <h4>Better Approach</h4>
+<pre><code class="language-cpp">const int CHAR = 256;
+int leftMost(string &amp;str)
+{
+    int count[CHAR] = {0};
+    for(int i=0; i&lt; str.length(); i++)
+        count[str[i]]++;
+    for(int i=0; i&lt; str.length(); i++)
+        if(count[str[i]] &gt; 1)
+            return i;
+    return -1;
+}</code></pre>
+      <p>The typical string trick: characters as indexes. The first traversal counts frequencies; the second returns the first character with a count above 1. For "abccbd" after the first loop, b and c have count 2; at index 1, b's count is 2, so return 1. CHAR = 256 assumes ASCII; for lowercase letters, use 26 and subtract 'a'. Java arrays start at 0 by default. Linear, but two traversals.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Approach-1</h4>
+<pre><code class="language-cpp">const int CHAR = 256;
+int leftMost(string &amp;str)
+{
+    int fIndex[CHAR];
+    fill(fIndex, fIndex + CHAR, -1);
+    int res = INT_MAX;
+    for(int i=0; i&lt; str.length(); i++)
+    {   int fi = fIndex[str[i]];
+        if(fi == -1)
+            fIndex[str[i]] = i;
+        else
+            res = min(res, fi);
+    }
+    return (res == INT_MAX) ? -1 : res;
+}</code></pre>
+      <ul>
+        <li>One traversal, recording each character's first index (−1 means not seen yet). A repeated character's first index is a candidate; keep the minimum in res, initially infinity (INT_MAX in C++, Integer.MAX_VALUE in Java). If it stays infinite, all are distinct: return −1.</li>
+        <li>Board walkthrough for str = "abccbd": i = 0, 1, 2 set fIndex['a'] = 0, ['b'] = 1, ['c'] = 2; i = 3: res = 2; i = 4: res = 1; i = 5: fIndex['d'] = 5.</li>
+      </ul>
+      <p><strong>Time:</strong> O(n + CHAR) · <strong>Aux Space:</strong> O(CHAR); with CHAR constant, linear time and O(1) space.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Approach-2</h4>
+<pre><code class="language-cpp">const int CHAR = 256;
+int leftMost(string &amp;str)
+{
+    bool visited[CHAR];
+    fill(visited, visited + CHAR, false);
+    int res = -1;
+    for(int i = str.length()-1; i&gt;=0; i--)
+    {
+        if(visited[str[i]])
+            res = i;
+        else
+            visited[str[i]] = true;
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-java">static final int CHAR = 256;
+int leftMost(String str)
+{
+    boolean[] visited = new boolean[CHAR];
+    int res = -1;
+    for(int i = str.length()-1; i&gt;=0; i--)
+    {
+        if(visited[str.charAt(i)])
+            res = i;
+        else
+            visited[str.charAt(i)] = true;
+    }
+    return res;
+}</code></pre>
+      <p>Traverse right to left with a boolean visited array (less space than an int array). A character already visited updates res; otherwise mark it. The leftmost repeating character is the last repeated one reached, so no comparison with res is needed. Board walkthrough for "abccbd": i = 5, 4, 3 mark d, b, c; i = 2: res = 2; i = 1: res = 1; i = 0: mark a. Java booleans start false, so no <code>fill</code>. Same complexity as Approach-1, with fewer comparisons.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYxMQ%3D%3D" target="_blank" rel="noopener">Leftmost Non-repeating Element</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Leftmost Non-Repeating Character
+I/P: str = "geeksforgeeks"     O/P: 5     // Index of 'f'
+I/P: str = "abcabc"            O/P: -1
+I/P: str = "apple"             O/P: 0     // Index of 'a'</code></pre>
+    <p>In "apple", a, l and e don't repeat; return the leftmost, a at index 0.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution</h4>
+<pre><code class="language-cpp">int nonRep(string &amp;str)
+{
+    for(int i=0; i&lt;str.length(); i++)
+    {   bool flag = false;
+        for(int j=0; j&lt;str.length(); j++)
+        {   if(i != j &amp;&amp; str[i] == str[j])
+            {   flag = true;
+                break;
+            }
+        }
+        if(flag == false)
+            return i;
+    }
+    return -1;
+}</code></pre>
+      <p>Compare each character with every other one (a different index, same character), setting the flag on a match. Traversing left to right, the first character with no match is the answer (Java uses <code>charAt</code>). <strong>Time:</strong> O(n²) · <strong>Aux Space:</strong> O(1)</p>
+    </div>
+    <div class="approach">
+      <h4>Better Solution (Two Traversals)</h4>
+<pre><code class="language-cpp">const int CHAR = 256;
+int nonRep(string &amp;str)
+{
+    int count[CHAR] = {0};
+    for(int i=0; i&lt;str.length(); i++)
+        count[str[i]]++;
+    for(int i=0; i&lt;str.length(); i++)
+        if(count[str[i]] == 1)
+            return i;
+    return -1;
+}</code></pre>
+      <p>Count frequencies with characters as indexes, then traverse the string again and return the first character with count 1. For "abbcda": a and b have count 2, c and d count 1, so return 3. O(n) time and constant space for a constant alphabet. Interviewers often ask for one traversal instead.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution (One Traversal)</h4>
+<pre><code class="language-cpp">const int CHAR = 256;
+int nonRep(string &amp;str)
+{
+    int fI[CHAR];
+    fill(fI, fI + CHAR, -1);
+    for(int i=0; i&lt;str.length(); i++)
+    {   if(fI[str[i]] == -1)
+            fI[str[i]] = i;
+        else
+            fI[str[i]] = -2;
+    }
+    int res = INT_MAX;
+    for(int i=0; i&lt;CHAR; i++)
+        if(fI[i] &gt;= 0)
+            res = min(res, fI[i]);
+    return (res == INT_MAX) ? -1 : res;
+}</code></pre>
+      <ul>
+        <li>fI stores first indexes: −1 for characters never seen, the index for a character seen once, and −2 once it repeats. A repeat can't reset it to −1, or a third occurrence would look like a first one (b appears three times in the example).</li>
+        <li>Board walkthrough for "abbcbda": i = 0: fI['a'] = 0; i = 1: fI['b'] = 1; i = 2: fI['b'] = −2; i = 3: fI['c'] = 3; i = 4: b stays −2; i = 5: fI['d'] = 5; i = 6: fI['a'] = −2. The non-negative entries (c and d; 0 is also valid) are the non-repeating characters; the minimum, 3, is the answer.</li>
+        <li>The second loop runs only CHAR (256) times, constant and negligible for long strings, so this is one traversal of the string. Java uses <code>Arrays.fill(fI, -1)</code>.</li>
+        <li>It also works for a <strong>stream</strong> of characters (millions arriving), giving the answer at any moment; the count solution needs the full string.</li>
+      </ul>
+      <p><strong>Time:</strong> Θ(n + CHAR) (always one full traversal) · <strong>Aux Space:</strong> Θ(CHAR)</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;str</code> and <code>&amp;&amp;</code> are drawn like "$str" and "$$".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYwOA%3D%3D" target="_blank" rel="noopener">Reverse words in a string</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Reverse the order of the words (separated by spaces), in place in the character array, without auxiliary space.</p>
+<pre><code class="language-plaintext">Reverse Words in a String
+I/P: str = "welcome to gfg"     O/P: str = "gfg to welcome"
+I/P: str = "I love coding"      O/P: str = "coding love I"
+I/P: str = "abc"                O/P: str = "abc"</code></pre>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/Nzc2OA%3D%3D" target="_blank" rel="noopener">Reverse words in a given string</a></p>
+<ul>
+<li>"i like this program very much" becomes "much very program this like i".</li>
+<li>Algorithm: reverse the individual words one by one ("i ekil siht margorp yrev hcum"), then reverse the whole string from start to end.</li>
+<li>Time O(N); the article gives auxiliary space O(N).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Method</h4>
+<pre><code class="language-plaintext">① Create a Stack
+② Push words one by one to the stack          │ gfg     │
+③ Pop words from the stack and append to output │ to      │
+                                               │ welcome │
+str = ""   →   str = "gfg to welcome"</code></pre>
+      <p>Traverse the string; at each space, push the word seen so far. Then make the string empty and pop the words, appending each (with a space before it). Auxiliary space O(n): stack entries for the words, plus all their characters.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution: reverse each word, then the whole string</h4>
+<pre><code class="language-plaintext">abc bcd ef
+cba dcb fe     (individual words reversed)
+ef bcd abc     (whole string reversed)</code></pre>
+<pre><code class="language-cpp">void reverseWords(char str[], int n)
+{
+    int start = 0;
+    for(int end = 0; end &lt; n; end++)
+    {
+        if(str[end] == ' ')
+        {
+            reverse(str, start, end-1);
+            start = end+1;
+        }
+    }
+    reverse(str, start, n-1);
+    reverse(str, 0, n-1);
+}
+void reverse(char str[], int low, int high)
+{
+    while(low &lt;= high)
+    {   swap(str[low], str[high]);
+        low++;
+        high--;
+    }
+}</code></pre>
+      <ul>
+        <li>Skip non-space characters; at a space, start to end − 1 is a word, so reverse it and set start = end + 1. The last word has no space after it, so reverse start to n − 1 explicitly, then the whole string from 0 to n − 1.</li>
+        <li>Assumes single spaces between words and no trailing spaces; for multiple spaces, a while loop inside the if can skip them.</li>
+        <li>Written close to both languages. In C++ the helper can be replaced with the library <code>reverse(str + start, str + end)</code>. In Java, n comes from <code>str.length</code>, and there's no swap: use temp = str[low], str[low] = str[high], str[high] = temp.</li>
+      </ul>
+<pre><code class="language-plaintext"> 0 1 2 3 4 5 6 7 8 9 10 11 12 13
+ welcome to Gfg        start = 0, n = 14
+end = 0, 1, 2, 3, 4, 5, 6 : No change
+end = 7 : emoclew to Gfg        start = 8
+end = 8, 9 : No change
+end = 10 : emoclew ot Gfg       start = 11
+end = 11, 12, 13 : No Change
+After loop:
+  emoclew ot gfG     // Last word Reversed
+  Gfg to welcome     // Whole String Reversed</code></pre>
+      <p>Capital G in "Gfg" shows where the characters move. Constant auxiliary space: just a few variables.</p>
+    </div>
+    <div class="approach">
+      <h4>Language notes</h4>
+<pre><code class="language-plaintext">Java:  String s = "Welcome to Gfg";
+       char [] str = s.toCharArray();
+       String s = new String(str);
+C++:   In case you initialize a character array like below
+           char str[] = "Welcome to Gfg";
+       do pass array size minus 1 as parameter      (\0)</code></pre>
+      <ul>
+        <li>Java: for a String input, convert it with <code>toCharArray</code> and build the result back with the String constructor. This copies (so it isn't O(1) extra space), but it's simpler than implementing the logic with String, StringBuilder or StringBuffer.</li>
+        <li>C++: a double-quoted literal adds a '\0', so a size from <code>sizeof(str)/sizeof(str[0])</code> is 15, not 14, and the logic breaks; pass n − 1.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYxMw%3D%3D" target="_blank" rel="noopener">Overview of Pattern Searching</a> · Notes from the full course transcript and the board (a frame every 10 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a text (a big string) and a pattern (a small string), print every index where the pattern occurs, or "Not Present".</p>
+<pre><code class="language-plaintext">Overview of Pattern Searching
+txt = "GEEKSFORGEEKS"     pat = "EKS"     2 10
+txt = "AAAAA"             pat = "AAA"     0 1 2
+txt = "ABCABCD"           pat = "ABD"     Not Present</code></pre>
+    <ul>
+      <li>The second is the corner case with the maximum possible occurrences; the third, no occurrence at all.</li>
+      <li>A very common problem: searching in a programming file or MS Word document, Google search, DNA matching and regular expression search are all variations of it, so many algorithms exist.</li>
+    </ul>
+<pre><code class="language-plaintext">m → Pattern length,  n → Txt length,  1 ≤ m ≤ n
+┌───────────────────────────────────────────────────┐
+│ Naive : O((n-m+1) * m)                            │  No Preprocessing
+│ Naive When All Characters                         │
+│ of Pattern are Distinct : O(n)                    │
+├───────────────────────────────────────────────────┤
+│ Rabin Karp : O((n-m+1) * m)                       │  Preprocess Pattern
+│     But Better than Naive on Average              │
+│ KMP : O(n)                                        │
+├───────────────────────────────────────────────────┤
+│ Suffix Tree : O(m)                                │  Preprocess Text
+└───────────────────────────────────────────────────┘</code></pre>
+    <ul>
+      <li><strong>Naive:</strong> compare the pattern with every window of the text one by one.</li>
+      <li><strong>Naive with distinct pattern characters:</strong> improves to O(n); naive performs poorly only with repetitions in the pattern and text.</li>
+      <li><strong>Rabin Karp:</strong> a rolling hash. Compare the hash first, and only if it matches compare the characters; generally better than naive, but if the hash matches every time it can be worse, so its upper bound is the same as naive.</li>
+      <li><strong>KMP:</strong> one of the most popular and complicated algorithms; linear for any pattern and text. Naive is good for distinct characters, and KMP handles the redundancies by precomputing an <strong>LPS array</strong> (Longest Proper Prefix which is also Suffix) of the pattern's length. Rabin Karp and KMP both preprocess the pattern.</li>
+      <li>Other linear algorithms: <strong>Boyer Moore</strong> and the <strong>Z algorithm</strong> (much simpler than KMP).</li>
+      <li><strong>Suffix Tree</strong> is a data structure, not an algorithm: preprocess a fixed text (a book like the Gita, or a webpage that won't change) in at least linear time, then run thousands or millions of searches for different patterns in O(m) each. It's built on the idea of a <strong>trie</strong> of all suffixes (the course covers tries). For text that keeps changing (a Word document, programs), use one of the algorithms.</li>
+    </ul>
+    <p>Naive, distinct-character naive, Rabin Karp and KMP each get their own video next.</p>
+  </section>
+</template>
+
+<template id="DSASP-Strings-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYwOQ%3D%3D" target="_blank" rel="noopener">Naive Pattern Searching</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Naive Pattern Searching
+txt = "ABABABCD"     pat = "ABAB"     0 2
+txt = "ABCABCD"      pat = "ABCD"     3
+txt = "AAAAA"        pat = "AAA"      0 1 2</code></pre>
+    <p>In the second example, index 0 fails at the fourth character (A against D) and the full match is at 3. With all A's, the pattern appears at every valid index. If the pattern doesn't appear, print nothing.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/MjMxMQ%3D%3D" target="_blank" rel="noopener">Naive Pattern Searching Algorithm</a></p>
+<ul>
+<li>Print all occurrences of pat[0..m−1] in txt[0..n−1] (assume n &gt; m). Used when searching a Notepad or Word file, a browser or a database.</li>
+<li>Slide the pattern over the text one by one: check the first character, then the following ones; on a mismatch, move forward in the text. After a match, slide by 1 again for further matches.</li>
+<li><strong>Best case:</strong> the first character of the pattern isn't in the text at all: O(n) comparisons.</li>
+<li><strong>Worst case:</strong> all characters of text and pattern are the same, or only the last character differs: O(m × (n − m + 1)) comparisons. Such repetitions are unlikely in English text but can occur elsewhere (e.g. binary texts). KMP improves the worst case to O(n).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Slide the pattern over the text one by one</h4>
+<pre><code class="language-cpp">void patSearching(string &amp;txt, string &amp;pat)
+{
+    int m = pat.length();
+    int n = txt.length();
+    for(int i=0; i&lt;=n-m; i++)
+    {   int j;
+        for(j=0; j&lt;m; j++)
+            if(pat[j] != txt[i+j])
+                break;
+        if(j == m)
+            cout &lt;&lt; i &lt;&lt; " ";
+    }
+}</code></pre>
+<pre><code class="language-java">void patSearching(String txt, String pat)
+{
+    int m = pat.length(), n = txt.length();
+    for(int i=0; i&lt;=n-m; i++)
+    {   int j;
+        for(j=0; j&lt;m; j++)
+            if(pat.charAt(j) != txt.charAt(i+j))
+                break;
+        if(j == m)
+            System.out.print(i + " ");
+    }
+}</code></pre>
+      <ul>
+        <li>i is the start of the current window, from 0 to n − m (with n = 7, m = 4 the last start is 3). j is the shift within the window: pattern index j against text index i + j. A mismatch breaks the inner loop; if j reaches m, every character matched, so print i.</li>
+        <li>Walkthrough for txt = "ABCABCD", pat = "ABCD": i = 0 matches A, B, C, then fails at j = 3 (j ≠ 4); i = 1 and i = 2 fail at j = 0; i = 3 matches all four, so print 3.</li>
+      </ul>
+      <p><strong>Time:</strong> O((n − m + 1) × m): the outer loop always runs n − m + 1 times; the inner loop runs m times in the worst case, e.g. all A's in both text and pattern. It may be less, hence Big O. <strong>Aux Space:</strong> O(1).</p>
+      <p>Naive is quadratic and not the best way; KMP and the Z algorithm are linear, and even Rabin Karp, though quadratic in the worst case, is better than naive.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;txt</code> and <code>&amp;pat</code> are drawn like "$txt" and "$pat".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYxMA%3D%3D" target="_blank" rel="noopener">Improved Naive Pattern Searching for Distinct</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The same pattern search, given that the pattern's characters are all distinct. The naive O((n − m + 1) × m) solution works for any pattern; this optimises it to linear time for distinct characters.</p>
+<pre><code class="language-plaintext">Improved Naive Algorithm for Distinct (in Pattern)
+txt = "ABCABCDABCD"     pat = "ABCD"     3 7
+txt = "GEEKSFORGEEKS"   pat = "EKS"      2 10
+txt = "ABCAAAD"         pat = "ABD"      (nothing printed)</code></pre>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Pseudo Code</h4>
+<pre><code class="language-plaintext">void patSearchDist(txt, pat)
+{
+    int n = txt.length();
+    int m = pat.length();
+    for(int i=0; i&lt;=n-m; )
+    {
+        int j;
+        for(j=0; j&lt;m; j++)
+            if(pat[j] != txt[i+j])
+                break;
+        if(j == m)
+            print(i + " ");
+        if(j == 0)
+            i++;
+        else
+            i = (i+j);
+    }
+}</code></pre>
+      <ul>
+        <li>Close to both languages: in Java, write <code>String</code> (and <code>charAt</code> for indexing, <code>System.out.print</code>); in C++, <code>string</code> passed by reference (<code>&amp;</code>) and <code>cout</code>.</li>
+        <li>There's no <code>i++</code> in the loop header. If the first character didn't match (j = 0), go like naive: i++. If a mismatch came after j matches, slide the pattern by j.</li>
+        <li><strong>Why it's safe:</strong> in "ABCABCD", A, B, C match, then A fails against D. The matched text characters equal the pattern's distinct B and C, so the pattern's first character A can't match either of them: shifting so A sits under B or C can never lead to an answer. Jump i to i + j (here 3), where the next match is found.</li>
+      </ul>
+<pre><code class="language-plaintext"> 0 1 2 3 4 5 6 7 8 9 10 11
+ A B C E A B E F A B C  D        pat = ABCD,  n = 12, m = 4
+i = 0: A B C match, E ≠ D (j = 3)   →  i = 0 + 3 = 3
+i = 3: E ≠ A (j = 0)                →  i = 4
+i = 4: A B match, E ≠ C (j = 2)     →  i = 4 + 2 = 6
+i = 6: E ≠ A                        →  i = 7
+i = 7: F ≠ A                        →  i = 8
+i = 8: A B C D match (j = 4)        →  print 8
+O/P: 8</code></pre>
+      <p><strong>Θ(n) time.</strong> Despite the nested loops, every j inner iterations move i forward by j in the outer loop, so the total work is linear.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the walkthrough's text is partly behind the teacher in the close-ups; it is rebuilt from the transcript's step-by-step run (n = 12, matches and jumps as listed), with "…BEFABCD" and O/P: 8 visible on the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTM5NQ%3D%3D" target="_blank" rel="noopener">Rabin Karp Algorithm</a> · Notes from the full course transcript and the board (a frame every 20 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Rabin Karp Algorithm
+txt = "abdabcbabc"     pat = "abc"     3 7
+txt = "aaaaa"          pat = "aaa"     0 1 2
+I/P: txt = "abcd", pat = "xyz"         O/P: Not Found</code></pre>
+    <ul>
+      <li>Also quadratic in the worst case, but better than naive in general. Like naive, slide the pattern over the text one by one; but instead of comparing characters straight away, compare a <strong>hash value</strong> (an integer) of the pattern, <strong>p</strong>, with that of the current text window, <strong>t</strong>. Only if they match, compare the characters. This saves many comparisons, especially for bigger patterns.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/MjMxMg%3D%3D" target="_blank" rel="noopener">Rabin-Karp Algorithm for Pattern Searching</a></p>
+<ul>
+<li>Like naive, Rabin-Karp slides the pattern one by one, but compares the pattern's hash with the current text substring's hash, and matches individual characters only when they're equal. Hashes are needed for the pattern and every length-m substring of the text.</li>
+<li>The hash at the next shift must be computable in O(1) from the current hash and the next character: hash(txt[s+1 .. s+m]) = rehash(txt[s+m], hash(txt[s .. s+m−1])).</li>
+<li>Rabin and Karp's hash is the string's numeric value (with characters 1 to 10, "122" is 122). With 256 possible characters and long patterns this can't fit an integer, so it's computed with modular arithmetic.</li>
+<li>Rehash: take off the most significant digit and add the new least significant one: hash(txt[s+1 .. s+m]) = (d (hash(txt[s .. s+m−1]) − txt[s]·h) + txt[s+m]) mod q, where d is the number of characters in the alphabet, q a prime, and h = d<sup>m−1</sup>.</li>
+<li>Average and best case O(n + m); worst case O(nm), when all characters of pattern and text are the same so every substring's hash matches, e.g. pat = "AAA", txt = "AAAAAAA".</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>A simple hash: sum of character values</h4>
+<pre><code class="language-plaintext">a : 1, b : 2, c : 3, d : 4, e : 5        p = (1+2+3) = 6
+ 0 1 2 3 4 5 6 7 8 9
+ a b d a b c b a b c
+i = 0 : t = (1+2+4) = 7
+i = 1 : t = (2+4+1) = 7
+i = 2 : t = (4+1+2) = 7
+i = 3 : t = (1+2+3) = 6   (Match)
+i = 4 : t = (2+3+2) = 7
+i = 5 : t = (3+2+1) = 6   (Spurious Hit)
+i = 6 : t = (2+1+2) = 5
+i = 7 : t = (1+2+3) = 6   (Match)</code></pre>
+      <ul>
+        <li>For simplicity, values 1 to 5 for five characters (not ASCII). At i = 5 the hashes match but the characters don't (c against a): a <strong>spurious hit</strong>.</li>
+        <li>Summing every window is O(m) again, like naive. A <strong>rolling hash</strong> computes the next window's hash from the previous one in O(1): subtract the outgoing character and add the incoming one, e.g. from i = 3: 6 − 1 + 2 = 7. For patterns of hundreds or thousands of characters, that's one addition and one subtraction instead of a full traversal.</li>
+        <li>This simple hash causes many spurious hits, especially with a small character set: every permutation of the pattern matches (GOD and DOG have the same sum).</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>Improved Hash: a weighted sum, d = 5</h4>
+<pre><code class="language-plaintext">h("abc") = 1×d² + 2×d¹ + 3×d⁰ = 1×5² + 2×5¹ + 3×5⁰ = 38
+h("dab") = 4×d² + 1×d¹ + 2×d⁰ = 4×5² + 1×5¹ + 2×5⁰ = 107
+Rolling:  t(i+1) = d(t(i) - txt[i] × d^(m-1)) + txt[i+m]      m → Length of pattern
+
+txt = "abdabcbabc"                         pat = "abc"
+t0 = 1×5² + 2×5¹ + 4×5⁰ = 39               p = 1×5² + 2×5 + 3×1 = 38
+t1 = 5 × (t0 - 1×5²) + 1 = 71
+t2 = 5 × (t1 - 2×5²) + 2 = 107
+t3 = 5 × (t2 - 4×5²) + 3 = 38
+⋮</code></pre>
+      <p>The first character is multiplied by d<sup>m−1</sup>, the next by d<sup>m−2</sup>, down to d<sup>0</sup>. It's like decimal arithmetic: with txt = "132456", d = 10, m = 4, t0 = 1324 and t1 = (1324 − 1 × 10<sup>3</sup>) × 10 + 5 = 3245: drop the first digit, shift, and add the new one. Here it's the same in base 5.</p>
+    </div>
+    <div class="approach">
+      <h4>Implementation (pseudo code)</h4>
+<pre><code class="language-plaintext">void RBSearch(pat, txt, M, N)
+{
+    int h = 1;                                   // Compute (d^(M-1)) % q
+    for(int i=1; i&lt;=M-1; i++)
+        h = (h * d) % q;
+    int p = 0, t = 0;                            // Compute p and t0
+    for(int i=0; i&lt;M; i++)
+    {   p = (p*d + pat[i]) % q;
+        t = (t*d + txt[i]) % q;
+    }
+    for(int i=0; i&lt;=N-M; i++)
+    {   if(p == t) {                             // Check for spurious hit
+            bool flag = true;
+            for(int j=0; j&lt;M; j++)
+                if(txt[i+j] != pat[j]) { flag = false; break; }
+            if(flag == true) { print(i); }
+        }
+        if(i &lt; N-M) {                            // Compute t(i+1) using t(i)
+            t = ((d*(t - txt[i]*h)) + txt[i+M]) % q;
+            if(t &lt; 0) t = t+q;
+        }
+    }
+}</code></pre>
+      <ul>
+        <li>Very close to C++ and Java. Computations are <strong>modulo q</strong> because the weighted sums become huge even for small strings; q is generally a prime, as big as possible, to reduce spurious hits (with q = 13 there are only 13 possible values, so by the pigeonhole principle many collide).</li>
+        <li>h = d<sup>M−1</sup> % q is precomputed once instead of inside the loop.</li>
+        <li>p and t<sub>0</sub> use <strong>Horner's rule</strong>: starting at 0, multiply by d and add the next character, giving pat[0]·d² + pat[1]·d + pat[2] for length 3. p is used in every comparison; t is recomputed for each window.</li>
+        <li>The subtraction can make t negative, so add q: (−3) % 13 is the same as (−3 + 13) % 13 = 10, keeping both values positive for comparison. The next hash isn't computed after the last window (<code>i &lt; N − M</code>).</li>
+      </ul>
+    </div>
+
+    <h3>Time Complexity</h3>
+    <ul>
+      <li>Worst case O((N − M + 1) × M), same as naive, e.g. txt = "AAAAA", pat = "AAA": the hashes match everywhere and every character is compared, plus the hash work, so it does more than naive. On average it's better, since such cases are rare and long patterns skip many character matches.</li>
+      <li>Better algorithms exist (KMP is linear), but Rabin Karp is used in practice to <strong>search multiple patterns</strong> in a text: compute every pattern's hash, slide over the text, and compare a window only with the patterns whose hash it matches.</li>
+    </ul>
+  </section>
+</template>
+
+<template id="DSASP-Strings-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTM5Nw%3D%3D" target="_blank" rel="noopener">KMP Algorithm (Part 1 : Constructing LPS Array)</a> · Notes from the full course transcript and the board (frames every 25–30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The LPS (Longest Proper Prefix which is also Suffix) array is KMP's preprocessing step on the pattern: lps[i] is the length of the longest proper prefix of str[0..i] that is also a suffix of it.</p>
+<pre><code class="language-plaintext">Constructing Longest Proper Prefix Suffix Array
+I/P: str = "ababc"        O/P: lps[] = {0, 0, 1, 2, 0}
+I/P: str = "aaaa"              lps[] = {0, 1, 2, 3}
+I/P: str = "abcd"              lps[] = {0, 0, 0, 0}
+I/P: str = "abababa"           lps[] = {0, 0, 1, 2, …}
+
+Proper Prefixes of "abcd":  "", "a", "ab", "abc"
+Suffixes of "abcd":         "", "d", "cd", "bcd", "abcd"</code></pre>
+    <ul>
+      <li>A <strong>proper</strong> prefix is shorter than the string ("abcd" itself isn't one).</li>
+      <li>lps[0] is always 0: a string of length 1 has no proper prefix longer than 0. lps[1] is 1 if the first two characters match, else 0.</li>
+      <li>For "aba": proper prefixes "", a, ab; suffixes a, ba, aba; the longest common one is "a", so 1. For "abab": "ab", so 2. For the whole "ababc": none, so 0.</li>
+      <li>All characters the same gives 0, 1, 2, 3…; all distinct gives all 0s. For "ababab": 0, 0, 1, 2, 3, 4.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive : O(n³)</h4>
+<pre><code class="language-plaintext">int longPropPreSuff(str, n)
+{
+    for(int len = n-1; len &gt; 0; len--)
+    {   bool flag = true;
+        for(int i=0; i&lt;len; i++)
+            if(str[i] != str[n-len+i])
+                flag = false;
+        if(flag == true)
+            return len;
+    }
+    return 0;
+}
+void fillLPS(str, lps[])
+{
+    for(int i=0; i&lt;str.length(); i++)
+        lps[i] = longPropPreSuff(str, i+1);
+}</code></pre>
+      <ul>
+        <li>Pseudo code close to C++ and Java (in Java, <code>str.charAt(i)</code>). <code>longPropPreSuff</code> tries every length from n − 1 down, the longest possible, and returns the first length whose prefix equals the suffix, or 0.</li>
+        <li>For str = "ababacab", n = 8: len = 7 compares str[0] with str[1], str[1] with str[2], …, str[6] with str[7]; len = 6 compares str[0] with str[2], …, str[5] with str[7]; len = 5, str[0] with str[3], …</li>
+        <li>The function is O(n²) (two loops), called O(n) times: <strong>O(n³)</strong>.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>Efficient O(n): Basic Ideas</h4>
+      <p>Reuse the already computed values lps[0..i−1] instead of computing each one fresh. len is lps[i − 1].</p>
+<pre><code class="language-plaintext">① If str[i] and str[len] match
+     lps[i] = len+1,  len++;
+② If str[i] and str[len] DO NOT match
+   (a) If len == 0
+         lps[i] = 0
+   (b) Else, we recursively apply lps[]
+         len = lps[len-1]
+       then compare str[i] with str[len]</code></pre>
+      <ul>
+        <li><strong>①</strong> str[0..len−1] equals the suffix ending at i − 1; if str[len] also equals str[i], the prefix extends by one. For "aaaa": lps[1] = 1, lps[2] = 2, lps[3] = 3.</li>
+        <li><strong>②(a)</strong> no earlier match and str[i] ≠ str[0], so lps[i] = 0.</li>
+        <li><strong>②(b)</strong> the first len characters can't be extended, so use the redundancy within them: the first lps[len − 1] characters equal the last lps[len − 1] of that prefix, hence also the characters just before i. Try extending that shorter prefix, repeating until a match or len = 0.</li>
+      </ul>
+<pre><code class="language-plaintext"> 0 1 2 3 4 5 6 7
+ a b c b a b c a
+lps[0] = 0,  len = 0
+lps[1] = 0,  len = 0   [Case 2.a]
+lps[2] = 0,  len = 0   [Case 2.a]
+lps[3] = 0,  len = 0   [Case 2.a]
+lps[4] = 1,  len = 1   [Case 1]
+lps[5] = 2,  len = 2   [Case 1]
+lps[6] = 3,  len = 3   [Case 1]
+lps[7] : [Case 2.b] len = lps[len-1] = lps[2] = 0,  then [Case 1]
+         lps[7] = 1,  len = 1</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Implementation of O(n) algorithm</h4>
+<pre><code class="language-plaintext">void fillLPS(str, lps[])
+{
+    int n = str.length(), len = 0;
+    lps[0] = 0;
+    int i = 1;
+    while(i &lt; n)
+    {   if(str[i] == str[len])
+        {   len++; lps[i] = len; i++; }
+        else {
+            if(len == 0) { lps[i] = 0; i++; }
+            else { len = lps[len-1]; }
+        }
+    }
+}</code></pre>
+<pre><code class="language-plaintext"> 0 1 2 3 4 5 6 7 8
+ A A A B A A A A C
+len = 0, lps[0] = 0
+i = 1 : lps[1] = 1, len = 1
+i = 2 : lps[2] = 2, len = 2
+i = 3 : str[i] ≠ str[len] and len&gt;0 : len = lps[1] = 1, then len = lps[0] = 0;  lps[3] = 0
+i = 4, 5, 6 : lps = 1, 2, 3
+i = 7 : len = lps[2] = 2, then match: lps[7] = 3, len = 3
+i = 8 : lps[8]
+        len = lps[2] = 2
+        len = lps[1] = 1
+        len = lps[0] = 0
+        lps[8] = 0</code></pre>
+      <p><strong>Time:</strong> Θ(n). With all characters the same, every step is case ① and i++; all distinct, every step is case ②(a). When a mismatch follows some matches (case ②(b)), len falls back at most as far as it rose, so at most 2n work in total.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTM5OA%3D%3D" target="_blank" rel="noopener">KMP Algorithm (Part 2 : Complete Algorithm)</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">KMP String Matching
+I/P: txt = "abcdefg"     pat = "bcd"      O/P: 1
+I/P: txt = "aaaaab"      pat = "aaaa"     O/P: 0 1
+I/P: txt = "abc…"        pat = "ba"       O/P: Not Found</code></pre>
+    <ul>
+      <li>Recap: naive is quadratic; naive for distinct pattern characters is O(n); Rabin Karp (rolling hash) is quadratic in the worst case but better on average. <strong>KMP</strong> is O(n) time with O(m) auxiliary space (n the text length, m the pattern length).</li>
+      <li>KMP preprocesses the pattern into the LPS array, then slides the pattern over the text like naive; its loop does at most 2n work.</li>
+      <li>For txt = "aaaaab", pat = "aaaa", naive does 4 + 4 + 4 = 12 comparisons over three shifts: (n − m + 1) × m in the worst case.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/MjMxMw%3D%3D" target="_blank" rel="noopener">KMP Algorithm for Pattern Searching</a></p>
+<ul>
+<li>Examples: txt = "THIS IS A TEST TEXT", pat = "TEST": found at index 10. txt = "AABAACAADAABAABA", pat = "AABA": found at 0, 9 and 12.</li>
+<li>Naive is O(m(n − m + 1)) in the worst case and does badly when many matching characters are followed by a mismatch (e.g. "AAAAAAAAAAAAAAAAAB" with "AAAAB"; "ABABABCABABABCABABABC" with "ABABAC" is a bad, though not worst, case). KMP (Knuth Morris Pratt) uses the pattern's degenerating property (the same sub-patterns appearing more than once) to reach O(n).</li>
+<li>Idea: after a mismatch following some matches, we already know some characters of the next window, so we skip matching those. With txt = "AAAAABAAABA", pat = "AAAA", the second window compares only the fourth A.</li>
+<li><strong>lps[i]</strong> is the longest proper prefix of pat[0..i] which is also a suffix (proper prefixes of "ABC": "", "A", "AB"). Examples: "AAAA" → [0, 1, 2, 3]; "ABCDE" → all 0; "AABAACAABAA" → [0, 1, 0, 1, 2, 0, 1, 2, 3, 4, 5]; "AAACAAAAAC" → [0, 1, 2, 0, 1, 2, 3, 3, 3, 4]; "AAABAAA" → [0, 1, 2, 0, 1, 2, 3].</li>
+<li><strong>Preprocessing:</strong> lps[0] and len start at 0. If pat[len] and pat[i] match, len++ and lps[i] = len. If not and len ≠ 0, len = lps[len − 1]; if len = 0, lps[i] = 0. The article walks through "AAACAAAA".</li>
+<li><strong>Searching:</strong> match txt[i] with pat[j], incrementing both while they match. On a mismatch, pat[0..j−1] matches txt[i−j..i−1], and lps[j−1] of those characters are both proper prefix and suffix, so they needn't be matched again: set j = lps[j − 1] (or i++ if j = 0). When j = M, print the match and set j = lps[j − 1].</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>How the LPS array skips comparisons</h4>
+<pre><code class="language-plaintext">n = 6     txt =  a a a a a b        (indexes 0 … 5)
+m = 4     pat =  a a a a             O/P: 0
+KMP:  lps[m] = {0, 1, 2, 3}
+      lps[i] → Longest Proper Prefix of pat[0…i] which is a suffix.</code></pre>
+      <ul>
+        <li>i indexes the text and j the pattern; when they match, both increment. After matching all four characters, print 0.</li>
+        <li>Naive would restart at the next shift. KMP looks up the LPS value of the <strong>last matched character</strong>: lps[3] = 3, so the next pattern index to compare is 3, while the text index always moves on by one after a match.</li>
+        <li>lps[3] = 3 means pat[0..2] equals pat[1..3], which just matched txt[1..3]; so pat[0..2] already matches txt[1..3] and those three comparisons are skipped. Comparing pat[3] with txt[4] matches, so print 1. With lps again 3, pat[3] is compared with txt[5] = b: no match, so nothing is printed.</li>
+        <li>Naive is already linear for distinct pattern characters; it slows down with redundancies, and KMP preprocesses exactly those redundancies within the pattern so the worst case stays linear.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>Algorithm (pseudo code)</h4>
+<pre><code class="language-plaintext">void KMP(pat, txt)
+{
+    int N = txt.length();
+    int M = pat.length();
+    int lps[M];
+    fillLPS(pat, lps);
+    int i = 0, j = 0;
+    while(i &lt; N)
+    {
+        if(pat[j] == txt[i]) { i++; j++; }
+        if(j == M) { print(i-j); j = lps[j-1]; }
+        else if(i &lt; N &amp;&amp; pat[j] != txt[i])
+        {
+            if(j == 0) { i++; }
+            else { j = lps[j-1]; }
+        }
+    }
+}</code></pre>
+      <ul>
+        <li>fillLPS is the previous video's function, and its logic closely resembles this one. When the whole pattern has matched (j = M), print the shift i − j (or i − M) and continue from lps[j − 1].</li>
+        <li>On a mismatch, if j = 0 (the first character itself didn't match) just move ahead in the text; otherwise, after some matches, take the next j from lps[j − 1]. That last case and the full-match case are the same idea.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>Dry run: txt = "ababcababaad", pat = "ababa", lps[] = {0, 0, 1, 2, 3}</h4>
+<pre><code class="language-plaintext">i = 0, j = 0 … match up to i = 4, j = 4: mismatch → j = lps[3] = 2
+i = 4, j = 2: mismatch → j = lps[1] = 0
+i = 4, j = 0: mismatch, j == 0 → i = 5
+i = 5, j = 0: match … i = 10, j = 5 = M → print 10 - 5 = 5; j = lps[4] = 3
+i = 10, j = 3: mismatch → j = lps[2] = 1
+i = 10, j = 1: mismatch → j = lps[0] = 0
+i = 10, j = 0: match → i = 11, j = 1: mismatch → j = lps[0] = 0
+i = 11, j = 0: mismatch, j == 0 → i = 12 = N, stop</code></pre>
+      <p>N = 12, M = 5. The pattern occurs at index 5.</p>
+    </div>
+
+    <h3>Time complexity</h3>
+    <p>Each iteration either moves ahead in the text (i++, j++, or i++ alone) or slides the pattern ahead (j = lps[j − 1], e.g. j from 2 to 0 slides it two positions). i goes from 0 to n − 1, so at most n text steps, and the pattern can slide at most n times: the work is upper bounded by <strong>2n</strong>.</p>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;&amp;</code> is drawn like "$$" in the else-if condition.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-16">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYwNg%3D%3D" target="_blank" rel="noopener">Check if Strings are Rotations</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Check whether s2 can be obtained by rotating s1 (left or right) any number of times.</p>
+<pre><code class="language-plaintext">Check for Rotation
+I/P: s1 = "ABCD",  s2 = "CDAB"      O/P: Yes    ABCD → BCDA → CDAB
+I/P: s1 = "ABAAA", s2 = "BAAAA"     O/P: Yes    ABAAA → BAAAA
+I/P: s1 = "ABAB",  s2 = "ABBA"      O/P: No</code></pre>
+    <ul>
+      <li>"CDAB" is two counterclockwise rotations of "ABCD", or two clockwise ones. "BAAAA" is one counterclockwise rotation of "ABAAA", or four clockwise: x left rotations equal n − x right rotations.</li>
+      <li>Rotating "ABAB" gives "BABA", "ABAB", … but never "ABBA".</li>
+      <li><strong>Naive:</strong> try all n rotations one by one (clockwise or counterclockwise), comparing each with s2: O(n²).</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/Nzc3MA%3D%3D" target="_blank" rel="noopener">Check if Strings are Rotations</a></p>
+<ul>
+<li>s1 = ABCD, s2 = CDAB returns true; s2 = ACBD returns false.</li>
+<li><strong>Method 1</strong> (areRotations): search s2 in s1 concatenated with itself. Its complexity depends on the strstr implementation: with a KMP matcher, Θ(n1 + n2).</li>
+<li><strong>Method 2 (STL queues):</strong> unequal sizes can never match. Push the original string into queue q1 and the one to check into q2; repeatedly pop from q2 and push it back, fewer times than the string's size. If q2 ever equals q1, it's a rotation.</li>
+<li><strong>Method 3:</strong> find every position j of s1's first character in s2; for each, compare s1[i] with s2[(j + i) % n] for all i, returning false on a mismatch. Worst case n × n.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Efficient: search s2 in s1 + s1</h4>
+<pre><code class="language-cpp">bool areRotations(string &amp;s1, string &amp;s2)
+{
+    if(s1.length() != s2.length()) return false;
+    return ((s1+s1).find(s2) != string::npos);
+}</code></pre>
+<pre><code class="language-java">boolean areRotations(String s1, String s2)
+{
+    if(s1.length() != s2.length()) return false;
+    return ((s1+s1).indexOf(s2) &gt;= 0);
+}</code></pre>
+<pre><code class="language-plaintext">①  s1 = "ABCD"    s2 = "CDAB"    s1+s1 = "ABCDABCD"   (found)
+②  s1 = "ABAB"    s2 = "ABBA"    s1+s1 = "ABABABAB"   (not found)</code></pre>
+      <ul>
+        <li>This is pattern searching in a circular way: s2 as the pattern, s1 as the text, wrapping round at the end. Our own naive search would be quadratic, and modifying KMP is complex.</li>
+        <li>Concatenating s1 with itself removes the wrap-around: if s2 is a rotation of s1, it appears in s1 + s1, and the standard library search works in linear time. Strings of different lengths can't be rotations.</li>
+        <li>C++ <code>find</code> returns <code>string::npos</code> if absent (otherwise the first index); Java <code>indexOf</code> returns a negative value. The two lines could even be one with an <code>&amp;&amp;</code>.</li>
+      </ul>
+      <p><strong>Time:</strong> Θ(n) (linear concatenation and library search) · <strong>Aux Space:</strong> Θ(n) for the temporary concatenated string.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-17">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYwNQ%3D%3D" target="_blank" rel="noopener">Anagram Search</a> · Notes from the full course transcript and the board (a frame every 15 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Return true if the pattern or any of its permutations (anagrams) appears in the text as a substring (contiguous characters).</p>
+<pre><code class="language-plaintext">Anagram Search
+I/P: txt = "geeksforgeeks"   pat = "frog"     O/P: Yes   ("forg")
+I/P: txt = "…"               pat = "…eek"     O/P: No</code></pre>
+    <p>In the second example the text has the characters e, e, k, s and r, but not contiguously: there's a g in between.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive Solution (CHAR = 256)</h4>
+<pre><code class="language-cpp">bool isPresent(string &amp;txt, string &amp;pat)
+{
+    int n = txt.length();
+    int m = pat.length();
+    for(int i=0; i&lt;=n-m; i++)
+    {   if(areAnagram(pat, txt, i))
+            return true;
+    }
+    return false;
+}
+bool areAnagram(string &amp;pat, string &amp;txt, int i)
+{
+    int count[CHAR] = {0};
+    for(int j=0; j&lt; txt.length(); j++)
+    {   count[pat[j]]++;
+        count[txt[i+j]]--;
+    }
+    for(int j=0; j&lt;CHAR; j++)
+        if(count[j] != 0)
+            return false;
+    return true;
+}</code></pre>
+      <p>Like naive pattern searching: slide the pattern over the text one by one and check each window with the earlier anagram check. For "geeksforgeeks" (n = 13) and "frog" (m = 4), windows start at 0 to 9. In Java, CHAR is a static final variable.</p>
+      <p><strong>Time:</strong> O((n − m + 1) × m), treating the alphabet size as constant · <strong>Aux Space:</strong> O(1)</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution: sliding window of counts</h4>
+<pre><code class="language-cpp">bool isPresent(string &amp;txt, string &amp;pat)
+{
+    int CT[CHAR] = {0}, CP[CHAR] = {0};
+    for(int i=0; i&lt;pat.length(); i++)
+    {   CT[txt[i]]++;
+        CP[pat[i]]++;
+    }
+    for(int i=pat.length(); i&lt;txt.length(); i++)
+    {
+        if(areSame(CT, CP))
+            return true;
+        CT[txt[i]]++;
+        CT[txt[i-pat.length()]]--;
+    }
+    return false;
+}</code></pre>
+      <ul>
+        <li>Count arrays for the first text window (CT) and the pattern (CP). For "geek" and "frog": g 1, e 2, k 1 against f 1, r 1, o 1, g 1.</li>
+        <li>Sliding to the next window needs only removing the previous window's first character and adding the current window's last one, in O(1): from "geek" to "eeks", decrement g and increment s; next, decrement e and increment f.</li>
+        <li><code>areSame</code> (not written out) checks whether CT and CP hold the same values.</li>
+      </ul>
+      <p><strong>Time:</strong> O(m + (n − m) × CHAR), simplified to O(n × CHAR): Θ(m) for the first loop, then n − m iterations each comparing the CHAR-sized arrays · <strong>Aux Space:</strong> Θ(CHAR). With a constant alphabet (ASCII, or only lowercase or uppercase letters), it's linear time and Θ(1) space.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the naive <code>areAnagram</code> loops <code>j &lt; txt.length()</code>, but should run over the pattern's length. As written, the efficient version checks <code>areSame</code> before each slide, and the transcript gives the same loop order, so the last window is never compared after the loop. The second example's text and pattern are partly hidden by the teacher's hand. <code>&amp;</code> is drawn like "$".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-18">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTYxNA%3D%3D" target="_blank" rel="noopener">Lexicographic Rank of a String</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+<pre><code class="language-plaintext">Lexicographic Rank
+I/P: str = "BAC"       O/P: 3          String   Rank
+I/P: str = "CBA"       O/P: 6          "ABC"    1
+I/P: str = "DCBA"      O/P: 24         "ACB"    2
+I/P: str = "STRING"    O/P: 598        "BAC"    3
+                                       "BCA"    4
+                                       "CAB"    5
+                                       "CBA"    6</code></pre>
+    <ul>
+      <li>Pen and paper: sort the characters, list all permutations in lexicographically increasing order, and find the string's position. "DCBA" is last of the 4! = 24 permutations; "ABCD" would be 1.</li>
+      <li><strong>Naive:</strong> generate the permutations in increasing order, comparing each with the string and counting. In the worst case (the last permutation) all n! permutations are compared, each in O(n): <strong>O(n × n!)</strong>.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Efficient Solution: count lexicographically smaller strings, then add 1</h4>
+<pre><code class="language-plaintext">"STRING"
+R _ _ _ _ _   │ SR _ _ _ _   │ STI _ _ _
+I _ _ _ _ _   │ SI _ _ _ _   │ STN _ _ _
+N _ _ _ _ _   │ SN _ _ _ _   │ STG _ _ _
+G _ _ _ _ _   │ SG _ _ _ _   │
+──────────────┼──────────────┼──────────
+STRG _ _      │ STRIG _      │ 4×5! + 4×4! + 3×3! + 1×2! + 1×1!
+                               = 480 + 96 + 18 + 2 + 1 = 597</code></pre>
+      <ul>
+        <li>Traverse left to right; for each character count the smaller characters to its <strong>right</strong>. Replacing S with any of R, I, N, G gives smaller strings, each with 5! arrangements of the rest: 4 × 5!.</li>
+        <li>Then fix S: T has 4 smaller characters to its right, 4 × 4!. Fix ST: R has 3, 3 × 3!. Then I has 1 (G), 1 × 2!; then N has 1, 1 × 1!.</li>
+        <li>597 strings are smaller, so the rank is 597 + 1 = 598.</li>
+      </ul>
+<pre><code class="language-plaintext">DCBA
+A _ _ _ │ DB _ _ │ DCA _
+B _ _ _ │ DA _ _ │
+C _ _ _ │        │
+= (3×3! + 2×2! + 1) + 1
+= (23) + 1
+= 24</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Implementation (distinct characters)</h4>
+<pre><code class="language-cpp">const int CHAR = 256;
+int lexRank(string &amp;str)
+{
+    int res = 1;
+    int n = str.length();
+    int mul = fact(n);
+    int count[CHAR] = {0};
+    for(int i=0; i&lt;n; i++)
+        count[str[i]]++;
+    for(int i=1; i&lt;CHAR; i++)
+        count[i] += count[i-1];
+    for(int i=0; i&lt;n-1; i++)
+    {
+        mul = mul/(n-i);
+        res = res + count[str[i]-1] * mul;
+        for(int j=str[i]; j&lt;CHAR; j++)
+            count[j]--;
+    }
+    return res;
+}</code></pre>
+      <ul>
+        <li>Assumes all characters are distinct (it can be extended to duplicates). <code>fact</code> is a factorial function, not written out.</li>
+        <li><strong>Factorials in O(1):</strong> precompute n! once; dividing by n − i each iteration gives 5!, then 4!, and so on.</li>
+        <li><strong>Smaller characters in O(1):</strong> count each character's frequency (at most 1), then make the counts cumulative, so count[c − 1] is how many characters are smaller than c (5 smaller than T, 4 smaller than S). After processing a character, decrement the counts from it onward, removing it; so for later characters, count[c − 1] counts only smaller characters on the right. Java initialises the array to 0 and uses <code>str.charAt(i)</code>.</li>
+        <li>The loop stops at n − 2: the last character has nothing on its right.</li>
+      </ul>
+<pre><code class="language-plaintext">"STRING"   After First Loop:  G 1, I 1, N 1, R 1, S 1, T 1
+           After Second Loop: cumulative counts (G 1, I 2, N 3, R 4, S 5, T 6)
+mul = 6! = 720
+i = 0 : mul = 120,  res = 1 + 4*120 = 481
+i = 1 : mul = 24,   res = 481 + 4*24 = 577
+i = 2 : mul = 6,    res = 577 + 3×6 = 595
+i = 3 : res = 595 + 2×1 = 597
+i = 4 : res = 597 + 1×1 = 598</code></pre>
+      <p><strong>Time:</strong> O(CHAR + n + CHAR + n × CHAR) = <strong>O(n × CHAR)</strong> (the inner loop is constant for a constant alphabet, so O(n)).</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the cumulative counts in the second-loop row are partly hidden; the values listed follow from the first loop. The i = 3 line is written 2×1 on the board, as the transcript gives it.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-19">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/video/MTQ3MQ%3D%3D" target="_blank" rel="noopener">Longest Substring with Distinct Characters</a> · Notes from the full course transcript and the board (a frame every 30 seconds plus close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Find the length of the longest substring (consecutive characters, unlike a subsequence) with all distinct characters.</p>
+<pre><code class="language-plaintext">Longest Substring with Distinct Characters
+I/P: str = "abcdabc"         O/P: 4    ("cdab", or "abcd")
+I/P: str = "aaa"             O/P: 1
+I/P: str = "abaacdbab"       O/P: 4    ("acdb")</code></pre>
+    <p>Any other substring either repeats a character ("aba") or is shorter ("ab"). Three solutions: O(n³), O(n²) and O(n).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/article/Nzk4MA%3D%3D" target="_blank" rel="noopener">Longest Substring with Distinct Characters</a></p>
+<ul>
+<li>"ABDEFGABEF": the longest are "BDEFGA" and "DEFGAB", length 6. "BBBB": "B", length 1. "GEEKSFORGEEKS": two longest substrings of length 7.</li>
+<li><strong>Method 1, O(n³):</strong> check each of the n(n + 1)/2 substrings for unique characters in linear time with a map of visited characters. Auxiliary space O(1).</li>
+<li><strong>Method 2, O(n²):</strong> window sliding: on a repetition, remove the previous occurrence and slide the window. <strong>Method 3, O(n):</strong> on a repetition, remove the window up to the repeated character.</li>
+<li><strong>Method 4, O(n + d)</strong> (d the alphabet size, e.g. 26), auxiliary space O(d): store the last index of every character in lastIndex[]. The ending index is the current index j; the starting index i stays the same unless lastIndex[str[j]] + 1 is more than the previous start, in which case it becomes that. An alternate implementation has the same complexity.</li>
+<li><strong>Method 5, O(n):</strong> a KMP-like technique with an unordered set instead of the LPS array, clearing the set and resetting len to zero on a repeating character. Auxiliary space O(m), m the result's length.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive : O(n³)</h4>
+<pre><code class="language-cpp">bool areDistinct(string str, int i, int j)
+{
+    vector&lt;bool&gt; visited(256);
+    for(int k = i; k &lt;= j; k++)
+    {   if(visited[str[k]] == true)
+            return false;
+        visited[str[k]] = true;
+    }
+    return true;
+}
+int longestDistinct(string str)
+{
+    int n = str.length(), res = 0;
+    for(int i=0; i&lt;n; i++)
+        for(int j=0; j&lt;n; j++)
+            if(areDistinct(str, i, j))
+                res = max(res, j-i+1);
+    return res;
+}</code></pre>
+      <ul>
+        <li>Consider every substring (start i, end j) and check it with <code>areDistinct</code>, an O(n) function using a boolean visited array (Java: <code>new boolean[256]</code>, <code>str.charAt(k)</code>, <code>Math.max</code>).</li>
+        <li>Substrings of "abac": a, ab, aba, abac, b, ba, bac, a, ac, c. res becomes 1 at "a", 2 at "ab", 3 at "bac".</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>Better : O(n²)</h4>
+      <p>Still all substrings, but one visited array per starting index i: extending j adds one character; if it's already visited, break (longer substrings from i repeat too). Otherwise every character so far is distinct, so compare j − i + 1 with res.</p>
+    </div>
+    <div class="approach">
+      <h4>Efficient Solution : O(n)</h4>
+<pre><code class="language-plaintext"> a b c a d b d
+maxEnd(j): 1 2 3 3 4 4 2
+maxEnd(j) : Length of the longest substring that has distinct characters and ends with j
+res = max over j = 0 … n-1 of (maxEnd(j))
+maxEnd(j) = { maxEnd(j-1) + 1      if str[j] is not present in maxEnd(j-1)
+            { j - prev(str[j]) + 1 where prev(str[j]) is previous index of the character str[j]
+x0 x1 … xi … x(j-1) xj … x(n-1)     (xi … x(j-1) is maxEnd(j-1))</code></pre>
+      <p>Compute each maxEnd(j) from maxEnd(j − 1) in constant time. If str[j] doesn't appear in that window, extend it by one; otherwise the window starts just after str[j]'s previous index. prev[] also tells whether str[j] is in the window (prev before i means not), with the character itself as the index.</p>
+<pre><code class="language-java">int longestDist(String str)
+{   int n = str.length(), res = 0;
+    int prev[] = new int[256];
+    Arrays.fill(visited, -1);
+    int i = 0;
+    for(int j=0; j&lt;n; j++)
+    {   i = Math.max(i, prev[str.charAt(j)]+1);
+        int maxEnd = j-i+1;
+        res = Math.max(res, maxEnd);
+        prev[str.charAt(j)] = j;
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-cpp">int longestDist(string str)
+{   int n = str.length(), res = 0;
+    vector&lt;int&gt; prev(256, -1);
+    int i = 0;
+    for(int j=0; j&lt;n; j++)
+    {   i = max(i, prev[str[j]]+1);
+        int maxEnd = j-i+1;
+        res = max(res, maxEnd);
+        prev[str[j]] = j;
+    }
+    return res;
+}</code></pre>
+<pre><code class="language-plaintext">"abcadbd"     prev[] = {-1, -1, -1, … -1},  i = 0, res = 0
+j = 0 : i = 0, maxEnd = 1, res = 1, prev['a'] = 0
+j = 1 : i = 0, maxEnd = 2, res = 2, prev['b'] = 1
+j = 2 : i = 0, maxEnd = 3, res = 3, prev['c'] = 2
+j = 3 : i = 1, maxEnd = 3, res = 3, prev['a'] = 3
+j = 4 : i = 1, maxEnd = 4, res = 4, prev['d'] = 4
+j = 5 : i = 2, maxEnd = 4, res = 4, prev['b'] = 5
+j = 6 : i = 5, maxEnd = 2, res = 4, prev['d'] = 6</code></pre>
+      <ul>
+        <li>The new start is the larger of the previous window's start and prev(str[j]) + 1. At j = 3, a's previous index is 0, so i = 1. At j = 5, b's is 1, so i = 2. At j = 6, d's is 4, so i = 5, which is greater than the previous start.</li>
+      </ul>
+      <p><strong>Time:</strong> O(n): one loop with O(1) indexing inside.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong> the naive inner loop starts at <code>j = 0</code> instead of <code>j = i</code>, as the transcript describes it. The Java efficient version fills <code>visited</code>, though the array is named <code>prev</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Strings-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (26 problems, in course order). Every Articles-tab item matches a video, so the articles are in the video notes. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/binary-string-1587115620" target="_blank" rel="noopener">Binary Substrings with Corners as 1</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/implement-strstr" target="_blank" rel="noopener">First Occurence</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/check-if-strings-are-rotations-of-each-other-or-not-1587115620" target="_blank" rel="noopener">String Rotation Check</a></td><td>Medium</td><td>Video 16</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/isomorphic-strings-1587115620" target="_blank" rel="noopener">Isomorphic Strings</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/given-two-strings-find-if-first-string-is-a-subsequence-of-second" target="_blank" rel="noopener">Check for Subsequence</a></td><td>Easy</td><td>Video 5</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/maximum-occuring-character-1587115620" target="_blank" rel="noopener">Most Frequent Character</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/case-specific-sorting-of-strings4845" target="_blank" rel="noopener">Case Specific Sorting of Strings</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/anagram-1587115620" target="_blank" rel="noopener">Anagram</a></td><td>Easy</td><td>Video 6</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/check-if-a-string-is-isogram-or-not-1587115620" target="_blank" rel="noopener">Check for Isogram String</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/repeating-character-first-appearance-leftmost" target="_blank" rel="noopener">Repeating Character</a></td><td>Easy</td><td>Video 7</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/non-repeating-character-1587115620" target="_blank" rel="noopener">Non Repeating Character</a></td><td>Easy</td><td>Video 8</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/minimum-indexed-character-1587115620" target="_blank" rel="noopener">Minimum Indexed Character</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>13</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/the-modified-string-1587115621" target="_blank" rel="noopener">The Modified String</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>14</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/reverse-words-in-a-given-string5459" target="_blank" rel="noopener">Reverse Words</a></td><td>Easy</td><td>Video 9</td></tr>
+        <tr><td>15</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/remove-common-characters-and-concatenate-1587115621" target="_blank" rel="noopener">Remove Common and Concat</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>16</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/sum-of-numbers-in-string-1587115621" target="_blank" rel="noopener">Sum Numbers in String</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>17</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/naive-pattern-search-1587115620" target="_blank" rel="noopener">Search Pattern</a></td><td>Hard</td><td>Video 11</td></tr>
+        <tr><td>18</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/nth-number-made-of-prime-digits4319" target="_blank" rel="noopener">Nth Number with Prime Digits</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>19</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/rabin-karp-pattern-searching" target="_blank" rel="noopener">Search Pattern (Rabin-Karp Algorithm)</a></td><td>Hard</td><td>Video 13</td></tr>
+        <tr><td>20</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/keypad-typing0119" target="_blank" rel="noopener">Keypad Typing</a></td><td>Basic</td><td>–</td></tr>
+        <tr><td>21</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/pattern-search-kmp" target="_blank" rel="noopener">Search Pattern</a></td><td>Hard</td><td>Video 15</td></tr>
+        <tr><td>22</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/distinct-pattern-search-1587115620" target="_blank" rel="noopener">Search Pattern</a></td><td>Hard</td><td>Video 12</td></tr>
+        <tr><td>23</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/check-if-string-is-rotated-by-two-places-1587115620" target="_blank" rel="noopener">String Rotated by 2 Places</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>24</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/pangram-checking-1587115620" target="_blank" rel="noopener">Panagram Checking</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>25</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/rank-the-permutations-1587115621" target="_blank" rel="noopener">Rank The Permutations</a></td><td>Medium</td><td>Video 18</td></tr>
+        <tr><td>26</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Strings/problem/smallest-window-in-a-string-containing-all-the-characters-of-another-string-1587115621" target="_blank" rel="noopener">Smallest Window with All</a></td><td>Hard</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -16670,7 +18325,28 @@ const TRACKS = [
       ["More than n/k Occurences", "8:43"],
       ["More than n/k Occurences (O(nk) solution)", "10:59"]
     ] },
-  { id: "DSASP-Strings", slug: "strings", name: "Strings", counts: [19, 12, 26, 10, 0] },
+  { id: "DSASP-Strings", slug: "strings", name: "Strings", counts: [19, 12, 26, 10, 0],
+    videos: [
+      ["Introduction to String", "14:18"],
+      ["Strings in C++", "18:08"],
+      ["String in Java", "15:16"],
+      ["Palindrome Check", "9:17"],
+      ["Check if a String is Subsequence of Other", "13:25"],
+      ["Check for Anagram", "7:25"],
+      ["Leftmost Repeating Character", "12:46"],
+      ["Leftmost Non-repeating Element", "9:56"],
+      ["Reverse words in a string", "14:45"],
+      ["Overview of Pattern Searching", "7:13"],
+      ["Naive Pattern Searching", "7:56"],
+      ["Improved Naive Pattern Searching for Distinct", "11:40"],
+      ["Rabin Karp Algorithm", "22:28"],
+      ["KMP Algorithm (Part 1 : Constructing LPS Array)", "25:00"],
+      ["KMP Algorithm (Part 2 : Complete Algorithm)", "21:30"],
+      ["Check if Strings are Rotations", "7:17"],
+      ["Anagram Search", "11:17"],
+      ["Lexicographic Rank of a String", "19:10"],
+      ["Longest Substring with Distinct Characters", "17:58"]
+    ] },
   { id: "DSASP-LinkedList", slug: "linked-list", name: "Linked List", counts: [54, 40, 25, 10, 1] },
   { id: "DSASP-Stack", slug: "stack", name: "Stack", counts: [27, 19, 17, 10, 0] },
   { id: "DSASP-Queue", slug: "queue", name: "Queue", counts: [9, 5, 9, 10, 0] },
