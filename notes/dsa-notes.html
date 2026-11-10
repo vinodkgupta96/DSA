@@ -26859,6 +26859,931 @@ void verticalOrder(Node root)
   </section>
 </template>
 
+<template id="DSASP-Heap-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTM4Mg%3D%3D" target="_blank" rel="noopener">Binary Heap Introduction</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Uses:</strong> a binary heap is used for heap sort and, mainly, for <strong>priority queues</strong>. Priority queues appear in Dijkstra's shortest path, Prim's minimum spanning tree and Huffman coding, and wherever queued items have priorities, e.g. a doctor's queue where the highest-priority patient is seen next.</p>
+    <ul>
+      <li><strong>Min heap:</strong> the lowest value means the highest priority; it stays at the top and is removed next.</li>
+      <li><strong>Max heap:</strong> the highest value is at the top and is removed next.</li>
+    </ul>
+    <p><strong>A binary heap is a complete binary tree</strong> (stored as an array). Complete means every level is full except possibly the last, which is filled from left to right with no gaps. The board shows one complete tree and one that isn't, because its last level has a gap; adding the missing left child would make it complete.</p>
+    <p><strong>Array representation:</strong> a complete tree fits in an array with no wasted space, and the parent and child links come from formulas:</p>
+    <ul>
+      <li><code>left(i) = 2i + 1</code></li>
+      <li><code>right(i) = 2i + 2</code></li>
+      <li><code>parent(i) = ⌊(i − 1)/2⌋</code></li>
+    </ul>
+    <p>Board example: 10 → 20, 30; 20 → 40, 50; 30 → 60 is stored as [10, 20, 30, 40, 50, 60]. There, left(1) = 3, right(1) = 4 and parent(5) = 2.</p>
+    <p><strong>Advantages:</strong></p>
+    <ul>
+      <li>Contiguous storage gives random access and cache friendliness (locality of reference).</li>
+      <li>A complete tree has the minimum possible height. Operations such as heapify and insert depend on the height.</li>
+      <li>No space is spent on left/right pointers or references: n items need only n array cells.</li>
+    </ul>
+    <p><strong>Min heap</strong> = (1) a complete binary tree and (2) every node smaller than its descendants (its whole subtree). Example: 10 → 20, 15; 20 → 30, 40; 15 → 18 is stored as [10, 20, 15, 30, 40, 18]. The tree is the logical picture; in memory it's the array.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/article/NjEzMQ%3D%3D" target="_blank" rel="noopener">Binary Heap Introduction</a></p>
+<ul>
+<li>A heap is a tree-based structure that is a complete tree (every level full except possibly the last, whose keys are as far left as possible). It is either a min heap (the root is the minimum, recursively true for every node) or a max heap. A <strong>binary heap</strong> is a heap whose nodes have at most two children, i.e. a complete binary tree with these properties.</li>
+<li>Being complete, it is easily represented as an array, with the root at <code>Arr[0]</code>. For node i:
+  <ul>
+    <li>the parent is <code>Arr[(i − 1)/2]</code>;</li>
+    <li>the left child is <code>Arr[2i + 1]</code>;</li>
+    <li>the right child is <code>Arr[2i + 2]</code>.</li>
+  </ul>
+</li>
+<li>Getting the maximum of a max heap, or the minimum of a min heap, means returning the root <code>Arr[0]</code>: O(1).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Which of these is/are min heap(s)?</h4>
+      <ul>
+        <li>(a) 10 → 20, 30; 30 → 40, … has gaps, so it isn't complete: <strong>not a min heap</strong>.</li>
+        <li>(b) 30 → 40, 50; 40 → 15 is complete, but 15 is smaller than its ancestors: <strong>not a min heap</strong>.</li>
+        <li>(c) 30 → 40, 50; 40 → 44, 100 is complete, and every node is smaller than its descendants: <strong>a min heap</strong>.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTM4Mw%3D%3D" target="_blank" rel="noopener">Binary Heap Implementation</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Our own min heap needs an array, its current <strong>size</strong> and its <strong>capacity</strong>; the capacity can exceed the size, leaving room for inserts. Board example: the heap 10 → 80, 15; 80 → 100, 85; 15 → 18 is stored as [10, 80, 15, 100, 85, 18, _, _, _, _], with size 6 and capacity 10. The tree is only the logical picture.</p>
+    <p>A <code>MinHeap</code> class holds the array, size and capacity. Its constructor takes the capacity c, creates an array of that size, and sets size = 0 and capacity = c. It also has the basic <code>left</code>, <code>right</code> and <code>parent</code> functions. More functions are added to this class in the upcoming videos.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>MinHeap class (board)</h4>
+<pre><code class="language-java">class MinHeap {
+    int[] arr;
+    int size;
+    int capacity;
+    MinHeap(int c) {
+        arr = new int[c];
+        size = 0;
+        capacity = c;
+    }
+    int left(int i) { return (2*i + 1); }
+    int right(int i) { return (2*i + 2); }
+    int parent(int i) { return (i - 1)/2; }
+}</code></pre>
+      <p>The description links C++, Java and C# versions.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTM4NA%3D%3D" target="_blank" rel="noopener">Binary Heap Insert</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Insert x into a min heap, keeping both properties (a complete binary tree, and every node smaller than its descendants), in O(log size). Inserting really means modifying the array.</p>
+    <ol>
+      <li>If size == capacity, the item can't be inserted.</li>
+      <li>Do <code>size++</code> and put x at <code>arr[size − 1]</code>, the last index. The tree stays complete.</li>
+      <li>Restore the min-heap property: while the node isn't the root and its parent is greater, swap the two and move to the parent (index ⌊(i − 1)/2⌋). Stop when the parent is smaller or the root is reached.</li>
+    </ol>
+    <p><strong>Time:</strong> the append is O(1), then at most one pass up the height, which is log(size). So O(log size).</p>
+    <p>The <code>insert</code> function sits inside the heap class from the previous video, so the array, size and capacity are members and only x is passed. This is a basic implementation. Real library heaps use dynamic-sized arrays that grow automatically, so an insert never fails for lack of capacity.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Insert: O(log size)</h4>
+<pre><code class="language-cpp">void insert(int x)
+{
+    if(size == capacity) return;
+    size++; arr[size - 1] = x;
+    for(int i = size - 1; i != 0 &amp;&amp; arr[parent(i)] &gt; arr[i]; )
+    {
+        swap(arr[i], arr[parent(i)]);
+        i = parent(i);
+    }
+}</code></pre>
+      <p>Board trace: insert 12 into 10 → 20, 15; 20 → 40, 50; 15 → 100, 25; 40 → 45. 12 goes to index 8, as 40's right child. 12 &lt; 40, so swap; 12 &lt; 20, so swap; 12 &gt; 10, so stop. Result: 10 → 12, 15; 12 → 20, 50; 20 → 45, 40; 15 → 100, 25.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;&amp;</code> in the loop condition is drawn like "$$".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTM4Ng%3D%3D" target="_blank" rel="noopener">Binary Heap (Heapify and Extract)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Heapify</strong> is a subroutine of extract min and build heap. It assumes only the given node i may violate the min-heap property; its subtrees are already min heaps.</p>
+    <ol>
+      <li>Find the smallest of node i and its left and right children, checking that each child exists (index &lt; size).</li>
+      <li>If the smallest is i itself, stop.</li>
+      <li>Otherwise swap node i with that child and heapify the child recursively.</li>
+    </ol>
+    <p>Board example: root 40 with children 20 and 30. 20 is the smallest, so swap and recurse at index 1. There 25 is the smallest, so swap and recurse at index 4. At index 4 the only child, 60, is larger, so stop.</p>
+    <p><strong>Heapify complexity:</strong> best Θ(1) (the node already fits), worst Θ(h) going down child by child. So O(h) = O(log n), since the heap is complete. Recursion uses O(h) space; it converts easily to an iterative O(1)-space version by changing i.</p>
+    <p><strong>getMin:</strong> <code>arr[0]</code>, O(1). C++ <code>priority_queue::top()</code> and Java <code>PriorityQueue.peek()</code> give the min of a min heap (or max of a max heap) in O(1).</p>
+    <p><strong>extractMin:</strong> remove and return the minimum. Size 0 returns infinity (<code>INT_MAX</code> in C++, <code>Integer.MAX_VALUE</code> in Java). Size 1 does <code>size--</code> and returns <code>arr[0]</code>; this case is separate so heapify is never called on an empty heap. Otherwise swap <code>arr[0]</code> with the last element, do <code>size--</code>, call <code>minHeapify(0)</code> and return <code>arr[size]</code>, the removed item. Time Θ(1) + O(log n) = O(log n). Auxiliary space is O(log n) with recursive heapify, or O(1) with the iterative version.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/article/NjEzMw%3D%3D" target="_blank" rel="noopener">Insertion and Deletion in Heap</a></p>
+<ul>
+<li><strong>Insertion:</strong> increase the heap size by 1, put the new element at the end, then heapify it bottom up, since it may violate the property with its parents.</li>
+<li><strong>Deletion</strong> (the standard one deletes the root, i.e. extract min or max): deleting from the middle is costly, so replace the element with the last one, delete the last, then heapify the moved element at the root.</li>
+<li><strong>Complexity:</strong> O(log n) time; the article lists O(n) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>minHeapify: O(log n)</h4>
+<pre><code class="language-cpp">int arr[];
+int size, capacity;
+void minHeapify(int i)
+{
+    int lt = left(i), rt = right(i);
+    int smallest = i;
+    if(lt &lt; size &amp;&amp; arr[lt] &lt; arr[i])
+        smallest = lt;
+    if(rt &lt; size &amp;&amp; arr[rt] &lt; arr[smallest])
+        smallest = rt;
+    if(smallest != i)
+    {
+        swap(arr[i], arr[smallest]);
+        minHeapify(smallest);
+    }
+}</code></pre>
+      <p>The function is assumed to be inside the heap class from the earlier video.</p>
+    </div>
+    <div class="approach">
+      <h4>extractMin: O(log n)</h4>
+<pre><code class="language-cpp">int extractMin()
+{
+    if(size == 0)
+        return INF;   // INT_MAX in C++, Integer.MAX_VALUE in Java
+    if(size == 1)
+    {
+        size--;
+        return arr[0];
+    }
+    swap(arr[0], arr[size - 1]);
+    size--;
+    minHeapify(0);
+    return arr[size];
+}</code></pre>
+      <p>Board trace on a heap of 10 rooted at 20: swap 20 with the last element 60 (size → 9), then heapify. 60 swaps with 25, then with 35. The function returns 20.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong> <code>&amp;&amp;</code> is drawn like "$$". The transcript says the smallest "is initialized as zero"; it's initialized as i. It says "int mix Int Max", meaning <code>INT_MAX</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTUwMjE%3D" target="_blank" rel="noopener">Binary Heap (Decrease Key, Delete and Build Heap)</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (a frame every 10 seconds plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The description covers three operations on a binary (min) heap: <strong>decrease key</strong>, <strong>delete</strong> and <strong>build heap</strong>.</p>
+    <p><strong>Decrease key (i, x):</strong> set <code>arr[i] = x</code> (a smaller value), then move it up as in insert. While i isn't the root and the parent is greater, swap with the parent and go up. Board examples:</p>
+    <ul>
+      <li>i = 3, x = 5 on 10 → 20, 40; 20 → 80, 100; 40 → 70.</li>
+      <li>i = 3, x = 10 on 20 → 80, 200; 80 → 90, 100; 200 → 250, 500; 90 → 120 gives 10 → 20, 200; 20 → 80, 100; 80 → 120; 200 → 250, 500.</li>
+    </ul>
+    <p><strong>Delete (i):</strong> <code>decreaseKey(i, −∞)</code>, which moves the node to the root, then <code>extractMin()</code>. Board: i = 3 (40) on 10 → 20, 30; 20 → 40, 50; 30 → 35, 38; 40 → 45. After decrease-key −∞ reaches the root, extract min gives 10 → 20, 30; 20 → 45, 50; 30 → 35, 38.</p>
+    <p><strong>Build heap:</strong> given a random array, rearrange its elements into a min heap. Call <code>minHeapify</code> for every internal node, from the last one (index (size − 2)/2, the parent of the last node) down to the root.</p>
+    <ul>
+      <li>{10, 5, 20, 2, 4, 8} → {2, 4, 8, 5, 10, 20}: minHeapify(2), then (1), then (0).</li>
+      <li>{30, 20, 10} → {10, 20, 30}.</li>
+    </ul>
+    <p><strong>Build heap time: O(n)</strong> (n = size), not O(n log n):</p>
+    <ul>
+      <li>At height h there are at most ⌈n / 2<sup>h+1</sup>⌉ nodes. For example, with n = 15 and h = 1, ⌈15/4⌉ = 4.</li>
+      <li>Heapify at height h costs O(h), so the total is Σ<sub>h=1</sub><sup>log n</sup> ⌈n / 2<sup>h+1</sup>⌉ · O(h) = O(n · Σ h / 2<sup>h+1</sup>).</li>
+      <li>With S = Σ<sub>h=1</sub><sup>∞</sup> h / 2<sup>h+1</sup> = 1/2² + 2/2³ + 3/2⁴ + …, subtracting S/2 gives S − S/2 = 1/2² + 1/2³ + 1/2⁴ + … = (1/2²)/(1 − 1/2) = 1/2, so S = 1.</li>
+    </ul>
+    <p>So the total is O(n).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/article/NzU1OQ%3D%3D" target="_blank" rel="noopener">Operations of Heap Data Structure</a></p>
+<ul>
+<li><strong>Min heap operations:</strong>
+  <ol>
+    <li><code>getMini()</code>: the root, O(1).</li>
+    <li><code>extractMin()</code>: O(log n), because heapify restores the property after the root is removed.</li>
+    <li><code>decreaseKey()</code>: O(log n). If the new value is greater than the parent, nothing to do; otherwise travel up fixing the violation.</li>
+    <li><code>insert()</code>: O(log n). Add the key at the end; if it's smaller than its parent, travel up.</li>
+    <li><code>delete()</code>: O(log n). <code>decreaseKey()</code> to minus infinity, which reaches the root, then <code>extractMin()</code>.</li>
+  </ol>
+</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Decrease key: O(log n)</h4>
+<pre><code class="language-cpp">int arr[];
+int size, capacity;
+void decreaseKey(int i, int x)
+{
+    arr[i] = x;
+    while(i != 0 &amp;&amp; arr[parent(i)] &gt; arr[i])
+    {
+        swap(arr[i], arr[parent(i)]);
+        i = parent(i);
+    }
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Delete (board steps)</h4>
+      <p><code>decreaseKey(i, −∞)</code>, then <code>extractMin()</code>. The board shows the steps, not separate code; the description links the C, C++ and Java code.</p>
+    </div>
+    <div class="approach">
+      <h4>Build heap: O(n)</h4>
+<pre><code class="language-cpp">void buildHeap()
+{
+    for(int i = (size - 2)/2; i &gt;= 0; i--)
+        minHeapify(i);
+}</code></pre>
+      <p>Board trace on {10, 5, 20, 2, 4, 8}:</p>
+      <ol>
+        <li>minHeapify(2) swaps 20 and 8.</li>
+        <li>minHeapify(1) swaps 5 and 2.</li>
+        <li>minHeapify(0) swaps 10 and 2, then 10 and 4.</li>
+      </ol>
+      <p>Result: 2 → 4, 8; 4 → 5, 10; 8 → 20.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;&amp;</code> in decrease key is drawn like "$$".</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTQyNg%3D%3D" target="_blank" rel="noopener">Heap Sort</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Idea:</strong> heap sort is selection sort with a better way to find the maximum. Selection sort finds the maximum by linear search, which is O(n²) overall, and swaps it with the last element. Heap sort finds it with a max heap instead. To sort in increasing order use a max heap; for decreasing order use a min heap.</p>
+    <ol>
+      <li><strong>Step 1: build a max heap</strong> from the array, in O(n). Any array can be viewed as a complete binary tree. Call <code>maxHeapify</code> from the last internal node, index (n − 2)/2 (the parent of index n − 1), down to 0. For n = 5 that starts at 1.</li>
+      <li><strong>Step 2:</strong> repeatedly swap the root (the maximum) with the last node of the heap, reduce the heap size by one, and heapify the root. Only the root is disturbed, so heapify fixes it. Each swap fixes one more element at its sorted position at the end.</li>
+    </ol>
+    <p><strong>maxHeapify(arr, n, i):</strong> find the largest of node i and its two children (checking the bounds against n). If it isn't i, swap and recurse on that child.</p>
+    <p><strong>Complexity:</strong> O(n log n) in all cases, the best possible for a comparison-based sort.</p>
+    <ul>
+      <li>Merge sort is also O(n log n) in the worst case, and quick sort is O(n log n) on average. Heap sort's hidden constants are higher, so in practice merge sort and quick sort are faster and used more.</li>
+      <li>Heap sort is used as a helper in hybrid algorithms. <strong>Introsort</strong>, which is based on quick sort, is the standard algorithm in the C++ library. Its recursion depth can go beyond log n, and then it switches to heap sort.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/article/NzU2MA%3D%3D" target="_blank" rel="noopener">Heap Sort</a></p>
+<ul>
+<li>Heap sort is a comparison-based sort on a binary heap, similar to selection sort: put the maximum at the end and repeat for the rest. A binary heap is a complete binary tree in which each parent is greater (max heap) or smaller (min heap) than its children. It is stored space-efficiently as an array, with the children of index I at 2I + 1 and 2I + 2.</li>
+<li><strong>Increasing order:</strong> build a max heap, then replace the root with the last item, shrink the heap by 1 and heapify the root. Repeat while the size is greater than 1.</li>
+<li>Heapify applies to a node only if its children are already heapified, so the heap must be built bottom up.</li>
+<li><strong>Notes:</strong> heap sort is in place; the typical implementation isn't stable but can be made so. Building the heap is O(N) and heap sort overall is O(N log N). (The article also says "time complexity of heapify is O(N*LogN)".) Its use is limited because quick sort and merge sort are better in practice, but the heap data structure itself is used enormously.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Heap sort: O(n log n)</h4>
+<pre><code class="language-cpp">void maxHeapify(int arr[], int n, int i)
+{
+    int largest = i, left = 2*i + 1, right = 2*i + 2;
+    if(left &lt; n &amp;&amp; arr[left] &gt; arr[largest]) largest = left;
+    if(right &lt; n &amp;&amp; arr[right] &gt; arr[largest]) largest = right;
+    if(largest != i)
+    {
+        swap(arr[largest], arr[i]);
+        maxHeapify(arr, n, largest);
+    }
+}
+void buildHeap(int arr[], int n)
+{
+    for(int i = (n - 2)/2; i &gt;= 0; i--)
+        maxHeapify(arr, n, i);
+}
+void heapSort(int arr[], int n)
+{
+    buildHeap(arr, n);
+    for(int i = n - 1; i &gt;= 1; i--)
+    {
+        swap(arr[0], arr[i]);
+        maxHeapify(arr, i, 0);
+    }
+}</code></pre>
+      <p>Board trace on {10, 15, 50, 4, 20}:</p>
+      <ul>
+        <li><strong>Step 1:</strong> heapify(1) swaps 15 and 20; heapify(0) swaps 10 and 50. The max heap is {50, 20, 10, 4, 15}.</li>
+        <li><strong>Step 2:</strong>
+          <ol>
+            <li>Swap arr[0] and arr[4], then heapify: {20, 15, 10, 4 | 50}.</li>
+            <li>Swap arr[0] and arr[3]: {4, 15, 10 | 20, 50}, then heapify to {15, 4, 10 | 20, 50}.</li>
+            <li>Swap arr[0] and arr[2]: {10, 4 | 15, 20, 50}.</li>
+            <li>Swap arr[0] and arr[1]: {4, 10, 15, 20, 50}.</li>
+          </ol>
+        </li>
+      </ul>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong></p>
+      <ul>
+        <li><code>&amp;&amp;</code> is drawn like "$$".</li>
+        <li>The board's <code>heapSort</code> loop calls <code>heapify(arr, i, 0)</code>, but the function defined is <code>maxHeapify</code> (written above).</li>
+        <li>The transcript says intro sort switches when quick sort's "recursion depth can become O(log n)". It switches when the depth goes <em>beyond</em> log n, as the teacher says next.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTI5OQ%3D%3D" target="_blank" rel="noopener">Priority Queue in C++</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The STL <code>priority_queue</code> is always a heap, and by default a <strong>max heap</strong>: <code>top()</code> is always the current maximum. <code>pop()</code> removes it, and the next maximum comes to the top. Popping until empty gives the elements in sorted (decreasing) order.</p>
+    <p><strong>Functions:</strong> <code>push</code>, <code>pop</code>, <code>top</code>, <code>size</code>, <code>empty</code>.</p>
+    <ul>
+      <li><code>top</code>, <code>empty</code> and <code>size</code> are O(1): the top is index 0 of the underlying vector.</li>
+      <li><code>push</code> and <code>pop</code> are O(log n).</li>
+    </ul>
+    <p><strong>Min heap:</strong> <code>priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt;</code>. Like sorting, <code>greater</code> reverses the order. The middle <code>vector&lt;int&gt;</code> is the underlying container. A priority queue uses the heap concept but is built on a dynamic array (cache friendly, and the user needn't give a size). A shortcut without that syntax: negate the elements, push them into a max heap, and print <code>−pq.top()</code>.</p>
+    <p><strong>From an existing array or vector:</strong> <code>priority_queue&lt;int&gt; pq(arr, arr + 3)</code>, or <code>(v.begin(), v.end())</code>; the end iterator points just past the last element. The constructor copies the elements and calls <code>make_heap</code>, which is O(n). That's better than n separate pushes (O(n log n)).</p>
+    <p><strong>Pairs and user-defined types:</strong> pairs compare by their first element. For other orders, or for user-defined classes, pass a custom comparator struct (with an overloaded <code>operator()</code>) in place of <code>greater</code>, as in sorting.</p>
+    <p><strong>Applications:</strong> Dijkstra, Prim, Huffman, heap sort, and anything that needs get/extract min or max. The STL priority queue has <em>no decrease key</em>, but most algorithms can be slightly modified to avoid it; the GfG article's Dijkstra with STL does this. Java's default <code>PriorityQueue</code> is a min heap, while C++'s default is a max heap, though most standard algorithms need a min heap.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/article/MjM4MA%3D%3D" target="_blank" rel="noopener">Implementing Heaps using inbuilt classes in C++ and Java</a></p>
+<ul>
+<li><strong>C++ <code>priority_queue</code>:</strong> uses a max heap internally, and extra parameters make it a min heap. Methods:
+  <ul>
+    <li><code>empty()</code> and <code>size()</code>.</li>
+    <li><code>top()</code>: a reference to the top element.</li>
+    <li><code>push(g)</code> and <code>pop()</code>.</li>
+    <li><code>swap()</code>: exchanges the contents with another priority queue of the same type and size.</li>
+  </ul>
+</li>
+<li><strong>Java <code>PriorityQueue</code>:</strong> a min heap by default; a comparator makes it a max heap. Methods:
+  <ul>
+    <li><code>add(E)</code>.</li>
+    <li><code>remove()</code>: removes one instance of the specified element, if present.</li>
+    <li><code>poll()</code>: retrieves and removes the head, or returns null if empty.</li>
+    <li><code>peek()</code>: retrieves the head without removing it, or returns null.</li>
+    <li><code>clear()</code> and <code>size()</code>.</li>
+  </ul>
+</li>
+<li>These methods work for both the max-heap and min-heap forms.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Default max heap</h4>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;queue&gt;
+using namespace std;
+int main() {
+    priority_queue&lt;int&gt; pq;
+    pq.push(10);
+    pq.push(15);
+    pq.push(5);
+    cout &lt;&lt; pq.size() &lt;&lt; " ";
+    cout &lt;&lt; pq.top() &lt;&lt; " ";
+    while(pq.empty() == false)
+    {
+        cout &lt;&lt; pq.top() &lt;&lt; " ";
+        pq.pop();
+    }
+    return 0;
+}</code></pre>
+      <p>Output: <code>3 15 15 10 5</code>.</p>
+    </div>
+    <div class="approach">
+      <h4>Min heap, building from an array, and a custom comparator</h4>
+<pre><code class="language-cpp">priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt; pq;   // min heap: 3 5 5 10 15
+
+int arr[] = {10, 5, 15};
+priority_queue&lt;int&gt; pq2(arr, arr + 3);                  // O(n) build: 15 10 5
+
+struct Person {
+    int age;
+    float ht;
+    Person(int a, float h) { age = a; ht = h; }
+};
+struct myCmp {
+    bool operator()(Person const &amp;p1, Person const &amp;p2)
+    {
+        return p1.ht &lt; p2.ht;
+    }
+};
+priority_queue&lt;Person, vector&lt;Person&gt;, myCmp&gt; pq3;  // decreasing order of height</code></pre>
+      <p>With <code>myCmp</code>, top is the tallest person; pop and top give the second tallest, and so on.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slips:</strong></p>
+      <ul>
+        <li>The comparator body is written <code>p1.ht &lt; p2.ht;</code> without <code>return</code>; it needs <code>return</code>, as written above.</li>
+        <li><code>Person const &amp;p1</code> is drawn like "$p1".</li>
+        <li>The struct's <code>float ht</code> line has no semicolon.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTM4Nw%3D%3D" target="_blank" rel="noopener">PriorityQueue in Java</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (a frame every 5 seconds plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The description: the implementation of the priority queue in Java. Its code links are labelled "Min Heap (default)" and "Max Heap". The board shows Java's <code>PriorityQueue</code>:</p>
+    <ul>
+      <li>It is a <strong>min heap by default</strong>, using <code>add</code>, <code>peek</code> (the top) and <code>poll</code> (remove and return the top).</li>
+      <li>A max heap comes from passing <code>Collections.reverseOrder()</code> to the constructor.</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Min heap (default)</h4>
+<pre><code class="language-java">class Test
+{
+    public static void main(String args[])
+    {
+        PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;Integer&gt;();
+        pq.add(10);
+        pq.add(20);
+        pq.add(15);
+        System.out.println(pq.peek());
+        System.out.println(pq.poll());
+        System.out.println(pq.peek());
+    }
+}</code></pre>
+      <p>Board output: <code>10</code>, <code>10</code>, <code>15</code>.</p>
+    </div>
+    <div class="approach">
+      <h4>Max heap</h4>
+<pre><code class="language-java">PriorityQueue&lt;Integer&gt; pq =
+    new PriorityQueue&lt;Integer&gt;(Collections.reverseOrder());
+pq.add(10);
+pq.add(20);
+pq.add(15);
+System.out.println(pq.peek());
+System.out.println(pq.poll());
+System.out.println(pq.peek());</code></pre>
+      <p>Board output: <code>20</code>, <code>20</code>, <code>15</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTM5MA%3D%3D" target="_blank" rel="noopener">Sort K-Sorted Array</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>In a <strong>k-sorted array</strong>, the element at index i is somewhere between indexes i − k and i + k of the sorted array.</p>
+    <ul>
+      <li>{9, 8, 7, 18, 19, 17}, k = 2 → {7, 8, 9, 17, 18, 19}. For example, 7 moves from index 2 to 0 and 9 from 0 to 2.</li>
+      <li>{10, 9, 7, 8, 4, 70, 50, 60}, k = 4 → {4, 7, 8, 9, 10, 50, 60, 70}.</li>
+    </ul>
+    <p><strong>Naive:</strong> just sort, O(n log n).</p>
+    <p><strong>Efficient, O(n log k):</strong> use a min heap to sort in increasing order (a max heap for decreasing). The element for index 0 is among the first k + 1 elements.</p>
+    <ol>
+      <li>Push <code>arr[0..k]</code> into the min heap and set <code>index = 0</code>.</li>
+      <li>For i = k + 1 to n − 1: pop the heap's top into <code>arr[index++]</code>, then push <code>arr[i]</code>.</li>
+      <li>Pop the remaining elements into <code>arr[index++]</code> until the heap is empty.</li>
+    </ol>
+    <p><strong>Time:</strong> O(k log k) to build the first heap, O((n − k) log k) for the loop (each pop and push is O(log k)), and at most O(k log k) to empty the heap. That's O((n + k) log k), so O(n log k).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/article/NzU2MQ%3D%3D" target="_blank" rel="noopener">Sort K-Sorted Array</a></p>
+<ul>
+<li>Create a min heap of the first k + 1 elements in O(k); an element is at most k positions away from its sorted index. Then repeatedly remove the min into the result and add the next remaining element, at O(log k) each.</li>
+<li><strong>Complexity:</strong> O(k) + O((n − k) log k) time, O(k) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Min heap of size k + 1</h4>
+<pre><code class="language-cpp">void sortK(int arr[], int n, int k)
+{
+    priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt; pq;
+    for(int i = 0; i &lt;= k; i++)
+        pq.push(arr[i]);
+    int index = 0;
+    for(int i = k + 1; i &lt; n; i++)
+    {
+        arr[index++] = pq.top();
+        pq.pop();
+        pq.push(arr[i]);
+    }
+    while(pq.empty() == false)
+    {
+        arr[index++] = pq.top();
+        pq.pop();
+    }
+}</code></pre>
+      <p>Java: <code>PriorityQueue&lt;Integer&gt; pq = new PriorityQueue&lt;Integer&gt;();</code>, with <code>pq.add</code>, <code>arr[index++] = pq.poll();</code> and <code>while(pq.isEmpty() == false)</code>.</p>
+      <p>Board trace on {9, 8, 7, 19, 18}, k = 2:</p>
+      <ol>
+        <li>The heap starts as {7, 8, 9}.</li>
+        <li>At i = 3, 7 goes to index 0 and 19 is pushed.</li>
+        <li>At i = 4, 8 goes to index 1 and 18 is pushed.</li>
+        <li>Emptying the heap places 9, 18 and 19.</li>
+      </ol>
+      <p>Result: {7, 8, 9, 18, 19}.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong></p>
+      <ul>
+        <li>The C++ min-heap declaration lacks the comma before <code>greater&lt;int&gt;</code> (<code>vector&lt;int&gt; greater&lt;int&gt;</code>).</li>
+        <li>The transcript says the pop and push are "Big O of log n operations". The heap holds at most k + 1 items, so they're O(log k), as the final bound uses.</li>
+        <li>The first array in the transcript's trace has 18 and 19 swapped relative to the board's example.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTM3OQ%3D%3D" target="_blank" rel="noopener">Buy Maximum Items with Given Sum</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given the costs of n items and a sum, find the maximum number of items that can be purchased.</p>
+    <ul>
+      <li>cost = {1, 12, 5, 111, 200}, sum = 10 → <strong>2</strong> (the items costing 1 and 5).</li>
+      <li>A second example with sum = 35 → <strong>3</strong> (items costing 20, 10 and 5).</li>
+    </ul>
+    <p><strong>Method 1 (sorting):</strong> sort the costs, then take items from the cheapest while each still fits, subtracting from the sum and counting. Stop at the first item that doesn't fit. On the example, 1 fits (sum 9), 5 fits (sum 4) and 12 doesn't → 2. Time O(n log n). Auxiliary space O(1) if the array may be modified, otherwise O(n) for a copy.</p>
+    <p><strong>Method 2 (heap):</strong> build a min heap from the costs in O(n) and set res = 0. While the top is no more than the sum, pop it, subtract it from the sum and increment res. Then return res.</p>
+    <ul>
+      <li><strong>Time:</strong> O(n) + O(res · log n). This is better than sorting's Θ(n log n) when res is small; the worst case is still O(n log n) if every item is picked.</li>
+      <li><strong>Space:</strong> O(1) if the same array is turned into the heap, O(n) for a separate priority queue.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/article/NzU2Mg%3D%3D" target="_blank" rel="noopener">Buy Maximum Items with Given Sum</a></p>
+<ul>
+<li>Toy costs and an amount K; each toy can be bought only once.
+  <ul>
+    <li>{1, 12, 5, 111, 200, 1000, 10, 9, 12, 15} with K = 50 → 6 (1 + 5 + 9 + 10 + 12 + 12 = 49).</li>
+    <li>{1, 12, 5, 111, 200, 1000, 10} with K = 50 → 4.</li>
+  </ul>
+</li>
+<li>Put every cost in a priority queue and remove them one by one into a running sum while it stays below K; the count removed is the answer.</li>
+<li><strong>Complexity:</strong> O(N log N) time, O(N) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace (Method 2)</h4>
+      <p>Min heap 1 → 12, 5; 12 → 111, 200; sum = 10, res = 0.</p>
+      <ol>
+        <li>The top (1) is smaller than the sum, so pop it: sum = 9, res = 1. The heap becomes 5 → 12, 200; 12 → 111.</li>
+        <li>The top (5) is smaller than the sum, so pop it: sum = 4, res = 2.</li>
+        <li>The top is now 12, not smaller than the sum, so return res = 2.</li>
+      </ol>
+      <p>The description links C++ and Java code for both methods.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTM4OA%3D%3D" target="_blank" rel="noopener">K Largest Elements</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print the k largest elements of an unsorted array, in any order. Examples: k = 2 gives 15 and 20; another array with k = 3 gives 10, 9 and 8.</p>
+    <ul>
+      <li><strong>Sorting:</strong> sort, then print the last k. O(n log n + k) = O(n log n).</li>
+      <li><strong>Max heap:</strong> build a max heap of all n elements in O(n), then extract the max k times at O(log n) each. O(n + k log n).</li>
+      <li><strong>Min heap of size k (efficient):</strong>
+        <ol>
+          <li>Build a min heap of the first k items.</li>
+          <li>Traverse from the (k + 1)th element. If the current element is smaller than the top of the heap, ignore it; otherwise remove the top and insert the current element.</li>
+          <li>Print the contents of the min heap.</li>
+        </ol>
+        <strong>Invariant:</strong> the heap always holds the k largest elements seen so far, with the smallest of them at the root.</li>
+    </ul>
+    <p><strong>Time (min heap):</strong> O(k) to build, O((n − k) log k) for the loop (insert and extract min on a size-k heap), and O(k) to print. So O(k + (n − k) log k).</p>
+    <p><strong>Vs max heap:</strong> for very small k, the min heap gives O(n) and the max heap n + log n. For k near n (n − 1, n − 2), the min heap gives n + log n and the max heap n + n log n. The min heap is better in these corner cases and in general.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/article/NzU2Mw%3D%3D" target="_blank" rel="noopener">K Largest Elements</a></p>
+<ul>
+<li><strong>Method 1 (sorting):</strong> sort descending, O(n log n), then print the first k. O(n log n) time, O(1) space.</li>
+<li><strong>Method 2 (max heap):</strong> build in O(n), then extract max k times. O(n + k log n).</li>
+<li><strong>Method 3 (min heap):</strong> the article lists O(n log n) time and O(n) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace: arr = {5, 15, 10, 20, 8, 25, 18}, k = 3</h4>
+      <ol>
+        <li>Step 1: the heap is 5 → 15, 10.</li>
+        <li>i = 3 (20): 20 &gt; 5, so remove 5 and insert 20, giving 10 → 15, 20.</li>
+        <li>i = 4 (8): 8 &lt; 10, so ignore it.</li>
+        <li>i = 5 (25): remove 10 and insert 25, giving 15 → 20, 25.</li>
+        <li>i = 6 (18): remove 15 and insert 18, giving 18 → 25, 20.</li>
+      </ol>
+      <p>Print <strong>18 25 20</strong> (any order). The description links C++ and Java code.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTk4Ng%3D%3D" target="_blank" rel="noopener">K Closest Elements</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (a frame every 10 seconds plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print the k elements closest to x, i.e. with the smallest |arr[i] − x|.</p>
+    <ul>
+      <li>{10, 15, 7, 3, 4}, x = 8, k = 2 → <strong>7 10</strong>.</li>
+      <li>{100, 80, 10, 5, 70}, x = 2, k = 3 → <strong>5 10 70</strong>.</li>
+      <li>{20, 40, 5, 100, 150}, x = 100, k = 3 → <strong>100 150 40</strong>.</li>
+    </ul>
+    <p><strong>Naive, O(nk) time, O(n) aux space:</strong> repeat k times. Scan for the unvisited element with the minimum |arr[j] − x|, print it and mark it visited.</p>
+    <p><strong>Efficient, with a max heap</strong> (a priority queue) of (difference, index) pairs:</p>
+    <ol>
+      <li>Create the max heap pq.</li>
+      <li>Insert (|arr[i] − x|, i) for the first k elements.</li>
+      <li>For each remaining element, compute diff = |arr[i] − x|. If <code>pq.peek().diff &gt; diff</code>, pop the top and add (diff, i).</li>
+      <li>Pop the k items and print <code>arr[index]</code> for each.</li>
+    </ol>
+    <p>The heap always holds the k closest seen so far, with the farthest of them on top. The board gives O(n log k) for the efficient solution; building the first k is O(k log k).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/article/NzU2NA%3D%3D" target="_blank" rel="noopener">K Closest Elements</a></p>
+<ul>
+<li>The article's version differs from the video's: the array is <em>sorted</em> with distinct elements, and x itself, if present, is excluded from the output.</li>
+<li><strong>Simple, O(n):</strong> linear search for the crossover point (≤ X before it, &gt; X after), then compare elements on both sides to print the k closest, O(k).</li>
+<li><strong>Optimized, O(log n + k):</strong> find the crossover point with binary search, then print the k closest in O(k).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Naive: O(nk)</h4>
+<pre><code class="language-cpp">void printKClosest(int arr[], int n, int k, int x)
+{
+    bool visited[n] = {false};
+    for(int i = 0; i &lt; k; i++)
+    {
+        int min_diff = INF;
+        int min_diff_idx;
+        for(int j = 0; j &lt; n; j++)
+        {
+            if(visited[j] == false &amp;&amp;
+               abs(arr[j] - x) &lt;= min_diff)
+            {
+                min_diff = abs(arr[j] - x);
+                min_diff_idx = j;
+            }
+        }
+        print(arr[min_diff_idx] + " ");
+        visited[min_diff_idx] = true;
+    }
+}</code></pre>
+      <p>Board trace on {10, 30, 5, 40, 38, 80, 70}, x = 35, k = 3:</p>
+      <ul>
+        <li>i = 0: min_diff 3 at index 4, so print 38.</li>
+        <li>i = 1: min_diff 5 at index 3, so print 40.</li>
+        <li>i = 2: min_diff 5 at index 1, so print 30.</li>
+      </ul>
+    </div>
+    <div class="approach">
+      <h4>Efficient: max heap of (diff, index), O(n log k)</h4>
+<pre><code class="language-java">class MyPair {
+    int diff;
+    int index;
+    MyPair(int d, int i) { diff = d; index = i; }
+}
+// 1) Create a max heap pq (priority queue) ordered by diff
+// 2) for(i = 0; i &lt; k; i++)
+//        pq.insert(abs(arr[i] - x), i);
+// 3) for(i = k; i &lt; n; i++)
+//    {
+//        int diff = abs(arr[i] - x);
+//        if(pq.peek().diff &gt; diff)
+//        {
+//            pq.pop();
+//            pq.add(diff, i);
+//        }
+//    }
+// 4) for(i = 0; i &lt; k; i++)
+//        print(arr[pq.pop().index] + " ");</code></pre>
+      <p>Board trace on {30, 40, 32, 33, 36, 37}, x = 38, k = 3: the first three give the heap (8, 0) → (2, 1), (6, 2). Later elements with smaller differences replace the top, ending at (2, 4) → (2, 1), (1, 5), i.e. 36, 40 and 37. The description links C++ and Java code.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong> <code>&amp;&amp;</code> in the naive version is drawn like "$$". The efficient steps are pseudocode on the board, so they're kept as comments above. The final print reads <code>pq.pop().index</code>; the element printed is <code>arr</code> at that index.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTM4OQ%3D%3D" target="_blank" rel="noopener">Merge K Sorted Arrays</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Merge k sorted arrays into one sorted array. The input is a <code>vector&lt;vector&lt;int&gt;&gt;</code> (C++) or a list of lists (Java). Example: {10, 20, 30}, {5, 15}, {1, 9, 11, 18} → {1, 5, 9, 10, 11, 15, 18, 20, 30}. Below, n is the maximum size of any array.</p>
+    <ul>
+      <li><strong>Super naive, O(nk log nk):</strong> copy every element into the result, then sort it with an n log n sort (merge sort or heap sort).</li>
+      <li><strong>Naive, O(nk²):</strong> copy the first array into the result, then merge each remaining array into it with merge sort's merge, which is O(m + n). The costs are n + 2n + 3n + … + kn = n · k(k + 1)/2.</li>
+      <li><strong>Efficient, O(nk log k):</strong> a min heap of <em>triplets</em> (value, aPos = which array, vPos = position within that array). Start with the first element of each array. Repeatedly extract the minimum, append its value to the result, and if its array has a next element (vPos + 1 &lt; size), insert that element. The heap never holds more than k items, so each of the nk elements costs one extract and one insert at O(log k).</li>
+    </ul>
+    <p>Board trace on {10, 20}, {5, 15}, {4, 9, 11}: extract 4 and insert 9, extract 5 and insert 15, extract 9 and insert 11, extract 10 and insert 20. Then 11, 15 and 20 are extracted with nothing left to insert. Result 4 5 9 10 11 15 20.</p>
+    <p><strong>Custom ordering:</strong> Java's <code>PriorityQueue</code> is a min heap by default; <code>Triplet</code> implements <code>Comparable</code> and its <code>compareTo</code> compares values. C++'s default is a max heap, so pass a comparator struct <code>MyCmp</code> that returns <code>t1.val &gt; t2.val</code>.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/article/NzU2NQ%3D%3D" target="_blank" rel="noopener">Merge K Sorted Arrays</a></p>
+<ul>
+<li>Arrays may have different sizes. <strong>Simple:</strong> copy all k arrays to the output and sort, O(N log N), where N is the total number of elements.</li>
+<li><strong>Heap, O(N log k):</strong> insert the first element of every array into a size-k min heap. While the heap isn't empty, remove the min into the output and insert the next element of its array, if any. Auxiliary space O(N).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Efficient (C++)</h4>
+<pre><code class="language-cpp">struct Triplet {
+    int val, aPos, vPos;
+    Triplet(int v, int ap, int vp)
+    { val = v; aPos = ap; vPos = vp; }
+};
+struct MyCmp {
+    bool operator()(Triplet &amp;t1, Triplet &amp;t2)
+    { return t1.val &gt; t2.val; }
+};
+vector&lt;int&gt; mergeArr(vector&lt;vector&lt;int&gt;&gt; &amp;arr)
+{
+    vector&lt;int&gt; res;
+    priority_queue&lt;Triplet, vector&lt;Triplet&gt;, MyCmp&gt; pq;
+    for(int i = 0; i &lt; arr.size(); i++)
+    {
+        Triplet t(arr[i][0], i, 0);
+        pq.push(t);
+    }
+    while(pq.empty() == false)
+    {
+        Triplet curr = pq.top(); pq.pop();
+        res.push_back(curr.val);
+        int ap = curr.aPos, vp = curr.vPos;
+        if(vp + 1 &lt; arr[ap].size())
+        {
+            Triplet t(arr[ap][vp + 1], ap, vp + 1);
+            pq.push(t);
+        }
+    }
+    return res;
+}</code></pre>
+      <p>Java uses <code>class Triplet implements Comparable&lt;Triplet&gt;</code>, whose <code>compareTo</code> returns −1 if <code>val &lt;= t.val</code>, else 1. <code>mergeArr</code> takes a <code>List&lt;List&lt;Integer&gt;&gt;</code> and uses <code>pq.add(new Triplet(arr.get(i).get(0), i, 0))</code>, <code>pq.poll()</code> and <code>arr.get(ap).size()</code>.</p>
+      <p>Board trace on {5, 10}, {4, 9}, {6}: the heap starts with 4, 5 and 6. The result grows 4 (9 inserted), 5 (10 inserted), 6, 9, 10.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong></p>
+      <ul>
+        <li><code>&amp;</code> in the C++ parameters is drawn like "$" or "8".</li>
+        <li>The transcript says the time is "n k log K where K is the maximum number of elements in any array". With this video's notation, n is the maximum size and k the number of arrays, so the heap size is k, as the teacher then explains.</li>
+        <li>It also calls the members "aPov and bPov"; the board has <code>aPos</code> and <code>vPos</code>.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/video/MTM4MQ%3D%3D" target="_blank" rel="noopener">Median of a Stream</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Print the median after each element of a stream. The median is the element smaller than half the elements and greater than the other half; with an even count, it's the average of the two middle elements, so it may be a floating-point number.</p>
+    <ul>
+      <li>{25, 7, 10, 15, 20} → 25, 16, 10, 12.5, 15.</li>
+      <li>{20, 10, 30, 7} → 20, 15, 20, 15.</li>
+    </ul>
+    <ul>
+      <li><strong>Naive, O(n²):</strong> keep a temporary array in sorted order, inserting each item by shifting the larger ones, which is O(n) per item. For odd sizes the median is <code>temp[size/2]</code>; for even sizes it's the average of <code>temp[size/2]</code> and <code>temp[(size − 1)/2]</code>.</li>
+      <li><strong>Better, augmented BST:</strong> insert each item in O(h) and keep a left-subtree count at every node, as in the BST track's kth-smallest problem, so the size/2-th (and (size − 1)/2-th) elements are found in O(h). That's O(n · h), on average O(n log n). But a BST is a linked structure, so it isn't cache friendly.</li>
+      <li><strong>Efficient, two heaps, O(n log n):</strong> s, a max heap, holds the smaller half; g, a min heap, holds the greater half. s may hold one extra element, never g.
+        <ul>
+          <li>For an odd count, the median is <code>s.top</code>; for an even count, it's (<code>s.top</code> + <code>g.top</code>)/2.</li>
+          <li>Each element costs at most three log n heap operations.</li>
+          <li>Heaps are cache friendly.</li>
+        </ul>
+      </li>
+    </ul>
+    <p><strong>Insert rule for x</strong> (the loop alternates between the two cases):</p>
+    <ul>
+      <li><strong>s is bigger:</strong> if <code>s.top &gt; x</code>, x belongs in s, so move s's top to g and add x to s. Otherwise add x to g. Print the average of the tops.</li>
+      <li><strong>Sizes equal:</strong> if <code>x ≤ s.top</code>, add x to s. Otherwise add x to g, then move g's top to s. Print <code>s.top</code>.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/article/NzU2Ng%3D%3D" target="_blank" rel="noopener">Median of a Stream</a></p>
+<ul>
+<li>Find the effective median of the integers read so far (no duplicates assumed); the article's example stream is 5, 15, 1, 3, …. With an odd size it's the middle element; with an even size, the average of the middle two.</li>
+<li>This is an <em>online algorithm</em>: it guarantees the output for i elements after processing the i-th element.</li>
+<li><strong>Heaps:</strong> a max heap on the left holds elements less than the median, and a min heap on the right holds the greater ones. Their sizes differ by at most 1. With equal sizes the median is the average of the two roots; otherwise it's the root of the larger heap.</li>
+<li><strong>Complexity:</strong> O(N log N) time (heap insertions and deletions), O(N) space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Two heaps (Java)</h4>
+<pre><code class="language-java">void printMedians(int arr[])
+{
+    PriorityQueue&lt;Integer&gt; g = new PriorityQueue&lt;Integer&gt;();
+    PriorityQueue&lt;Integer&gt; s =
+        new PriorityQueue&lt;Integer&gt;(Collections.reverseOrder());
+    s.add(arr[0]);
+    System.out.println(arr[0]);
+    for(int i = 1; i &lt; arr.length; i++)
+    {
+        int x = arr[i];
+        if(s.size() &gt; g.size())
+        {
+            if(s.peek() &gt; x)
+            {
+                g.add(s.poll());
+                s.add(x);
+            }
+            else g.add(x);
+            System.out.println((double)(s.peek() + g.peek())/2);
+        }
+        else
+        {
+            if(x &lt;= s.peek())
+                s.add(x);
+            else {
+                g.add(x);
+                s.add(g.poll());
+            }
+            System.out.println(s.peek());
+        }
+    }
+}</code></pre>
+      <p>C++ is the same with <code>priority_queue&lt;int&gt; s;</code> and <code>priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt; g;</code> (C++'s default is a max heap, so s is the easy one). It uses <code>top</code>/<code>pop</code>/<code>push</code> and prints <code>(s.top() + g.top())/2.0</code>.</p>
+      <p>Board trace on {12, 15, 10, 5, 8, 7, 16}, with s and g after each step:</p>
+      <ol>
+        <li>12: s = {12} → <strong>12</strong>.</li>
+        <li>15: goes to g → <strong>13.5</strong>.</li>
+        <li>10: sizes equal and 10 ≤ 12, so s = {12, 10} → <strong>12</strong>.</li>
+        <li>5: s is bigger and 12 &gt; 5, so 12 moves to g and 5 goes to s → (10 + 12)/2 = <strong>11</strong>.</li>
+        <li>8: goes to s → <strong>10</strong>.</li>
+        <li>7: 10 moves to g and 7 goes to s → (8 + 10)/2 = <strong>9</strong>.</li>
+        <li>16: goes to g, then g's top (10) moves to s → <strong>10</strong>.</li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Board and teacher slips:</strong></p>
+      <ul>
+        <li>The board's s declaration reads <code>Collections.ReverseOrder()</code>; it's <code>reverseOrder()</code>.</li>
+        <li>The else branch's last line is <code>s.push(g.poll())</code> mixing C++ and Java names; Java uses <code>s.add(g.poll())</code>, as written above.</li>
+        <li>In the trace, the transcript says "12 plus 15 37 divided by 2" (27/2 = 13.5) and "We start from this 50" (it's 15).</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Heap-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (11 problems, in course order). Every Articles-tab item matches a video, so the articles are in the video notes. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/problem/operations-on-binary-min-heap" target="_blank" rel="noopener">Binary Heap Operations</a></td><td>Medium</td><td>Videos 3–5</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/problem/heap-sort" target="_blank" rel="noopener">Heap Sort</a></td><td>Medium</td><td>Video 6</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/problem/kth-largest-element5034" target="_blank" rel="noopener">Kth Largest</a></td><td>Medium</td><td>Video 11</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/problem/nearly-sorted-1587115620" target="_blank" rel="noopener">Nearly Sorted</a></td><td>Medium</td><td>Video 9</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/problem/most-occurring-elements-1587115620" target="_blank" rel="noopener">Top K Frequent in Array</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/problem/minimum-cost-of-ropes-1587115620" target="_blank" rel="noopener">Min Cost to Connect Ropes</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/problem/kth-smallest-element5545-1587115620" target="_blank" rel="noopener">Kth Smallest</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/problem/rearrange-characters5322" target="_blank" rel="noopener">Rearrange To Make Adjacent Different</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/problem/merge-k-sorted-arrays" target="_blank" rel="noopener">Merge k Sorted Arrays</a></td><td>Medium</td><td>Video 13</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/problem/find-median-in-a-stream-1587115620" target="_blank" rel="noopener">Median in Stream</a></td><td>Medium</td><td>Video 14</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Heap/problem/kth-largest-element-in-a-stream-1587115620" target="_blank" rel="noopener">Kth largest element in a stream</a></td><td>Medium</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -27237,7 +28162,23 @@ const TRACKS = [
       ["Top View of Binary Tree", "13:28"],
       ["Bottom View of Binary Tree", "13:48"]
     ] },
-  { id: "DSASP-Heap", slug: "heap", name: "Heap", counts: [14, 11, 11, 10, 0] },
+  { id: "DSASP-Heap", slug: "heap", name: "Heap", counts: [14, 11, 11, 10, 0],
+    videos: [
+      ["Binary Heap Introduction", "9:12"],
+      ["Binary Heap Implementation", "1:39"],
+      ["Binary Heap Insert", "6:38"],
+      ["Binary Heap (Heapify and Extract)", "18:23"],
+      ["Binary Heap (Decrease Key, Delete and Build Heap)", "15:22"],
+      ["Heap Sort", "12:53"],
+      ["Priority Queue in C++", "16:20"],
+      ["PriorityQueue in Java", "2:29"],
+      ["Sort K-Sorted Array", "7:35"],
+      ["Buy Maximum Items with Given Sum", "5:21"],
+      ["K Largest Elements", "8:48"],
+      ["K Closest Elements", "12:17"],
+      ["Merge K Sorted Arrays", "20:36"],
+      ["Median of a Stream", "20:36"]
+    ] },
   { id: "DSASP-Graph", slug: "graph", name: "Graph", counts: [30, 20, 24, 10, 1] },
   { id: "DSASP-Greedy", slug: "greedy", name: "Greedy", counts: [12, 5, 6, 10, 1] },
   { id: "DSASP-Backtracking", slug: "backtracking", name: "Backtracking", counts: [4, 4, 7, 10, 0] },

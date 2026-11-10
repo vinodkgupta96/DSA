@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 16 of 24 tracks · 360 of 470 videos · 268 of 342 articles · 275 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 17 of 24 tracks · 374 of 470 videos · 279 of 342 articles · 286 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -91,8 +91,8 @@ Report back with:
 | 14 | Deque | 8 | 7 | 6 | ✅ Done: 8/8 videos, 7/7 articles, 6 problems |
 | 15 | Tree | 30 | 24 | 32 | ✅ Done: 30/30 videos, 24/24 articles, 32 problems |
 | 16 | Binary Search Tree | 28 | 16 | 23 | ✅ Done: 28/28 videos, 16/16 articles, 23 problems |
-| 17 | Heap | 14 | 11 | 11 | ⏭ Next |
-| 18 | Graph | 30 | 20 | 24 | Not started |
+| 17 | Heap | 14 | 11 | 11 | ✅ Done: 14/14 videos, 11/11 articles, 11 problems |
+| 18 | Graph | 30 | 20 | 24 | ⏭ Next |
 | 19 | Greedy | 12 | 5 | 6 | Not started |
 | 20 | Backtracking | 4 | 4 | 7 | Not started |
 | 21 | Dynamic Programming | 31 | 25 | 28 | Not started |
@@ -574,6 +574,27 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
 
 "Finding LCA in Binary Search Tree" matches no video, so it's in the Track practice set with the 23 problems. V13, V17 and V23 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (12/28 videos watched, 35%, 0/16 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 28 BST videos.
 
+### Track 17: Heap, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Binary Heap Introduction | 9:12 | Transcript + board | Binary Heap Introduction |
+| 2 | Binary Heap Implementation | 1:39 | Transcript + board |  |
+| 3 | Binary Heap Insert | 6:38 | Transcript + board |  |
+| 4 | Binary Heap (Heapify and Extract) | 18:23 | Transcript + board | Insertion and Deletion in Heap |
+| 5 | Binary Heap (Decrease Key, Delete and Build Heap) | 15:22 | Board + description | Operations of Heap Data Structure |
+| 6 | Heap Sort | 12:53 | Transcript + board | Heap Sort |
+| 7 | Priority Queue in C++ | 16:20 | Transcript + board | Implementing Heaps using inbuilt classes in C++ and Java |
+| 8 | PriorityQueue in Java | 2:29 | Board + description |  |
+| 9 | Sort K-Sorted Array | 7:35 | Transcript + board | Sort K-Sorted Array |
+| 10 | Buy Maximum Items with Given Sum | 5:21 | Transcript + board | Buy Maximum Items with Given Sum |
+| 11 | K Largest Elements | 8:48 | Transcript + board | K Largest Elements |
+| 12 | K Closest Elements | 12:17 | Board + description | K Closest Elements |
+| 13 | Merge K Sorted Arrays | 20:36 | Transcript + board | Merge K Sorted Arrays |
+| 14 | Median of a Stream | 20:36 | Transcript + board | Median of a Stream |
+
+Every Heap article matches a video, so the Track practice set lists only the 11 problems. V5, V8 and V12 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (10/14 videos watched, 40%, 0/11 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 14 Heap videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -601,10 +622,11 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
 - `e80e175`: Add Queue track notes (9 videos, 5 articles, 9 problems)
 - `6a5d4d9`: Add Deque track notes (8 videos, 7 articles, 6 problems)
 - `684a13d`: Add Tree track notes (30 videos, 24 articles, 32 problems)
-- (this commit): Add Binary Search Tree track notes (28 videos, 16 articles, 23 problems)
+- `839335d`: Add Binary Search Tree track notes (28 videos, 16 articles, 23 problems)
+- (this commit): Add Heap track notes (14 videos, 11 articles, 11 problems)
 
 ### What's next
-- **Track 17: Heap** (14 videos, 11 articles, 11 problems), starting straight away.
+- **Track 18: Graph** (30 videos, 20 articles, 24 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -633,6 +655,7 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
   - Completed track 14 (Deque): 8 videos, 7 articles, 6 problems.
   - Completed track 15 (Tree): 30 videos, 24 articles, 32 problems.
   - Completed track 16 (Binary Search Tree): 28 videos, 16 articles, 23 problems.
+  - Completed track 17 (Heap): 14 videos, 11 articles, 11 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -649,6 +672,17 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Heap: teacher slips flagged
+- V3, V5, V6 (board): `&&` is drawn like "$$".
+- V4: "smallest is initialized as zero" (it's i); "int mix Int Max" means `INT_MAX`.
+- V6 (board): the `heapSort` loop calls `heapify(arr, i, 0)` though the function is `maxHeapify`. The transcript says intro sort switches when recursion depth "can become O(log n)"; it switches when the depth goes beyond log n.
+- V7 (board): the comparator body `p1.ht < p2.ht;` is missing `return`; `&p1` is drawn like "$p1".
+- V9 (board/teacher): the min-heap declaration lacks a comma before `greater<int>`. Pop and push are called "log n"; with k + 1 items they're log k.
+- V13: the complexity is first said with "K the maximum number of elements in any array" (the notation is swapped). The members are called "aPov/bPov"; the board has `aPos`/`vPos`.
+- V14 (board/teacher): `Collections.ReverseOrder()` for `reverseOrder()`; `s.push(g.poll())` mixes C++ and Java. The transcript says "12 plus 15 37" (27) and "this 50" (15).
+- The "K Closest Elements" article solves a sorted-array, exclude-x variant, different from the video's.
+- Videos without a transcript (5, 8, 12): spoken slips couldn't be checked.
 
 ### Binary Search Tree: teacher slips flagged
 - V7: in the iterative trace, "parent → right equal to 10"; the code sets `parent->right = temp` (20).
