@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 17 of 24 tracks · 374 of 470 videos · 279 of 342 articles · 286 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 18 of 24 tracks · 404 of 470 videos · 299 of 342 articles · 310 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -92,8 +92,8 @@ Report back with:
 | 15 | Tree | 30 | 24 | 32 | ✅ Done: 30/30 videos, 24/24 articles, 32 problems |
 | 16 | Binary Search Tree | 28 | 16 | 23 | ✅ Done: 28/28 videos, 16/16 articles, 23 problems |
 | 17 | Heap | 14 | 11 | 11 | ✅ Done: 14/14 videos, 11/11 articles, 11 problems |
-| 18 | Graph | 30 | 20 | 24 | ⏭ Next |
-| 19 | Greedy | 12 | 5 | 6 | Not started |
+| 18 | Graph | 30 | 20 | 24 | ✅ Done: 30/30 videos, 20/20 articles, 24 problems |
+| 19 | Greedy | 12 | 5 | 6 | ⏭ Next |
 | 20 | Backtracking | 4 | 4 | 7 | Not started |
 | 21 | Dynamic Programming | 31 | 25 | 28 | Not started |
 | 22 | Trie | 4 | 3 | 6 | Not started |
@@ -595,6 +595,43 @@ Every Deque article matches a video, so the Track practice set lists only the 6 
 
 Every Heap article matches a video, so the Track practice set lists only the 11 problems. V5, V8 and V12 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (10/14 videos watched, 40%, 0/11 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 14 Heap videos.
 
+### Track 18: Graph, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Introduction to Graph | 8:53 | Transcript + board | Introduction to Graphs |
+| 2 | Graph Representation (Adjacency Matrix) | 7:17 | Transcript + board | Graph Representation |
+| 3 | Graph Representation (Adjacency List) | 7:06 | Transcript + board |  |
+| 4 | Adjacency List implementation in CPP | 4:35 | Transcript + board |  |
+| 5 | Adjacency List implementation in Java | 5:44 | Transcript + board |  |
+| 6 | Adjacency Matrix and List Comparison | 6:15 | Transcript + board | Adjacency Matrix and List Comparison |
+| 7 | Breadth First Search | 20:16 | Transcript + board | Breadth First Traversal of a Graph |
+| 8 | Applications of BFS | 3:30 | Transcript + board | Applications of BFS |
+| 9 | Depth First Search | 20:07 | Transcript + board | Depth First Traversal of a Graph |
+| 10 | Applications of DFS | 5:25 | Transcript + board | Applications, Advantages and Disadvantages of DFS |
+| 11 | Shortest Path in an Unweighted Graph | 6:56 | Transcript + board | Shortest path in an Unweighted graph |
+| 12 | Detect Cycle in Undirected Graph | 7:14 | Transcript + board | Detect cycle in Undirected graph |
+| 13 | Detect Cycle in a Directed Graph (Part 1) | 10:14 | Transcript + board | Detect Cycle in a Directed Graph |
+| 14 | Topological Sorting (Kahn's BFS Based Algortihm) | 12:32 | Transcript + board | Topological Sorting (Kahn's BFS Based Algortihm) |
+| 15 | Detect Cycle in a Directed Graph (Part 2) | 4:36 | Transcript + board | Detect Cycle in a Directed Graph (Part 2) |
+| 16 | Topological Sorting (DFS Based Algorithm) | 9:06 | Transcript + board |  |
+| 17 | Shortest Path in DAG | 9:42 | Transcript + board |  |
+| 18 | Prim's Algorithm/Minimum Spanning Tree | 9:26 | Transcript + board | Prim's Minimum Spanning Tree Algorithm |
+| 19 | Implementation of Prim's Algorithm C++ | 16:52 | Board + description |  |
+| 20 | Implementation of Prim's Algorithm Java | 17:11 | Transcript + board |  |
+| 21 | Dijkstra's Shortest Path Algorithm | 19:02 | Transcript + board | Dijkstra's Algorithm for Shortest Path in a Weighted Graph |
+| 22 | Implementation of Dijkstra's Algorithm C++ | 11:03 | Board + description |  |
+| 23 | Implementation of Dijkstra's Algorithm Java | 10:06 | Board + description |  |
+| 24 | Kosaraju's Algorithm Part 1 | 13:43 | Transcript + board | Kosaraju's Algorithm / Strongly Connected Components |
+| 25 | Kosaraju's Algorithm Part 2 | 11:02 | Board + description |  |
+| 26 | Bellman Ford Shortest Path Algorithm | 12:51 | Transcript + board | Bellman-Ford Algorithm for Shortest Path |
+| 27 | Articulation Point | 22:33 | Board + description | Articulation Points (or Cut Vertices) in a Graph |
+| 28 | Bridges in Graph | 10:34 | Transcript + board | Bridges in a Graph |
+| 29 | Tarjans Algorithm | 14:24 | Transcript + board |  |
+| 30 | Kruskal's Algorithm | 24:04 | Transcript + board |  |
+
+"Number of Strongly Connected Components in an Undirected Graph" and "Sample Problems on Graphs" match no video, so they're in the Track practice set with the 24 problems. V19, V22, V23, V25 and V27 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (26/30 videos watched, 36%, 0/20 articles read). All resume positions were 0:00 and were restored. The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 30 Graph videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -623,10 +660,11 @@ Every Heap article matches a video, so the Track practice set lists only the 11 
 - `6a5d4d9`: Add Deque track notes (8 videos, 7 articles, 6 problems)
 - `684a13d`: Add Tree track notes (30 videos, 24 articles, 32 problems)
 - `839335d`: Add Binary Search Tree track notes (28 videos, 16 articles, 23 problems)
-- (this commit): Add Heap track notes (14 videos, 11 articles, 11 problems)
+- `cd1b6ea`: Add Heap track notes (14 videos, 11 articles, 11 problems)
+- (this commit): Add Graph track notes (30 videos, 20 articles, 24 problems)
 
 ### What's next
-- **Track 18: Graph** (30 videos, 20 articles, 24 problems), starting straight away.
+- **Track 19: Greedy** (12 videos, 5 articles, 6 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -656,6 +694,7 @@ Every Heap article matches a video, so the Track practice set lists only the 11 
   - Completed track 15 (Tree): 30 videos, 24 articles, 32 problems.
   - Completed track 16 (Binary Search Tree): 28 videos, 16 articles, 23 problems.
   - Completed track 17 (Heap): 14 videos, 11 articles, 11 problems.
+  - Completed track 18 (Graph): 30 videos, 20 articles, 24 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -672,6 +711,16 @@ Every Heap article matches a video, so the Track practice set lists only the 11 
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Graph: teacher slips flagged
+- V5 (board): `int V = 5;` for a 4-vertex graph.
+- V9 (board): the C++ source DFS calls `DFSRec(adj, s)` without `visited`.
+- V13 (board/description): `recSt[3] = false` should be `recSt[s] = false`; `&&` is drawn like "$$". V13 and V15's descriptions say "Undirected Graph" for directed-graph cycle detection.
+- V14: Kahn's is said to use "O(E) extra space"; the in-degree array is size V.
+- V19, V20, V22 (board): `&&` is drawn like "$$"; `vector<int> graph[]` is used as a V × V matrix. V20's inner update is partly hidden (taken from the transcript). V23 (board) writes `min` for Java's `Math.min`.
+- V21 (board): the C–F edge weight (1) is hidden; it's taken from the transcript.
+- V26: "works in big-oh of V plus e" in the summary; Bellman–Ford is O(VE).
+- Videos without a transcript (19, 22, 23, 25, 27): spoken slips couldn't be checked.
 
 ### Heap: teacher slips flagged
 - V3, V5, V6 (board): `&&` is drawn like "$$".

@@ -27784,6 +27784,1536 @@ vector&lt;int&gt; mergeArr(vector&lt;vector&lt;int&gt;&gt; &amp;arr)
   </section>
 </template>
 
+<template id="DSASP-Graph-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTU1MDA%3D" target="_blank" rel="noopener">Introduction to Graph</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A tree represents a hierarchy through parent-child links, but it can't represent arbitrary connections such as friendships, which may form cycles. A <strong>graph</strong> allows connections between any vertices.</p>
+    <p>A graph is a pair of sets, G = (V, E): a set of vertices V and a set of edges E, each edge a pair of vertices. Board example: V = {v1, …, v5} and E = {(v1, v2), (v1, v3), (v2, v4), (v3, v4), (v3, v5), (v4, v5)}, six edges.</p>
+    <ul>
+      <li><strong>Undirected:</strong> an edge is an unordered pair, so (v1, v2) is the same as (v2, v1). Example: a social network, where friendship goes both ways.</li>
+      <li><strong>Directed:</strong> an edge is an ordered pair, so (v1, v2) only allows going from v1 to v2. Example: the World Wide Web, where an edge means page v1 links to page v2; crawlers use this graph to crawl the web.</li>
+    </ul>
+    <p><strong>Degrees and edge counts</strong> (self loops, an edge from a vertex to itself, are ignored; they don't occur in most practical graphs):</p>
+    <ul>
+      <li><strong>Undirected:</strong> degree(v) is the number of edges through v; on the board, degree(v3) = 3. Sum of degrees = 2·|E|. The maximum number of edges is |V|(|V| − 1)/2, in a complete graph.</li>
+      <li><strong>Directed:</strong> in-degree counts edges coming in and out-degree edges going out; on the board, v3 has in-degree 1 and out-degree 2. Sum of in-degrees = sum of out-degrees = |E|, since each edge adds one of each. The maximum number of edges is |V|(|V| − 1).</li>
+      <li>The minimum number of edges is 0.</li>
+    </ul>
+    <p><strong>More terms:</strong></p>
+    <ul>
+      <li><strong>Walk</strong> (some books say "path"): a sequence of vertices following edges, e.g. v1, v2, v4, v2. v1, v5 is not a walk, because there's no edge between them.</li>
+      <li><strong>Path</strong> ("simple path"): a walk with no repeated vertices, and so no repeated edges, e.g. v1, v2, v4.</li>
+      <li><strong>Cyclic:</strong> some walk begins and ends at the same vertex, as in the board's cyclic undirected and cyclic directed triangles on v1, v2, v3. <strong>Acyclic:</strong> no such walk.</li>
+      <li>A directed acyclic graph is a <strong>DAG</strong>. DAGs have many applications, including topological sorting for job scheduling (later in the track).</li>
+      <li><strong>Weighted graphs</strong> (directed or undirected) have weights on their edges. Examples: road networks between cities (weight = road length) and computer networks of routers.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/MjM2Ng%3D%3D" target="_blank" rel="noopener">Introduction to Graphs</a></p>
+<ul>
+<li>A graph is a finite set of vertices (nodes) plus a finite set of pairs (u, v), the edges. In a directed graph (digraph) the pair is ordered, since (u, v) ≠ (v, u), and means an edge from u to v. Edges may carry a weight, value or cost.</li>
+<li><strong>Uses:</strong> networks (paths in a city, telephone and circuit networks, e.g. Google GPS) and social networks (LinkedIn, Facebook), where each person is a vertex holding an id, name, gender and locale.</li>
+<li>The two most common representations are the adjacency matrix and the adjacency list.
+  <ul>
+    <li><strong>Matrix:</strong> easy, O(1) edge removal and edge queries, but O(V²) space even when the graph is sparse.</li>
+    <li><strong>List:</strong> O(|V| + |E|) space (up to O(V²) in the worst case, C(V, 2) edges), easier to add a vertex, but O(V) for an edge query. The article uses dynamic arrays (<code>vector</code>, <code>ArrayList</code>) rather than linked lists, for cache friendliness.</li>
+  </ul>
+</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>On the board's graphs, compute every vertex's degree (undirected) or in-degree and out-degree (directed), and check the sum identities. Identify walks, simple paths and cycles.</p>
+  </section>
+</template>
+
+<template id="DSASP-Graph-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/OTE2" target="_blank" rel="noopener">Graph Representation (Adjacency Matrix)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The two most popular representations are the adjacency matrix and the adjacency list. <strong>Adjacency matrix:</strong> a V × V matrix with <code>mat[i][j] = 1</code> if there is an edge from i to j, otherwise 0.</p>
+    <ul>
+      <li>An undirected graph's matrix is always <strong>symmetric</strong>: rows and columns mirror each other. Board example: 0–1, 0–2, 1–2, 2–3 gives rows 0110, 1010, 1101, 0010.</li>
+      <li>A directed graph's matrix may or may not be symmetric. Board example: 0→1, 0→2, 1→2, 2→3 gives rows 0110, 0010, 0001, 0000. Vertex 3 has no outgoing edges, so its row is all 0.</li>
+    </ul>
+    <p><strong>String vertex names</strong> (e.g. cities ABC, BCD, CDE, EFG) need extra structures: an array mapping index → name, and a hash table mapping name → index. Without the hash table, finding the index of "CDE" is an O(V) linear search. With it: CDE → 2, and the adjacent indices 0, 1, 3 map back to ABC, BCD, EFG.</p>
+    <p><strong>Properties:</strong></p>
+    <ul>
+      <li><strong>Space:</strong> Θ(V × V).</li>
+      <li><strong>Check whether u and v are adjacent:</strong> Θ(1), by looking at <code>mat[u][v]</code>.</li>
+      <li><strong>Find all vertices adjacent to u:</strong> Θ(V), scanning u's row for 1s. For vertex 1, that gives 0 and 2.</li>
+      <li><strong>Find the degree of u:</strong> Θ(V), counting the 1s in its row.</li>
+      <li><strong>Add or remove an edge:</strong> Θ(1). Set the cell, plus its mirror cell for an undirected graph.</li>
+      <li><strong>Add or remove a vertex:</strong> Θ(V²). A matrix one size bigger (or smaller) is allocated and the entries copied; pre-allocating space can avoid this.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/Njk5NQ%3D%3D" target="_blank" rel="noopener">Graph Representation</a></p>
+<ul>
+<li><strong>Adjacency matrix</strong> <code>adj[V][V]</code>: <code>adj[i][j] = 1</code> for an edge (symmetric when undirected), or <code>= w</code> for weight w.
+  <ul>
+    <li>Pros: easy to implement and follow; O(1) edge removal and edge queries.</li>
+    <li>Cons: O(V²) space even when sparse; adding a vertex is O(V²); all neighbours of a vertex take O(V).</li>
+  </ul>
+</li>
+<li><strong>Adjacency list:</strong> an array of V lists; for weighted graphs the lists hold pairs.
+  <ul>
+    <li>Pros: O(|V| + |E|) space; easy vertex addition; optimal time to get all neighbours.</li>
+    <li>Cons: edge queries are O(V).</li>
+  </ul>
+</li>
+<li>Real-life graphs are sparse (|E| ≪ |V|²), so adjacency lists are commonly used; a matrix forces an O(|V|²) bound on such algorithms.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>Write the adjacency matrix of each board graph, check that the undirected one is symmetric, and work out each operation's cost from the matrix. The description links C++ and Java code.</p>
+  </section>
+</template>
+
+<template id="DSASP-Graph-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM0NA%3D%3D" target="_blank" rel="noopener">Graph Representation (Adjacency List)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The adjacency matrix stores redundant information: which vertices are <em>not</em> connected, too. An <strong>adjacency list</strong> stores only the vertices that are connected. That saves space and makes "find all adjacent of a vertex" faster, an operation many algorithms use.</p>
+    <p>It's an <strong>array of lists</strong>, indexed by vertex number. Board example: 0–1, 0–2, 1–2, 2–3 gives 0: [1, 2], 1: [0, 2], 2: [0, 1, 3], 3: [2].</p>
+    <p>The lists are most often <strong>(a) dynamic-sized arrays</strong> or <strong>(b) linked lists</strong>. The course uses dynamic-sized arrays: they're cache friendly and easy to use. Their downsides: pre-allocated space may be wasted, and while an add is Θ(1) on average, an occasional add costs Θ(n) when the array resizes.</p>
+    <p>For a directed graph, each list holds only the outgoing edges; the board's example has 0: [1, 2], 1: [2], 2: [3, 1], 3: [1].</p>
+    <p><strong>Properties:</strong></p>
+    <ul>
+      <li><strong>Space:</strong> Θ(V + E). That's V + 2E for an undirected graph, since each edge appears in two lists, and V + E for a directed one.</li>
+      <li><strong>Check for an edge from u to v:</strong> O(V), scanning u's list, which can hold up to V items.</li>
+      <li><strong>Find all adjacent of u:</strong> O(degree(u)). Vertex 2 has 3 adjacent, so 3 steps.</li>
+      <li><strong>Find the degree of u:</strong> O(1), the list's size.</li>
+      <li><strong>Add an edge:</strong> O(1), appending to the end of the list(s).</li>
+      <li><strong>Remove an edge:</strong> O(V), finding and removing the item from the list(s).</li>
+    </ul>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>Write the adjacency list of the board's undirected and directed graphs, count V + 2E and V + E cells respectively, and compare each operation's cost with the adjacency matrix.</p>
+  </section>
+</template>
+
+<template id="DSASP-Graph-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM0Ng%3D%3D" target="_blank" rel="noopener">Adjacency List implementation in CPP</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>In C++, use an <strong>array of vectors</strong>, one vector per vertex, all initially empty. <code>addEdge(u, v)</code> pushes v into u's vector and u into v's vector, since the graph is undirected. A <code>vector</code> of vectors also works, and lets vertices be added at run time; the array of vectors is the most used when V is known in advance.</p>
+    <p>In competitive programming and interviews, V and E are usually given first: read V, create the array, then read E edges and call <code>addEdge</code> for each.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Array of vectors</h4>
+<pre><code class="language-cpp">void addEdge(vector&lt;int&gt; adj[], int u, int v)
+{
+    adj[u].push_back(v);
+    adj[v].push_back(u);
+}
+void printGraph(vector&lt;int&gt; adj[], int V)
+{
+    for(int i = 0; i &lt; V; i++)
+    {
+        for(int x : adj[i])
+            cout &lt;&lt; x &lt;&lt; " ";
+        cout &lt;&lt; "\n";
+    }
+}
+int main()
+{
+    int V = 4;
+    vector&lt;int&gt; adj[V];
+    addEdge(adj, 0, 1);
+    addEdge(adj, 0, 2);
+    addEdge(adj, 1, 2);
+    addEdge(adj, 1, 3);
+    printGraph(adj, V);
+    return 0;
+}</code></pre>
+      <p>Output, one line per vertex: <code>1 2</code> / <code>0 2 3</code> / <code>0 1</code> / <code>1</code>. The <code>printGraph</code> body is from the transcript: a loop over the vertices and a for-each over each vector, printing a new line after each.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM0Nw%3D%3D" target="_blank" rel="noopener">Adjacency List implementation in Java</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>In Java, use an <strong><code>ArrayList</code> of <code>ArrayList</code>s</strong>; an ArrayList of LinkedLists also works, but ArrayLists are cache friendly. An array of ArrayLists causes warnings or errors in Java, so it isn't an option. Create the outer list with capacity V, then add V empty ArrayLists in a loop, after which its size is V.</p>
+    <p><code>addEdge</code> uses <code>get(u)</code> to reach u's list and adds v to it, then adds u to v's list (undirected). <code>printGraph</code> loops over <code>adj.size()</code> and each inner list's <code>size()</code>, using <code>get(i).get(j)</code>.</p>
+    <p>For test cases, read V and E, then read the E edges one by one and call <code>addEdge</code>. This representation is used for all the later graph problems.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>ArrayList of ArrayLists</h4>
+<pre><code class="language-java">class Test {
+    static void addEdge(ArrayList&lt;ArrayList&lt;Integer&gt;&gt; adj, int u, int v)
+    {
+        adj.get(u).add(v);
+        adj.get(v).add(u);
+    }
+    static void printGraph(ArrayList&lt;ArrayList&lt;Integer&gt;&gt; adj)
+    {
+        for(int i = 0; i &lt; adj.size(); i++)
+        {
+            for(int j = 0; j &lt; adj.get(i).size(); j++)
+                System.out.print(adj.get(i).get(j) + " ");
+            System.out.println();
+        }
+    }
+    public static void main(String[] args)
+    {
+        int V = 4;
+        ArrayList&lt;ArrayList&lt;Integer&gt;&gt; adj =
+            new ArrayList&lt;ArrayList&lt;Integer&gt;&gt;(V);
+        for(int i = 0; i &lt; V; i++)
+            adj.add(new ArrayList&lt;Integer&gt;());
+        addEdge(adj, 0, 1);
+        addEdge(adj, 0, 2);
+        addEdge(adj, 1, 2);
+        addEdge(adj, 1, 3);
+        printGraph(adj);
+    }
+}</code></pre>
+      <p>Output: <code>1 2</code> / <code>0 2 3</code> / <code>0 1</code> / <code>1</code>.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> <code>main</code> sets <code>int V = 5;</code> but the graph has 4 vertices (0–3), which would add an extra empty list. It's written as 4 above, matching the C++ video.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM0NQ%3D%3D" target="_blank" rel="noopener">Adjacency Matrix and List Comparison</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Space</strong> is the list's big advantage: Θ(V + E) against Θ(V × V). E ranges over 0 ≤ E ≤ V(V − 1)/2 (undirected) or 0 ≤ E ≤ V(V − 1) (directed), reaching the maximum only in a complete graph. In practice E is far smaller. A social network has billions of people but you're connected to perhaps 500–1000; in a road network each city connects directly to only a few others.</p>
+    <p>A graph with E close to the maximum is <strong>dense</strong>; one with far fewer edges is <strong>sparse</strong>. Most real-world graphs are sparse, which suits the adjacency list.</p>
+    <ul>
+      <li><strong>Check for an edge u → v:</strong> the matrix wins, Θ(1) against O(V) for the list, whose lists can hold up to V vertices.</li>
+      <li><strong>Find all adjacent of u:</strong> the list wins, Θ(degree(u)) (out-degree for directed graphs) against Θ(V). This operation is used by BFS, DFS, Dijkstra, Prim and many other standard algorithms.</li>
+      <li><strong>Add an edge:</strong> Θ(1) for both. For a list, appending to a dynamic array is O(1) on average and to a linked list Θ(1) in the worst case.</li>
+      <li><strong>Remove an edge:</strong> the matrix wins, Θ(1) against O(V); an undirected edge must be removed from both vertices' lists.</li>
+      <li><strong>Add or remove a vertex</strong> (rare in practice): the list wins. The matrix needs O(V × V) to add a row and column; the list is less, depending on the implementation.</li>
+    </ul>
+    <p><strong>Conclusion:</strong> in general the adjacency list is much better. It suits sparse, practical graphs (routers, social networks, roads), and makes "find all adjacent" fast. BFS and DFS have better time complexity with lists than with a matrix.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/NzM4MQ%3D%3D" target="_blank" rel="noopener">Adjacency Matrix and List Comparison</a></p>
+<div class="scroll"><table>
+  <thead><tr><th>Operation</th><th>Adjacency matrix</th><th>Adjacency list</th></tr></thead>
+  <tbody>
+    <tr><td>Storage space</td><td>O(|V|²), a V × V matrix</td><td>O(|V| + |E|): neighbours stored per vertex</td></tr>
+    <tr><td>Adding a vertex</td><td>O(|V|²): grow to (|V| + 1)² and copy the matrix</td><td>O(1), using front and rear pointers</td></tr>
+    <tr><td>Adding an edge</td><td>O(1): <code>matrix[i][j] = 1</code></td><td>O(1), using front and rear pointers</td></tr>
+    <tr><td>Removing a vertex</td><td>O(|V|²): shrink and copy</td><td>O(|V| + |E|): find the vertex, then traverse the edges</td></tr>
+    <tr><td>Removing an edge</td><td>O(1): <code>matrix[i][j] = 0</code></td><td>O(|E|) in the worst case</td></tr>
+  </tbody>
+</table></div>
+<p>The article's table continues with querying for an edge, cut off in the read.</p>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>Operation</th><th>List</th><th>Matrix</th></tr></thead>
+      <tbody>
+        <tr><td>Memory</td><td>Θ(V + E)</td><td>Θ(V × V)</td></tr>
+        <tr><td>Check if there is an edge from u to v</td><td>O(V)</td><td>Θ(1)</td></tr>
+        <tr><td>Find all adjacent of u</td><td>Θ(degree(u))</td><td>Θ(V)</td></tr>
+        <tr><td>Add an edge</td><td>Θ(1)</td><td>Θ(1)</td></tr>
+        <tr><td>Remove an edge</td><td>O(V)</td><td>Θ(1)</td></tr>
+      </tbody>
+    </table></div>
+    <p>The List column on the board is partly hidden by the teacher; those entries are from the transcript.</p>
+  </section>
+</template>
+
+<template id="DSASP-Graph-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/OTE3" target="_blank" rel="noopener">Breadth First Search</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>BFS (and DFS) are graph traversal mechanisms.</p>
+    <p><strong>First version:</strong> given an undirected graph and a source s, print everything reachable from s in order of distance: s, then its immediate neighbours, then theirs, and so on, each vertex exactly once. Think of a social network: you, then your friends, then their friends. Board examples with s = 0:</p>
+    <ul>
+      <li>0 → 1, 2; 2 → 3, 4 gives 0 1 2 3 4.</li>
+      <li>0–1, 0–2, 0–5, 1–3, 2–4, 3–5, 4–5 gives 0 1 2 5 3 4.</li>
+    </ul>
+    <p>It's like tree level order traversal with a queue, except that a graph can have cycles and lead back to an already discovered vertex. A <strong>visited</strong> array prevents this: a vertex is marked when it is <em>enqueued</em> (discovered), not when it is printed.</p>
+    <p><strong>Second version:</strong> no source is given and the graph may be disconnected, e.g. web crawling over all pages. The wrapper <code>BFSDin</code> creates the visited array and calls BFS(i) for every vertex i not yet visited. Board example: 0–1, 0–2, 1–3, 2–3 and 4–5, 4–6, 5–6 gives 0 1 2 3 4 5 6.</p>
+    <p><strong>Time:</strong> O(V + E). The inner loop traverses every adjacency list, whose lengths sum to 2E (undirected) or E (directed). The V covers a graph with no edges, where the outer loop still calls BFS for every vertex.</p>
+    <p><strong>Counting connected components</strong> (also asked as the number of islands): a component is connected if every vertex in it is reachable from every other. Make <code>BFSDin</code> return an int and increment a count each time BFS starts from an unvisited vertex. Board example: {0, 1, 2}, {3, 4}, {5, 6, 7, 8} → 3.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/MjM2OA%3D%3D" target="_blank" rel="noopener">Breadth First Traversal of a Graph</a></p>
+<ul>
+<li>BFS of a graph is like level order traversal of a tree: it goes level by level from a start vertex, using a queue and a <code>visited[]</code> array.</li>
+<li><strong>Algorithm:</strong> create <code>visited[V + 1]</code>; mark the source visited and push it. While the queue isn't empty, pop the front, print it, and push its unvisited neighbours, marking them visited.</li>
+<li>The article's worked example starts from vertex 1 and runs step by step (visit 2 and 3, then push 4 and 5, …).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>BFS from a source, disconnected BFS, and counting components</h4>
+<pre><code class="language-cpp">void BFS(vector&lt;int&gt; adj[], int s, bool visited[])
+{
+    queue&lt;int&gt; q;
+    visited[s] = true;
+    q.push(s);
+    while(q.empty() == false)
+    {
+        int u = q.front();
+        q.pop();
+        cout &lt;&lt; u &lt;&lt; " ";
+        for(int v : adj[u])
+        {
+            if(visited[v] == false)
+            {
+                visited[v] = true;
+                q.push(v);
+            }
+        }
+    }
+}
+int BFSDin(vector&lt;int&gt; adj[], int V)
+{
+    bool visited[V + 1];
+    for(int i = 0; i &lt; V; i++)
+        visited[i] = false;
+    int count = 0;
+    for(int i = 0; i &lt; V; i++)
+        if(visited[i] == false)
+        {
+            BFS(adj, i, visited);
+            count++;
+        }
+    return count;
+}</code></pre>
+      <p>Java: <code>boolean visited[] = new boolean[V + 1];</code> (false by default), <code>Queue&lt;Integer&gt; q = new LinkedList&lt;Integer&gt;();</code>, <code>q.add</code> and <code>q.poll()</code>, and <code>for(int v : adj.get(u))</code>.</p>
+      <p>The first version takes (adj, V, s) and creates its own visited array. The second passes visited in, and the wrapper is <code>void</code>. Counting components changes the wrapper to return <code>count</code>.</p>
+      <p>Board trace on 0–1, 0–2, 1–2, 1–3, 2–3, 2–4, 3–4 with s = 0:</p>
+      <ol>
+        <li>Print 0 and enqueue 1, 2.</li>
+        <li>Print 1 and enqueue 3.</li>
+        <li>Print 2 and enqueue 4.</li>
+        <li>Print 3, then 4; nothing new is enqueued.</li>
+      </ol>
+      <p>Output 0 1 2 3 4.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM1NA%3D%3D" target="_blank" rel="noopener">Applications of BFS</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <ol>
+      <li><strong>Shortest path in an unweighted graph:</strong> BFS reaches vertices one edge away first, then two edges away, and so on, so it finds the shortest paths from the source. Shortest-path algorithms such as Dijkstra share BFS's structure but use a priority queue and edge weights.</li>
+      <li><strong>Crawlers in search engines:</strong> documents link to each other, and the crawler traverses them in BFS order.</li>
+      <li><strong>Peer-to-peer networks.</strong></li>
+      <li><strong>Social networking search:</strong> for a name, people who are immediate friends come first, then those two edges away, and so on.</li>
+      <li><strong>Garbage collection (Cheney's algorithm):</strong> find the memory reachable from the current variables, then the memory reachable from that, and delete what's unreachable.</li>
+      <li><strong>Cycle detection:</strong> BFS or DFS, in undirected and directed graphs (separate videos).</li>
+      <li><strong>Ford–Fulkerson algorithm.</strong></li>
+      <li><strong>Broadcasting</strong> happens in BFS order.</li>
+    </ol>
+    <p>Many algorithms are BFS based, e.g. Dijkstra's shortest path and Prim's minimum spanning tree.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/NzAwOQ%3D%3D" target="_blank" rel="noopener">Applications of BFS</a></p>
+<ul>
+<li><strong>Shortest path and MST in an unweighted graph:</strong> BFS reaches each vertex with the fewest edges. Any spanning tree of an unweighted graph is an MST, and BFS or DFS can find one.</li>
+<li><strong>Peer-to-peer networks:</strong> e.g. BitTorrent finds all neighbour nodes.</li>
+<li><strong>Search-engine crawlers:</strong> follow links from a source page. DFS works too, but BFS can limit the depth.</li>
+<li><strong>Social networks:</strong> find people within distance k by running BFS to k levels.</li>
+<li><strong>Other uses:</strong>
+  <ul>
+    <li>GPS navigation, to find neighbouring locations.</li>
+    <li>Broadcasting in networks.</li>
+    <li>Copying garbage collection (Cheney's algorithm), where BFS beats DFS for locality of reference.</li>
+  </ul>
+</li>
+<li><strong>BFS or DFS:</strong>
+  <ul>
+    <li>Cycle detection in undirected graphs (BFS works for directed graphs too).</li>
+    <li>Ford–Fulkerson, where BFS gives O(VE²).</li>
+    <li>Bipartite testing, path finding, and finding all nodes of a connected component.</li>
+  </ul>
+</li>
+<li>Prim's MST and Dijkstra's shortest paths have BFS-like structure.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>For each application, say what plays the role of the source, the vertices and the edges.</p>
+  </section>
+</template>
+
+<template id="DSASP-Graph-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/OTE4" target="_blank" rel="noopener">Depth First Search</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Simple version:</strong> an undirected, connected graph and a source. DFS is recursive: print the source, then pick an adjacent vertex and recursively print everything reachable from it. Only when that finishes, move on to the source's next adjacent vertex. Example: 0's adjacent vertices are 1 and 4; DFS(0) prints 0, then 1 2 3 via 1, then 4 5 6 via 4.</p>
+    <p>It resembles preorder traversal of a tree, with two differences:</p>
+    <ul>
+      <li>A graph's edges are undirected and it may have cycles, so a <strong>visited</strong> array is needed so that no vertex is visited twice.</li>
+      <li>There's no fixed left-then-right order. Any adjacent vertex may be picked first, so many DFS orders are possible (e.g. 0 4 5 6 1 2 3). The course always picks the lowest-numbered adjacent vertex first.</li>
+    </ul>
+    <p><strong>Disconnected graphs:</strong> the recursive function stays the same. A wrapper calls it for every vertex that isn't visited yet. Board example: 0–1, 0–2, 1–2 and 3–4 → 0 1 2 3 4, with DFSRec called only for 0 and 3.</p>
+    <p><strong>Counting connected components</strong> (number of islands; BFS works too): increment a count each time the wrapper starts DFSRec, and return it. Example: {0, 1}, {2, 3, 4}, {5, …} → 3.</p>
+    <p><strong>Time:</strong> O(V + E), as for BFS. All adjacency lists are traversed once (total length 2E or E), plus V for the outer loop.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/MjM3MQ%3D%3D" target="_blank" rel="noopener">Depth First Traversal of a Graph</a></p>
+<ul>
+<li>DFS goes depth-wise: it keeps going in one direction as far as possible, then backtracks to find a new path, until every node is visited.</li>
+<li>It's implemented recursively with a <code>visited</code> array (a graph may have cycles). At each step, mark the current vertex and recurse on its adjacent vertices. The article's illustration uses an auxiliary stack for the recursive calls: A, B, D, E, F, then back to E, then C.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Recursive DFS and the disconnected wrapper</h4>
+<pre><code class="language-cpp">void DFSRec(vector&lt;int&gt; adj[], int s, bool visited[])
+{
+    visited[s] = true;
+    cout &lt;&lt; s &lt;&lt; " ";
+    for(int u : adj[s])
+        if(visited[u] == false)
+            DFSRec(adj, u, visited);
+}
+void DFS(vector&lt;int&gt; adj[], int V)      // whole graph, possibly disconnected
+{
+    bool visited[V];
+    for(int i = 0; i &lt; V; i++)
+        visited[i] = false;
+    for(int i = 0; i &lt; V; i++)
+        if(visited[i] == false)
+            DFSRec(adj, i, visited);
+}</code></pre>
+      <p>The source version is <code>DFS(adj, V, s)</code>: it initialises visited, then calls <code>DFSRec(adj, s, visited)</code>. Java: <code>void DFSRec(ArrayList&lt;ArrayList&lt;Integer&gt;&gt; adj, int s, boolean[] visited)</code>, with <code>for(int u : adj.get(s))</code> and <code>boolean visited[] = new boolean[V];</code>.</p>
+      <p>Board trace on 0–1, 0–2, 1–3, 1–4, 2–3, 3–4 with s = 0:</p>
+      <ol>
+        <li>Visit 0, then 1, then 3 (1's first unvisited neighbour), then 2.</li>
+        <li>2's neighbours are all visited, so return to 3, which then visits 4.</li>
+        <li>Everything is visited, so the recursion unwinds back to 0.</li>
+      </ol>
+      <p>Output 0 1 3 2 4.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board slip:</strong> the C++ source version calls <code>DFSRec(adj, s)</code> without passing <code>visited</code>; it needs <code>DFSRec(adj, s, visited)</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM1NQ%3D%3D" target="_blank" rel="noopener">Applications of DFS</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Recap:</strong> DFS goes to one adjacent vertex and recursively covers everything reachable through it before trying the next. BFS instead visits all adjacent vertices first, using a queue. DFS is recursive, though recursion can be replaced with a stack.</p>
+    <ol>
+      <li><strong>Cycle detection:</strong> natural in DFS, especially for directed graphs, where a back edge during DFS means a cycle (separate video).</li>
+      <li><strong>Topological sorting:</strong> for dependency graphs, i.e. jobs with dependencies. For example, the make utility takes dependencies between files, generates a schedule that follows them, and compiles the files in that order, internally using topological sort.</li>
+      <li><strong>Strongly connected components:</strong> two popular algorithms, both DFS based. Kosaraju's does two DFS traversals; Tarjan's optimizes this to one (upcoming videos).</li>
+      <li><strong>Solving mazes and similar puzzles:</strong> from an initial state, each step reaches new states, and some final states are solutions. BFS goes level by level and may traverse n − 1 levels before reaching the last. DFS goes down one path at a time and may find a solution after a single trip down the height, so it's preferred.</li>
+      <li><strong>Path finding:</strong> when DFS reaches the destination, the recursion call stack holds exactly the vertices on the path, so printing the path is natural. A BFS queue at that moment may contain anything.</li>
+    </ol>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/OTYyMw%3D%3D" target="_blank" rel="noopener">Applications, Advantages and Disadvantages of DFS</a></p>
+<ul>
+<li><strong>Applications:</strong>
+  <ol>
+    <li>Cycle detection: a graph has a cycle if and only if DFS finds a back edge.</li>
+    <li>Path finding: DFS(G, u) with a stack of the current path, returned when the destination z is reached.</li>
+    <li>Topological sorting: job scheduling from dependencies, e.g. instruction scheduling and formula-cell evaluation order.</li>
+    <li>Bipartite testing (two colours).</li>
+    <li>Strongly connected components.</li>
+    <li>One-solution puzzles such as mazes; all solutions too, if only nodes on the current path count as visited.</li>
+    <li>Web crawlers.</li>
+    <li>Maze generation.</li>
+    <li>Model checking.</li>
+    <li>Backtracking.</li>
+  </ol>
+</li>
+<li><strong>Advantages:</strong> memory is linear in the search graph, since only the current path's nodes are stored, so DFS is time-limited rather than space-limited. It may find a solution early, without exploring much.</li>
+<li><strong>Disadvantages:</strong> it may go down the left-most path forever (even a finite graph can generate an infinite tree). A cutoff depth helps, but the ideal one, the solution depth d, is rarely known. Too small fails; too large costs time, and the first solution found may not be optimal.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <p>Compare BFS and DFS for each application: why does DFS fit cycle detection, topological sort, puzzles and path printing better?</p>
+  </section>
+</template>
+
+<template id="DSASP-Graph-11">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM0OA%3D%3D" target="_blank" rel="noopener">Shortest Path in an Unweighted Graph</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given an unweighted graph (directed or undirected) and a source, find the shortest distance, i.e. the minimum number of edges, to every vertex. Example: from 0, vertex 2 is at distance 1 by its direct edge, although a two-edge path also exists. For 3, the shortest of its paths has two edges, so the answer is 2.</p>
+    <p><strong>Idea: BFS</strong> visits vertices one edge away first, then two edges away, and so on, so distances come out shortest first. Add a <code>dist</code> array set to infinity, with <code>dist[s] = 0</code>. When an unvisited vertex v is discovered from u, set <code>dist[v] = dist[u] + 1</code> with no comparison: u's distance is already final, and no other path to v can be shorter than through u. Finally print <code>dist</code>.</p>
+    <p><strong>Time:</strong> O(V + E) for the BFS, plus O(V) to initialise and print, so O(V + E), the same as BFS.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/NzAxNw%3D%3D" target="_blank" rel="noopener">Shortest path in an Unweighted graph</a></p>
+<ul>
+<li>Bellman–Ford would take O(VE), and Dijkstra O(E + V log V) without negative cycles. An unweighted graph needs only O(V + E): a modified BFS.</li>
+<li>Keep <code>dist[i]</code> (the distance from the source) and <code>pred[i]</code> (the immediate predecessor in the BFS). The path length is then O(1) from <code>dist</code>, and the path itself is printed by following <code>pred</code> back from the destination.</li>
+<li><strong>Complexity:</strong> O(V + E) time, O(V) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Algorithm (board steps)</h4>
+<pre><code class="language-cpp">// 1) Initialize: dist[V] = {INF, INF, ... INF}
+// 2) dist[s] = 0
+// 3) Create a queue, q
+// 4) Initialize: visited[V] = {false, false, ... false}
+// 5) q.push(s), visited[s] = true
+// 6) while(q is not empty)
+//    {
+//        u = q.pop()
+//        for every adjacent v of u
+//        {
+//            if(visited[v] == false)
+//            {
+//                dist[v] = dist[u] + 1
+//                visited[v] = true
+//                q.push(v);
+//            }
+//        }
+//    }
+// 7) Print dist[]</code></pre>
+      <p>Board trace on 0–1, 0–2, 1–2, 1–3, 2–3, s = 0:</p>
+      <ol>
+        <li>Pop 0: dist[1] = dist[2] = 1, both enqueued.</li>
+        <li>Pop 1: 2 is already visited; dist[3] = 1 + 1 = 2, enqueued.</li>
+        <li>Pop 2 and 3: nothing new.</li>
+      </ol>
+      <p>dist = {0, 1, 1, 2}. The description links C++, Java and C# code.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-12">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM0OQ%3D%3D" target="_blank" rel="noopener">Detect Cycle in Undirected Graph</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Return true if an undirected graph (as an adjacency list) has a cycle. This is much simpler than for a directed graph, and either BFS or DFS works; the video uses DFS.</p>
+    <p>The obvious idea is "an adjacent vertex already visited means a cycle". The <strong>corner case</strong> it misses: in an undirected graph, the vertex you came from is always an already-visited neighbour. Even a single edge 0–1 would be reported as a cycle. Fix: pass the <strong>parent</strong> (the vertex we came from), and report a cycle only for a visited neighbour that isn't the parent.</p>
+    <p>Board example: 0–1, 1–2, 1–3, 2–3, 2–4, 4–5. DFS goes 0, 1 (its visited neighbour 0 is the parent), 2, 3. At 3, neighbour 1 is visited and isn't the parent (2), so there's a cycle.</p>
+    <p>The graph may be disconnected (e.g. 0–1 and the triangle 3–4–5), so the wrapper calls DFSRec for every unvisited vertex, with parent −1, which isn't a valid vertex.</p>
+    <p><strong>Time:</strong> O(V + E), DFS plus constant work per call for the parent. A BFS version keeps a parent array (when going u → v, set parent[v] = u) and applies the same check, also O(V + E).</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/NzAyMg%3D%3D" target="_blank" rel="noopener">Detect cycle in Undirected graph</a></p>
+<ul>
+<li><strong>Examples:</strong> N = 4, E = 4 with the cycle 0 → 2 → 1 → 0 → Yes; edges 0–1, 1–2, 2–3 → No. Union–find is another approach, in a separate article.</li>
+<li><strong>DFS from every unvisited node:</strong> a cycle exists only if there's a back edge, i.e. an edge from a node to itself (self-loop) or to one of its DFS-tree ancestors. For each adjacent node: if it's unvisited, recurse, returning true if the call does. If it's visited and isn't the current node's parent, return true.</li>
+<li><strong>Complexity:</strong> O(V + E) time, O(V) auxiliary space for the visited array.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>DFS based (board pseudocode)</h4>
+<pre><code class="language-cpp">bool DFSRec(adj, s, visited, parent)
+{
+    visited[s] = true;
+    for(every adjacent u of s)
+    {
+        if(visited[u] == false)
+        {
+            if(DFSRec(adj, u, visited, s) == true)
+                return true;
+        }
+        else if(u != parent)
+            return true;
+    }
+    return false;
+}
+bool DFS(adj, V)
+{
+    visited[V] = {false, false, ... false};
+    for(int i = 0; i &lt; V; i++)
+        if(visited[i] == false)
+            if(DFSRec(adj, i, visited, -1) == true)
+                return true;
+    return false;
+}</code></pre>
+      <p>The board writes this as pseudocode close to C++ and Java. <code>adj</code> is a <code>vector&lt;int&gt; adj[]</code> or an <code>ArrayList</code> of ArrayLists, and C++ needs a loop to initialise <code>visited</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-13">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/OTE5" target="_blank" rel="noopener">Detect Cycle in a Directed Graph (Part 1)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Return true if a directed graph has a cycle. The undirected solution fails even on a simple DAG such as 0 → 1, 2 → 1. DFS from 0 visits 0 and 1; then DFS from 2 finds 1 already visited and would wrongly report a cycle, although 1 isn't an ancestor of 2. This is a more complex problem than the undirected one. A BFS-based solution is covered separately (Part 2).</p>
+    <p><strong>Idea (DFS, back edges):</strong> in the DFS recursion tree, which follows the directed edges, there is a cycle if and only if some edge goes from a vertex to one of its <strong>ancestors currently active in the recursion</strong>, a <strong>back edge</strong>. To detect it, keep a second boolean array <code>recSt</code> marking the vertices on the current recursion call stack. Set it true on entering a call and false on leaving. A neighbour that is visited and also in <code>recSt</code> means a back edge, so there's a cycle.</p>
+    <p>Board example: 0 → 1, 2 → 1, 2 → 3, 3 → 4, 4 → 5, 5 → 3.</p>
+    <ol>
+      <li>DFS(0) visits 1, then both leave the stack.</li>
+      <li>DFS(2) finds 1 visited but not in the stack, so no cycle there.</li>
+      <li>DFS(2) goes on to 3, then 4, then 5.</li>
+      <li>5 → 3: 3 is visited and in the stack, a back edge, so return true.</li>
+    </ol>
+    <p><strong>Time:</strong> O(V + E), DFS with one extra array.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/NzEwMA%3D%3D" target="_blank" rel="noopener">Detect Cycle in a Directed Graph</a></p>
+<ul>
+<li><strong>Examples:</strong> N = 4, E = 6 with the cycle 0 → 2 → 0 → Yes; an N = 4, E = 4 graph → No.</li>
+<li>DFS of a connected graph produces a tree; a disconnected one gives a DFS forest. A cycle exists only if there's a back edge, to the node itself (self-loop) or to an ancestor. Detect it by tracking the vertices currently on the DFS recursion stack: reaching one of them means a cycle.</li>
+<li><strong>Steps:</strong> mark the node visited and on the stack, and recurse on unvisited neighbours, returning true if any call does. A neighbour already on the stack also returns true. A wrapper calls this for all vertices.</li>
+<li><strong>Complexity:</strong> O(V + E) time, O(V) space for the visited array and the recursion stack.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>DFS with a recursion-stack array (board)</h4>
+<pre><code class="language-cpp">bool DFSRec(adj, s, visited[], recSt[])
+{
+    visited[s] = true;
+    recSt[s] = true;
+    for(every adjacent u of s)
+    {
+        if(visited[u] == false &amp;&amp; DFSRec(adj, u, visited, recSt))
+            return true;
+        else if(recSt[u] == true)
+            return true;
+    }
+    recSt[s] = false;
+    return false;
+}
+bool DFS(adj, V)
+{
+    visited[V] = {false, false, ... false};
+    recSt[V] = {false, false, ... false};
+    for(int i = 0; i &lt; V; i++)
+        if(visited[i] == false)
+            if(DFSRec(adj, i, visited, recSt) == true)
+                return true;
+    return false;
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board and description slips:</strong></p>
+      <ul>
+        <li>The board resets <code>recSt[3] = false;</code> at the end of <code>DFSRec</code>; it must be <code>recSt[s] = false</code>, the current vertex, as written above.</li>
+        <li><code>&amp;&amp;</code> is drawn like "$$".</li>
+        <li>The description says "Detection of a Cycle in an Undirected Graph using DFS"; this video is about directed graphs.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-14">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM1MQ%3D%3D" target="_blank" rel="noopener">Topological Sorting (Kahn's BFS Based Algorithm)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a <strong>DAG</strong> (a directed graph with no cycles), find a topological sorting. Vertices are jobs and edges are dependencies: an edge 0 → 1 means job 0 must finish before job 1. There can be several valid orders; print any one.</p>
+    <ul>
+      <li>0 → 1, 0 → 2 → 0 1 2 or 0 2 1.</li>
+      <li>0 and 1 → 2, 3, 4 → 0 1 2 3 4 (and 1 0 …, with 2, 3, 4 in any order).</li>
+      <li>0 → 1, 2; 1, 2 → 3; 3 → 4, 5 → 0 1 2 3 4 5 (or 0 2 1 3 …).</li>
+    </ul>
+    <p><strong>Kahn's (BFS-based) algorithm, O(V + E):</strong> vertices with in-degree 0 have no dependencies and can go first.</p>
+    <ol>
+      <li>Store the in-degree of every vertex.</li>
+      <li>Create a queue q.</li>
+      <li>Add all in-degree-0 vertices to q.</li>
+      <li>While q isn't empty:
+        <ol type="a">
+          <li><code>u = q.pop()</code>;</li>
+          <li>print u;</li>
+          <li>for every adjacent v of u: (i) reduce v's in-degree by 1; (ii) if it becomes 0, add v to q, since all its dependencies are done.</li>
+        </ol>
+      </li>
+    </ol>
+    <p>No visited array is needed: the in-degrees make every vertex enter the queue exactly once.</p>
+    <p><strong>Computing in-degrees</strong> (an array of size V, initially 0) can be done two ways:</p>
+    <ul>
+      <li>If you control <code>addEdge(u, v)</code>, do <code>indegree[v]++</code> there.</li>
+      <li>Otherwise, traverse all the adjacency lists and increment <code>indegree[v]</code> for each occurrence of v. That's O(E), since the lists hold E items in total.</li>
+    </ul>
+    <p>The algorithm costs O(V + E) time like BFS, with O(V) extra space for the in-degrees.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/NzEwMQ%3D%3D" target="_blank" rel="noopener">Topological Sorting (Kahn's BFS Based Algorithm)</a></p>
+<ul>
+<li>Topological sort of a DAG is a linear order in which u comes before v for every edge uv; it's impossible if the graph isn't a DAG. There can be several, e.g. "5 4 2 3 1 0" and "4 5 2 0 3 1". The first vertex always has in-degree 0.</li>
+<li><strong>Fact:</strong> a DAG has at least one vertex with in-degree 0 and one with out-degree 0. Proof: the longest path u → v can have no edge into u and none out of v.</li>
+<li><strong>Kahn's:</strong> start with the tasks that have no dependencies, then those freed by them, level by level as in BFS.
+  <ol>
+    <li>Compute in-degrees and enqueue the in-degree-0 vertices.</li>
+    <li>Dequeue, count the vertex as visited, and decrement its neighbours' in-degrees, enqueuing any that reach 0.</li>
+    <li>If the visited count ≠ V, no topological sort is possible (there's a cycle).</li>
+  </ol>
+</li>
+<li><strong>In-degrees</strong> come from the edge array (+1 at each destination) or from traversing every vertex's list, O(V + E) either way.</li>
+<li><strong>Complexity:</strong> O(V + E) overall.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace: 0 → 2, 0 → 3, 1 → 3, 1 → 4, 2 → 3</h4>
+      <p>In-degrees 0, 0, 1, 3, 1, so q = [0, 1].</p>
+      <ol>
+        <li>Pop 0: indeg(2) = 0, so enqueue 2; indeg(3) = 2.</li>
+        <li>Pop 1: indeg(3) = 1; indeg(4) = 0, so enqueue 4.</li>
+        <li>Pop 2: indeg(3) = 0, so enqueue 3.</li>
+        <li>Pop 4, then 3.</li>
+      </ol>
+      <p>Output <strong>0 1 2 4 3</strong>. The description links C++ and Java code.</p>
+    </div>
+    <div class="added">
+      <p><strong>Teacher note:</strong> the transcript says Kahn's uses "Big O of E extra space". The in-degree array has size V; E is the time to fill it.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-15">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM1MA%3D%3D" target="_blank" rel="noopener">Detect Cycle in a Directed Graph (Part 2)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Cycle detection in a directed graph by modifying <strong>Kahn's algorithm</strong>: return true if there's a cycle. Board examples: 0 → 1 → 2 → 0 has a cycle; the other example has none.</p>
+    <p><strong>Change:</strong> keep <code>count = 0</code> and increment it each time a vertex is popped from the queue. At the end return <code>count != V</code>. If every vertex was processed the graph is acyclic; if count stays below V there's a cycle. Vertices on a cycle depend on each other, so none of them ever reaches in-degree 0; there is no starting point.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/NzEwNA%3D%3D" target="_blank" rel="noopener">Detect Cycle in a Directed Graph (Part 2)</a></p>
+<ul>
+<li>The BFS solution uses Kahn's topological sort. The article's example has two cycles, 0 → 1 → 2 → 3 → 0 and 2 → 4 → 2, so it returns true.</li>
+<li><strong>Steps:</strong>
+  <ol>
+    <li>Compute the in-degrees and set the visited count to 0.</li>
+    <li>Enqueue the in-degree-0 vertices.</li>
+    <li>Dequeue, increment the count, and decrement the neighbours' in-degrees, enqueuing any that reach 0.</li>
+    <li>If count ≠ V there's a cycle.</li>
+  </ol>
+</li>
+<li><strong>Complexity:</strong> O(V + E) time, O(V) auxiliary space.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Kahn's algorithm with a count (board)</h4>
+<pre><code class="language-cpp">// 1) Store indegree of every vertex.
+// 2) Create a queue, q
+// 3) Add all 0 indegree vertices to the q.
+// 4) count = 0
+// 5) while(q is not empty)
+//    {
+//        a) u = q.pop()
+//        b) for every adjacent v of u
+//               (i) reduce indegree of v by 1
+//               (ii) if indegree of v becomes 0, push v to the q
+//        c) count++
+//    }
+// 6) return (count != V)</code></pre>
+      <p>Board trace on 0 → 1, 4 → 1, 1 → 2, 2 → 3, 3 → 1 (in-degrees 0, 3, 1, 1, 0):</p>
+      <ol>
+        <li>The queue starts as [0, 4].</li>
+        <li>Pop 0: count = 1 and indeg(1) = 2.</li>
+        <li>Pop 4: count = 2 and indeg(1) = 1.</li>
+        <li>The queue is empty with count = 2 ≠ 5, so there's a cycle (1 → 2 → 3 → 1).</li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Description slip:</strong> it says "Detection of a Cycle in an Undirected Graph using Kahn's algorithm"; this video is about directed graphs.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-16">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM1Mg%3D%3D" target="_blank" rel="noopener">Topological Sorting (DFS Based Algorithm)</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Recap:</strong> in a DAG of jobs and dependencies, print a finishing order that respects every dependency; any valid order will do. Example: 0 → 1, 1 → 3, 2 → 3, 2 → 4, 3 → 4 gives 0 2 1 3 4, or 2 0 1 3 4, and so on.</p>
+    <p><strong>DFS idea:</strong> a vertex is pushed onto a stack only <em>after</em> all its descendants (everything that depends on it) have been pushed. Popping the stack then gives the dependencies first.</p>
+    <ol>
+      <li>Create an empty stack st.</li>
+      <li>For every vertex u: if u isn't visited, call DFS(u, st). This is the standard disconnected-graph DFS loop.</li>
+      <li>While st isn't empty, pop an item and print it.</li>
+    </ol>
+    <p>DFS(u, st):</p>
+    <ol>
+      <li>Mark u as visited.</li>
+      <li>For every adjacent v of u: if v isn't visited, call DFS(v, st).</li>
+      <li>Push u onto st. This line is the only addition to the normal DFS.</li>
+    </ol>
+    <p><strong>Time:</strong> O(V + E), the same as DFS: each push is O(1) and printing the stack is O(V).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace (0 → 1, 1 → 3, 2 → 3, 2 → 4, 3 → 4)</h4>
+      <ol>
+        <li>DFS(0) → DFS(1) → DFS(3) → DFS(4). 4 has no adjacent vertices, so push 4.</li>
+        <li>The calls finish in turn and push 3, then 1, then 0.</li>
+        <li>The loop then calls DFS(2). Its adjacent vertices 3 and 4 are already visited, so push 2.</li>
+        <li>Popping the stack prints <strong>2 0 1 3 4</strong>.</li>
+      </ol>
+      <p>The description links C++ and Java code.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-17">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTM1Mw%3D%3D" target="_blank" rel="noopener">Shortest Path in DAG</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a weighted DAG and a source, find the shortest distance to every vertex; vertices that can't be reached get infinity.</p>
+    <ul>
+      <li>Board: 0 → 1 (2), 0 → 4 (1), 1 → 2 (3), 4 → 2 (2), 4 → 5 (4), 2 → 3 (6), 5 → 3 (1), source 0 → <strong>0 2 3 6 1 5</strong>. For 2, the paths cost 2 + 3 = 5 and 1 + 2 = 3, so 3 is the shortest.</li>
+      <li>In a second example with source 1, vertex 0 isn't reachable, so its distance is ∞.</li>
+    </ul>
+    <p><strong>Algorithm, O(V + E), using topological sort:</strong></p>
+    <ol>
+      <li>Initialize <code>dist[V] = {INF, INF, … INF}</code>.</li>
+      <li>Set <code>dist[s] = 0</code>.</li>
+      <li>Find a topological sort of the graph, by BFS (Kahn) or DFS (a stack).</li>
+      <li>For every vertex u in topological order, for every adjacent v of u: if <code>dist[v] &gt; dist[u] + weight(u, v)</code>, set <code>dist[v] = dist[u] + weight(u, v)</code>. This is the standard <em>relax</em> operation.</li>
+    </ol>
+    <p><strong>Why it works:</strong> with no cycles there's never an edge from a later vertex back to an earlier one in topological order, so each vertex's distance is final before it is used.</p>
+    <p><strong>Time:</strong> O(V + E) for the topological sort, plus O(V + E) to relax every adjacency list (V for the outer loop, E for the lists). So O(V + E).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace (source 0, topological sort 0 1 4 2 5 3)</h4>
+      <ol>
+        <li>u = 0: dist[1] = 2 and dist[4] = 1.</li>
+        <li>u = 1: dist[2] = 2 + 3 = 5.</li>
+        <li>u = 4: dist[2] = min(5, 1 + 2) = 3 and dist[5] = 1 + 4 = 5.</li>
+        <li>u = 2: dist[3] = 3 + 6 = 9.</li>
+        <li>u = 5: dist[3] = min(9, 5 + 1) = 6.</li>
+        <li>u = 3: nothing.</li>
+      </ol>
+      <p>Final: <strong>0 2 3 6 1 5</strong>. With source 1, vertex 0 stays ∞, because relaxing from ∞ changes nothing. The description links C++ and Java code.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-18">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/OTM5" target="_blank" rel="noopener">Prim's Algorithm/Minimum Spanning Tree</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Motivation:</strong> four computers A, B, C, D at home, with known wire lengths between pairs (e.g. 5 m from A to D, 7 m from D to C, 10 m from A to C). Connect them all, possibly through intermediate computers, using the least total wire. The teacher's hand solution has weight 20.</p>
+    <p><strong>Minimum spanning tree:</strong> given a weighted, undirected, connected graph, find its minimum spanning tree. MST is defined only for undirected graphs, and the graph must be connected, or not every vertex can be connected.</p>
+    <p>A <strong>spanning tree</strong> connects all V vertices with exactly V − 1 edges and no cycle. Among all spanning trees of a weighted graph, the MST has the minimum total weight. Board example: A–B 8, A–C 9, B–D 10, B–E 3, C–E 5, D–E 6. Two of its spanning trees weigh 33 and 22, and the MST has weight 22.</p>
+    <p><strong>Naive:</strong> generate every spanning tree and pick the lightest.</p>
+    <p><strong>Prim's (greedy):</strong> keep two sets, the vertices in the MST and those not yet in it. Start with any vertex. Repeatedly take the minimum-weight edge crossing between the two sets (a <em>cut</em>), add it to the MST, and move its endpoint across. Since everything must end up connected, picking the cheapest crossing edge at each step is the greedy choice.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/MjM4NQ%3D%3D" target="_blank" rel="noopener">Prim's Minimum Spanning Tree Algorithm</a></p>
+<ul>
+<li>A spanning tree of a connected, undirected graph is a subgraph that's a tree connecting all vertices; a graph can have many. The MST has weight ≤ every other spanning tree's, where weight is the sum of edge weights, and it has V − 1 edges.</li>
+<li><strong>Prim's (greedy):</strong> start with an empty tree and two vertex sets, included and not yet included. At each step consider the cut between them, pick its minimum-weight edge, and move that vertex into the MST set. The two sets must be connected, and with the cheapest edge, for the result to be an MST.</li>
+<li><strong>Algorithm:</strong> <code>mstSet</code> is empty and all keys are INF except the first vertex's key, 0.
+  <ol>
+    <li>Pick the vertex u not in <code>mstSet</code> with the minimum key.</li>
+    <li>Add u to <code>mstSet</code>.</li>
+    <li>For each adjacent v, if w(u, v) &lt; key[v], set key[v] = w(u, v).</li>
+  </ol>
+  Repeat until all vertices are included. A <code>parent[]</code> array records the MST edges for output.</li>
+<li><strong>Complexity:</strong> O(V²) with the matrix version, O(E log V) with an adjacency list and a binary heap. Auxiliary space O(V).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace (A–B 5, A–C 8, B–C 10, B–D 15, C–D 20)</h4>
+      <ol>
+        <li>Start with {A}. The crossing edges are A–B (5) and A–C (8): add A–B.</li>
+        <li>From {A, B}, the crossing edges are 8, 10 and 15: add A–C (8).</li>
+        <li>From {A, B, C}, the crossing edges are B–D (15) and C–D (20): add B–D.</li>
+      </ol>
+      <p>MST weight 5 + 8 + 15 = <strong>28</strong>. The next videos cover the C++ and Java implementations; the description links Python, C++ and Java code.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-19">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTgzOA%3D%3D" target="_blank" rel="noopener">Implementation of Prim's Algorithm C++</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (a frame every 15 seconds plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The description says this lecture implements Prim's algorithm in C++. The input is an adjacency matrix <code>graph[][]</code>, where 0 means no edge; the output is the MST weight.</p>
+    <ul>
+      <li>{{0,5,8,0},{5,0,10,0},{8,10,0,20},{0,15,20,0}} → <strong>28</strong>.</li>
+      <li>{{0,2,0,6,0},{2,0,3,8,5},{0,3,0,0,7},{6,8,0,0,9},{0,5,7,9,0}} → <strong>16</strong>.</li>
+    </ul>
+    <p><strong>Idea on the board:</strong> keep <code>key[v]</code> (the cheapest known edge weight connecting v to the MST, initially ∞, with <code>key[0] = 0</code>) and <code>mSet[v]</code> (whether v is in the MST). V times:</p>
+    <ol>
+      <li>Pick the vertex u not in mSet with the minimum key.</li>
+      <li>Add it to mSet and add <code>key[u]</code> to the result.</li>
+      <li>For each v not in mSet with an edge from u, set <code>key[v] = min(key[v], graph[u][v])</code>.</li>
+    </ol>
+    <p><strong>Time:</strong> Θ(V²) with the adjacency matrix. The board also notes that with an adjacency list and a min heap (priority queue) it becomes O((V + E) log V).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Prim's with an adjacency matrix: Θ(V²)</h4>
+<pre><code class="language-cpp">int primMST(vector&lt;int&gt; graph[], int V)
+{
+    int key[V], res = 0;
+    fill(key, key + V, INT_MAX);
+    key[0] = 0;
+    bool mSet[V] = {false};
+    for(int count = 0; count &lt; V; count++)
+    {
+        int u = -1;
+        for(int i = 0; i &lt; V; i++)
+            if(!mSet[i] &amp;&amp; (u == -1 || key[i] &lt; key[u]))
+                u = i;
+        mSet[u] = true;
+        res = res + key[u];
+        for(int v = 0; v &lt; V; v++)
+            if(graph[u][v] != 0 &amp;&amp; !mSet[v])
+                key[v] = min(key[v], graph[u][v]);
+    }
+    return res;
+}</code></pre>
+      <p>Board trace on 0–1 5, 0–2 10, 1–2 8, 1–3 15, 2–3 20 (key starts {0, ∞, ∞, ∞}):</p>
+      <ol>
+        <li>count = 0: u = 0, so key = {0, 5, 10, ∞}.</li>
+        <li>count = 1: u = 1, so key = {0, 5, 8, 15}.</li>
+        <li>count = 2: u = 2; key[3] stays 15.</li>
+        <li>count = 3: u = 3.</li>
+      </ol>
+      <p>res = 0 + 5 + 8 + 15 = 28. For the 5-vertex graph the board accumulates res = 2 + 3 + 5 + 6 = 16, with mSet filled in the order {0, 1, 2, 4, 3}.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong> <code>&amp;&amp;</code> is drawn like "$$". The parameter is written <code>vector&lt;int&gt; graph[]</code> but used as a V × V matrix (<code>graph[u][v]</code>).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-20">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTU2MDE%3D" target="_blank" rel="noopener">Implementation of Prim's Algorithm Java</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The input is a V × V matrix for an undirected, weighted, connected graph, with vertices numbered 0 to V − 1. The output is just the MST weight: 28 and 16 for the same two examples as the C++ video.</p>
+    <p><strong>Implementation:</strong> the "in MST" set is a boolean array <code>mSet</code> (false by default in Java). Instead of examining every crossing edge, keep <code>key[]</code>: the minimum weight of an edge from the current MST to each outside vertex, initially <code>Integer.MAX_VALUE</code>, with <code>key[0] = 0</code>, so vertex 0 is picked first. An infinite key means the vertex isn't yet reachable from the MST.</p>
+    <p>Each iteration:</p>
+    <ol>
+      <li>Pick the unincluded vertex u with the minimum key.</li>
+      <li>Add it to the MST and add <code>key[u]</code> to <code>res</code>.</li>
+      <li>For each unincluded adjacent v (<code>graph[u][v] != 0</code>) with a smaller edge, set <code>key[v] = graph[u][v]</code>.</li>
+    </ol>
+    <p>That's exactly "pick the minimum-weight edge crossing the cut". In the last iteration no updates happen, since everything is included.</p>
+    <p><strong>Time:</strong> the outer loop runs Θ(V) times, and each pass has two Θ(V) inner loops, so Θ(V²).</p>
+    <p><strong>Better:</strong> an adjacency list plus a min heap for the keys gives O(V log V) for the extract-mins and O((V + E) log V) for the decrease-keys (each O(log V), at most once per adjacency-list entry). That's O((V + E) log V), and since a connected graph has E ≥ V − 1, V = O(E), giving <strong>O(E log V)</strong>, the best for Prim's.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Prim's with an adjacency matrix (Java): Θ(V²)</h4>
+<pre><code class="language-java">int V;
+int primMST(int graph[][])
+{
+    int key[] = new int[V], res = 0;
+    Arrays.fill(key, Integer.MAX_VALUE);
+    key[0] = 0;
+    boolean mSet[] = new boolean[V];
+    for(int count = 0; count &lt; V; count++)
+    {
+        int u = -1;
+        for(int i = 0; i &lt; V; i++)
+            if(!mSet[i] &amp;&amp; (u == -1 || key[i] &lt; key[u]))
+                u = i;
+        mSet[u] = true;
+        res = res + key[u];
+        for(int v = 0; v &lt; V; v++)
+            if(!mSet[v] &amp;&amp; graph[u][v] != 0 &amp;&amp; graph[u][v] &lt; key[v])
+                key[v] = graph[u][v];
+    }
+    return res;
+}</code></pre>
+      <p>Board trace on 0–1 5, 0–2 8, 1–2 10, 1–3 15, 2–3 20:</p>
+      <ol>
+        <li>Pick 0: key = {0, 5, 8, ∞}.</li>
+        <li>Pick 1: key[3] = 15; key[2] stays 8, since 10 isn't smaller.</li>
+        <li>Pick 2 (8), then 3 (15).</li>
+      </ol>
+      <p>res = 5 + 8 + 15 = 28.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong> <code>&amp;&amp;</code> is drawn like "$$". The inner update's last part (<code>graph[u][v] &lt; key[v]</code>) is hidden by the teacher on the board and is taken from the transcript ("the key value should be smaller than the current key value").</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-21">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/OTQw" target="_blank" rel="noopener">Dijkstra's Shortest Path Algorithm</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Given a weighted graph and a source, find the shortest distance to every vertex. First example: A–B 5, A–C 10, B–C 3, C–D 2, B–D 20. From A: A 0, B 5, C 8 (5 + 3, shorter than the direct 10), D 10 (5 + 3 + 2; the other paths cost 12 and 25).</p>
+    <p><strong>Idea</strong> (similar to Prim's): give the source distance 0 and every other vertex ∞. Keep two sets, distances finalized and not yet finalized. Repeatedly pick the not-finalized vertex u with the minimum distance, finalize it, and <strong>relax</strong> each adjacent v: if <code>d[v] &gt; d[u] + w(u, v)</code>, set <code>d[v] = d[u] + w(u, v)</code>. The source is picked first because its distance is 0.</p>
+    <p><strong>Negative weights break it.</strong> With A → B 4, A → C 8 and C → B −10, B is finalized at 4, but the real shortest distance is 8 − 10 = −2. Dijkstra does not work for graphs with negative-weight edges.</p>
+    <p><strong>Edge changes:</strong></p>
+    <ul>
+      <li>Adding the same weight to every edge can change the shortest path, because paths with more edges gain more. On the board, a 3-edge path costing 33 becomes 63 after adding 10 to each edge, while a 2-edge path costing 35 becomes 55 and is now shorter.</li>
+      <li>Multiplying every weight by the same value doesn't change the shortest path: every path is scaled by the same factor.</li>
+    </ul>
+    <p><strong>Implementation with a min heap (priority queue):</strong></p>
+    <ol>
+      <li>Create an empty priority queue pq.</li>
+      <li>Set <code>dist[V] = {∞, …}</code> and <code>dist[s] = 0</code>.</li>
+      <li>Insert all distances into pq.</li>
+      <li>While pq isn't empty: <code>u = pq.extractMin()</code>, then relax every adjacent of u that's still in pq. A relax is a decrease-key.</li>
+    </ol>
+    <p><strong>Time:</strong> building the heap is O(V). There are V extract-mins at O(log V), and each adjacency entry relaxes at most once (E times in total) with an O(log V) decrease-key. So O(V log V + E log V).</p>
+    <p>The C++ STL and Java priority queues don't support decrease-key. Instead, insert a new (smaller) entry and keep or skip the old one, or delete the old key and insert the new.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/MjM3MA%3D%3D" target="_blank" rel="noopener">Dijkstra's Algorithm for Shortest Path in a Weighted Graph</a></p>
+<ul>
+<li>Dijkstra is a variation of BFS that builds a shortest path tree (SPT) rooted at the source. It keeps <code>sptSet</code>, the included vertices. Each step picks the not-included vertex with the minimum distance, adds it, and updates each neighbour v if dist(u) + w(u, v) &lt; dist(v).</li>
+<li>Article example: distances start {0, INF, …}. 0 is picked and 1 and 7 become 4 and 8. Then 1 is picked, then 7 (6 and 8 become 15 and 9), then 6, … until all vertices are in the SPT.</li>
+<li>With a min heap (<code>priority_queue</code>): O(E log V). Dijkstra doesn't work with negative edge weights.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board example (source A)</h4>
+      <p>Edges: A–B 4, A–C 8, B–C 11, B–D 8, C–E 7, C–F 1, D–E 2, D–G 7, D–H 4, E–F 6, F–H 2, G–H 14, G–I 9, H–I 10.</p>
+      <ol>
+        <li>Finalize A: B = 4, C = 8.</li>
+        <li>Finalize B: D = 12; C stays 8, since 4 + 11 is larger.</li>
+        <li>Finalize C: E = 15, F = 9.</li>
+        <li>Finalize F: H = 11; E stays 15.</li>
+      </ol>
+      <p>Continue in the same way until every vertex is finalized; the final row of the table is the output.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> the edge between C and F is partly hidden by the teacher; its weight (1) is from the transcript ("we are getting through it is 9", i.e. 8 + 1).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-22">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTgzNg%3D%3D" target="_blank" rel="noopener">Implementation of Dijkstra's Algorithm C++</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (a frame every 15 seconds plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The description says this implements Dijkstra's algorithm in C++. The input is an adjacency matrix (0 means no edge) and a source; the output is the dist array.</p>
+    <ul>
+      <li>{{0,5,10,0},{5,0,3,20},{10,3,0,2},{0,20,2,0}}, src = 0 → dist = {0, 5, 8, 10}.</li>
+      <li>{{0,5,3},{5,0,1},{3,1,0}}, src = 1 → dist = {4, 0, 1}.</li>
+    </ul>
+    <p><strong>Simple version, O(V²):</strong> dist is set to <code>INT_MAX</code> except <code>dist[src] = 0</code>, and <code>fin[]</code> (finalized) starts all false. Repeat V − 1 times:</p>
+    <ol>
+      <li>Pick the unfinalized u with the minimum dist.</li>
+      <li>Mark it finalized.</li>
+      <li>Relax each unfinalized neighbour v: <code>dist[v] = min(dist[v], dist[u] + graph[u][v])</code>.</li>
+    </ol>
+    <p>The board notes that with a min heap and an adjacency list, the pick becomes O(V log V) and the relaxation O((V + E) log V).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Dijkstra with an adjacency matrix: O(V²)</h4>
+<pre><code class="language-cpp">vector&lt;int&gt; dijkstra(vector&lt;int&gt; graph[], int V, int src)
+{
+    vector&lt;int&gt; dist(V, INT_MAX);
+    dist[src] = 0;
+    vector&lt;bool&gt; fin(V, false);
+    for(int count = 0; count &lt; V - 1; count++)
+    {
+        int u = -1;
+        for(int i = 0; i &lt; V; i++)
+            if(!fin[i] &amp;&amp; (u == -1 || dist[i] &lt; dist[u]))
+                u = i;
+        fin[u] = true;
+        for(int v = 0; v &lt; V; v++)
+            if(graph[u][v] != 0 &amp;&amp; fin[v] == false)
+                dist[v] = min(dist[v], dist[u] + graph[u][v]);
+    }
+    return dist;
+}</code></pre>
+      <p>Board trace on 0–1 50, 0–2 100, 1–2 30, 1–3 200, 2–3 20, src = 0. Initially dist = {0, ∞, ∞, ∞} and fin = {F, F, F, F}.</p>
+      <ol>
+        <li>count = 0: u = 0, so dist = {0, 50, 100, ∞}.</li>
+        <li>count = 1: u = 1, so dist = {0, 50, 80, 250}.</li>
+        <li>count = 2: u = 2, so dist = {0, 50, 80, 100}.</li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong> <code>&amp;&amp;</code> is drawn like "$$". The parameter is <code>vector&lt;int&gt; graph[]</code> but is used as a V × V matrix. The loop runs V − 1 times, because the last vertex has nothing left to relax.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-23">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTgzNw%3D%3D" target="_blank" rel="noopener">Implementation of Dijkstra's Algorithm Java</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (a frame every 30 seconds plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The description says this implements Dijkstra's algorithm in Java. It uses the same examples and the same O(V²) adjacency-matrix approach as the C++ video. A <code>fin[]</code> boolean array marks the finalized vertices.</p>
+    <p>The board also sketches why the relaxation works: when u is finalized, the path src → … → u (cost <code>dist[u]</code>) followed by the edge u → v (cost <code>graph[u][v]</code>) is a candidate path for v. It also notes the min heap with adjacency list optimization: O(V log V) for the picks and O((V + E) log V) for the relaxations.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Dijkstra with an adjacency matrix (Java)</h4>
+<pre><code class="language-java">int[] dijkstra(int graph[][], int src)
+{
+    int V = graph.length;
+    int[] dist = new int[V];
+    Arrays.fill(dist, Integer.MAX_VALUE);
+    dist[src] = 0;
+    boolean fin[] = new boolean[V];   // Finalized
+    for(int count = 0; count &lt; V - 1; count++)
+    {
+        int u = -1;
+        for(int i = 0; i &lt; V; i++)
+            if(!fin[i] &amp;&amp; (u == -1 || dist[i] &lt; dist[u]))
+                u = i;
+        fin[u] = true;
+        for(int v = 0; v &lt; V; v++)
+            if(!fin[v] &amp;&amp; graph[u][v] != 0)
+                dist[v] = Math.min(dist[v], dist[u] + graph[u][v]);
+    }
+    return dist;
+}</code></pre>
+      <p>Board trace on 0–1 50, 0–2 100, 1–2 30, 1–3 200, 2–3 20, src = 0. Each count picks u = count and finalizes it:</p>
+      <ol>
+        <li>count = 0: u = 0, so dist = {0, 50, 100, ∞}.</li>
+        <li>count = 1: u = 1, so dist = {0, 50, 80, 250}.</li>
+        <li>count = 2: u = 2, so dist = {0, 50, 80, 100}.</li>
+      </ol>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong> <code>&amp;&amp;</code> is drawn like "88". The board writes <code>min(...)</code>; Java needs <code>Math.min</code>, as written above.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-24">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTgzMA%3D%3D" target="_blank" rel="noopener">Kosaraju's Algorithm Part 1</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Strongly connected components (SCCs)</strong> of a directed graph are sets of vertices in which every pair is reachable from each other. Print each SCC on its own line; the components, and the vertices within one, may come in any order.</p>
+    <ul>
+      <li>0 → 2, 2 → 1, 1 → 0, 2 → 3, 3 ⇄ 4 → <strong>0 1 2 | 3 4</strong>. 3 is reachable from 2 but not 2 from 3, so they're separate.</li>
+      <li>0 → 1, 1 ⇄ 2, 1 → 3, 3 → 4, 4 ⇄ 5 → <strong>0 | 1 2 | 3 | 4 5</strong>.</li>
+      <li>0 → 1, 1 → 2, 2 → 0, 3 → 1, and a vertex 4 → <strong>0 1 2 | 3 | 4</strong>.</li>
+    </ul>
+    <p><strong>Why plain DFS fails:</strong> in an undirected graph, if v is reachable from u then u is reachable from v, so each DFS from an unvisited vertex gives exactly one connected component. In a directed graph that isn't true. Starting DFS at 0 in the first example reaches everything, but starting at 3 gives just {3, 4}, after which DFS from 0 gives {0, 1, 2}, which is correct.</p>
+    <p>So the DFS must start from a <strong>sink component</strong> (one with no edges out to other components) and work back toward the <strong>source component</strong>. Then each DFS can't leak into components that haven't been printed yet. Kosaraju's algorithm guarantees that order with some preprocessing.</p>
+    <ol>
+      <li>Order the vertices in <strong>decreasing order of finish time</strong> in DFS. A vertex's start time is when its recursive call begins; its finish time is when all its adjacent vertices are done.</li>
+      <li><strong>Reverse all edges</strong> to get the transpose graph.</li>
+      <li><strong>DFS the reversed graph in the order from step 1.</strong> Each DFS from an unvisited vertex prints all the vertices it reaches as one SCC.</li>
+    </ol>
+    <p>Steps 2 and 3 are simple. Step 1 is like topological sort (push a vertex after its descendants), except that the graph may have cycles; Part 2 covers it.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/MjYzNA%3D%3D" target="_blank" rel="noopener">Kosaraju's Algorithm | Strongly Connected Components</a></p>
+<ul>
+<li>A directed graph is strongly connected if every pair of vertices has a path between them; an SCC is a <em>maximal</em> strongly connected subgraph. Kosaraju's finds all SCCs in O(V + E).</li>
+<li><strong>Steps:</strong>
+  <ol>
+    <li>DFS, pushing each vertex onto a stack S after its adjacent vertices are done. In the example, starting from 0 gives the stack 1, 2, 4, 3, 0.</li>
+    <li>Reverse every arc to get the transpose graph.</li>
+    <li>Pop vertices while S isn't empty; for each unvisited v, DFSUtil(v) prints v's SCC.</li>
+  </ol>
+</li>
+<li><strong>Why:</strong> a single DFS from 0, 1 or 2 gives one tree, but from 3 or 4 a forest. To print SCCs, DFS should start from the sink, 4, then 3, then the rest. There's no direct way to get that order. But a vertex linking to other SCCs always finishes after the vertices of those SCCs (0 finishes after 3 and 4). Reversing the graph turns {0, 1, 2} into the sink and {4} into the source, so the stack order processes sink to source.</li>
+<li><strong>Complexity:</strong> O(V + E): two DFS passes plus an O(V + E) reversal over the adjacency lists. Auxiliary space O(V + E). SCC algorithms are often a first step for algorithms that work only on strongly connected graphs.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace: 0 → 1, 1 → 2, 2 → 0, 1 → 3, 3 → 4</h4>
+      <ol>
+        <li>DFS from 1. Start and finish times: 1 (1, 10), 2 (2, 5), 0 (3, 4), 3 (6, 9), 4 (7, 8). Decreasing finish order: <strong>1 3 4 2 0</strong>.</li>
+        <li>Reverse the edges: 1 → 0, 0 → 2, 2 → 1, 3 → 1, 4 → 3.</li>
+        <li>DFS in order 1 3 4 2 0:
+          <ul>
+            <li>from 1, reach 0 and 2 → <strong>1 0 2</strong>;</li>
+            <li>from 3 (1 is visited) → <strong>3</strong>;</li>
+            <li>from 4 → <strong>4</strong>;</li>
+            <li>2 and 0 are already visited.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-25">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTgzMQ%3D%3D" target="_blank" rel="noopener">Kosaraju's Algorithm Part 2</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (a frame every 20 seconds plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Implementing step 1</strong> (decreasing finish order), the same way as DFS-based topological sort:</p>
+    <ol>
+      <li>Create an empty stack st.</li>
+      <li>For every vertex u: if u isn't visited, call DFSRec(u, st).</li>
+      <li>While st isn't empty, pop an item and add it to the result.</li>
+    </ol>
+    <p>DFSRec(u, st):</p>
+    <ol type="a">
+      <li>Mark u as visited.</li>
+      <li>For every adjacent v: if v isn't visited, call DFSRec(v, st).</li>
+      <li>Push u onto st, after all of its descendants.</li>
+    </ol>
+    <p>Board example (0 → 1, 1 → 2, 2 → 0, 1 → 3, 3 → 4, beginning from 1): the stack ends with 1 on top, giving <strong>1 3 4 2 0</strong>.</p>
+    <p><strong>Why step 2 (reversing the edges) is needed:</strong> in 0 → 1, 1 → 2, 1 → 3, 3 → 0, step 1 gives 0 1 2 3. Without reversal, a DFS from 0 would reach everything. On the reversed graph (1 → 0, 2 → 1, 3 → 1, 0 → 3), DFS from 0 gives <strong>0 3 1</strong>, then <strong>2</strong>, which are the correct SCCs.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board example: 0 → 1, 1 → 2, 2 → 3, 3 → 0, 3 → 4, 4 ⇄ 5</h4>
+      <ol>
+        <li><strong>Step 1:</strong> the stack gives the order 0 1 2 3 4 5.</li>
+        <li><strong>Step 2:</strong> reverse the edges: 1 → 0, 2 → 1, 3 → 2, 0 → 3, 4 → 3, 5 ⇄ 4.</li>
+        <li><strong>Step 3:</strong> DFS from 0 gives <strong>0 3 2 1</strong>; DFS from 4 gives <strong>4 5</strong>.</li>
+      </ol>
+      <p>The description links C++, Java and C# code for the full algorithm.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-26">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTMyMw%3D%3D" target="_blank" rel="noopener">Bellman Ford Shortest Path Algorithm</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Single-source shortest paths again: BFS for unweighted graphs, topological sort for DAGs, Dijkstra for any graph but <em>not</em> with negative edge weights. <strong>Bellman–Ford</strong> works even with negative-weight edges, and it can also report negative-weight cycles.</p>
+    <p>Board example: A → B 1, A → C 4, B → C −3, B → D 2, C → D 3, source A → distances <strong>{0, 1, −2, 1}</strong>. C is −2 via B (1 − 3), and D is 1 via C (−2 + 3).</p>
+    <p><strong>Idea (dynamic programming, bottom up):</strong> first find all shortest paths of one edge, then of two edges, and so on, using the length i − 1 solutions to get length i. <strong>Algorithm:</strong> relax all edges V − 1 times. A simple shortest path has at most V − 1 edges, so after iteration i every shortest path with ≤ i edges is found. Relax(u, v): if <code>d[v] &gt; d[u] + weight(u, v)</code>, set <code>d[v] = d[u] + weight(u, v)</code>. The edges may be processed in any order.</p>
+    <p>On a chain v1 → v2 → … → vn whose edges happen to be processed in reverse order, each iteration fixes only one more vertex, so all V − 1 iterations are needed.</p>
+    <p><strong>Time:</strong> O(VE), which is O(V³) for a complete graph, where E = Θ(V²).</p>
+    <p><strong>Negative-weight cycles:</strong> the shortest distance through one is −∞, since going round the cycle again always gives a shorter path. Board example: A → B 4, B → C −8, C → D 2, D → B 3, where B → C → D → B totals −3. Detection: after the V − 1 iterations, relax all edges once more. If any distance still decreases, there is a negative-weight cycle.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/MjM3Mw%3D%3D" target="_blank" rel="noopener">Bellman-Ford Algorithm for Shortest Path</a></p>
+<ul>
+<li>Single-source shortest paths when the graph may have negative-weight edges. Dijkstra is greedy and O(V log V) with a Fibonacci heap, but fails with negative edges. Bellman–Ford handles them, is simpler and suits distributed systems, but is O(VE).</li>
+<li><strong>Steps:</strong>
+  <ol>
+    <li>dist = ∞, with dist[src] = 0.</li>
+    <li>Relax every edge, |V| − 1 times.</li>
+    <li>Check every edge once more: if dist[v] &gt; dist[u] + w(u, v), report "Graph contains negative weight cycle".</li>
+  </ol>
+</li>
+<li><strong>Why it works</strong> (dynamic programming, bottom up): after iteration i, all shortest paths with at most i edges are known, and a simple path has at most |V| − 1 edges.</li>
+<li>In the article's example, edges are processed in a fixed order, and distances settle after two of the four iterations.</li>
+<li>Negative weights arise when following a path gives an advantage instead of a cost. Unlike Dijkstra, which must find the minimum over all vertices, Bellman–Ford considers edges one by one.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Bellman–Ford (board)</h4>
+<pre><code class="language-cpp">// d[V] = {INF, INF, ... INF}
+// d[s] = 0
+// for(count = 0; count &lt; V - 1; count++)
+//     for every edge (u, v)
+//         if(d[v] &gt; d[u] + weight(u, v))
+//             d[v] = d[u] + weight(u, v);
+//
+// // negative-weight cycle check: one more pass
+// for every edge (u, v)
+//     if(d[v] &gt; d[u] + weight(u, v))
+//         report "negative weight cycle"</code></pre>
+      <p>Dry run on the example, processing edges in the order BC, BD, CD, AB, AC:</p>
+      <ol>
+        <li>Iteration 1: only AB (B = 1) and AC (C = 4) change.</li>
+        <li>Iteration 2: BC gives C = 1 − 3 = −2; BD gives D = 3; CD gives D = −2 + 3 = 1.</li>
+        <li>Iteration 3 changes nothing.</li>
+      </ol>
+      <p>The description links C++ and Java code.</p>
+    </div>
+    <div class="added">
+      <p><strong>Teacher slip:</strong> in the summary the transcript says Bellman–Ford "works in big-oh of V plus e time". It's O(VE), as derived earlier in the video and written on the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-27">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTQ2NzA%3D" target="_blank" rel="noopener">Articulation Point</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (a frame every 20 seconds plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>An <strong>articulation point</strong> (cut vertex) is a vertex of an <em>undirected, connected</em> graph whose removal increases the number of connected components.</p>
+    <ul>
+      <li>0–1, 0–2, 1–2, 2–3, 3–4 → <strong>2 3</strong>.</li>
+      <li>0–1, 0–2, 1–2, 2–3, 2–4, 3–4 → <strong>2</strong>.</li>
+      <li>A star with centre 2 → <strong>2</strong>.</li>
+      <li>The triangle 0–1–2 → <strong>no articulation point</strong>.</li>
+    </ul>
+    <p><strong>Naive:</strong> remove every vertex one by one and count the connected components afterwards; if there's more than one, the removed vertex is an articulation point. Time O(V × (V + E)).</p>
+    <p><strong>Efficient approach, based on the DFS tree:</strong></p>
+    <ol>
+      <li><strong>First idea</strong> (root only): if the root of the DFS tree has 2 or more children, the root is an articulation point. The board shows DFS trees of the same graph rooted differently (beginning with 1, 2 or 3). The idea can only be used for the root: in the board's example, node 1 has two children in the DFS tree but isn't an articulation point.</li>
+      <li><strong>Second idea</strong> (non-root): a non-root node u is an articulation point if it has a child v such that no ancestor of u is reachable from the subtree rooted at v.</li>
+    </ol>
+    <p><strong>Discovery time</strong> <code>disc[u]</code>: the time at which DFS for u is called. <strong>Low value</strong> <code>low[u]</code>: the smallest discovery time reachable from u, considering both types of edges (tree edges and back edges).</p>
+    <p><strong>Implementation detail:</strong> a non-root node u is an articulation point if there's a child v with <code>low[v] ≥ disc[u]</code>. The root uses the first idea instead.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/MjYzNQ%3D%3D" target="_blank" rel="noopener">Articulation Points (or Cut Vertices) in a Graph</a></p>
+<ul>
+<li>A vertex whose removal, together with its edges, disconnects a connected undirected graph; for a disconnected graph, one whose removal increases the number of components. Articulation points are a network's vulnerabilities, single points of failure, and matter for designing reliable networks.</li>
+<li><strong>Simple:</strong> for every vertex v, remove it, check connectivity with BFS or DFS, then add it back.</li>
+<li><strong>DFS tree:</strong> u is an articulation point if either
+  <ul>
+    <li>it's the root and has at least two children, or</li>
+    <li>it isn't the root and has a child v such that nothing in v's subtree has a back edge to an ancestor of u.</li>
+  </ul>
+  A leaf of the DFS tree is never an articulation point.</li>
+<li><strong>Implementation:</strong> track <code>parent[]</code>, child counts for the root case, <code>disc[]</code>, and <code>low[]</code> (the earliest visited vertex reachable from the subtree). Time O(V + E), like DFS.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board example: 0–1, 0–3, 1–2, 2–3, 1–4, 4–5, 4–6, 5–6</h4>
+      <p>The DFS tree from 0 goes 0 → 1 → 2 → 3, with back edge 3 – 0, and 1 → 4 → 5 → 6, with back edge 6 – 4. Timers start at 1.</p>
+      <div class="scroll"><table>
+        <thead><tr><th>Node</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr></thead>
+        <tbody>
+          <tr><td>Disc</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+          <tr><td>Low</td><td>1</td><td>1</td><td>1</td><td>1</td><td>5</td><td>5</td><td>5</td></tr>
+        </tbody>
+      </table></div>
+      <p>For u = 1 and child v = 4, low[4] = 5 ≥ disc[1] = 2, so <strong>1 is an articulation point</strong>; removing 1 separates {4, 5, 6}. The description links C++ and Java code.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-28">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/OTQz" target="_blank" rel="noopener">Bridges in Graph</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A <strong>bridge</strong> is an edge of an undirected, connected graph whose removal increases the number of connected components. Board example: A–B, A–C, B–C, B–D, D–E. B–D and D–E are bridges; A–B, A–C and B–C (a cycle) aren't.</p>
+    <p>The solution is like articulation points, using DFS discovery times <code>disc</code> (the root's is 1) and <code>low[i]</code> (the lowest discovery time reachable from i). The rule is simpler: a tree edge <strong>u–v is a bridge if <code>low[v] &gt; disc[u]</code></strong>.</p>
+    <p><strong>Intuition:</strong> if neither u nor any of its ancestors is reachable from child v, removing u–v cuts v's DFS subtree off into its own component. If an ancestor is reachable through a back edge (drawn dotted), the edge isn't a bridge.</p>
+    <p><strong>Notes:</strong></p>
+    <ul>
+      <li>The algorithm works with any vertex as the DFS root.</li>
+      <li>Back edges in an undirected graph are never bridges, so only tree edges need checking.</li>
+      <li>In an undirected graph, the edge back to the parent must not update the low value, so keep a parent array too.</li>
+      <li>For a disconnected graph, run it on every component, as in disconnected DFS.</li>
+      <li>Time O(V + E): a single DFS with extra disc and low arrays (GfG has an implementation).</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/MjYzNg%3D%3D" target="_blank" rel="noopener">Bridges in a Graph</a></p>
+<ul>
+<li>An edge whose removal disconnects a connected undirected graph, or increases the number of components of a disconnected one. Like articulation points these are vulnerabilities: in a wired network, articulation points are the critical computers and bridges the critical wires.</li>
+<li><strong>Simple:</strong> for every edge (u, v), remove it, check connectivity with BFS or DFS, then add it back.</li>
+<li><strong>Efficient:</strong> with low[v] (the earliest visited vertex reachable from v's subtree), (u, v) is a bridge if <strong>low[v] &gt; disc[u]</strong>. Time O(V + E), auxiliary space O(V).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board trace (DFS from A; disc/low)</h4>
+      <p>The DFS tree is A → B → D → E and B → C, with back edge C – A. Values: A 1/1, B 2/1, D 3/3, E 4/4, C 5/1.</p>
+      <ul>
+        <li>A–B: low[B] = 1, not &gt; disc[A] = 1, so not a bridge.</li>
+        <li>B–D: low[D] = 3 &gt; disc[B] = 2, so a <strong>bridge</strong>.</li>
+        <li>D–E: low[E] = 4 &gt; disc[D] = 3, so a <strong>bridge</strong>.</li>
+        <li>B–C: low[C] = 1, not &gt; 2, so not a bridge.</li>
+      </ul>
+      <p>The teacher repeats the check with a different DFS root (C) on a larger graph and finds the same bridges. The description links C++ and Java code.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-29">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/OTQ0" target="_blank" rel="noopener">Tarjans Algorithm</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Tarjan's algorithm finds the SCCs of a directed graph in <strong>one</strong> DFS traversal; Kosaraju's needs two. Prerequisites: Kosaraju's algorithm, discovery times and low values, articulation points and bridges.</p>
+    <p><strong>Idea:</strong> do a DFS with disc and low values. Keep a <strong>stack</strong>: push each vertex when its recursive call starts, and, unlike directed cycle detection, don't remove it when the call ends.</p>
+    <p>When all of u's children are explored and <code>disc[u] == low[u]</code>, no ancestor is reachable from u's subtree. u is then the head of an SCC: pop the stack down to and including u and print the popped vertices as one SCC.</p>
+    <p><strong>Cross edges:</strong> in a directed graph, an edge to an already-visited vertex that is no longer on the stack (not an ancestor) is a <em>cross edge</em>. It must not update the low value; only back edges to vertices still on the stack count. So the algorithm needs three extra arrays: stack membership, low, and disc.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board example 1: A → B, B → C, C → A, B → D, D → E</h4>
+      <p>The DFS tree from A goes A → B → C (back edge C → A), then B → D → E. disc/low: A 1/1, B 2/1, C 3/1, D 4/4, E 5/5. The stack gets A, B, C, then D, then E.</p>
+      <ol>
+        <li>E finishes with disc = low = 5, so pop and print <strong>E</strong>.</li>
+        <li>D finishes with 4 = 4, so print <strong>D</strong>.</li>
+        <li>C and B have low ≠ disc, so nothing is printed for them.</li>
+        <li>A finishes with 1 = 1, so pop C, B, A and print <strong>C B A</strong>.</li>
+      </ol>
+    </div>
+    <div class="approach">
+      <h4>Board example 2 (with a cross edge): A → B, A → C, C → B, C → D, D → E, E → C</h4>
+      <p>The DFS from A visits B first (2/2): B finishes with disc = low, so print <strong>B</strong>. Then it visits C (3), D (4) and E (5).</p>
+      <ul>
+        <li>C → B is a cross edge, because B is no longer on the stack, so low[C] stays 3, not 2.</li>
+        <li>E → C is a back edge, so low[E] = 3 and then low[D] = 3.</li>
+      </ul>
+      <p>C finishes with 3 = 3, so pop E, D, C and print <strong>E D C</strong>. Then A gives <strong>A</strong>. The description links C++ and Java code.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-30">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/video/MTQxMQ%3D%3D" target="_blank" rel="noopener">Kruskal's Algorithm</a> · Notes from the full course transcript and the board (close-ups). The transcript is auto-generated, so the board wins where they differ. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>MST recap:</strong> for a weighted, undirected, connected graph, find a spanning tree (V − 1 edges, connecting all vertices, no cycle) of minimum total weight. Here only the weight is returned.</p>
+    <p><strong>Kruskal's algorithm</strong> (greedy):</p>
+    <ol>
+      <li>Sort all edges in increasing order of weight.</li>
+      <li>Initialize MST = { } and res = 0.</li>
+      <li>For every edge e, while the MST has fewer than V − 1 edges: if adding e to the MST doesn't cause a cycle, set MST = MST ∪ {e} and res += e.weight.</li>
+      <li>Return res.</li>
+    </ol>
+    <p><strong>Naive cycle check:</strong> add the edge to a separate MST graph, run cycle detection, and remove the edge if a cycle appears. That's a separate graph and a full cycle detection for every edge.</p>
+    <p><strong>Efficient: disjoint set (union–find).</strong> The input graph is an array of edges, since the only access pattern is sorting by weight, so no adjacency list or matrix is needed. Each <code>Edge</code> has src, dest and wt, plus a comparator: <code>compareTo</code> via <code>Comparable</code> in Java, a <code>myCmp</code> for STL <code>sort</code> in C++.</p>
+    <p>For edge (u, v): if <code>find(u) == find(v)</code>, u and v are already connected, so adding the edge would make a cycle and it is skipped. Otherwise <code>union(x, y)</code> adds it. <code>parent[i] = i</code> and <code>rank[i] = 0</code> initially; rank is a tree's height, used for union by rank.</p>
+    <p>To print the chosen edges too, store each accepted edge in an output array at index s.</p>
+    <p><strong>Time:</strong> O(E log E) to sort, plus O(V) to initialise, plus a loop over at most E edges (the last edge may be the one that completes the MST). With union by rank and path compression, find and union are effectively constant, α(V), so the loop is O(E · α(V)). Overall O(E log E), which equals O(E log V) for a connected graph. Auxiliary space O(V) for the parent and rank arrays.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Kruskal with union–find (board, close to C++/Java)</h4>
+<pre><code class="language-cpp">int parent[V], rank[V];
+int kruskal(Edge arr[])
+{
+    sort(arr);                       // C++: sort(arr, arr + E, myCmp);
+    for(int i = 0; i &lt; V; i++)       // Initialization
+    {
+        parent[i] = i;
+        rank[i] = 0;
+    }
+    int res = 0;
+    for(int i = 0, s = 0; s &lt; V - 1; i++)
+    {
+        Edge e = arr[i];
+        int x = find(e.src);
+        int y = find(e.dst);
+        if(x != y)
+        {
+            res += e.wt;
+            Union(x, y);
+            s++;
+        }
+    }
+    return res;
+}</code></pre>
+      <p>Here i is the index of the next edge, s the current size of the MST, V the number of vertices and E the number of edges. find() and union() have their standard implementations (union by rank, path compression).</p>
+    </div>
+    <div class="approach">
+      <h4>Board traces</h4>
+      <ul>
+        <li>Sorted edges BC 3, AC 5, AB 6, CD 7, BD 8, DE 10, CE 12. Take BC and AC (res 8); skip AB (cycle); take CD (15); skip BD; take DE. That makes 4 edges, so res = 3 + 5 + 7 + 10 = 25.</li>
+        <li>Edges 1–3 3, 2–3 4, 1–2 5, 0–2 8, 0–1 10, 2–4 12, 3–4 15: take 1–3 (3) and 2–3 (7); skip 1–2 (same set); take 0–2 (15); skip 0–1; take 2–4. That's V − 1 = 4 edges, so stop: res = 15 + 12 = 27.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Graph-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (24 problems, in course order), plus the two Articles-tab items that don't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/print-adjacency-list-1587115620" target="_blank" rel="noopener">Graph Adjacency List Traversal</a></td><td>Basic</td><td>Videos 3–5</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/bfs-traversal-of-graph" target="_blank" rel="noopener">BFS of Graph</a></td><td>Easy</td><td>Video 7</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/distance-of-nearest-cell-having-1-1587115620" target="_blank" rel="noopener">Distance of Nearest 1 in Grid</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/depth-first-traversal-for-a-graph" target="_blank" rel="noopener">DFS of Graph</a></td><td>Easy</td><td>Video 9</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/rotten-oranges2536" target="_blank" rel="noopener">Rotten Oranges</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/steps-by-knight5927" target="_blank" rel="noopener">Min Steps by Knight</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>7</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/find-the-number-of-islands" target="_blank" rel="noopener">Count Islands</a></td><td>Medium</td><td>Videos 7, 9</td></tr>
+        <tr><td>8</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/find-whether-path-exist5238" target="_blank" rel="noopener">Check for Path in a 2D Grid with Obstacles</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>9</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/level-of-nodes-1587115620" target="_blank" rel="noopener">Level of Node</a></td><td>Medium</td><td>Video 11</td></tr>
+        <tr><td>10</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/possible-paths-between-2-vertices-1587115620" target="_blank" rel="noopener">Count Paths Between Two Vertices</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>11</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/x-total-shapes3617" target="_blank" rel="noopener">Connected Groups of 1s</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>12</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/detect-cycle-in-an-undirected-graph" target="_blank" rel="noopener">Undirected Graph Cycle</a></td><td>Medium</td><td>Video 12</td></tr>
+        <tr><td>13</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/topological-sort" target="_blank" rel="noopener">Topological Sort</a></td><td>Medium</td><td>Videos 14, 16</td></tr>
+        <tr><td>14</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/minimum-swaps" target="_blank" rel="noopener">Minimum Swaps to Sort</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>15</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/mother-vertex" target="_blank" rel="noopener">Mother Vertex</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>16</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/detect-cycle-in-a-directed-graph" target="_blank" rel="noopener">Directed Graph Cycle</a></td><td>Medium</td><td>Videos 13, 15</td></tr>
+        <tr><td>17</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/minimum-cost-path3833" target="_blank" rel="noopener">Minimum Cost Path with 4 Moves</a></td><td>Hard</td><td>–</td></tr>
+        <tr><td>18</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/length-of-largest-region-of-1s-1587115620" target="_blank" rel="noopener">Largest Region of 1's in a Binary Matrix</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>19</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/minimum-spanning-tree" target="_blank" rel="noopener">Minimum Spanning Tree</a></td><td>Medium</td><td>Videos 18–20, 30</td></tr>
+        <tr><td>20</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/implementing-dijkstra-set-1-adjacency-matrix" target="_blank" rel="noopener">Dijkstra Algorithm</a></td><td>Medium</td><td>Videos 21–23</td></tr>
+        <tr><td>21</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/strongly-connected-components-kosarajus-algo" target="_blank" rel="noopener">Count Strongly Connected Components</a></td><td>Medium</td><td>Videos 24–25</td></tr>
+        <tr><td>22</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/articulation-point-1" target="_blank" rel="noopener">Articulation Point</a></td><td>Hard</td><td>Video 27</td></tr>
+        <tr><td>23</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/articulation-point2616" target="_blank" rel="noopener">Articulation Point</a></td><td>Hard</td><td>Video 27</td></tr>
+        <tr><td>24</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/problem/strongly-connected-component-tarjanss-algo-1587115621" target="_blank" rel="noopener">Strongly Connected Components</a></td><td>Hard</td><td>Video 29</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/MjM3NQ%3D%3D" target="_blank" rel="noopener">Number of Strongly Connected Components in an Undirected Graph</a></p>
+<ul>
+<li>Count the components of an undirected graph in which every pair of vertices has a path between them. This is easier than the directed case: traverse every unvisited vertex with DFS or BFS, and each traversal is one component.</li>
+</ul>
+    </div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Graph/article/MjYxMQ%3D%3D" target="_blank" rel="noopener">Sample Problems on Graphs</a></p>
+<ul>
+<li><strong>Number of islands</strong> (connected 1s in a boolean 2D matrix): DFS on each unvisited component; the number of DFS calls is the answer (BFS works too). The article's example matrix has 5 islands.</li>
+<li><strong>Detect a cycle in a directed graph:</strong> DFS with <code>recStack[]</code>. Reaching a vertex already on the recursion stack means a back edge, so there's a cycle.</li>
+<li><strong>Topological sorting</strong> (e.g. "5 4 2 3 1 0" or "4 5 2 3 1 0"): DFS, pushing a vertex onto a stack only after all its adjacent vertices are pushed, then print the stack.</li>
+<li><strong>Minimum time to rot all oranges</strong> (cells 0 empty, 1 fresh, 2 rotten; rot spreads up, down, left and right; return −1 if impossible): BFS. Enqueue all rotten oranges plus a delimiter marking the next time frame. The oranges rotted in a frame lie between two delimiters.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -28179,7 +29709,39 @@ const TRACKS = [
       ["Merge K Sorted Arrays", "20:36"],
       ["Median of a Stream", "20:36"]
     ] },
-  { id: "DSASP-Graph", slug: "graph", name: "Graph", counts: [30, 20, 24, 10, 1] },
+  { id: "DSASP-Graph", slug: "graph", name: "Graph", counts: [30, 20, 24, 10, 1],
+    videos: [
+      ["Introduction to Graph", "8:53"],
+      ["Graph Representation (Adjacency Matrix)", "7:17"],
+      ["Graph Representation (Adjacency List)", "7:06"],
+      ["Adjacency List implementation in CPP", "4:35"],
+      ["Adjacency List implementation in Java", "5:44"],
+      ["Adjacency Matrix and List Comparison", "6:15"],
+      ["Breadth First Search", "20:16"],
+      ["Applications of BFS", "3:30"],
+      ["Depth First Search", "20:07"],
+      ["Applications of DFS", "5:25"],
+      ["Shortest Path in an Unweighted Graph", "6:56"],
+      ["Detect Cycle in Undirected Graph", "7:14"],
+      ["Detect Cycle in a Directed Graph (Part 1)", "10:14"],
+      ["Topological Sorting (Kahn's BFS Based Algortihm)", "12:32"],
+      ["Detect Cycle in a Directed Graph (Part 2)", "4:36"],
+      ["Topological Sorting (DFS Based Algorithm)", "9:06"],
+      ["Shortest Path in DAG", "9:42"],
+      ["Prim's Algorithm/Minimum Spanning Tree", "9:26"],
+      ["Implementation of Prim's Algorithm C++", "16:52"],
+      ["Implementation of Prim's Algorithm Java", "17:11"],
+      ["Dijkstra's Shortest Path Algorithm", "19:02"],
+      ["Implementation of Dijkstra's Algorithm C++", "11:03"],
+      ["Implementation of Dijkstra's Algorithm Java", "10:06"],
+      ["Kosaraju's Algorithm Part 1", "13:43"],
+      ["Kosaraju's Algorithm Part 2", "11:02"],
+      ["Bellman Ford Shortest Path Algorithm", "12:51"],
+      ["Articulation Point", "22:33"],
+      ["Bridges in Graph", "10:34"],
+      ["Tarjans Algorithm", "14:24"],
+      ["Kruskal's Algorithm", "24:04"]
+    ] },
   { id: "DSASP-Greedy", slug: "greedy", name: "Greedy", counts: [12, 5, 6, 10, 1] },
   { id: "DSASP-Backtracking", slug: "backtracking", name: "Backtracking", counts: [4, 4, 7, 10, 0] },
   { id: "DSASP-DP", slug: "dynamic-programming", name: "Dynamic Programming", counts: [31, 25, 28, 10, 1] },
