@@ -32550,6 +32550,347 @@ int minPages(int arr[], int n, int k) {
   </section>
 </template>
 
+<template id="DSASP-Trie-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/video/MTM5MQ%3D%3D" target="_blank" rel="noopener">Trie Data Structure (Introduction)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>A <strong>trie</strong> is well suited to implementing a dictionary of words. It is efficient for:</p>
+    <ul>
+      <li>search;</li>
+      <li>insert;</li>
+      <li>delete;</li>
+      <li><strong>prefix search</strong>: all words beginning with a prefix. With {geek, geeks, bad, bat}, "ge" gives geek and geeks, and "b" gives bad and bat;</li>
+      <li><strong>lexicographic ordering</strong> of the words: bad, bat, geek, geeks.</li>
+    </ul>
+    <p>Board example: insert geek, geeks, bad and bat.</p>
+    <ul>
+      <li>search("bad") gives Yes.</li>
+      <li>search("eek") gives No: search means the exact whole word, not a substring.</li>
+      <li>delete("geek"), then search("geek") gives No.</li>
+      <li>print gives bad, bat, geeks.</li>
+    </ul>
+    <p><strong>Comparison with hashing:</strong></p>
+    <table>
+      <tr><th>Operation</th><th>Trie</th><th>Hashing</th></tr>
+      <tr><td>Search / Insert / Delete</td><td>O(word_len) worst case</td><td>O(word_len) on average (hashing a string also reads every character; collisions can make the worst case higher)</td></tr>
+      <tr><td>Prefix search</td><td>O(prefix_len + output_len)</td><td>Not supported</td></tr>
+      <tr><td>Lexicographic ordering</td><td>O(output_len)</td><td>Not supported (hashing doesn't keep keys in order)</td></tr>
+    </table>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <ol>
+      <li>On {geek, geeks, bad, bat}: prefix "ge" gives geek, geeks; sorted order is bad, bat, geek, geeks.</li>
+      <li>Why choose a trie over hashing? It supports prefix search and ordered output, and its time bounds are worst case rather than average.</li>
+    </ol>
+  </section>
+</template>
+
+<template id="DSASP-Trie-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/video/MTM5Mg%3D%3D" target="_blank" rel="noopener">Trie (Representation, Search and Insert)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>TrieNode</strong> (lowercase English letters only): an array <code>child[26]</code> plus <code>bool isEnd</code>, which marks the end of a word.</p>
+    <ul>
+      <li>For a bigger alphabet, use 256 entries in C++ (or an unordered_map to save space). In Java, use a HashMap from character to node to cover all Unicode.</li>
+      <li>The C++ constructor sets isEnd = false and all 26 children to NULL. Java's defaults do this automatically.</li>
+      <li>A character's child index is its ASCII value minus 'a' (97); for example 'c' − 'a' = 99 − 97 = 2. This works because ASCII values are contiguous.</li>
+    </ul>
+    <p><strong>An empty trie</strong> is a root node with 26 null children and isEnd false. Memory <em>is</em> allocated for the root, unlike an empty binary tree, which is just null.</p>
+    <p><strong>Insert</strong> (board dictionary {bad, bat, geek, geeks, cat, cut, zoo}):</p>
+    <ol>
+      <li>Walk from the root, one character per level.</li>
+      <li>Whenever the child for the current character is null, create a new node and link it.</li>
+      <li>At the last character, set isEnd = true.</li>
+    </ol>
+    <p>For example, bat reuses b and a from bad and adds t; geeks reuses g-e-e-k and adds s.</p>
+    <p><strong>Search:</strong> walk the same way.</p>
+    <ul>
+      <li>If a child is null before the word ends, return false (cater stops at e).</li>
+      <li>Otherwise return the isEnd of the last node: true for bad and geek, false for ge.</li>
+      <li>isEnd doesn't mean "leaf": geek's k is a word end but has a child, s.</li>
+    </ul>
+    <p><strong>Complexity</strong>, with the alphabet size (26, or 256) taken as constant and n the key length:</p>
+    <ul>
+      <li>insert is <strong>Θ(n)</strong>: constant work per character, including allocating a 26-array node;</li>
+      <li>search is <strong>O(n)</strong>: it may stop early, even at the first character.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/article/MTA3OTE%3D" target="_blank" rel="noopener">Trie | (Insert and Search)</a></p>
+<ul>
+<li>A trie (from "retrieval") is a k-ary, or multiway, tree for storing strings over an alphabet. It is also called a digital tree or prefix tree. All strings sharing a common prefix come from a common node, e.g. allot, alone, ant, and, are, bat, bad.</li>
+<li>A balanced BST needs O(M log N) to search for a key (M = maximum key length, N = number of keys); a trie needs O(M). The cost is storage: O(ALPHABET_SIZE × key_length × N).</li>
+<li>Compressed tries and ternary search trees reduce memory.</li>
+<li><strong>Insert:</strong> create missing nodes and mark the last node isEndOfWord. If the key is a prefix of an existing key, only mark its last node.</li>
+<li><strong>Search:</strong> it ends either at the end of the key (then check isEndOfWord) or at a missing node (not present).</li>
+<li><strong>Advantages:</strong> prefix-based lookup, less space for many short strings (nodes are shared), and longest-prefix matching.</li>
+<li><strong>Compared with a hash table:</strong> faster worst case than an imperfect hash table, no collisions and no hash function. But retrieval can sometimes be slower, keys like floating-point numbers are awkward to represent, tries take more space, and they aren't built into languages.</li>
+<li><strong>Uses:</strong> dictionaries (phone numbers, English words) and spell checkers.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>C++ (board)</h4>
+<pre><code class="language-cpp">struct TrieNode {
+    TrieNode *child[26];
+    bool isEnd;
+    TrieNode() {
+        isEnd = false;
+        for (int i = 0; i &lt; 26; i++)
+            child[i] = NULL;
+    }
+};
+TrieNode *root;
+
+bool search(string &amp;key) {
+    TrieNode *curr = root;
+    for (int i = 0; i &lt; key.length(); i++) {
+        int index = key[i] - 'a';
+        if (curr-&gt;child[index] == NULL)
+            return false;
+        curr = curr-&gt;child[index];
+    }
+    return curr-&gt;isEnd;
+}
+
+void insert(string &amp;key) {
+    TrieNode *curr = root;
+    for (int i = 0; i &lt; key.length(); i++) {
+        int index = key[i] - 'a';
+        if (curr-&gt;child[index] == NULL)
+            curr-&gt;child[index] = new TrieNode();
+        curr = curr-&gt;child[index];
+    }
+    curr-&gt;isEnd = true;
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Java (board)</h4>
+<pre><code class="language-java">class TrieNode {
+    TrieNode[] child = new TrieNode[26];
+    boolean isEnd;
+}
+TrieNode root;
+
+boolean search(String key) {
+    TrieNode curr = root;
+    for (int i = 0; i &lt; key.length(); i++) {
+        int index = key.charAt(i) - 'a';
+        if (curr.child[index] == null)
+            return false;
+        curr = curr.child[index];
+    }
+    return curr.isEnd;
+}
+
+void insert(String key) {
+    TrieNode curr = root;
+    for (int i = 0; i &lt; key.length(); i++) {
+        int index = key.charAt(i) - 'a';
+        if (curr.child[index] == null)
+            curr.child[index] = new TrieNode();
+        curr = curr.child[index];
+    }
+    curr.isEnd = true;
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slips, fixed above:</strong></p>
+      <ul>
+        <li>The Java class declares <code>bool isEnd</code>; Java's type is <code>boolean</code>.</li>
+        <li>The Java search reads <code>key.charAt(index)</code> where the loop variable is <code>i</code>.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Trie-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/video/MTM5Mw%3D%3D" target="_blank" rel="noopener">Trie Delete</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 10 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>Example cases in delete, on the trie for {bad, bat, cat, cut, geek, geeks, zoo} (board):</p>
+    <ul>
+      <li><strong>zoo</strong>: the chain of 3 nodes for z, o and o must be deleted, since no other word uses it.</li>
+      <li><strong>geek</strong>: only isEnd changes to false; the nodes are still needed by geeks.</li>
+      <li><strong>bad</strong>: delete one node, the one for d; b and a are still used by bat.</li>
+    </ul>
+    <p><strong>Recursive delete</strong> delKey(root, key, i), with i initially 0, returns the (possibly new) root of the subtree:</p>
+    <ol>
+      <li>If root is null, return null.</li>
+      <li>If i == key.length() (the word's last node): set isEnd = false, and if the node now has no children, delete it and return null.</li>
+      <li>Otherwise recurse into the child for key[i], and store the returned pointer back in that child slot.</li>
+      <li>After returning, delete this node too if it has no children <em>and</em> isn't the end of another word. This frees the chain upwards.</li>
+    </ol>
+    <p><code>isEmpty(root)</code> checks whether all 26 children are null.</p>
+    <p>The board traces deleting "zoo" from the trie of {an, and, ant, bad, bat, zoo} (i = 1, 2, …). The chain z-o-o is removed bottom-up.</p>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/article/MjQ2Ng%3D%3D" target="_blank" rel="noopener">Deletion in a Trie</a></p>
+<ul>
+<li>Delete bottom-up with recursion. There are four cases:</li>
+<li>1. The key is not present: don't modify the trie.</li>
+<li>2. A unique key (no part of it is another key, and it isn't a prefix of another key): delete all its nodes.</li>
+<li>3. The key is a prefix of a longer key: just unmark its end node.</li>
+<li>4. Another key is a prefix of this key: delete nodes from the end of the key up to the end node of the longest prefix key.</li>
+<li>O(n) time for a key of length n; space O(n × m), where n is the longest word's length and m the number of words.</li>
+<li><strong>Bonus, duplicate strings:</strong> a plain trie can't count repeats. Store an end-count at the terminal node: increment it on insert, treat a word as present when the count is above 0, decrement it on delete, and delete nodes only when they have no children and a count of 0.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>C++ (board)</h4>
+<pre><code class="language-cpp">bool isEmpty(TrieNode *root) {
+    for (int i = 0; i &lt; 26; i++)
+        if (root-&gt;child[i] != NULL)
+            return false;
+    return true;
+}
+
+// i is initially 0
+TrieNode *delKey(TrieNode *root, string &amp;key, int i) {
+    if (root == NULL) return NULL;
+    if (i == key.length()) {
+        root-&gt;isEnd = false;
+        if (isEmpty(root) == true) { delete (root); root = NULL; }
+        return root;
+    }
+    int index = key[i] - 'a';
+    root-&gt;child[index] = delKey(root-&gt;child[index], key, i + 1);
+    if (isEmpty(root) &amp;&amp; root-&gt;isEnd == false) { delete (root); root = NULL; }
+    return root;
+}</code></pre>
+    </div>
+    <div class="approach">
+      <h4>Java (board, with fixes)</h4>
+<pre><code class="language-java">boolean isEmpty(TrieNode root) {
+    for (int i = 0; i &lt; 26; i++)
+        if (root.child[i] != null)
+            return false;
+    return true;
+}
+
+// i is initially 0
+TrieNode delKey(TrieNode root, String key, int i) {
+    if (root == null) return null;
+    if (i == key.length()) {
+        root.isEnd = false;
+        if (isEmpty(root) == true)
+            root = null;
+        return root;
+    }
+    int index = key.charAt(i) - 'a';
+    root.child[index] = delKey(root.child[index], key, i + 1);
+    if (isEmpty(root) &amp;&amp; root.isEnd == false)
+        root = null;
+    return root;
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board slips, fixed above (Java side):</strong></p>
+      <ul>
+        <li>The base case writes <code>root.isEnd == false;</code>, a comparison rather than an assignment. It must be <code>= false</code>.</li>
+        <li>The function is headed <code>delNode</code> but calls itself <code>delKey</code>.</li>
+        <li><code>isEmpty</code> is declared <code>bool</code>; Java needs <code>boolean</code>.</li>
+        <li><code>&amp;&amp;</code> is drawn like "$$".</li>
+      </ul>
+      <p>One caution applies to the code as written: for the root node itself, if the trie becomes empty, the function returns null. Callers should keep a root node, since an empty trie still has one.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Trie-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/video/MTM5NA%3D%3D" target="_blank" rel="noopener">Count Distinct Rows in a Binary Matrix</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> Given a binary (Boolean) matrix, count its distinct rows.</p>
+    <ul>
+      <li>{{1, 0, 0}, {1, 1, 1}, {1, 0, 0}, {1, 1, 1}} gives 2.</li>
+      <li>{{1, 1, 0, 0} × 4} gives 1.</li>
+    </ul>
+    <p><strong>Naive:</strong> for each row, compare it with every previous row and count it only if none matches. With m rows and n columns that is O(m) rows × O(mn) checks, so <strong>O(m² n)</strong>.</p>
+    <p><strong>Trie solution, O(mn):</strong> insert every row into a binary trie, where each node has child[2]. <code>insert</code> returns true if it created any new node, meaning the row is new; otherwise the row already existed. Count the trues.</p>
+    <p>No isEnd field is needed: every "word" (row) has the same length, n.</p>
+    <p>Board run on {1, 0, 0}, {1, 1, 1}, {1, 0, 0}, {0, 1, 0}:</p>
+    <ul>
+      <li>100 creates 3 nodes, so res = 1.</li>
+      <li>111 reuses 1 and creates the next two, so res = 2.</li>
+      <li>100 finds every node existing, so it returns false.</li>
+      <li>010 creates a new branch, so res = <strong>3</strong>.</li>
+    </ul>
+    <p><strong>Complexity:</strong> m rows × n cells, each constant work, so <strong>O(mn)</strong> time. Auxiliary space is O(mn) worst case, when every cell is stored in the trie.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>C++ (board)</h4>
+<pre><code class="language-cpp">bool mat[M][N];
+
+struct TrieNode {
+    TrieNode *child[2];
+    TrieNode() { child[0] = NULL; child[1] = NULL; }
+};
+
+bool insert(TrieNode *root, int row) {
+    TrieNode *curr = root;
+    bool flag = false;
+    for (int i = 0; i &lt; N; i++) {
+        int index = mat[row][i];
+        if (curr-&gt;child[index] == NULL) {
+            curr-&gt;child[index] = new TrieNode();
+            flag = true;
+        }
+        curr = curr-&gt;child[index];
+    }
+    return flag;
+}
+
+int countDist() {
+    TrieNode *root = new TrieNode();
+    int res = 0;
+    for (int row = 0; row &lt; M; row++)
+        if (insert(root, row) == true)
+            res++;
+    return res;
+}</code></pre>
+      <p>The Java version on the board is the same, with <code>boolean mat[M][N]</code> and <code>int index = mat[row][i] ? 1 : 0;</code>.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Trie-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (6 problems, in course order), plus the one Articles-tab item that doesn't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/problem/trie-insert-and-search0651" target="_blank" rel="noopener">Implement Trie</a></td><td>Medium</td><td>Video 2</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/problem/search-query-for-strings5049" target="_blank" rel="noopener">Search Query for Strings</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/problem/camel-case04234120" target="_blank" rel="noopener">PascalCase Pattern Matching</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/problem/renaming-cities28581833" target="_blank" rel="noopener">Assign Short Codes in Stream of Words</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/problem/most-frequent-word-in-an-array-of-strings3528" target="_blank" rel="noopener">Max Frequency Word</a></td><td>Easy</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/problem/contiguous-elements-xor4151" target="_blank" rel="noopener">Maximum XOR Subarray</a></td><td>Hard</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Trie/article/MjQ2Nw%3D%3D" target="_blank" rel="noopener">Implementing Auto-Complete Feature using Trie</a></p>
+<ul>
+<li>List every stored string that starts with the query prefix. With {abc, abcd, aa, abbbaba}, "ab" gives abc, abcd, abbbaba.</li>
+<li>Insert all strings, then search for the prefix. If the prefix is absent, return −1. If its last node is a word end, print the query. If that node has no children, return; otherwise recursively print every word in its subtree.</li>
+<li>O(N × L) time (N words, L the longest length); O(N × L + N × ALPHABET_SIZE) space.</li>
+</ul>
+    </div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -33034,7 +33375,13 @@ const TRACKS = [
       ["Allocate Minimum Pages (Naive Method)", "8:54"],
       ["Allocate Minimum Pages (DP Solution) (Hard)", "10:18"]
     ] },
-  { id: "DSASP-Trie", slug: "trie", name: "Trie", counts: [4, 3, 6, 5, 0] },
+  { id: "DSASP-Trie", slug: "trie", name: "Trie", counts: [4, 3, 6, 5, 0],
+    videos: [
+      ["Trie Data Structure (Introduction)", "4:30"],
+      ["Trie (Representation, Search and Insert)", "21:48"],
+      ["Trie Delete", "11:11"],
+      ["Count Distinct Rows in a Binary Matrix", "7:37"]
+    ] },
   { id: "DSASP-Segment-Tree", slug: "segment-and-bit", name: "Segment and Binary Indexed Trees", counts: [10, 3, 6, 5, 0] },
   { id: "DSASP-DisjointSet", slug: "disjoint-set", name: "Disjoint Set", counts: [5, 3, 4, 5, 1] }
 ];

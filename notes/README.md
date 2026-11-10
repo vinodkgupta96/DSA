@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 21 of 24 tracks · 451 of 470 videos · 333 of 342 articles · 351 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 22 of 24 tracks · 455 of 470 videos · 336 of 342 articles · 357 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -96,8 +96,8 @@ Report back with:
 | 19 | Greedy | 12 | 5 | 6 | ✅ Done: 12/12 videos, 5/5 articles, 6 problems |
 | 20 | Backtracking | 4 | 4 | 7 | ✅ Done: 4/4 videos, 4/4 articles, 7 problems |
 | 21 | Dynamic Programming | 31 | 25 | 28 | ✅ Done: 31/31 videos, 25/25 articles, 28 problems |
-| 22 | Trie | 4 | 3 | 6 | ⏭ Next |
-| 23 | Segment and Binary Indexed Trees | 10 | 3 | 6 | Not started |
+| 22 | Trie | 4 | 3 | 6 | ✅ Done: 4/4 videos, 3/3 articles, 6 problems |
+| 23 | Segment and Binary Indexed Trees | 10 | 3 | 6 | ⏭ Next |
 | 24 | Disjoint Set | 5 | 3 | 4 | Not started |
 
 ### Track 1: Analysis of Algorithms, per video
@@ -700,6 +700,17 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
 
 "Solving a Dynamic Programming Problem" and "Sample Problems on Dynamic Programming" match no video, so they're in the Track practice set with the 28 problems. V23, V24, V27, V28, V29, V30, V31 have no Transcript button and were done from frames and the description; no transcript was cut off early. Course progress was unchanged (40%, 21/31 videos watched). All resume positions were restored (V1 was at 0:03 and was put back there). The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 31 DP videos.
 
+### Track 22: Trie, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Trie Data Structure (Introduction) | 4:30 | Transcript + board |  |
+| 2 | Trie (Representation, Search and Insert) | 21:48 | Transcript + board | Trie (Insert and Search) |
+| 3 | Trie Delete | 11:11 | Board + description | Deletion in a Trie |
+| 4 | Count Distinct Rows in a Binary Matrix | 7:37 | Transcript + board |  |
+
+"Implementing Auto-Complete Feature using Trie" matches no video, so it's in the Track practice set with the 6 problems. V3 has no Transcript button and was done from frames and the description. Course progress was unchanged (0%). All resume positions were restored (V1 was at 0:03 and was put back there). The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 4 Trie videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -732,10 +743,11 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
 - `92dabf7`: Add Graph track notes (30 videos, 20 articles, 24 problems)
 - `ef72ced`: Add Greedy track notes (12 videos, 5 articles, 6 problems)
 - `1000f12`: Add Backtracking track notes (4 videos, 4 articles, 7 problems)
-- (this commit): Add Dynamic Programming track notes (31 videos, 25 articles, 28 problems)
+- `dc87f65`: Add Dynamic Programming track notes (31 videos, 25 articles, 28 problems)
+- (this commit): Add Trie track notes (4 videos, 3 articles, 6 problems)
 
 ### What's next
-- **Track 22: Trie** (4 videos, 3 articles, 6 problems), starting straight away.
+- **Track 23: Segment and Binary Indexed Trees** (10 videos, 3 articles, 6 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -769,6 +781,7 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
   - Completed track 19 (Greedy): 12 videos, 5 articles, 6 problems.
   - Completed track 20 (Backtracking): 4 videos, 4 articles, 7 problems.
   - Completed track 21 (Dynamic Programming): 31 videos, 25 articles, 28 problems.
+  - Completed track 22 (Trie): 4 videos, 3 articles, 6 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -785,6 +798,10 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Trie: teacher slips flagged
+- V2 (board): the Java TrieNode declares `bool isEnd` (Java's type is `boolean`); the Java search reads `key.charAt(index)` with loop variable `i`.
+- V3 (board, Java): `root.isEnd == false;` is a comparison where an assignment is meant; the function is headed `delNode` but calls `delKey`; `bool isEmpty`. Spoken slips couldn't be checked (no transcript).
 
 ### Dynamic Programming: teacher slips flagged
 - V6: the board writes "Superequence"; when printing the LCS, the teacher says the "upper and lower" neighbours (they're upper and left).
