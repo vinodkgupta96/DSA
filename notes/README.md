@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 22 of 24 tracks · 455 of 470 videos · 336 of 342 articles · 357 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 23 of 24 tracks · 465 of 470 videos · 339 of 342 articles · 363 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -97,8 +97,8 @@ Report back with:
 | 20 | Backtracking | 4 | 4 | 7 | ✅ Done: 4/4 videos, 4/4 articles, 7 problems |
 | 21 | Dynamic Programming | 31 | 25 | 28 | ✅ Done: 31/31 videos, 25/25 articles, 28 problems |
 | 22 | Trie | 4 | 3 | 6 | ✅ Done: 4/4 videos, 3/3 articles, 6 problems |
-| 23 | Segment and Binary Indexed Trees | 10 | 3 | 6 | ⏭ Next |
-| 24 | Disjoint Set | 5 | 3 | 4 | Not started |
+| 23 | Segment and Binary Indexed Trees | 10 | 3 | 6 | ✅ Done: 10/10 videos, 3/3 articles, 6 problems |
+| 24 | Disjoint Set | 5 | 3 | 4 | ⏭ Next |
 
 ### Track 1: Analysis of Algorithms, per video
 
@@ -711,6 +711,23 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
 
 "Implementing Auto-Complete Feature using Trie" matches no video, so it's in the Track practice set with the 6 problems. V3 has no Transcript button and was done from frames and the description. Course progress was unchanged (0%). All resume positions were restored (V1 was at 0:03 and was put back there). The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 4 Trie videos.
 
+### Track 23: Segment and Binary Indexed Trees, per video
+
+| # | Video | Duration | Source | Articles folded in |
+|---|-------|---------:|--------|--------------------|
+| 1 | Segment Tree (Introduction) | 22:07 | Transcript + board | Introduction to Segment Trees |
+| 2 | Constructing Segment Tree | 10:11 | Transcript + board |  |
+| 3 | Range Query on Segment Tree | 13:48 | Board + description |  |
+| 4 | Update Query on Segment Tree | 10:03 | Transcript + board |  |
+| 5 | Binary Indexed Tree (Intoduction) | 6:10 | Board + description | Binary Indexed Tree |
+| 6 | Binary Indexed Tree (An Example Problem) | 6:00 | Transcript + board |  |
+| 7 | Binary Indexed Tree (Prefix Sum) | 15:19 | Transcript + board |  |
+| 8 | Binary Indexed Tree (Prefix Sum Implemention) | 11:34 | Board + description |  |
+| 9 | Binary Indexed Tree (Update Operation) | 10:41 | Board + description |  |
+| 10 | Binary Indexed Tree (Construction) | 6:11 | Transcript + board |  |
+
+"Segment Tree | Range Minimum Query" matches no video, so it's in the Track practice set with the 6 problems. V3, V5, V8 and V9 have no Transcript button and were done from frames and the description. V10's transcript is auto-generated and garbled, so the notes lean on the board. Course progress was unchanged (0%). All resume positions were restored (V1 was at 0:02 and was put back there). The render check was done offline: every template's tags balance, the page script parses, and TRACKS lists 10 videos.
+
 ### Open uncertainties
 - V9, example 5: the boxed final answer on the board is hard to read (the bases look swapped). The notes use the derivation as written (k < log_c log₂ n + 1) and Θ(log log n), as the teacher says.
 - Some board code is C/C++-style (`bool`, `print`, `pow`, `int f[n+1]`). It's kept as written, with Java differences noted only where relevant.
@@ -744,10 +761,11 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
 - `ef72ced`: Add Greedy track notes (12 videos, 5 articles, 6 problems)
 - `1000f12`: Add Backtracking track notes (4 videos, 4 articles, 7 problems)
 - `dc87f65`: Add Dynamic Programming track notes (31 videos, 25 articles, 28 problems)
-- (this commit): Add Trie track notes (4 videos, 3 articles, 6 problems)
+- `4198a96`: Add Trie track notes (4 videos, 3 articles, 6 problems)
+- (this commit): Add Segment and Binary Indexed Trees track notes (10 videos, 3 articles, 6 problems)
 
 ### What's next
-- **Track 23: Segment and Binary Indexed Trees** (10 videos, 3 articles, 6 problems), starting straight away.
+- **Track 24: Disjoint Set** (5 videos, 3 articles, 4 problems), starting straight away.
 
 ### History
 - **2026-11-10:**
@@ -782,6 +800,7 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
   - Completed track 20 (Backtracking): 4 videos, 4 articles, 7 problems.
   - Completed track 21 (Dynamic Programming): 31 videos, 25 articles, 28 problems.
   - Completed track 22 (Trie): 4 videos, 3 articles, 6 problems.
+  - Completed track 23 (Segment and Binary Indexed Trees): 10 videos, 3 articles, 6 problems.
 
 ### Analysis of Algorithms: teacher slips flagged
 - V2 10:56: "fun1 takes more time than fun2"; the board shows fun2, after n = 999.
@@ -798,6 +817,12 @@ All 4 articles match a video; the Track practice set lists the 7 problems. V4 ha
 - V14: the board's print strings have no spaces ("Move 1 from" + A + "to" + C).
 - V15 (no transcript): the course's Josephus uses 0-based positions (n = 7, k = 3 → 3). The article uses 1-based (n = 7, k = 3 → 4), with `myJos` = jos + 1 bridging the two.
 - Videos without a transcript (5, 10, 13, 15): spoken slips couldn't be checked.
+
+### Segment and Binary Indexed Trees: teacher slips flagged
+- V2: the board labels the root's range [3, 3] (it's [0, 3]); the transcript says the 30 is written "at index 0" (it's tree[1]).
+- V4 (board): the right child is labelled [1, 3] (it's [2, 3]).
+- V6 (board): the second example's output is first written "23 20" (it's 33 30).
+- V3, V8, V9 (board): `&&`, `||` and `&` are drawn like "$$", "¦¦" and "$" or "8". Spoken slips couldn't be checked for V3, V5, V8 and V9 (no transcript).
 
 ### Trie: teacher slips flagged
 - V2 (board): the Java TrieNode declares `bool isEnd` (Java's type is `boolean`); the Java search reads `key.charAt(index)` with loop variable `i`.

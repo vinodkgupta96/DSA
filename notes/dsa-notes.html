@@ -32891,6 +32891,548 @@ int countDist() {
   </section>
 </template>
 
+<template id="DSASP-Segment-Tree-1">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/video/MTQxMg%3D%3D" target="_blank" rel="noopener">Segment Tree (Introduction)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>When to use a segment tree:</strong> a <em>fixed-size</em> array with many queries of two types:</p>
+    <ul>
+      <li><strong>range query</strong> on (qs, qe), e.g. a sum, minimum or maximum;</li>
+      <li><strong>update query</strong> (index, new value).</li>
+    </ul>
+    <p>Building the tree takes Θ(n) time and Θ(n) auxiliary space, since it is stored as an array. Both query types then take O(log n).</p>
+    <p><strong>Example problem:</strong> arr = {10, 20, 30, 40, 50}.</p>
+    <ul>
+      <li>getSum(0, 2) = 60 and getSum(1, 3) = 90.</li>
+      <li>Then update(1, 60).</li>
+      <li>After that, getSum(0, 2) = 100 and getSum(1, 3) = 130.</li>
+    </ul>
+    <table>
+      <tr><th>Method</th><th>getSum</th><th>update</th><th>Preprocessing / extra space</th></tr>
+      <tr><td>1. Simple loop qs … qe</td><td>Θ(qe − qs + 1), up to O(n)</td><td>Θ(1)</td><td>none</td></tr>
+      <tr><td>2. Prefix sum (preSum[i] = preSum[i − 1] + arr[i])</td><td>O(1): preSum[qe], minus preSum[qs − 1] if qs ≠ 0</td><td>O(n): add (new − old) to preSum[i … n − 1]</td><td>O(n) / O(n)</td></tr>
+      <tr><td>3. Segment tree</td><td>O(log n)</td><td>O(log n)</td><td>Θ(n) / Θ(n)</td></tr>
+    </table>
+    <p>With a mix of queries, e.g. x/4 of one type and 3x/4 of the other, either simple method still averages (x/4 · O(n))/x = O(n). The segment tree makes both types O(log n).</p>
+    <p><strong>Structure.</strong> It is drawn as a tree but stored as an array, like a heap.</p>
+    <ul>
+      <li>Each node holds the sum of one range. The root covers [0, n − 1], and the leaves are single elements, i.e. the array values.</li>
+      <li>To build, split a range into two halves; with an odd count, the left half gets the extra element. Stop at single elements.</li>
+      <li>Each internal node is the sum of its children. For range-minimum or range-maximum problems it would be the min or max instead.</li>
+    </ul>
+    <p>For {10, 20, 30, 40, 50, 60} the root [0, 5] = 210, with [0, 2] = 60 and [3, 5] = 150.</p>
+    <p><strong>Not a complete binary tree.</strong> There are gaps, so <em>dummy nodes</em> (never read or written) keep the heap relations:</p>
+    <ul>
+      <li>left(i) = 2i + 1;</li>
+      <li>right(i) = 2i + 2;</li>
+      <li>parent(i) = ⌊(i − 1)/2⌋.</li>
+    </ul>
+    <p><strong>Size of the tree array:</strong></p>
+    <ul>
+      <li>If n is a power of 2, the tree is perfect: 2n − 1 nodes and no dummies (8 leaves + 7 internal = 15).</li>
+      <li>Otherwise the size is 2x − 1, where x is the next power of 2 above n. That is 2·2<sup>⌈log₂ n⌉</sup> − 1: n = 6 gives 15, and n = 5 or 17 gives x = 8 or 32.</li>
+      <li>A simple safe bound is <strong>4n</strong> (n = 9: 31 ≤ 36), so allocate 4n.</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/article/MjQwNw%3D%3D" target="_blank" rel="noopener">Introduction to Segment Trees</a></p>
+<ul>
+<li>A segment tree is a binary tree storing intervals (segments): each node stores a segment of the array. It is used for queries on ranges.</li>
+<li>Problem: sum of arr[l … r], and set arr[i] = x.</li>
+<li>The simple loop is O(N) per query with an O(1) update. A prefix-sum array is O(1) per query with an O(n) update. A segment tree makes both O(log N).</li>
+<li>Leaves are the input elements, and internal nodes are a <em>merge</em> of their leaves (here the sum; it depends on the problem).</li>
+<li>Stored as an array like a heap: left 2i + 1, right 2i + 2, parent (i − 1)/2. It isn't a complete binary tree but a <strong>full</strong> one (every node has 0 or 2 children), so the last level may have gaps.</li>
+<li>With n leaves it has n − 1 internal nodes, so 2n − 1 nodes excluding dummies. If n is a power of 2 the array size is 2n − 1; otherwise 2x − 1, with x the next power of 2.</li>
+<li>Update: add diff to every node whose range contains the index.</li>
+<li>Construction is O(n), since each of the 2n − 1 nodes is computed once. A query is O(log n) (at most four nodes per level), and so is an update (one node per level). Auxiliary space is O(MAX).</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Methods 1 and 2 (from the transcript)</h4>
+<pre><code class="language-cpp">// Method 1
+int getSum(int qs, int qe) {
+    int sum = 0;
+    for (int i = qs; i &lt;= qe; i++) sum += arr[i];
+    return sum;
+}
+void update(int i, int newVal) { arr[i] = newVal; }
+
+// Method 2: preSum[0] = arr[0]; preSum[i] = preSum[i-1] + arr[i]
+int getSum(int qs, int qe) {
+    if (qs == 0) return preSum[qe];
+    return preSum[qe] - preSum[qs - 1];
+}
+void update(int i, int newVal) {
+    int diff = newVal - arr[i];
+    arr[i] = newVal;
+    for (int j = i; j &lt; n; j++) preSum[j] += diff;
+}</code></pre>
+      <p>Example: changing 20 to 60 in {10, 20, 30, 40, 50} adds 40 to preSum[1 …], giving 10, 70, 100, 140, 190.</p>
+    </div>
+    <div class="approach">
+      <h4>Segment tree array for {10, 20, 30, 40, 50, 60} (board)</h4>
+      <p>Indexes 0–14 hold 210, 60, 150, 30, 30, 90, 60, 10, 20, x, x, 40, 50, x, x, where x is a dummy.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Segment-Tree-2">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/video/MTQxMw%3D%3D" target="_blank" rel="noopener">Constructing Segment Tree</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>For arr = {10, 20, 30, 40}, the tree array is 100, 30, 70, 10, 20, 30, 40.</p>
+    <p><strong>Recursive construction.</strong> Allocate <code>int tree[4n]</code>, a global array or a class member. Then call <code>constructST(0, n − 1, 0)</code>.</p>
+    <ul>
+      <li>ss and se are the start and end of the segment this node represents; si is the node's index in tree[]. The root always has ss = 0, se = n − 1, si = 0.</li>
+      <li><strong>Base case</strong> ss == se: set tree[si] = arr[ss] and return it.</li>
+      <li>Otherwise mid = (ss + se)/2. Then tree[si] = constructST(ss, mid, 2si + 1) + constructST(mid + 1, se, 2si + 2); return tree[si].</li>
+    </ul>
+    <p>Calls start at the root, but values are filled <em>bottom-up</em>: leaves first, then each parent sums its children's return values.</p>
+    <p>Trace (cST = constructST):</p>
+    <ol>
+      <li>cST(0, 3, 0) sets mid = 1.</li>
+      <li>cST(0, 1, 1) sets mid = 0. Its leaves are cST(0, 0, 3), writing 10, and cST(1, 1, 4), writing 20. So tree[1] = 30.</li>
+      <li>cST(2, 3, 2): cST(2, 2, 5) writes 30 and cST(3, 3, 6) writes 40, so tree[2] = 70.</li>
+      <li>tree[0] = 100.</li>
+    </ol>
+    <p><strong>Time:</strong> constant work per node, and the tree has Θ(n) nodes (bounded by 4n), so <strong>Θ(n)</strong>.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board code</h4>
+<pre><code class="language-cpp">int tree[4 * n];
+// initial values: ss = 0, se = n - 1, si = 0
+int constructST(int ss, int se, int si) {
+    if (ss == se) {
+        tree[si] = arr[ss];
+        return arr[ss];
+    }
+    int mid = (ss + se) / 2;
+    tree[si] = constructST(ss, mid, 2 * si + 1) +
+               constructST(mid + 1, se, 2 * si + 2);
+    return tree[si];
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Slips:</strong></p>
+      <ul>
+        <li>The board labels the root's range [3, 3]; it is [0, 3].</li>
+        <li>The transcript says the parent "write[s] this at index 0" for the 30. That is tree[1], as the teacher then corrects.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Segment-Tree-3">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/video/NzQyNQ%3D%3D" target="_blank" rel="noopener">Range Query on Segment Tree</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 10 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The board uses arr = {10, 20, 30, 40}, whose tree array is 110, 30, 70, 10, 20, 30, 40.</p>
+    <ul>
+      <li>getSum(0, 2) = 60.</li>
+      <li>getSum(1, 3) = 90.</li>
+      <li>getSum(0, 3) = 110.</li>
+    </ul>
+    <p><strong>getSumRec(qs, qe, ss, se, si):</strong></p>
+    <ul>
+      <li>qs and qe are the user's query range.</li>
+      <li>ss and se are the range represented by the current node, initially 0 and n − 1.</li>
+      <li>si is the current node's index, initially 0.</li>
+    </ul>
+    <p>Three cases:</p>
+    <ol>
+      <li><strong>No overlap</strong> (se &lt; qs or ss &gt; qe): return 0.</li>
+      <li><strong>Node range inside the query</strong> (qs ≤ ss and qe ≥ se): return tree[si].</li>
+      <li><strong>Partial overlap:</strong> mid = (ss + se)/2. Return getSumRec on the left child (ss, mid, 2si + 1) plus the right child (mid + 1, se, 2si + 2).</li>
+    </ol>
+    <p><strong>Example 1</strong>, getSum(2, 3):</p>
+    <ul>
+      <li>At the root, mid = 1.</li>
+      <li>getSumRec(2, 3, 0, 1, 1) has no overlap and returns 0.</li>
+      <li>getSumRec(2, 3, 2, 3, 2) is fully inside and returns 70.</li>
+    </ul>
+    <p>Example 2 walks a partial-overlap query down into the leaves.</p>
+    <p><strong>Time complexity</strong> (board): the tree's height is O(log n), and the query never visits more than 4 nodes on any level. So it never does more than 4 log n work: <strong>O(log n)</strong>.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board code</h4>
+<pre><code class="language-cpp">// initially ss = 0, se = n - 1 and si = 0
+int getSumRec(int qs, int qe, int ss, int se, int si) {
+    if (se &lt; qs || ss &gt; qe)
+        return 0;
+    if (qs &lt;= ss &amp;&amp; qe &gt;= se)
+        return tree[si];
+    int mid = (ss + se) / 2;
+    return getSumRec(qs, qe, ss, mid, 2 * si + 1) +
+           getSumRec(qs, qe, mid + 1, se, 2 * si + 2);
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong></p>
+      <ul>
+        <li><code>||</code> and <code>&amp;&amp;</code> are drawn like "¦¦" and "$$".</li>
+        <li>Example 1's root call is written <code>getSumRec(2, 3, …)</code> and partly hidden by the teacher. The child calls shown (2, 3, 0, 1, 1) and (2, 3, 2, 3, 2) fix the query as (2, 3).</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Segment-Tree-4">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/video/MTQxNQ%3D%3D" target="_blank" rel="noopener">Update Query on Segment Tree</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>getSum queries read only the tree array, not the original array, so an update must fix every tree node whose range contains the index.</p>
+    <p>Example: arr = {10, 20, 30, 40}.</p>
+    <ul>
+      <li>After update(1, 25) and update(0, 15), getSum(0, 1) = 40 and getSum(1, 2) = 55.</li>
+    </ul>
+    <p><strong>Approach:</strong></p>
+    <ol>
+      <li>Compute diff = new_val − arr[i]. For example, 25 − 20 = 5.</li>
+      <li>Call updateRec(0, n − 1, i, 0, diff), starting from the root.</li>
+      <li>If i is outside the node's range [ss, se], return.</li>
+      <li>Otherwise add diff to tree[si].</li>
+      <li>If the node isn't a leaf (se &gt; ss), recurse into both children: (ss, mid, 2si + 1) and (mid + 1, se, 2si + 2).</li>
+    </ol>
+    <p>Dry run of updateRec(0, 3, 1, 0, 5):</p>
+    <ul>
+      <li>The root becomes 105, and [0, 1] becomes 35.</li>
+      <li>The leaf [0, 0] is out of range and returns.</li>
+      <li>The leaf [1, 1] becomes 25.</li>
+      <li>The right child [2, 3] is out of range and returns.</li>
+    </ul>
+    <p><strong>Time:</strong> it goes down the tree's height, O(log n), visiting at most 2 nodes per level. So <strong>O(log n)</strong>.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board code</h4>
+<pre><code class="language-cpp">int diff = new_val - arr[i];
+// arr[i] = new_val; (keep the array in sync if it's used again)
+// initially ss = 0, se = n - 1, si = 0
+void updateRec(int ss, int se, int i, int si, int diff) {
+    if (i &lt; ss || i &gt; se)
+        return;
+    tree[si] = tree[si] + diff;
+    if (se &gt; ss) {
+        int mid = (ss + se) / 2;
+        updateRec(ss, mid, i, 2 * si + 1, diff);
+        updateRec(mid + 1, se, i, 2 * si + 2, diff);
+    }
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board notes:</strong></p>
+      <ul>
+        <li>The board's tree here has root 100 and the right child labelled [1, 3]. For {10, 20, 30, 40} the right child is [2, 3].</li>
+        <li>The <code>arr[i] = new_val</code> comment is added. Without it, a second update to the same index would compute diff from the stale value.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Segment-Tree-5">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/video/MTk0Ng%3D%3D" target="_blank" rel="noopener">Binary Indexed Tree (Introduction)</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 10 s plus close-ups). The description gives only the title. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Binary Indexed Tree</strong> (board):</p>
+    <ul>
+      <li>It is used for a fixed input array with many queries of these types:
+        <ol type="a">
+          <li><strong>prefix operations</strong>: sum, product, XOR, OR, etc.;</li>
+          <li><strong>update a value</strong>.</li>
+        </ol>
+        Both take <strong>O(log n)</strong>.
+      </li>
+      <li>It is actually an array, but the concept is tree based.</li>
+      <li>It requires O(n log n) preprocessing time and Θ(n) auxiliary space.</li>
+      <li>It is also known as a <strong>Fenwick tree</strong>.</li>
+      <li>It can also be used for range queries: rangeSum(l, r) = prefixSum(r) − prefixSum(l − 1).</li>
+    </ul>
+      <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/article/NzY3OA%3D%3D" target="_blank" rel="noopener">Binary Indexed Tree</a></p>
+<ul>
+<li>It achieves O(log n) for both prefix sum and update, like a segment tree, but uses less space and is easier to implement.</li>
+<li>Stored in BITree[], sized n + 1 for convenience. It is built by setting every entry to 0 and calling update() for each index.</li>
+<li><strong>getSum(x):</strong> start at index x + 1; while index &gt; 0, add BITree[index] and move to the parent, index −= index &amp; (−index).</li>
+<li>BITree[0] is a dummy. BITree[y] is the parent of BITree[x] iff y = x − (x &amp; (−x)); the child x stores arr[y … x − 1].</li>
+<li><strong>update(x, val)</strong> (BITree only, arr[] unchanged): start at x + 1; while index ≤ n, add val, then index += index &amp; (−index).</li>
+<li>Works because every positive integer is a sum of powers of 2, e.g. 19 = 16 + 2 + 1, so both operations touch O(log n) nodes (the number of set bits). Construction is O(n log n), space O(n).</li>
+<li>rangeSum(l, r) = getSum(r) − getSum(l − 1). Its original motivating application was the arithmetic coding algorithm.</li>
+</ul>
+    </div>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <ol>
+      <li>Write rangeSum(3, 5) using prefix sums: prefixSum(5) − prefixSum(2).</li>
+      <li>BIT vs segment tree: both answer queries and updates in O(log n). A BIT targets prefix operations; range queries are derived from two prefixes.</li>
+    </ol>
+  </section>
+</template>
+
+<template id="DSASP-Segment-Tree-6">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/video/MTk0Nw%3D%3D" target="_blank" rel="noopener">Binary Indexed Tree (An Example Problem)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Problem.</strong> On a fixed array, answer many queries of two types:</p>
+    <ul>
+      <li><strong>getSum(i)</strong>, the sum of arr[0 … i];</li>
+      <li><strong>update(i, x)</strong>.</li>
+    </ul>
+    <p>Examples:</p>
+    <ul>
+      <li>arr = {10, 20, 30, 40, 50, 60}:
+        <ul>
+          <li>getSum(2) = 60 and getSum(4) = 150;</li>
+          <li>after update(3, 45), getSum(4) = 155 and getSum(5) = 215.</li>
+        </ul>
+      </li>
+      <li>arr = {5, 4, 3, 2}: after update(0, 10) and update(1, 20), getSum(2) = 33 and getSum(1) = 30.</li>
+    </ul>
+    <table>
+      <tr><th>Method</th><th>getSum(i)</th><th>update(i, x)</th></tr>
+      <tr><td>1. Simple: loop 0 … i</td><td>O(n)</td><td>O(1)</td></tr>
+      <tr><td>2. Prefix-sum array</td><td>O(1): return preSum[i]</td><td>O(n): diff = x − arr[i]; arr[i] = x; add diff to preSum[i … n − 1]</td></tr>
+      <tr><td>3. Segment tree, getSum(0, i)</td><td>O(log n), up to 4 log n operations</td><td>O(log n), log n operations</td></tr>
+    </table>
+    <p>Methods 1 and 2 are fine when one operation type is only a constant number of the total. With a good mix (e.g. x/4 and 3x/4) of millions of operations, both average linear time.</p>
+    <p>A segment tree gives O(log n) for both, but it needs more operations per query and 4n space. A <strong>Binary Indexed Tree</strong> does better (next video).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <ol>
+      <li>Method 2 example from the board: in {10, 20, 30, 40, 50} the prefix sums are 10, 30, 60, 100, 150. Changing 40 to 60 adds the diff of 20 to the last two, giving 120 and 170.</li>
+      <li>With a segment tree, getSum(i) is the range query getSum(0, i).</li>
+    </ol>
+    <div class="added">
+      <p><strong>Board slip:</strong> the second example's output is written "23 20". After the updates the array is {10, 20, 3, 2}, so the answers are 33 and 30, as the teacher says and later corrects on the board.</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Segment-Tree-7">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/video/MTk0OA%3D%3D" target="_blank" rel="noopener">Binary Indexed Tree (Prefix Sum)</a> · notes from the course transcript and the board. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Key fact:</strong> every number is a sum of powers of 2, given by its binary representation. For example 14 = 8 + 4 + 2, 10 = 8 + 2 and 5 = 4 + 1.</p>
+    <ul>
+      <li>A prefix of size i + 1 (indices 0 … i) splits into ranges whose sizes are powers of 2. For index 13 the size is 14, which is 8 + 4 + 2.</li>
+      <li>The BIT stores the sums of exactly such ranges, so a prefix sum adds at most one stored value per set bit: <strong>O(log n)</strong> terms.</li>
+    </ul>
+    <p><strong>Structure:</strong> BITree has n + 1 entries, and index 0 is a dummy root. Entry j covers a range ending at original index j − 1, whose length is a power of 2.</p>
+    <ul>
+      <li>The root's children are the entries at 1, 2, 4, 8, …, holding the prefixes [0, 0], [0, 1], [0, 3] and [0, 7].</li>
+      <li>The remaining sub-ranges are split the same way. For example, entry 3 is [2, 2], 5 is [4, 4], 6 is [4, 5], 7 is [6, 6] (a child of 6), 9 is [8, 8] and 10 is [8, 9].</li>
+    </ul>
+    <p>arr = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100} gives BITree = {–, 10, 30, 30, 100, 50, 110, 70, 360, 90, 190}.</p>
+    <ul>
+      <li>getSum(5) = Σ arr[0 … 3] + Σ arr[4 … 5] = BITree[4] + BITree[6] = 100 + 110 = <strong>210</strong>. The size 6 is 4 + 2.</li>
+      <li>getSum(4) = BITree[4] + BITree[5] = 100 + 50 = <strong>150</strong>. The size 5 is 4 + 1.</li>
+    </ul>
+    <p>In the real implementation the BIT starts as all zeros and is filled by update operations (later videos). The manual fill here just shows the structure.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board example 2</h4>
+      <p>arr = {1, 2, …, 13} gives BITree = {–, 1, 3, 3, 10, 5, 11, 7, 36, 9, 19, 11, 42, 13}.</p>
+      <ul>
+        <li>The root's children are 1, 2, 4 and 8.</li>
+        <li>Their sub-trees: 2 → 3; 4 → 5, 6; 6 → 7; 8 → 9, 10, 12; 10 → 11; 12 → 13.</li>
+        <li>For example, entry 12 covers arr[8 … 11] = 9 + 10 + 11 + 12 = 42.</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Segment-Tree-8">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/video/MTk0OQ%3D%3D" target="_blank" rel="noopener">Binary Indexed Tree (Prefix Sum Implementation)</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 25 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The board uses arr = {10, 20, 30, 40, 50, 60, 70, 80, 90}, whose BIT is shown as a tree. The root is a dummy (index 0). Its children are 1 [0, 0] = 10, 2 [0, 1] = 30, 4 [0, 3] = 100 and 8 [0, 7] = 360. Below them:</p>
+    <ul>
+      <li>3 [2, 2] = 30, under 2;</li>
+      <li>5 [4, 4] = 50 and 6 [4, 5] = 110, under 4;</li>
+      <li>7 [6, 6] = 70, under 6;</li>
+      <li>9 [8, 8] = 90, under 8.</li>
+    </ul>
+    <p><strong>Value of getSum(i):</strong></p>
+    <ol>
+      <li>Set i = i + 1. For i = 6 that makes 7, and 7 = 2² + 2¹ + 2⁰.</li>
+      <li>result = BITree[i] + BITree[parent(i)] + BITree[parent(parent(i))] + … until reaching the root (0).</li>
+    </ol>
+    <p>For i = 7: BITree[7] + BITree[6] + BITree[4] = 70 + 110 + 100 = 280, which is the sum of arr[0 … 6].</p>
+    <p><strong>Value of parent(i) = i − (i &amp; (−i))</strong>: remove the last set bit. In two's complement, −i flips the bits and adds 1, so i &amp; (−i) isolates the lowest set bit.</p>
+    <ul>
+      <li>i = 9 is 1001, and −i ends in …0111.</li>
+      <li>i &amp; (−i) = 0001.</li>
+      <li>i − (i &amp; (−i)) = 1000 = 8, so parent(9) = 8.</li>
+    </ul>
+    <p>The loop runs once per set bit of i + 1: <strong>O(log n)</strong>.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board code</h4>
+<pre><code class="language-cpp">int BITree[n + 1];
+
+int getSum(int i) {
+    i = i + 1;
+    int res = 0;
+    while (i &gt; 0) {
+        res = res + BITree[i];
+        i = i - (i &amp; (-i));
+    }
+    return res;
+}</code></pre>
+      <p>getSum(6) visits indices 7, then 6, then 4: 70 + 110 + 100 = 280.</p>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;</code> is drawn like "$" (<code>i − i$(−i)</code>).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Segment-Tree-9">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/video/MTk1MA%3D%3D" target="_blank" rel="noopener">Binary Indexed Tree (Update Operation)</a> · <strong>No transcript</strong> (this video has no Transcript button): notes from the board (frames every 25 s plus close-ups) and the course description. Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p>The first parameter of update is an index of arr[]. Every BITree entry whose range contains that index must change. Board example: arr = {10, 20, …, 110} (n = 11), with BITree ranges [0, 0], [0, 1], [2, 2], [0, 3], [4, 4], [4, 5], [6, 6], [0, 7], [8, 8], [8, 9], ….</p>
+    <ul>
+      <li>update(4, 55) changes BITree entries <strong>5, 6, 8</strong>: 5 (101), 6 (110), 8 (1000).</li>
+      <li>update(2, 35) changes <strong>3, 4, 8</strong>: 3 (11), 4 (100), 8 (1000).</li>
+      <li>update(8, 95) changes <strong>9, 10</strong>: 9 (1001), 10 (1010).</li>
+    </ul>
+    <p><strong>nextIndex(i) = i + (i &amp; (−i))</strong>: add the last set bit. Start from i + 1 and repeat while i ≤ n.</p>
+    <p>Trace of update(2, 35) on arr = {10, 20, 30, 40, 50}, BITree = {–, 10, 30, 30, 100, 50}:</p>
+    <ol>
+      <li>diff = 35 − 30 = 5; arr[2] = 35; i = 3.</li>
+      <li>1st iteration: BITree[3] = 35, then i = 3 + 1 = 4.</li>
+      <li>2nd iteration: BITree[4] = 105, then i = 4 + 4 = 8 &gt; n, so stop.</li>
+    </ol>
+    <p><strong>Time:</strong> i stays below 2n and its lowest set bit moves up each step, so <strong>O(log n)</strong>. The board writes O(log 2n).</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board code</h4>
+<pre><code class="language-cpp">int n;
+int arr[n];
+int BITree[n + 1];
+
+void update(int i, int x) {
+    int diff = x - arr[i];
+    arr[i] = x;
+    i = i + 1;
+    while (i &lt;= n) {
+        BITree[i] += diff;
+        i = i + (i &amp; (-i));
+    }
+}</code></pre>
+    </div>
+    <div class="added">
+      <p><strong>Board note:</strong> <code>&amp;</code> is drawn like "8" (<code>i + i 8 (−i)</code>).</p>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Segment-Tree-10">
+  <p class="src">Course video: <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/video/MTYxMDk%3D" target="_blank" rel="noopener">Binary Indexed Tree (Construction)</a> · notes from the course transcript and the board. The transcript is auto-generated and garbled ("binary industry"). Anything not from the course is in a dashed "Added" box.</p>
+
+  <section class="part theory">
+    <span class="part-label">Theory</span>
+    <p><strong>Recap of the manual build.</strong> The BIT array has size n + 1.</p>
+    <ol>
+      <li>Write all the powers of 2 up to n as the root's children: the prefixes [0, 0], [0, 1], [0, 3], ….</li>
+      <li>Treat each uncovered sub-array the same way, as children of the node it follows.</li>
+    </ol>
+    <p>For example, {10, 20, 30, 40} gives entries 1 = [0, 0], 2 = [0, 1], 3 = [2, 2] (under 2) and 4 = [0, 3]. With 7 elements, [6, 6] = 70 sits on a third level, under [4, 5].</p>
+    <p><strong>Code construction:</strong></p>
+    <ol>
+      <li>Create BITree[n + 1] with every value 0. That is already a valid BIT, for an all-zero array.</li>
+      <li>Call update(i, arr[i]) for every index.</li>
+    </ol>
+    <p>The update here is slightly changed: there is no diff to compute and no array to modify, since we start from a "virtual" all-zero array. Just add x along the nextIndex chain.</p>
+    <p><strong>Time:</strong> n updates of O(log n) each, so <strong>O(n log n)</strong>, matching the introduction's preprocessing bound.</p>
+  </section>
+
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="approach">
+      <h4>Board code</h4>
+<pre><code class="language-cpp">int arr[] = {10, 20, 30, 40, 50};
+int n = 5;
+int BITree[n + 1];   // Java: int BITree[] = new int[n + 1];
+
+void update(int i, int x) {
+    i = i + 1;
+    while (i &lt;= n) {
+        BITree[i] += x;
+        i = i + (i &amp; (-i));
+    }
+}
+
+// construction
+for (int i = 1; i &lt;= n; i++)
+    BITree[i] = 0;
+for (int i = 0; i &lt; n; i++)
+    update(i, arr[i]);</code></pre>
+      <ul>
+        <li>After the first loop, BITree = [–, 0, 0, 0, 0, 0].</li>
+        <li>After the update operations (the second loop), BITree = [–, 10, 30, 30, 100, 50].</li>
+      </ul>
+    </div>
+  </section>
+</template>
+
+<template id="DSASP-Segment-Tree-practice">
+  <p class="src">From the track's <strong>Problems</strong> tab (6 problems, in course order), plus the one Articles-tab item that doesn't match any video. The notes list each problem with its difficulty and a link. Solve them on GfG. The problem statements aren't copied here.</p>
+  <section class="part practice">
+    <span class="part-label">Practice</span>
+    <div class="scroll"><table>
+      <thead><tr><th>#</th><th>Problem</th><th>Level</th><th>Covered in</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/problem/range-min-max-queries4557" target="_blank" rel="noopener">Range Min Max Queries</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>2</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/problem/range-gcd-queries3654" target="_blank" rel="noopener">Range GCD Queries</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>3</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/problem/range-queries-for-longest-correct-bracket-subsequence4719" target="_blank" rel="noopener">Longest Correct Bracket Subsequence</a></td><td>Medium</td><td>–</td></tr>
+        <tr><td>4</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/problem/range-sum-queries2353" target="_blank" rel="noopener">Range Sum Queries with Update</a></td><td>Medium</td><td>Videos 1–4, 7–10</td></tr>
+        <tr><td>5</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/problem/largest-sum-contiguous-subarray-in-range-1587115620" target="_blank" rel="noopener">Largest Sum Subarray Range Queries</a></td><td>Hard</td><td>–</td></tr>
+        <tr><td>6</td><td><a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/problem/range-lcm-queries3348" target="_blank" rel="noopener">Range LCM Queries</a></td><td>Medium</td><td>–</td></tr>
+      </tbody>
+    </table></div>
+    <div class="article"><p class="article-h">From the article · <a href="https://www.geeksforgeeks.org/batch/dsa-5/track/DSASP-Segment-Tree/article/MjQxMA%3D%3D" target="_blank" rel="noopener">Segment Tree | Range Minimum Query</a></p>
+<ul>
+<li>Find the minimum element in each query range, with no updates.</li>
+<li>Each internal node stores the <strong>minimum</strong> of the leaves under it, with the same array layout (2i + 1, 2i + 2, (i − 1)/2) and full-binary-tree shape (2n − 1 nodes).</li>
+<li>The height is log₂n, so allocate 2·2<sup>⌈log₂ n⌉</sup> − 1.</li>
+<li>Construction O(n). A query is O(log n), processing at most two nodes per level. Auxiliary space O(n).</li>
+</ul>
+    </div>
+  </section>
+</template>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
 <script>
@@ -33382,7 +33924,19 @@ const TRACKS = [
       ["Trie Delete", "11:11"],
       ["Count Distinct Rows in a Binary Matrix", "7:37"]
     ] },
-  { id: "DSASP-Segment-Tree", slug: "segment-and-bit", name: "Segment and Binary Indexed Trees", counts: [10, 3, 6, 5, 0] },
+  { id: "DSASP-Segment-Tree", slug: "segment-and-bit", name: "Segment and Binary Indexed Trees", counts: [10, 3, 6, 5, 0],
+    videos: [
+      ["Segment Tree (Introduction)", "22:07"],
+      ["Constructing Segment Tree", "10:11"],
+      ["Range Query on Segment Tree", "13:48"],
+      ["Update Query on Segment Tree", "10:03"],
+      ["Binary Indexed Tree (Intoduction)", "6:10"],
+      ["Binary Indexed Tree (An Example Problem)", "6:00"],
+      ["Binary Indexed Tree (Prefix Sum)", "15:19"],
+      ["Binary Indexed Tree (Prefix Sum Implemention)", "11:34"],
+      ["Binary Indexed Tree (Update Operation)", "10:41"],
+      ["Binary Indexed Tree (Construction)", "6:11"]
+    ] },
   { id: "DSASP-DisjointSet", slug: "disjoint-set", name: "Disjoint Set", counts: [5, 3, 4, 5, 1] }
 ];
 
