@@ -71,7 +71,7 @@ Report back with:
 
 ## 7. Progress (as of 2026-11-10)
 
-**Notes written: 24 of 24 tracks · 470 of 470 videos · 342 of 342 articles · 367 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 is also in the private artifact.
+**Notes written: 24 of 24 tracks · 470 of 470 videos · 342 of 342 articles · 367 of 367 problems listed.** All work is on branch `claude/project-thread-8jxc30`. Track 1 was written by Claude, and tracks 2–24 were added by Vinod, in the same `dsa-notes.html`. The private artifact still shows only track 1 (see What's next).
 
 | # | Track | Videos | Articles | Problems | Notes status |
 |---|-------|-------:|---------:|---------:|--------------|
@@ -778,7 +778,8 @@ All 3 articles match a video; the Track practice set lists the 4 problems. V5 ha
 - (this commit): Add Disjoint Set track notes (5 videos, 3 articles, 4 problems)
 
 ### What's next
-- All 24 tracks are written. The commits after the last push (`671776d`) are local only; push when the user says so.
+- All 24 tracks are written and pushed to `claude/project-thread-8jxc30`.
+- The private artifact link (https://claude.ai/artifact/XStbsSAnGcAdMa1AU9CBmL) has not been refreshed with tracks 2–24. The full 2.2 MB file is too large for Claude to read end-to-end before publishing, so meanwhile use `notes/dsa-notes.html` from the repo.
 
 ### History
 - **2026-11-10:**
